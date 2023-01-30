@@ -7,11 +7,11 @@ class indicators:
         sma = source.rolling(length).mean()
         return sma.dropna(axis=0)
 
-    def ema(self, source, periods):
-        sma = source.rolling(window=periods, min_periods=periods).mean()[:periods]
-        rest = source[periods:]
+    def ema(self, source, length):
+        sma = source.rolling(window=length, min_periods=length).mean()[:length]
+        rest = source[length:]
         return (
-            pd.concat([sma, rest]).ewm(span=periods, adjust=False).mean().dropna(axis=0)
+            pd.concat([sma, rest]).ewm(span=length, adjust=False).mean().dropna(axis=0)
         )
 
     def CCI(self, source, length):
@@ -31,3 +31,4 @@ class indicators:
         macd_Signal["MACD_Signal"] = self.ema(macd_Signal["MACD"], signal_length)
         macd_Signal["Histogram"] = macd_Signal["MACD"] - macd_Signal["MACD_Signal"]
         return macd_Signal["Histogram"]
+
