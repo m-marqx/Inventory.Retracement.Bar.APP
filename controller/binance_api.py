@@ -34,7 +34,7 @@ class spot_Kline:
             timeLoop_list.append(initial_Time)
             if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
                 request_Time_Start = t.time()
-                klines_Loop = self.spot_Kline(
+                klines_Loop = self.get_Spot_Kline(
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
@@ -48,7 +48,7 @@ class spot_Kline:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
-                lastCall = self.spot_Kline(
+                lastCall = self.get_Spot_Kline(
                     timeLoop_list[-1] + 1, int(t.time() * 1000), interval
                 )
                 klines_list.extend(lastCall)
@@ -76,7 +76,7 @@ class spot_Kline:
             timeLoop_list.append(initial_Time)
             if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
                 request_Time_Start = t.time()
-                klines_Loop = self.spot_Kline(
+                klines_Loop = self.get_Spot_Kline(
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
