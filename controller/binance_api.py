@@ -100,7 +100,7 @@ class spot_Kline:
 
 
 class source:
-    def get_Source_List(klines):
+    def get_Source_List(self,klines):
         open_Time_List = []
         open_List = []
         high_List = []
