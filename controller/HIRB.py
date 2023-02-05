@@ -66,7 +66,5 @@ fig = go.Figure(data=[go.Candlestick(x=dfpl.index,
                 close=dfpl['Close']),
     go.Scatter(x=dfpl.index, y=dfpl.EMA, line=dict(color='orange', width=1), name="EMA")])
 
-fig.add_scatter(x=dfpl.index, y=dfpl['pointpos'], mode="markers",
-                marker=dict(size=5, color="MediumPurple"),
-                name="Signal")
+fig.add_trace(go.Scatter(x=dfpl.index, y=dfpl.pointpos, mode='markers', marker=dict(color='MediumPurple', size=5), name='Signal'))
 fig.show()
