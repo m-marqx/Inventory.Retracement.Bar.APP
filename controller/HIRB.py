@@ -5,7 +5,8 @@ import numpy as np
 import plotly.graph_objects as go
 
 # Downloading historical currency data of Euro-US dollar exchange rate
-df = yf.download(tickers='EURUSD=X', period='59d', interval='15m')
+ticker = 'EURUSD=X'
+df = yf.download(tickers=ticker, period='59d', interval='15m')
 
 # Resetting the index and droping the previous one
 df.reset_index(drop=True, inplace=True)
@@ -63,8 +64,9 @@ fig = go.Figure(data=[go.Candlestick(x=dfpl.index,
                 open=dfpl['Open'],
                 high=dfpl['High'],
                 low=dfpl['Low'],
-                close=dfpl['Close']),
-    go.Scatter(x=dfpl.index, y=dfpl.EMA, line=dict(color='orange', width=1), name="EMA")])
+                close=dfpl['Close'],
+                name=ticker),
+    go.Scatter(x=dfpl.index, y=dfpl.EMA, line=dict(color='blue', width=2), name='EMA')])
 
 fig.add_trace(go.Scatter(x=dfpl.index, y=dfpl.pointpos, mode='markers', marker=dict(color='MediumPurple', size=5), name='Signal'))
 fig.show()
