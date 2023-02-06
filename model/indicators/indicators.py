@@ -1,19 +1,10 @@
-# Import libraries
 import pandas as pd
+from moving_average import moving_average
 
-# Indicadores
+ma = moving_average()
+
+
 class indicators:
-    def sma(self, source, length):
-        sma = source.rolling(length).mean()
-        return sma.dropna(axis=0)
-
-    def ema(self, source, length):
-        sma = source.rolling(window=length, min_periods=length).mean()[:length]
-        rest = source[length:]
-        return (
-            pd.concat([sma, rest]).ewm(span=length, adjust=False).mean().dropna(axis=0)
-        )
-
     def CCI(self, source, length):
         df = pd.DataFrame()
         df["TP"] = source
@@ -23,12 +14,11 @@ class indicators:
         return df["CCI"].dropna(axis=0)
 
     def MACD(self, source, fast_length, slow_length, signal_length):
-        MACD = self.ema(source, fast_length) - self.ema(source, slow_length)
+        MACD = MA.ema(source, fast_length) - MA.ema(source, slow_length)
         df = pd.DataFrame()
         df["MACD"] = pd.DataFrame(MACD).dropna(axis=0)
         macd_Signal = pd.DataFrame()
         macd_Signal["MACD"] = df["MACD"]
-        macd_Signal["MACD_Signal"] = self.ema(macd_Signal["MACD"], signal_length)
+        macd_Signal["MACD_Signal"] = MA.ema(macd_Signal["MACD"], signal_length)
         macd_Signal["Histogram"] = macd_Signal["MACD"] - macd_Signal["MACD_Signal"]
         return macd_Signal["Histogram"]
-
