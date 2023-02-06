@@ -14,11 +14,11 @@ class indicators:
         return df["CCI"].dropna(axis=0)
 
     def MACD(self, source, fast_length, slow_length, signal_length):
-        MACD = MA.ema(source, fast_length) - MA.ema(source, slow_length)
+        MACD = ma.ema(source, fast_length) - ma.ema(source, slow_length)
         df = pd.DataFrame()
         df["MACD"] = pd.DataFrame(MACD).dropna(axis=0)
         macd_Signal = pd.DataFrame()
         macd_Signal["MACD"] = df["MACD"]
-        macd_Signal["MACD_Signal"] = MA.ema(macd_Signal["MACD"], signal_length)
+        macd_Signal["MACD_Signal"] = ma.ema(macd_Signal["MACD"], signal_length)
         macd_Signal["Histogram"] = macd_Signal["MACD"] - macd_Signal["MACD_Signal"]
         return macd_Signal["Histogram"]
