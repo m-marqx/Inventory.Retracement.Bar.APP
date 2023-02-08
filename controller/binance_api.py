@@ -142,7 +142,7 @@ class source:
 
 
 # coin-M Klines
-class coin_Kline:
+class futures_API:
     def __init__(self, api_key, secret_key):
         self.client = Client(api_key, secret_key)
 
