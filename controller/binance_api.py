@@ -7,7 +7,11 @@ class spot_API:
         self.client = Client(api_key, secret_key)
 
     def get_Spot_Kline(
-        self, startTime, endTime, interval='2h', symbol="BTCUSDT"
+        self,
+        startTime,
+        endTime,
+        interval="2h",
+        symbol="BTCUSDT",
     ):
         request = self.client.get_klines(
             symbol=symbol,
@@ -18,7 +22,13 @@ class spot_API:
         )
         return request
 
-    def get_All_Klines(self, interval, interval_ms, first_Candle_Time=1502942400000, symbol="BTCUSDT"):
+    def get_All_Klines(
+        self,
+        interval,
+        interval_ms,
+        first_Candle_Time=1502942400000,
+        symbol="BTCUSDT",
+    ):
         START = t.time()
         klines_list = []
         timeLoop_list = []
@@ -36,7 +46,7 @@ class spot_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
-                    symbol=symbol
+                    symbol=symbol,
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
@@ -60,7 +70,12 @@ class spot_API:
         return klines_list
 
     def get_Historical_Klines(
-        self, interval, interval_ms, first_Candle_Time=1502942400000, symbol="BTCUSDT"):
+        self,
+        interval,
+        interval_ms,
+        first_Candle_Time=1502942400000,
+        symbol="BTCUSDT",
+    ):
         START = t.time()
         klines_list = []
         timeLoop_list = []
@@ -78,7 +93,7 @@ class spot_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
-                    symbol=symbol
+                    symbol=symbol,
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
@@ -99,7 +114,7 @@ class spot_API:
 
 
 class source:
-    def get_Source_List(self,klines):
+    def get_Source_List(self, klines):
         open_Time_List = []
         open_List = []
         high_List = []
@@ -146,7 +161,13 @@ class futures_API:
     def __init__(self, api_key, secret_key):
         self.client = Client(api_key, secret_key)
 
-    def futures_Kline(self, startTime, endTime, interval='2h', symbol='BTCUSD_PERP'):
+    def futures_Kline(
+        self,
+        startTime,
+        endTime,
+        interval="2h",
+        symbol="BTCUSD_PERP",
+    ):
         request = self.client.futures_coin_klines(
             symbol=symbol,
             interval=interval,
@@ -156,7 +177,13 @@ class futures_API:
         )
         return request
 
-    def get_All_Klines(self, interval, interval_ms, first_Candle_Time=1597118400000, symbol='BTCUSD_PERP'):
+    def get_All_Klines(
+        self,
+        interval,
+        interval_ms,
+        first_Candle_Time=1597118400000,
+        symbol="BTCUSD_PERP",
+    ):
         START = t.time()
         klines_list = []
         timeLoop_list = []
@@ -174,7 +201,7 @@ class futures_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
-                    symbol=symbol
+                    symbol=symbol,
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
@@ -196,7 +223,11 @@ class futures_API:
         return klines_list
 
     def get_Historical_Klines(
-        self, interval, interval_ms, first_Candle_Time=1597118400000, symbol='BTCUSD_PERP'
+        self,
+        interval,
+        interval_ms,
+        first_Candle_Time=1597118400000,
+        symbol="BTCUSD_PERP",
     ):
         START = t.time()
         klines_list = []
@@ -215,7 +246,7 @@ class futures_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
-                    symbol=symbol
+                    symbol=symbol,
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
@@ -233,7 +264,11 @@ class futures_API:
         return klines_list
 
     def markPrice_futures_Kline(
-        self, startTime, endTime, interval='2h', symbol='BTCUSD_PERP'
+        self,
+        startTime,
+        endTime,
+        interval="2h",
+        symbol="BTCUSD_PERP",
     ):
         request = self.client.futures_coin_mark_price_klines(
             symbol=symbol,
@@ -245,7 +280,11 @@ class futures_API:
         return request
 
     def get_markPrice_All_Klines(
-        self, interval, interval_ms, first_Candle_Time=1597118400000, symbol='BTCUSD_PERP'
+        self,
+        interval,
+        interval_ms,
+        first_Candle_Time=1597118400000,
+        symbol="BTCUSD_PERP",
     ):
         START = t.time()
         kline_List = []
@@ -261,7 +300,10 @@ class futures_API:
             if timeLoop[-1] + max_Interval < int(t.time() * 1000):
                 request_Time_Start = t.time()
                 klines_Loop = self.markPrice_futures_Kline(
-                    timeLoop[index - 1], timeLoop[index - 1] + max_Interval, interval, symbol=symbol
+                    timeLoop[index - 1],
+                    timeLoop[index - 1] + max_Interval,
+                    interval,
+                    symbol=symbol,
                 )
                 kline_List.extend(klines_Loop)
                 print("\nLoop : " + str(index))
