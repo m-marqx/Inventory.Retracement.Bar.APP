@@ -8,7 +8,7 @@ class spot_API:
         self.client = Client(api_key, secret_key)
 
     def get_Spot_Kline(
-        self, startTime, endTime, interval=KLINE_INTERVAL_2HOUR, symbol="BTCUSDT"
+        self, startTime, endTime, interval='2h', symbol="BTCUSDT"
     ):
         request = self.client.get_klines(
             symbol=symbol,
@@ -146,7 +146,7 @@ class futures_API:
     def __init__(self, api_key, secret_key):
         self.client = Client(api_key, secret_key)
 
-    def futures_Kline(self, startTime, endTime, interval=KLINE_INTERVAL_2HOUR):
+    def futures_Kline(self, startTime, endTime, interval='2h'):
         request = self.client.futures_coin_klines(
             symbol="BTCUSD_PERP",
             interval=interval,
@@ -231,7 +231,7 @@ class futures_API:
         return klines_list
 
     def markPrice_futures_Kline(
-        self, startTime, endTime, interval=KLINE_INTERVAL_2HOUR
+        self, startTime, endTime, interval='2h'
     ):
         request = self.client.futures_coin_mark_price_klines(
             symbol="BTCUSD_PERP",
