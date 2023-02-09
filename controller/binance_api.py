@@ -1,6 +1,5 @@
 import time as t
 from binance.client import Client
-from binance.enums import KLINE_INTERVAL_2HOUR
 
 # spot Klines
 class spot_API:
