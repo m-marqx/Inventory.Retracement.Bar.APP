@@ -18,7 +18,7 @@ class spot_API:
         )
         return request
 
-    def get_All_Klines(self, interval, interval_ms, first_Candle_Time=1502942400000):
+    def get_All_Klines(self, interval, interval_ms, first_Candle_Time=1502942400000, symbol="BTCUSDT"):
         START = t.time()
         klines_list = []
         timeLoop_list = []
@@ -36,6 +36,7 @@ class spot_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
+                    symbol=symbol
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
@@ -47,7 +48,7 @@ class spot_API:
             else:
                 print("Else Reached!")
                 lastCall = self.get_Spot_Kline(
-                    timeLoop_list[-1] + 1, int(t.time() * 1000), interval
+                    timeLoop_list[-1] + 1, int(t.time() * 1000), interval, symbol=symbol
                 )
                 klines_list.extend(lastCall)
                 print("\nQtd  : " + str(len(klines_list)))
@@ -59,8 +60,7 @@ class spot_API:
         return klines_list
 
     def get_Historical_Klines(
-        self, interval, interval_ms, first_Candle_Time=1502942400000
-    ):
+        self, interval, interval_ms, first_Candle_Time=1502942400000, symbol="BTCUSDT"):
         START = t.time()
         klines_list = []
         timeLoop_list = []
@@ -78,6 +78,7 @@ class spot_API:
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
                     interval,
+                    symbol=symbol
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
