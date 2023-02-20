@@ -1,4 +1,6 @@
+#%% 
 import pandas as pd
+import numpy as np
 import sys
 import os
 
@@ -7,11 +9,14 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the desired directory
 controller_dir = os.path.join(current_dir, '..', '..', 'controller')
+indicators_dir = os.path.join(current_dir, '..', 'indicators')
 
 # Add the desired directory to the Python path
 sys.path.insert(0,controller_dir)
-
+sys.path.insert(0,indicators_dir)
+# %%
 import binance_api as bAPI
+import moving_average
 # Import the class
 
 # Create an instance of the class
@@ -19,6 +24,7 @@ API_KEY = os.environ['API_KEY']
 SECRET_KEY = os.environ['SECRET_KEY']
 
 fapi = bAPI.futures_API(API_KEY, SECRET_KEY)
+ma = moving_average.moving_average()
 
 def get_all_futures_klines_df(symbol, interval, intervalms):
     klines_list = fapi.get_All_Klines(interval, intervalms, symbol=symbol)
