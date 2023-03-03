@@ -74,3 +74,29 @@ def process_data(profit, dataframe, length=20):
 profit = 2
 df = pd.read_csv('BTCUSD_PERP-2h.csv', sep=';', decimal='.', encoding='utf-8', index_col='open_time')
 df_filtered = process_data(profit, df,20)
+
+#%%
+import time
+
+def IRB_strategy(df):
+    dataframe = df.copy()
+    dataframe.reset_index(inplace=True)
+    dataframe['Close Position'] = False
+    
+    print('Loop Started')
+    for x in range(1, dataframe.shape[0]):
+        if (dataframe['Signal'].iloc[x-1] == 1) & (dataframe['Close Position'].iloc[x] == False):
+            dataframe.loc[x,'Signal'] = dataframe['Signal'].iloc[x-1]
+            dataframe.loc[x,'Entry_Price'] = dataframe['Entry_Price'].iloc[x-1]	
+            dataframe.loc[x,'Take_Profit'] = dataframe['Take_Profit'].iloc[x-1]
+            dataframe.loc[x,'Stop_Loss'] = dataframe['Stop_Loss'].iloc[x-1]
+
+            if (dataframe['high'].iloc[x] > dataframe['Take_Profit'].iloc[x]) ^ (dataframe['low'].iloc[x] < dataframe['Stop_Loss'].iloc[x]):
+                dataframe.loc[x,'Close Position'] = True
+                dataframe.loc[x,'Signal'] = -1
+
+    return dataframe
+
+df1 = IRB_strategy(df_filtered)
+
+#%%
