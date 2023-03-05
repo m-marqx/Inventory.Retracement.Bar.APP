@@ -106,7 +106,7 @@ def calculate_results(dataframe, check_error=False):
         dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
         dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
         dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
-    if df_backtest[df_backtest['Check_Error'] == True].shape[0] > 0:
+    if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
 def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
@@ -123,7 +123,7 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
         dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
         dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
         dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
-    if df_backtest[df_backtest['Check_Error'] == True].shape[0] > 0:
+    if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
 profit = 2
