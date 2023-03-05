@@ -73,6 +73,7 @@ def process_data(profit, dataframe, length=20):
     buy_condition = irb_condition & is_bullish
     
     df_filtered['Signal'] = np.where(buy_condition, 1, np.nan)
+    df_filtered['Signal'].astype('float32')
     df_filtered['Entry_Price'] = np.where(buy_condition, df_filtered['high'].shift(1), np.nan)
     df_filtered['Take_Profit'] = np.where(buy_condition, (candle_amplitude.shift(1) * profit) + df_filtered['high'].shift(1), np.nan)
     df_filtered['Stop_Loss'] = np.where(buy_condition, df_filtered['low'].shift(1) - 1, np.nan)
