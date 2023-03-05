@@ -27,12 +27,6 @@ SECRET_KEY = os.environ['SECRET_KEY']
 fapi = bAPI.futures_API(API_KEY, SECRET_KEY)
 ma = moving_average.moving_average()
 
-def get_all_futures_klines_df(symbol, interval, intervalms):
-    klines_list = fapi.get_All_Klines(interval, intervalms, symbol=symbol)
-    dataframe = pd.DataFrame(klines_list,columns=['open_time','open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore'])
-    dataframe.set_index('open_time', inplace=True)
-    return dataframe
-
 def klines_df_to_csv(dataframe, symbol, interval):
     str_name = str(symbol) + '-' + str(interval) + '.csv'
     dataframe.to_csv(str_name, index=True, header=['open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore'], sep=';', decimal='.', encoding='utf-8')
@@ -81,11 +75,6 @@ def process_data(profit, dataframe, length=20):
     return df_filtered
 #%%
 
-profit = 2
-df = pd.read_csv('BTCUSD_PERP-2h.csv', sep=';', decimal='.', encoding='utf-8', index_col='open_time')
-df_filtered = process_data(profit, df,20)
-
-#%%
 import time
 
 def IRB_strategy(df):
@@ -93,7 +82,6 @@ def IRB_strategy(df):
     dataframe.reset_index(inplace=True)
     dataframe['Close Position'] = False
     
-    print('Loop Started')
     for x in range(1, dataframe.shape[0]):
         if (dataframe['Signal'].iloc[x-1] == 1) & (dataframe['Close Position'].iloc[x] == False):
             dataframe.loc[x,'Signal'] = dataframe['Signal'].iloc[x-1]
@@ -106,8 +94,6 @@ def IRB_strategy(df):
                 dataframe.loc[x,'Signal'] = -1
 
     return dataframe
-
-df_backtest = IRB_strategy(df_filtered)
 
 #%%
 def calculate_results(dataframe, check_error=False):

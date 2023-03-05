@@ -1,5 +1,6 @@
 import time as t
 from binance.client import Client
+import pandas as pd
 
 # spot Klines
 class spot_API:
@@ -323,6 +324,12 @@ class futures_API:
                 print("\nExecution time: " + str(END - START))
                 break
         return kline_List
+
+    def get_all_futures_klines_df(self,symbol, interval, intervalms):
+        klines_list = self.get_All_Klines(interval, intervalms, symbol=symbol)
+        dataframe = pd.DataFrame(klines_list,columns=['open_time','open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore'])
+        dataframe.set_index('open_time', inplace=True)
+        return dataframe
 
 
 # Classe ainda não testada
