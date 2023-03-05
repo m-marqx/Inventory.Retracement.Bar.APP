@@ -126,13 +126,15 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
     if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
-def IRB_model_df(profit,df):
-    profit = 2
+def run_IRB_model(profit,dataframe=None,csv_name=None,length=20):
+    # It is possible to run the model with a dataframe or a csv file
+    try:
+        df = pd.read_csv(csv_name, sep=';', decimal='.', encoding='utf-8', index_col='open_time') # type: ignore
+    except:
+        df = dataframe.copy() # type: ignore
 
-    df_filtered = process_data(profit, df,20)
+    df_filtered = process_data(profit, df, length)
     df_backtest = IRB_strategy(df_filtered)
 
     calculate_results(df_backtest, check_error=True)
-    df_backtest['Cumulative_Result'].plot()
     return df_backtest
-
