@@ -46,6 +46,10 @@ def process_data(profit, dataframe, length=20):
         df_filtered = pd.DataFrame(dataframe[['Open','High','Low','Close']]) # Filter out the columns we don't need
         df_filtered = df_filtered.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'})
 
+    df_filtered['open'] = df_filtered['open'].astype(float)
+    df_filtered['high'] = df_filtered['high'].astype(float)
+    df_filtered['low'] = df_filtered['low'].astype(float)
+    df_filtered['close'] = df_filtered['close'].astype(float)
     Open = df_filtered['open']
     High = df_filtered['high']
     Low = df_filtered['low']
