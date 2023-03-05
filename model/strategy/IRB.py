@@ -70,8 +70,6 @@ def process_data(profit, dataframe, length=20):
     return df_filtered
 #%%
 
-import time
-
 def IRB_strategy(df):
     dataframe = df.copy()
     dataframe.reset_index(inplace=True)
