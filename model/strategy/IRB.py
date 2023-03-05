@@ -129,3 +129,37 @@ def calculate_results(dataframe, check_error=False):
         dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
     if df_backtest[df_backtest['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
+
+def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
+    is_close_position = dataframe['Close Position'] == True
+    is_take_profit = dataframe['high'] > dataframe['Take_Profit']
+    is_stop_loss = dataframe['low'] < dataframe['Stop_Loss']
+    
+    dataframe['Result'] = 0 
+    dataframe['Result'] = np.where(is_close_position & is_take_profit, profit, dataframe['Result'])
+    dataframe['Result'] = np.where(is_close_position & is_stop_loss, -loss, dataframe['Result'])
+    dataframe['Cumulative_Result'] = dataframe['Result'].cumsum()
+
+    if check_error:
+        dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
+        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
+        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
+    if df_backtest[df_backtest['Check_Error'] == True].shape[0] > 0:
+        print('Error Found')
+
+profit = 2
+try:
+    df = pd.read_csv('BTCUSD_PERP-2h.csv', sep=';', decimal='.', encoding='utf-8', index_col='open_time')
+except:
+    df = get_all_futures_klines_df('BTCUSD_PERP', '2h', 7200000)
+    klines_df_to_csv(df, 'BTCUSD_PERP', '2h')
+
+df_filtered = process_data(profit, df,20)
+df_backtest = IRB_strategy(df_filtered)
+
+calculate_results(df_backtest, check_error=True)
+df_backtest['Cumulative_Result'].plot()
+
+df_backtest2 = IRB_strategy(df_filtered)
+calculate_fixed_pl_results(df_backtest2, 200, 100, check_error=True)
+df_backtest2['Cumulative_Result'].plot()
