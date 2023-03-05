@@ -126,9 +126,9 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
     if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
-def run_IRB_model(profit, length=20, dataframe=Optional[pd.DataFrame], csv_name=Optional[str]):
-    if csv_name is not None:
-        df = pd.read_csv(f"../data/{csv_name}", sep=';', decimal='.', encoding='utf-8', index_col='open_time')
+def run_IRB_model(profit, length=20, dataframe=Optional[pd.DataFrame], csv_file=Optional[str]):
+    if csv_file is not None:
+        df = pd.read_csv(f"{csv_file}", sep=';', decimal='.', encoding='utf-8', index_col='open_time')
     elif dataframe is not None:
         df = dataframe.copy()
     else:
