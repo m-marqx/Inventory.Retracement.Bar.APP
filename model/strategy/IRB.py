@@ -107,10 +107,10 @@ def IRB_strategy(df):
 
     return dataframe
 
-df1 = IRB_strategy(df_filtered)
+df_backtest = IRB_strategy(df_filtered)
 
 #%%
-def calculate_results(dataframe, check_method=False):
+def calculate_results(dataframe, check_error=False):
     is_close_position = dataframe['Close Position'] == True
     is_take_profit = dataframe['high'] > dataframe['Take_Profit']
     is_stop_loss = dataframe['low'] < dataframe['Stop_Loss']
@@ -123,11 +123,9 @@ def calculate_results(dataframe, check_method=False):
     dataframe['Result'] = np.where(is_close_position & is_stop_loss, loss, dataframe['Result'])
     dataframe['Cumulative_Result'] = dataframe['Result'].cumsum()
 
-    if check_method:
-        dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1) == 1
-        dataframe['Check_Method'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), "ERROR", 0)
-        dataframe['Check_Method'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), "ERROR", dataframe['Check_Method'])
-
-calculate_results(df1, check_method=True)
-
-df1['Cumulative_Result'].plot()
+    if check_error:
+        dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
+        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
+        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
+    if df_backtest[df_backtest['Check_Error'] == True].shape[0] > 0:
+        print('Error Found')
