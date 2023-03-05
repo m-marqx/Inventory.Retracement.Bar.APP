@@ -132,8 +132,8 @@ profit = 2
 try:
     df = pd.read_csv('BTCUSD_PERP-2h.csv', sep=';', decimal='.', encoding='utf-8', index_col='open_time')
 except:
-    df = get_all_futures_klines_df('BTCUSD_PERP', '2h', 7200000)
-    klines_df_to_csv(df, 'BTCUSD_PERP', '2h')
+    df = fapi.get_all_futures_klines_df('BTCUSD_PERP', '2h', 7200000)
+    fapi.klines_df_to_csv(df, 'BTCUSD_PERP', '2h')
 
 df_filtered = process_data(profit, df,20)
 df_backtest = IRB_strategy(df_filtered)
