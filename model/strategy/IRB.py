@@ -56,9 +56,9 @@ def process_data(profit, dataframe, length=20):
     Close = df_filtered['close']
     ema = ma.ema(Close, length)
     df_filtered['ema'] = ema
-    df_filtered['market_trend'] = np.where(Close >= df_filtered['ema'], "Bullish", "Bearish")
+    df_filtered['uptrend'] = np.where(Close >= df_filtered['ema'], True, False)
 
-    is_bullish = df_filtered['market_trend'] == "Bullish"
+    is_bullish = df_filtered['uptrend'] == True
 
     candle_amplitude = High - Low
     candle_downtail = np.minimum(Open, Close) - Low # type: ignore
