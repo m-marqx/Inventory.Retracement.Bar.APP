@@ -1,3 +1,4 @@
+
 #%% 
 import pandas as pd
 import numpy as np
@@ -14,7 +15,7 @@ indicators_dir = os.path.join(current_dir, '..', 'indicators')
 # Add the desired directory to the Python path
 sys.path.insert(0,controller_dir)
 sys.path.insert(0,indicators_dir)
-# %%
+# %% 
 import binance_api as bAPI
 import moving_average
 # Import the class
@@ -39,7 +40,11 @@ def klines_df_to_csv(dataframe, symbol, interval):
 
 #%% 
 def process_data(profit, dataframe, length=20):
-    df_filtered = pd.DataFrame(dataframe[['open','high','low','close']]) # Filter out the columns we don't need
+    try:
+        df_filtered = pd.DataFrame(dataframe[['open','high','low','close']]) # Filter out the columns we don't need
+    except:
+        df_filtered = pd.DataFrame(dataframe[['Open','High','Low','Close']]) # Filter out the columns we don't need
+        df_filtered = df_filtered.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'})
 
     Open = df_filtered['open']
     High = df_filtered['high']
@@ -67,7 +72,7 @@ def process_data(profit, dataframe, length=20):
     df_filtered['Entry_Price'] = np.where(buy_condition, df_filtered['high'].shift(1), np.nan)
     df_filtered['Take_Profit'] = np.where(buy_condition, (candle_amplitude.shift(1) * profit) + df_filtered['high'].shift(1), np.nan)
     df_filtered['Stop_Loss'] = np.where(buy_condition, df_filtered['low'].shift(1) - 1, np.nan)
-    
+
     return df_filtered
 #%%
 
