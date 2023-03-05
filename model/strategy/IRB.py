@@ -126,19 +126,13 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
     if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
-profit = 2
-try:
-    df = pd.read_csv('BTCUSD_PERP-2h.csv', sep=';', decimal='.', encoding='utf-8', index_col='open_time')
-except:
-    df = fapi.get_all_futures_klines_df('BTCUSD_PERP', '2h', 7200000)
-    fapi.klines_df_to_csv(df, 'BTCUSD_PERP', '2h')
+def IRB_model_df(profit,df):
+    profit = 2
 
-df_filtered = process_data(profit, df,20)
-df_backtest = IRB_strategy(df_filtered)
+    df_filtered = process_data(profit, df,20)
+    df_backtest = IRB_strategy(df_filtered)
 
-calculate_results(df_backtest, check_error=True)
-df_backtest['Cumulative_Result'].plot()
+    calculate_results(df_backtest, check_error=True)
+    df_backtest['Cumulative_Result'].plot()
+    return df_backtest
 
-df_backtest2 = IRB_strategy(df_filtered)
-calculate_fixed_pl_results(df_backtest2, 200, 100, check_error=True)
-df_backtest2['Cumulative_Result'].plot()
