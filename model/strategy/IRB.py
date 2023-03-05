@@ -1,9 +1,9 @@
-
 #%% 
 import pandas as pd
 import numpy as np
 import sys
 import os
+from typing import Optional
 
 # Get the directory containing the current script
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -126,12 +126,13 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
     if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
         print('Error Found')
 
-def run_IRB_model(profit,dataframe=None,csv_name=None,length=20):
-    # It is possible to run the model with a dataframe or a csv file
-    try:
-        df = pd.read_csv(csv_name, sep=';', decimal='.', encoding='utf-8', index_col='open_time') # type: ignore
-    except:
-        df = dataframe.copy() # type: ignore
+def run_IRB_model(profit, length=20, dataframe=Optional[pd.DataFrame], csv_name=Optional[str]):
+    if csv_name is not None:
+        df = pd.read_csv(f"../data/{csv_name}", sep=';', decimal='.', encoding='utf-8', index_col='open_time')
+    elif dataframe is not None:
+        df = dataframe.copy()
+    else:
+        raise ValueError("Either 'dataframe' or 'csv_name' must be provided")
 
     df_filtered = process_data(profit, df, length)
     df_backtest = IRB_strategy(df_filtered)
