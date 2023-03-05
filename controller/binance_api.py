@@ -51,7 +51,7 @@ class spot_API:
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
-                print("\nQtd  : " + str(len(klines_list)))
+                print("\nQty  : " + str(len(klines_list)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
@@ -62,8 +62,8 @@ class spot_API:
                     timeLoop_list[-1] + 1, int(t.time() * 1000), interval, symbol=symbol
                 )
                 klines_list.extend(lastCall)
-                print("\nQtd  : " + str(len(klines_list)))
-                print("\nLoop Finalizado\n")
+                print("\nQty  : " + str(len(klines_list)))
+                print("\nLoop Ended\n")
 
                 END = t.time()
                 print("\nExecution time: " + str(END - START))
@@ -98,13 +98,13 @@ class spot_API:
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
-                print("\nQtd  : " + str(len(klines_list)))
+                print("\nQty  : " + str(len(klines_list)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
                     t.sleep(1.33 - request_Duration)
             else:
-                print("\nLoop Finalizado\n")
+                print("\nLoop Ended\n")
 
                 END = t.time()
                 print("\nExecution time: " + str(END - START))
@@ -206,7 +206,7 @@ class futures_API:
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
-                print("\nQtd  : " + str(len(klines_list)))
+                print("\nQty  : " + str(len(klines_list)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
@@ -215,8 +215,8 @@ class futures_API:
                 print("Else Reached!")
                 lastCall = self.futures_Kline(timeLoop_list[-1] + 1, "", interval)
                 klines_list.extend(lastCall)
-                print("\nQtd  : " + str(len(klines_list)))
-                print("\nLoop Finalizado\n")
+                print("\nQty  : " + str(len(klines_list)))
+                print("\nLoop Ended\n")
 
                 END = t.time()
                 print("\nExecution time: " + str(END - START))
@@ -251,13 +251,13 @@ class futures_API:
                 )
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
-                print("\nQtd  : " + str(len(klines_list)))
+                print("\nQty  : " + str(len(klines_list)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
                     t.sleep(1.33 - request_Duration)
             else:
-                print("\nLoop Finalizado\n")
+                print("\nLoop Ended\n")
 
                 END = t.time()
                 print("\nExecution time: " + str(END - START))
@@ -308,7 +308,7 @@ class futures_API:
                 )
                 kline_List.extend(klines_Loop)
                 print("\nLoop : " + str(index))
-                print("\nQtd  : " + str(len(kline_List)))
+                print("\nQty  : " + str(len(kline_List)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
@@ -317,8 +317,8 @@ class futures_API:
                 print("Else Reached!")
                 lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, "", interval)
                 kline_List.extend(lastCall)
-                print("\nQtd  : " + str(len(kline_List)))
-                print("\nLoop Finalizado\n")
+                print("\nQty  : " + str(len(kline_List)))
+                print("\nLoop Ended\n")
 
                 END = t.time()
                 print("\nExecution time: " + str(END - START))
