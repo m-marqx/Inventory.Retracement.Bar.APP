@@ -27,11 +27,6 @@ SECRET_KEY = os.environ['SECRET_KEY']
 fapi = bAPI.futures_API(API_KEY, SECRET_KEY)
 ma = moving_average.moving_average()
 
-def klines_df_to_csv(dataframe, symbol, interval):
-    str_name = str(symbol) + '-' + str(interval) + '.csv'
-    dataframe.to_csv(str_name, index=True, header=['open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore'], sep=';', decimal='.', encoding='utf-8')
-    return print(str_name+' has been saved')
-
 #%% 
 def process_data(profit, dataframe, length=20):
     try:
