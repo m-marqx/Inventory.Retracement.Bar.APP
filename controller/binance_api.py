@@ -163,6 +163,25 @@ class futures_API:
     def __init__(self):
         self.client = Client(config.api_key, config.secret_key)
 
+    def get_ticker_info(self,Symbol):
+        info = self.client.futures_coin_exchange_info()
+        info_df = pd.DataFrame(info['symbols'])
+        filtered_info = [x['filters'] for x in info_df[info_df['symbol'] == Symbol].to_dict(orient='records')][0]
+        df_filtered = pd.DataFrame.from_records(filtered_info)
+        df_filtered.set_index('filterType')
+        df_filtered.set_index('filterType',inplace=True)
+        df_filtered['minPrice'] = df_filtered['minPrice'].astype('float64')
+        df_filtered['maxPrice'] = df_filtered['maxPrice'].astype('float64')
+        df_filtered['tickSize'] = df_filtered['tickSize'].astype('float64')
+        df_filtered['stepSize'] = df_filtered['stepSize'].astype('float64')
+        df_filtered['maxQty'] = df_filtered['maxQty'].astype('float64')
+        df_filtered['minQty'] = df_filtered['minQty'].astype('float64')
+        df_filtered['limit'] = df_filtered['limit'].astype('float64')
+        df_filtered['multiplierDown'] = df_filtered['multiplierDown'].astype('float64')
+        df_filtered['multiplierUp'] = df_filtered['multiplierUp'].astype('float64')
+        df_filtered['multiplierDecimal'] = df_filtered['multiplierDecimal'].astype('float64')
+        return df_filtered
+
     def futures_Kline(
         self,
         startTime,
