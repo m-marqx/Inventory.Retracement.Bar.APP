@@ -9,19 +9,14 @@ from typing import Optional
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the desired directory
-controller_dir = os.path.join(current_dir, '..', '..', 'controller')
 indicators_dir = os.path.join(current_dir, '..', 'indicators')
 
 # Add the desired directory to the Python path
-sys.path.insert(0,controller_dir)
 sys.path.insert(0,indicators_dir)
 # %% 
-import binance_api as bAPI
 import moving_average
 # Import the class
 
-# Create an instance of the class
-fapi = bAPI.futures_API()
 ma = moving_average.moving_average()
 
 #%% 
