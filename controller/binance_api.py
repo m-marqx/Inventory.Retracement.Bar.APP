@@ -1,11 +1,12 @@
 import time as t
 from binance.client import Client
 import pandas as pd
+import config
 
 # spot Klines
 class spot_API:
-    def __init__(self, api_key, secret_key):
-        self.client = Client(api_key, secret_key)
+    def __init__(self):
+        self.client = Client(config.api_key, config.secret_key)
 
     def get_Spot_Kline(
         self,
@@ -159,8 +160,8 @@ class source:
 
 # coin-M Klines
 class futures_API:
-    def __init__(self, api_key, secret_key):
-        self.client = Client(api_key, secret_key)
+    def __init__(self):
+        self.client = Client(config.api_key, config.secret_key)
 
     def futures_Kline(
         self,
@@ -339,8 +340,8 @@ class futures_API:
 
 # Classe ainda não testada
 class coin_Trade:
-    def __init__(self, api_key, secret_key):
-        self.client = Client(api_key, secret_key)
+    def __init__(self):
+        self.client = Client(config.api_key, config.secret_key)
 
     def get_open_orders(self):
         return self.client.futures_coin_get_open_orders()
