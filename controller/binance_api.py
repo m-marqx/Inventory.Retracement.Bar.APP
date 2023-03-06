@@ -181,6 +181,12 @@ class futures_API:
         df_filtered['multiplierUp'] = df_filtered['multiplierUp'].astype('float64')
         df_filtered['multiplierDecimal'] = df_filtered['multiplierDecimal'].astype('float64')
         return df_filtered
+    
+    def get_tick_size(self,Symbol):
+        
+        df = self.get_ticker_info(Symbol)
+        tick_size = df.loc['PRICE_FILTER', 'tickSize']
+        return tick_size
 
     def futures_Kline(
         self,
