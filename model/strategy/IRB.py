@@ -21,10 +21,7 @@ import moving_average
 # Import the class
 
 # Create an instance of the class
-API_KEY = os.environ['API_KEY']
-SECRET_KEY = os.environ['SECRET_KEY']
-
-fapi = bAPI.futures_API(API_KEY, SECRET_KEY)
+fapi = bAPI.futures_API()
 ma = moving_average.moving_average()
 
 #%% 
