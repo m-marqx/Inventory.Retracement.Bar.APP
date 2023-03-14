@@ -22,10 +22,10 @@ ma = moving_average.moving_average()
 #%% 
 def process_data(profit, dataframe, length=20):
     try:
-        df_filtered = pd.DataFrame(dataframe[['open','high','low','close']]) # Filter out the columns we don't need
+        df_filtered = dataframe[['open', 'high', 'low', 'close']].copy()
     except KeyError:
-        df_filtered = pd.DataFrame(dataframe[['Open','High','Low','Close']]) # Filter out the columns we don't need
-        df_filtered = df_filtered.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'})
+        df_filtered = dataframe[['Open', 'High', 'Low', 'Close']].copy()
+        df_filtered.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'}, inplace=True)
 
     df_filtered['open'] = df_filtered['open'].astype(float)
     df_filtered['high'] = df_filtered['high'].astype(float)
