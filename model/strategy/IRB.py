@@ -1,21 +1,8 @@
-#%% 
+#%%
+from typing import Optional
 import pandas as pd
 import numpy as np
-import sys
-import os
-from typing import Optional
-
-# Get the directory containing the current script
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Construct the path to the desired directory
-indicators_dir = os.path.join(current_dir, '..', 'indicators')
-
-# Add the desired directory to the Python path
-sys.path.insert(0,indicators_dir)
-# %% 
-import moving_average
-# Import the class
+from ..indicators import moving_average
 
 ma = moving_average.moving_average()
 
