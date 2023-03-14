@@ -19,118 +19,164 @@ import moving_average
 
 ma = moving_average.moving_average()
 
-#%% 
+#%%
 def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     try:
-        df_filtered = dataframe[['open', 'high', 'low', 'close']].copy()
+        df_filtered = dataframe[["open", "high", "low", "close"]].copy()
     except KeyError:
-        df_filtered = dataframe[['Open', 'High', 'Low', 'Close']].copy()
-        df_filtered.rename(columns={'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'}, inplace=True)
+        df_filtered = dataframe[["Open", "High", "Low", "Close"]].copy()
+        df_filtered.rename(
+            columns={"Open": "open", "High": "high", "Low": "low", "Close": "close"},
+            inplace=True,
+        )
 
-    df_filtered['open'] = df_filtered['open'].astype(float)
-    df_filtered['high'] = df_filtered['high'].astype(float)
-    df_filtered['low'] = df_filtered['low'].astype(float)
-    df_filtered['close'] = df_filtered['close'].astype(float)
-    Open = df_filtered['open']
-    High = df_filtered['high']
-    Low = df_filtered['low']
-    Close = df_filtered['close']
+    df_filtered["open"] = df_filtered["open"].astype(float)
+    df_filtered["high"] = df_filtered["high"].astype(float)
+    df_filtered["low"] = df_filtered["low"].astype(float)
+    df_filtered["close"] = df_filtered["close"].astype(float)
+    Open = df_filtered["open"]
+    High = df_filtered["high"]
+    Low = df_filtered["low"]
+    Close = df_filtered["close"]
     ema = ma.ema(Close, length)
-    df_filtered['ema'] = ema
-    df_filtered['uptrend'] = np.where(Close >= df_filtered['ema'], True, False)
+    df_filtered["ema"] = ema
+    df_filtered["uptrend"] = np.where(Close >= df_filtered["ema"], True, False)
 
-    is_bullish = df_filtered['uptrend'] == True
+    is_bullish = df_filtered["uptrend"] == True
 
     candle_amplitude = High - Low
-    candle_downtail = np.minimum(Open, Close) - Low # type: ignore
+    candle_downtail = np.minimum(Open, Close) - Low  # type: ignore
     candle_uppertail = High - np.maximum(Open, Close)
 
-# Analyze the downtail and uptail of the candle and assign a value to the IRB_Condition column based on the decimal value of the downtail or uptail
+    # Analyze the downtail and uptail of the candle and assign a value to the IRB_Condition column based on the decimal value of the downtail or uptail
     bullish_calculation = candle_uppertail / candle_amplitude
     bearish_calculation = candle_downtail / candle_amplitude
-    
-    df_filtered['IRB_Condition'] = np.where(is_bullish, bullish_calculation, bearish_calculation)
-    irb_condition = df_filtered['IRB_Condition'] >= 0.45
+
+    df_filtered["IRB_Condition"] = np.where(
+        is_bullish, bullish_calculation, bearish_calculation
+    )
+    irb_condition = df_filtered["IRB_Condition"] >= 0.45
     buy_condition = irb_condition & is_bullish
-    
-    df_filtered['Signal'] = np.where(buy_condition, 1, np.nan)
-    df_filtered['Signal'].astype('float32')
 
-    entry_Price = df_filtered['high'].shift(1) + tick_size
-    target = df_filtered['high'].shift(1) + (candle_amplitude.shift(1) * profit)
-    
+    df_filtered["Signal"] = np.where(buy_condition, 1, np.nan)
+    df_filtered["Signal"].astype("float32")
+
+    entry_Price = df_filtered["high"].shift(1) + tick_size
+    target = df_filtered["high"].shift(1) + (candle_amplitude.shift(1) * profit)
+
     # Stop Loss is the lowest low of the last X candles
-    stop_loss = df_filtered['low'].rolling(window=lowestlow).min().shift(1) - tick_size
-    
-    # If the lowest low is NaN, fill it with the cumulative minimum
-    stop_loss = stop_loss.fillna(df_filtered['low'].cummin())
+    stop_loss = df_filtered["low"].rolling(window=lowestlow).min().shift(1) - tick_size
 
-    df_filtered['Entry_Price'] = np.where(buy_condition, entry_Price, np.nan)
-    df_filtered['Take_Profit'] = np.where(buy_condition, target, np.nan)
-    df_filtered['Stop_Loss'] = np.where(buy_condition, stop_loss, np.nan)
+    # If the lowest low is NaN, fill it with the cumulative minimum
+    stop_loss = stop_loss.fillna(df_filtered["low"].cummin())
+
+    df_filtered["Entry_Price"] = np.where(buy_condition, entry_Price, np.nan)
+    df_filtered["Take_Profit"] = np.where(buy_condition, target, np.nan)
+    df_filtered["Stop_Loss"] = np.where(buy_condition, stop_loss, np.nan)
 
     return df_filtered
-#%%
+# %%
 
 def IRB_strategy(df):
     dataframe = df.copy()
     dataframe.reset_index(inplace=True)
-    dataframe['Close Position'] = False
-    
-    for x in range(1, dataframe.shape[0]):
-        if (dataframe['Signal'].iloc[x-1] == 1) & (dataframe['Close Position'].iloc[x] == False):
-            dataframe.loc[x,'Signal'] = dataframe['Signal'].iloc[x-1]
-            dataframe.loc[x,'Entry_Price'] = dataframe['Entry_Price'].iloc[x-1]	
-            dataframe.loc[x,'Take_Profit'] = dataframe['Take_Profit'].iloc[x-1]
-            dataframe.loc[x,'Stop_Loss'] = dataframe['Stop_Loss'].iloc[x-1]
+    dataframe["Close Position"] = False
 
-            if (dataframe['high'].iloc[x] > dataframe['Take_Profit'].iloc[x]) ^ (dataframe['low'].iloc[x] < dataframe['Stop_Loss'].iloc[x]):
-                dataframe.loc[x,'Close Position'] = True
-                dataframe.loc[x,'Signal'] = -1
+    for x in range(1, dataframe.shape[0]):
+        if (dataframe["Signal"].iloc[x - 1] == 1) & (
+            dataframe["Close Position"].iloc[x] == False
+        ):
+            dataframe.loc[x, "Signal"] = dataframe["Signal"].iloc[x - 1]
+            dataframe.loc[x, "Entry_Price"] = dataframe["Entry_Price"].iloc[x - 1]
+            dataframe.loc[x, "Take_Profit"] = dataframe["Take_Profit"].iloc[x - 1]
+            dataframe.loc[x, "Stop_Loss"] = dataframe["Stop_Loss"].iloc[x - 1]
+
+            if (dataframe["high"].iloc[x] > dataframe["Take_Profit"].iloc[x]) ^ (
+                dataframe["low"].iloc[x] < dataframe["Stop_Loss"].iloc[x]
+            ):
+                dataframe.loc[x, "Close Position"] = True
+                dataframe.loc[x, "Signal"] = -1
 
     return dataframe
 
-#%%
+
+# %%
 def calculate_results(dataframe, check_error=False):
-    is_close_position = dataframe['Close Position'] == True
-    is_take_profit = dataframe['high'] > dataframe['Take_Profit']
-    is_stop_loss = dataframe['low'] < dataframe['Stop_Loss']
-    
-    profit = dataframe['Take_Profit'] - dataframe['Entry_Price']
-    loss = dataframe['Stop_Loss'] - dataframe['Entry_Price']
-    
-    dataframe['Result'] = 0 
-    dataframe['Result'] = np.where(is_close_position & is_take_profit, profit, dataframe['Result'])
-    dataframe['Result'] = np.where(is_close_position & is_stop_loss, loss, dataframe['Result'])
-    dataframe['Cumulative_Result'] = dataframe['Result'].cumsum()
+    is_close_position = dataframe["Close Position"] == True
+    is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
+    is_stop_loss = dataframe["low"] < dataframe["Stop_Loss"]
+
+    profit = dataframe["Take_Profit"] - dataframe["Entry_Price"]
+    loss = dataframe["Stop_Loss"] - dataframe["Entry_Price"]
+
+    dataframe["Result"] = 0
+    dataframe["Result"] = np.where(
+        is_close_position & is_take_profit, profit, dataframe["Result"]
+    )
+    dataframe["Result"] = np.where(
+        is_close_position & is_stop_loss, loss, dataframe["Result"]
+    )
+    dataframe["Cumulative_Result"] = dataframe["Result"].cumsum()
 
     if check_error:
-        dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
-        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
-        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
-    if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
-        print('Error Found')
+        dataframe["Signal_Shifted"] = dataframe["Signal"].shift(1)
+        dataframe["Check_Error"] = np.where(
+            (pd.isnull(dataframe["Signal"])) & (dataframe["Signal_Shifted"] == 1),
+            True,
+            False,
+        )
+        dataframe["Check_Error"] = np.where(
+            (
+                pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]
+                == True
+            ),
+            True,
+            dataframe["Check_Error"],
+        )
+    if dataframe[dataframe["Check_Error"] == True].shape[0] > 0:
+        print("Error Found")
+
 
 def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
-    is_close_position = dataframe['Close Position'] == True
-    is_take_profit = dataframe['high'] > dataframe['Take_Profit']
-    is_stop_loss = dataframe['low'] < dataframe['Stop_Loss']
-    
-    dataframe['Result'] = 0 
-    dataframe['Result'] = np.where(is_close_position & is_take_profit, profit, dataframe['Result'])
-    dataframe['Result'] = np.where(is_close_position & is_stop_loss, -loss, dataframe['Result'])
-    dataframe['Cumulative_Result'] = dataframe['Result'].cumsum()
+    is_close_position = dataframe["Close Position"] == True
+    is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
+    is_stop_loss = dataframe["low"] < dataframe["Stop_Loss"]
+
+    dataframe["Result"] = 0
+    dataframe["Result"] = np.where(
+        is_close_position & is_take_profit, profit, dataframe["Result"]
+    )
+    dataframe["Result"] = np.where(
+        is_close_position & is_stop_loss, -loss, dataframe["Result"]
+    )
+    dataframe["Cumulative_Result"] = dataframe["Result"].cumsum()
 
     if check_error:
-        dataframe['Signal_Shifted'] = dataframe['Signal'].shift(1)
-        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal'])) & (dataframe['Signal_Shifted'] == 1), True, False)
-        dataframe['Check_Error'] = np.where((pd.isnull(dataframe['Signal_Shifted']) & dataframe['Close Position'] == True), True, dataframe['Check_Error'])
-    if dataframe[dataframe['Check_Error'] == True].shape[0] > 0:
-        print('Error Found')
+        dataframe["Signal_Shifted"] = dataframe["Signal"].shift(1)
+        dataframe["Check_Error"] = np.where(
+            (pd.isnull(dataframe["Signal"])) & (dataframe["Signal_Shifted"] == 1),
+            True,
+            False,
+        )
+        dataframe["Check_Error"] = np.where(
+            (
+                pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]
+                == True
+            ),
+            True,
+            dataframe["Check_Error"],
+        )
+    if dataframe[dataframe["Check_Error"] == True].shape[0] > 0:
+        print("Error Found")
 
-def run_IRB_model(profit, length=20, dataframe=Optional[pd.DataFrame], csv_file=Optional[str]):
+
+def run_IRB_model(
+    profit, length=20, dataframe=Optional[pd.DataFrame], csv_file=Optional[str]
+):
     if csv_file is not None:
-        df = pd.read_csv(f"{csv_file}", sep=';', decimal='.', encoding='utf-8', index_col='open_time')
+        df = pd.read_csv(
+            f"{csv_file}", sep=";", decimal=".", encoding="utf-8", index_col="open_time"
+        )
     elif dataframe is not None:
         df = dataframe.copy()
     else:
