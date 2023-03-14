@@ -187,3 +187,27 @@ def run_IRB_model(
 
     calculate_results(df_backtest, check_error=True)
     return df_backtest
+
+#%%
+def run_IRB_model_fixed(
+    target,
+    profit,
+    loss,
+    length=20,
+    dataframe=Optional[pd.DataFrame],
+    csv_file=Optional[str],
+):
+    if csv_file is not Optional[str]:
+        df = pd.read_csv(
+            f"{csv_file}", sep=";", decimal=".", encoding="utf-8", index_col="open_time"
+        )
+    elif dataframe is not Optional[pd.DataFrame]:
+        df = dataframe.copy()
+    else:
+        raise ValueError("Either 'dataframe' or 'csv_file' must be provided")
+
+    df_filtered = process_data(target, df, length)
+    df_backtest = IRB_strategy(df_filtered)
+
+    calculate_fixed_pl_results(df_backtest, profit, loss, check_error=True)
+    return df_backtest
