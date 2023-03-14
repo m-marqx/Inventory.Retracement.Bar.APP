@@ -211,3 +211,34 @@ def run_IRB_model_fixed(
 
     calculate_fixed_pl_results(df_backtest, profit, loss, check_error=True)
     return df_backtest
+
+#%%
+def EM_Calculation(dataframe):
+    df = dataframe["Result"].copy()
+
+    df["Gain Count"] = np.where(df["Result"] > 0, 1, 0)
+    df["Loss Count"] = np.where(df["Result"] < 0, 1, 0)
+
+    df["Gain Count"] = df["Gain Count"].cumsum()
+    df["Loss Count"] = df["Loss Count"].cumsum()
+
+    df["Mean Gain"] = df.query("Result > 0")["Result"].expanding().mean()
+    df["Mean Loss"] = df.query("Result < 0")["Result"].expanding().mean()
+
+    df["Mean Gain"].fillna(method="ffill", inplace=True)
+    df["Mean Loss"].fillna(method="ffill", inplace=True)
+
+    df["Total Gain"] = np.where(df["Result"] > 0, df["Result"], 0).cumsum()
+    df["Total Loss"] = np.where(df["Result"] < 0, df["Result"], 0).cumsum()
+
+    df["Total Trade"] = df["Gain Count"] + df["Loss Count"]
+    df["Win Rate"] = df["Gain Count"] / df["Total Trade"]
+    df["Loss Rate"] = df["Loss Count"] / df["Total Trade"]
+
+    # EM
+    df["EM_Gain"] = df["Mean Gain"] * df["Win Rate"]
+    df["EM_Loss"] = df["Mean Loss"] * df["Loss Rate"]
+    df["EM"] = df["EM_Gain"] - abs(df["EM_Loss"])
+    df = df.query("Result != 0")
+
+    return df
