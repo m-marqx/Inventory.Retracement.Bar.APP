@@ -20,7 +20,7 @@ import moving_average
 ma = moving_average.moving_average()
 
 #%% 
-def process_data(profit, dataframe, length=20, lowestlow=1):
+def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     try:
         df_filtered = dataframe[['open', 'high', 'low', 'close']].copy()
     except KeyError:
@@ -56,11 +56,11 @@ def process_data(profit, dataframe, length=20, lowestlow=1):
     df_filtered['Signal'] = np.where(buy_condition, 1, np.nan)
     df_filtered['Signal'].astype('float32')
 
-    entry_Price = df_filtered['high'].shift(1)
+    entry_Price = df_filtered['high'].shift(1) + tick_size
     target = df_filtered['high'].shift(1) + (candle_amplitude.shift(1) * profit)
     
     # Stop Loss is the lowest low of the last X candles
-    stop_loss = df_filtered['low'].rolling(window=lowestlow).min().shift(1)
+    stop_loss = df_filtered['low'].rolling(window=lowestlow).min().shift(1) - tick_size
     
     # If the lowest low is NaN, fill it with the cumulative minimum
     stop_loss = stop_loss.fillna(df_filtered['low'].cummin())
