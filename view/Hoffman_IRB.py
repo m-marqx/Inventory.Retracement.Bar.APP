@@ -18,6 +18,8 @@ def IRB_plot(dataframe):
     if "Win Rate" not in data_frame.columns:
         data_frame["Win Rate"] = ((data_frame["Result"] > 0).cumsum()) / ((data_frame["Result"] < 0).cumsum())
 
+    dataframe["Date"] = get_date_column(data_frame)
+
     fig = px.histogram(
         (data_frame.query("(`Win Rate` > 0) and (`Close Position` == True)")).iloc[:, -1],
         histnorm="probability",
