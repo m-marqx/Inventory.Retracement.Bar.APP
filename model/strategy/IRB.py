@@ -28,7 +28,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
 
     ema = ma.ema(close_price, length)
     df_filtered["ema"] = ema
-    df_filtered["uptrend"] = np.where(close_price >= df_filtered["ema"], True, False)
+    df_filtered["uptrend"] = close_price >= df_filtered["ema"]
 
     is_bullish = df_filtered["uptrend"]
 
