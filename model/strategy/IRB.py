@@ -177,15 +177,15 @@ def run_IRB_model_fixed(
     csv_file=Optional[str],
 ):
     if csv_file is not Optional[str]:
-        df = pd.read_csv(
+        data_frame = pd.read_csv(
             f"{csv_file}", sep=";", decimal=".", encoding="utf-8", index_col="open_time"
         )
     elif dataframe is not Optional[pd.DataFrame]:
-        df = dataframe.copy()
+        data_frame = dataframe.copy()
     else:
         raise ValueError("Either 'dataframe' or 'csv_file' must be provided")
 
-    df_filtered = process_data(target, df, length)
+    df_filtered = process_data(target, data_frame, length)
     df_backtest = IRB_strategy(df_filtered)
 
     calculate_fixed_pl_results(df_backtest, profit, loss, check_error=True)
