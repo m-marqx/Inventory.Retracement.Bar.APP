@@ -21,19 +21,20 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     df_filtered["high"] = df_filtered["high"].astype(float)
     df_filtered["low"] = df_filtered["low"].astype(float)
     df_filtered["close"] = df_filtered["close"].astype(float)
-    Open = df_filtered["open"]
-    High = df_filtered["high"]
-    Low = df_filtered["low"]
-    Close = df_filtered["close"]
-    ema = ma.ema(Close, length)
+    open_price = df_filtered["open"]
+    high = df_filtered["high"]
+    low_price = df_filtered["low"]
+    close_price = df_filtered["close"]
+
+    ema = ma.ema(close_price, length)
     df_filtered["ema"] = ema
-    df_filtered["uptrend"] = np.where(Close >= df_filtered["ema"], True, False)
+    df_filtered["uptrend"] = np.where(close_price >= df_filtered["ema"], True, False)
 
     is_bullish = df_filtered["uptrend"] == True
 
-    candle_amplitude = High - Low
-    candle_downtail = np.minimum(Open, Close) - Low  # type: ignore
-    candle_uppertail = High - np.maximum(Open, Close)
+    candle_amplitude = high - low_price
+    candle_downtail = np.minimum(open_price, close_price) - low_price  # type: ignore
+    candle_uppertail = high - np.maximum(open_price, close_price)
 
     # Analyze the downtail and uptail of the candle and assign a value to the IRB_Condition column based on the decimal value of the downtail or uptail
     bullish_calculation = candle_uppertail / candle_amplitude
