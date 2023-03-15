@@ -138,6 +138,7 @@ def show_trading_results(dataframe):
         win_rate = wins / (wins + losses)
         data_frame["Win Rate"] = win_rate
 
+    get_date_column(data_frame)
 
     fig = px.histogram(
         (data_frame.query("(`Win Rate` > 0) and (`Close Position` == True)")).iloc[:, -1],
