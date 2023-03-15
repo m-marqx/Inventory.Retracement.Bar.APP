@@ -70,20 +70,19 @@ def IRB_strategy(df):
     dataframe.reset_index(inplace=True)
     dataframe["Close Position"] = False
 
-    for x in range(1, dataframe.shape[0]):
-        if (dataframe["Signal"].iloc[x - 1] == 1) & (
-            dataframe["Close Position"].iloc[x] == False
+    for index in range(1, dataframe.shape[0]):
+        prev_index = index - 1
+        if (dataframe["Signal"].iloc[prev_index] == 1) & (
+            dataframe["Close Position"].iloc[index] == False
         ):
-            dataframe.loc[x, "Signal"] = dataframe["Signal"].iloc[x - 1]
-            dataframe.loc[x, "Entry_Price"] = dataframe["Entry_Price"].iloc[x - 1]
-            dataframe.loc[x, "Take_Profit"] = dataframe["Take_Profit"].iloc[x - 1]
-            dataframe.loc[x, "Stop_Loss"] = dataframe["Stop_Loss"].iloc[x - 1]
+            dataframe.loc[index, "Signal"] = dataframe["Signal"].iloc[prev_index]
+            dataframe.loc[index, "Entry_Price"] = dataframe["Entry_Price"].iloc[prev_index]
+            dataframe.loc[index, "Take_Profit"] = dataframe["Take_Profit"].iloc[prev_index]
+            dataframe.loc[index, "Stop_Loss"] = dataframe["Stop_Loss"].iloc[prev_index]
 
-            if (dataframe["high"].iloc[x] > dataframe["Take_Profit"].iloc[x]) ^ (
-                dataframe["low"].iloc[x] < dataframe["Stop_Loss"].iloc[x]
-            ):
-                dataframe.loc[x, "Close Position"] = True
-                dataframe.loc[x, "Signal"] = -1
+            if (dataframe["high"].iloc[index] > dataframe["Take_Profit"].iloc[index]) ^ (dataframe["low"].iloc[index] < dataframe["Stop_Loss"].iloc[index]):
+                dataframe.loc[index, "Close Position"] = True
+                dataframe.loc[index, "Signal"] = -1
 
     return dataframe
 
