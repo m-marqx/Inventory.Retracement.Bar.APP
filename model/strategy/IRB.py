@@ -49,7 +49,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     df_filtered["Signal"] = np.where(buy_condition, 1, np.nan)
     df_filtered["Signal"].astype("float32")
 
-    entry_Price = df_filtered["high"].shift(1) + tick_size
+    entry_price = df_filtered["high"].shift(1) + tick_size
     target = df_filtered["high"].shift(1) + (candle_amplitude.shift(1) * profit)
 
     # Stop Loss is the lowest low of the last X candles
@@ -58,7 +58,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     # If the lowest low is NaN, fill it with the cumulative minimum
     stop_loss = stop_loss.fillna(df_filtered["low"].cummin())
 
-    df_filtered["Entry_Price"] = np.where(buy_condition, entry_Price, np.nan)
+    df_filtered["Entry_Price"] = np.where(buy_condition, entry_price, np.nan)
     df_filtered["Take_Profit"] = np.where(buy_condition, target, np.nan)
     df_filtered["Stop_Loss"] = np.where(buy_condition, stop_loss, np.nan)
 
