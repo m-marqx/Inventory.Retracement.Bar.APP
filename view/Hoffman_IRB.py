@@ -116,3 +116,115 @@ def IRB_plot(dataframe):
 
     # Exibir o gráfico
     fig.show()
+
+# %%
+def show_trading_results(dataframe):
+    data_frame = dataframe.copy()
+
+    if "Win Rate" in data_frame.columns:
+        data_frame["Win Rate"] = data_frame["Win Rate"]
+    else:
+        wins = (data_frame["Result"] > 0).cumsum()
+        losses = (data_frame["Result"] < 0).cumsum()
+        win_rate = wins / (wins + losses)
+        data_frame["Win Rate"] = win_rate
+
+
+    fig = px.histogram(
+        (data_frame.query("(`Win Rate` > 0) and (`Close Position` == True)")).iloc[:, -1],
+        histnorm="probability",
+    )
+    fig2 = px.histogram(data_frame.query("`Close Position` == True").iloc[:, -6])
+    fig.show()
+    fig2.show()
+
+    data_frame.plot(x="date", y="Cumulative_Result", kind="line")
+
+    # Criar um gráfico de candlesticks com Plotly Express
+    fig1 = go.Figure(
+        data=[
+            go.Candlestick(
+                x=data_frame["date"],
+                open=data_frame["open"],
+                high=data_frame["high"],
+                low=data_frame["low"],
+                close=data_frame["close"],
+            )
+        ]
+    )
+
+    # Adicionar linhas para ema, Entry_Price, Take_Profit e Stop_Loss
+    fig1.add_trace(
+        go.Scatter(x=data_frame["date"], y=data_frame["ema"], name="EMA", line=dict(color="white"))
+    )
+    fig1.add_trace(
+        go.Scatter(
+            x=data_frame["date"],
+            y=data_frame["Entry_Price"],
+            name="Entry Price",
+            line=dict(color="yellow"),
+        )
+    )
+    fig1.add_trace(
+        go.Scatter(
+            x=data_frame["date"],
+            y=data_frame["Take_Profit"],
+            name="Take Profit",
+            line=dict(color="lime"),
+        )
+    )
+    fig1.add_trace(
+        go.Scatter(
+            x=data_frame["date"], y=data_frame["Stop_Loss"], name="Stop Loss", line=dict(color="red")
+        )
+    )
+
+    # Criar um segundo gráfico com a coluna "resultado" e "cumulative_result"
+    fig3 = go.Figure()
+    fig3.add_trace(
+        go.Scatter(
+            x=data_frame["date"],
+            y=data_frame["Cumulative_Result"],
+            name="Cumulative Result",
+            line=dict(color="white"),
+        )
+    )
+
+    # Criar uma figura combinando os dois gráficos
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        shared_xaxes=True,
+        vertical_spacing=0.02,
+        row_heights=[0.2, 0.8],
+    )  # especifica a altura da primeira e segunda linha
+    # row_widths=[1]) # especifica a largura de cada coluna
+
+    # # Adicionar o subplot na segunda linha e primeira coluna
+    fig.add_trace(fig3.data[0], row=1, col=1)
+    for trace in fig3.data[1:]:
+        fig.add_trace(trace, row=1, col=1)
+
+    # Adicionar o gráfico de candlesticks na primeira linha e primeira coluna
+    fig.add_trace(fig1.data[0], row=2, col=1)
+    for trace in fig1.data[1:]:
+        fig.add_trace(trace, row=2, col=1)
+
+    # Atualizar o layout da figura
+    fig.update_layout(
+        title={
+            "text": "Hoffman Inventory Retracement Bar",
+            "x": 0.5,
+        },
+        template="plotly_dark",
+        font=dict(
+            family="Georgia",
+            size=18,
+        ),
+        legend_title="Trade Signals",
+        showlegend=True,
+        xaxis_rangeslider_visible=False,  # remove o range slider
+    )
+
+    # Exibir o gráfico
+    fig.show()
