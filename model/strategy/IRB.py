@@ -30,7 +30,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     df_filtered["ema"] = ema
     df_filtered["uptrend"] = np.where(close_price >= df_filtered["ema"], True, False)
 
-    is_bullish = df_filtered["uptrend"] == True
+    is_bullish = df_filtered["uptrend"]
 
     candle_amplitude = high - low_price
     candle_downtail = np.minimum(open_price, close_price) - low_price  # type: ignore
@@ -72,9 +72,7 @@ def IRB_strategy(df):
 
     for index in range(1, dataframe.shape[0]):
         prev_index = index - 1
-        if (dataframe["Signal"].iloc[prev_index] == 1) & (
-            dataframe["Close Position"].iloc[index] == False
-        ):
+        if (dataframe["Signal"].iloc[prev_index] == 1) & ~dataframe["Close Position"].iloc[index]:
             dataframe.loc[index, "Signal"] = dataframe["Signal"].iloc[prev_index]
             dataframe.loc[index, "Entry_Price"] = dataframe["Entry_Price"].iloc[prev_index]
             dataframe.loc[index, "Take_Profit"] = dataframe["Take_Profit"].iloc[prev_index]
@@ -89,7 +87,7 @@ def IRB_strategy(df):
 
 # %%
 def calculate_results(dataframe, check_error=False):
-    is_close_position = dataframe["Close Position"] == True
+    is_close_position = dataframe["Close Position"]
     is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
     is_stop_loss = dataframe["low"] < dataframe["Stop_Loss"]
 
@@ -113,19 +111,16 @@ def calculate_results(dataframe, check_error=False):
             False,
         )
         dataframe["Check_Error"] = np.where(
-            (
-                pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]
-                == True
-            ),
+            (pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]),
             True,
             dataframe["Check_Error"],
         )
-    if dataframe[dataframe["Check_Error"] == True].shape[0] > 0:
+    if dataframe[dataframe["Check_Error"]].shape[0] > 0:
         print("Error Found")
 
 
 def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
-    is_close_position = dataframe["Close Position"] == True
+    is_close_position = dataframe["Close Position"]
     is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
     is_stop_loss = dataframe["low"] < dataframe["Stop_Loss"]
 
@@ -146,14 +141,11 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
             False,
         )
         dataframe["Check_Error"] = np.where(
-            (
-                pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]
-                == True
-            ),
+            (pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]),
             True,
             dataframe["Check_Error"],
         )
-    if dataframe[dataframe["Check_Error"] == True].shape[0] > 0:
+    if dataframe[dataframe["Check_Error"]].shape[0] > 0:
         print("Error Found")
 
 
