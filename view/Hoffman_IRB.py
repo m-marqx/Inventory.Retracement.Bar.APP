@@ -130,13 +130,10 @@ def IRB_plot(dataframe):
 def show_trading_results(dataframe):
     data_frame = dataframe.copy()
 
-    if "Win Rate" in data_frame.columns:
-        data_frame["Win Rate"] = data_frame["Win Rate"]
-    else:
+    if "Win Rate" not in data_frame.columns:
         wins = (data_frame["Result"] > 0).cumsum()
         losses = (data_frame["Result"] < 0).cumsum()
-        win_rate = wins / (wins + losses)
-        data_frame["Win Rate"] = win_rate
+        data_frame["Win Rate"] = wins / (wins + losses)
 
     get_date_column(data_frame)
 
