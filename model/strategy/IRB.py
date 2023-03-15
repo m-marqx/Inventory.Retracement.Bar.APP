@@ -30,10 +30,8 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     df_filtered["ema"] = ema
     df_filtered["uptrend"] = close_price >= df_filtered["ema"]
 
-    is_bullish = df_filtered["uptrend"]
-
     candle_amplitude = high - low_price
-    candle_downtail = np.minimum(open_price, close_price) - low_price  # type: ignore
+    candle_downtail = np.minimum(open_price, close_price) - low_price
     candle_uppertail = high - np.maximum(open_price, close_price)
 
     # Analyze the downtail and uptail of the candle and assign a value to the IRB_Condition column based on the decimal value of the downtail or uptail
@@ -41,10 +39,10 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     bearish_calculation = candle_downtail / candle_amplitude
 
     df_filtered["IRB_Condition"] = np.where(
-        is_bullish, bullish_calculation, bearish_calculation
+        df_filtered["uptrend"], bullish_calculation, bearish_calculation
     )
     irb_condition = df_filtered["IRB_Condition"] >= 0.45
-    buy_condition = irb_condition & is_bullish
+    buy_condition = irb_condition & df_filtered["uptrend"]
 
     df_filtered["Signal"] = np.where(buy_condition, 1, np.nan)
     df_filtered["Signal"].astype("float32")
