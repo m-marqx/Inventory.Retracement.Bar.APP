@@ -193,31 +193,31 @@ def run_IRB_model_fixed(
 
 #%%
 def EM_Calculation(dataframe):
-    df = dataframe["Result"].copy()
+    data_frame = dataframe["Result"].copy()
 
-    df["Gain Count"] = np.where(df["Result"] > 0, 1, 0)
-    df["Loss Count"] = np.where(df["Result"] < 0, 1, 0)
+    data_frame["Gain Count"] = np.where(data_frame["Result"] > 0, 1, 0)
+    data_frame["Loss Count"] = np.where(data_frame["Result"] < 0, 1, 0)
 
-    df["Gain Count"] = df["Gain Count"].cumsum()
-    df["Loss Count"] = df["Loss Count"].cumsum()
+    data_frame["Gain Count"] = data_frame["Gain Count"].cumsum()
+    data_frame["Loss Count"] = data_frame["Loss Count"].cumsum()
 
-    df["Mean Gain"] = df.query("Result > 0")["Result"].expanding().mean()
-    df["Mean Loss"] = df.query("Result < 0")["Result"].expanding().mean()
+    data_frame["Mean Gain"] = data_frame.query("Result > 0")["Result"].expanding().mean()
+    data_frame["Mean Loss"] = data_frame.query("Result < 0")["Result"].expanding().mean()
 
-    df["Mean Gain"].fillna(method="ffill", inplace=True)
-    df["Mean Loss"].fillna(method="ffill", inplace=True)
+    data_frame["Mean Gain"].fillna(method="ffill", inplace=True)
+    data_frame["Mean Loss"].fillna(method="ffill", inplace=True)
 
-    df["Total Gain"] = np.where(df["Result"] > 0, df["Result"], 0).cumsum()
-    df["Total Loss"] = np.where(df["Result"] < 0, df["Result"], 0).cumsum()
+    data_frame["Total Gain"] = np.where(data_frame["Result"] > 0, data_frame["Result"], 0).cumsum()
+    data_frame["Total Loss"] = np.where(data_frame["Result"] < 0, data_frame["Result"], 0).cumsum()
 
-    df["Total Trade"] = df["Gain Count"] + df["Loss Count"]
-    df["Win Rate"] = df["Gain Count"] / df["Total Trade"]
-    df["Loss Rate"] = df["Loss Count"] / df["Total Trade"]
+    data_frame["Total Trade"] = data_frame["Gain Count"] + data_frame["Loss Count"]
+    data_frame["Win Rate"] = data_frame["Gain Count"] / data_frame["Total Trade"]
+    data_frame["Loss Rate"] = data_frame["Loss Count"] / data_frame["Total Trade"]
 
-    # EM
-    df["EM_Gain"] = df["Mean Gain"] * df["Win Rate"]
-    df["EM_Loss"] = df["Mean Loss"] * df["Loss Rate"]
-    df["EM"] = df["EM_Gain"] - abs(df["EM_Loss"])
-    df = df.query("Result != 0")
+    # expected mathematical calculation
+    em_gain = data_frame["Mean Gain"] * data_frame["Win Rate"]
+    em_loss = data_frame["Mean Loss"] * data_frame["Loss Rate"]
+    data_frame["EM"] = em_gain - abs(em_loss)
+    data_frame = data_frame.query("Result != 0")
 
-    return df
+    return data_frame
