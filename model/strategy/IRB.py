@@ -160,11 +160,11 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
 def run_IRB_model(
     profit, length=20, dataframe=Optional[pd.DataFrame], csv_file=Optional[str]
 ):
-    if csv_file is not None:
+    if csv_file is not Optional[str]:
         df = pd.read_csv(
             f"{csv_file}", sep=";", decimal=".", encoding="utf-8", index_col="open_time"
         )
-    elif dataframe is not None:
+    elif dataframe is not Optional[pd.DataFrame]:
         df = dataframe.copy()
     else:
         raise ValueError("Either 'dataframe' or 'csv_name' must be provided")
