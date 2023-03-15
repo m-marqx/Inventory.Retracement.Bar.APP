@@ -5,6 +5,13 @@ import plotly.express as px
 import pandas as pd
 #%%
 
+def get_date_column(dataframe):
+    if "open_time" in dataframe.columns:
+        dataframe["Date"] = pd.to_datetime(dataframe["open_time"], unit="ms")
+    elif "Date" not in dataframe.columns:
+        dataframe["Date"] = dataframe.index
+        return dataframe["Date"]
+
 def IRB_plot(dataframe):
     data_frame = dataframe.copy()
 
