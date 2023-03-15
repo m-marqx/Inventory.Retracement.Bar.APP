@@ -28,13 +28,13 @@ def IRB_plot(dataframe):
     fig.show()
     fig2.show()
 
-    data_frame.plot(x="date", y="Cumulative_Result", kind="line")
+    data_frame.plot(x="Date", y="Cumulative_Result", kind="line")
 
     # Criar um gráfico de candlesticks com Plotly Express
     fig = go.Figure(
         data=[
             go.Candlestick(
-                x=data_frame["date"],
+                x=data_frame["Date"],
                 open=data_frame["open"],
                 high=data_frame["high"],
                 low=data_frame["low"],
@@ -45,11 +45,11 @@ def IRB_plot(dataframe):
 
     # Adicionar linhas para ema, Entry_Price, Take_Profit e Stop_Loss
     fig.add_trace(
-        go.Scatter(x=data_frame["date"], y=data_frame["ema"], name="EMA", line=dict(color="white"))
+        go.Scatter(x=data_frame["Date"], y=data_frame["ema"], name="EMA", line=dict(color="white"))
     )
     fig.add_trace(
         go.Scatter(
-            x=data_frame["date"],
+            x=data_frame["Date"],
             y=data_frame["Entry_Price"],
             name="Entry Price",
             line=dict(color="yellow"),
@@ -57,7 +57,7 @@ def IRB_plot(dataframe):
     )
     fig.add_trace(
         go.Scatter(
-            x=data_frame["date"],
+            x=data_frame["Date"],
             y=data_frame["Take_Profit"],
             name="Take Profit",
             line=dict(color="lime"),
@@ -65,7 +65,7 @@ def IRB_plot(dataframe):
     )
     fig.add_trace(
         go.Scatter(
-            x=data_frame["date"], y=data_frame["Stop_Loss"], name="Stop Loss", line=dict(color="red")
+            x=data_frame["Date"], y=data_frame["Stop_Loss"], name="Stop Loss", line=dict(color="red")
         )
     )
 
@@ -93,7 +93,7 @@ def IRB_plot(dataframe):
             rangeslider=dict(
                 visible=False
             ),
-            type="date"
+            type="Date"
         )
     )
 
@@ -145,13 +145,13 @@ def show_trading_results(dataframe):
     fig.show()
     fig2.show()
 
-    data_frame.plot(x="date", y="Cumulative_Result", kind="line")
+    data_frame.plot(x="Date", y="Cumulative_Result", kind="line")
 
     # Criar um gráfico de candlesticks com Plotly Express
     fig1 = go.Figure(
         data=[
             go.Candlestick(
-                x=data_frame["date"],
+                x=data_frame["Date"],
                 open=data_frame["open"],
                 high=data_frame["high"],
                 low=data_frame["low"],
@@ -162,11 +162,11 @@ def show_trading_results(dataframe):
 
     # Adicionar linhas para ema, Entry_Price, Take_Profit e Stop_Loss
     fig1.add_trace(
-        go.Scatter(x=data_frame["date"], y=data_frame["ema"], name="EMA", line=dict(color="white"))
+        go.Scatter(x=data_frame["Date"], y=data_frame["ema"], name="EMA", line=dict(color="white"))
     )
     fig1.add_trace(
         go.Scatter(
-            x=data_frame["date"],
+            x=data_frame["Date"],
             y=data_frame["Entry_Price"],
             name="Entry Price",
             line=dict(color="yellow"),
@@ -174,7 +174,7 @@ def show_trading_results(dataframe):
     )
     fig1.add_trace(
         go.Scatter(
-            x=data_frame["date"],
+            x=data_frame["Date"],
             y=data_frame["Take_Profit"],
             name="Take Profit",
             line=dict(color="lime"),
@@ -182,7 +182,7 @@ def show_trading_results(dataframe):
     )
     fig1.add_trace(
         go.Scatter(
-            x=data_frame["date"], y=data_frame["Stop_Loss"], name="Stop Loss", line=dict(color="red")
+            x=data_frame["Date"], y=data_frame["Stop_Loss"], name="Stop Loss", line=dict(color="red")
         )
     )
 
@@ -190,7 +190,7 @@ def show_trading_results(dataframe):
     fig3 = go.Figure()
     fig3.add_trace(
         go.Scatter(
-            x=data_frame["date"],
+            x=data_frame["Date"],
             y=data_frame["Cumulative_Result"],
             name="Cumulative Result",
             line=dict(color="white"),
