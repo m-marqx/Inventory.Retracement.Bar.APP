@@ -51,7 +51,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     target = df_filtered["high"].shift(1) + (candle_amplitude.shift(1) * profit)
 
     # Stop Loss is the lowest low of the last X candles
-    stop_loss = df_filtered["low"].rolling(window=lowestlow).min().shift(1) - tick_size
+    stop_loss = df_filtered["low"].rolling(lowestlow).min().shift() - tick_size
 
     # If the lowest low is NaN, fill it with the cumulative minimum
     stop_loss = stop_loss.fillna(df_filtered["low"].cummin())
