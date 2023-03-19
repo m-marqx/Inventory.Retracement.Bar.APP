@@ -8,12 +8,13 @@ ma = moving_average.moving_average()
 
 #%%
 def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
+    columns = {"Open": "open", "High": "high", "Low": "low", "Close": "close"}
     try:
-        df_filtered = dataframe[["open", "high", "low", "close"]].copy()
+        df_filtered = dataframe[columns.values()].copy()
     except KeyError:
-        df_filtered = dataframe[["Open", "High", "Low", "Close"]].copy()
+        df_filtered = dataframe[columns.keys()].copy()
         df_filtered.rename(
-            columns={"Open": "open", "High": "high", "Low": "low", "Close": "close"},
+            columns=columns,
             inplace=True,
         )
 
