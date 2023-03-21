@@ -247,39 +247,40 @@ def run_IRB_model_fixed(
 # %%
 # TODO6: Esse aqui eu acho que poderia fazer em um arquivo separado fora de strategy inclusive, mas ele se encaixa no 50 tons de result.
 def EM_Calculation(dataframe):
-    data_frame = dataframe["Result"].copy()
+    data_frame = dataframe.query("Result != 0")[["Result"]].copy()
 
-    data_frame["Gain Count"] = np.where(data_frame["Result"] > 0, 1, 0)
-    data_frame["Loss Count"] = np.where(data_frame["Result"] < 0, 1, 0)
+    gain = data_frame["Result"] > 0
+    loss = data_frame["Result"] < 0
+
+    data_frame["Gain Count"] = np.where(gain, 1, 0)
+    data_frame["Loss Count"] = np.where(loss, 1, 0)
 
     data_frame["Gain Count"] = data_frame["Gain Count"].cumsum()
     data_frame["Loss Count"] = data_frame["Loss Count"].cumsum()
 
-    data_frame["Mean Gain"] = (
-        data_frame.query("Result > 0")["Result"].expanding().mean()
-    )
-    data_frame["Mean Loss"] = (
-        data_frame.query("Result < 0")["Result"].expanding().mean()
-    )
+    query_gains = data_frame.query("Result > 0")["Result"]
+    query_loss = data_frame.query("Result < 0")["Result"]
+
+    data_frame["Mean Gain"] = query_gains.expanding().mean()
+    data_frame["Mean Loss"] = query_loss.expanding().mean()
 
     data_frame["Mean Gain"].fillna(method="ffill", inplace=True)
     data_frame["Mean Loss"].fillna(method="ffill", inplace=True)
 
-    data_frame["Total Gain"] = np.where(
-        data_frame["Result"] > 0, data_frame["Result"], 0
-    ).cumsum()
-    data_frame["Total Loss"] = np.where(
-        data_frame["Result"] < 0, data_frame["Result"], 0
-    ).cumsum()
+    data_frame["Total Gain"] = np.where(gain, data_frame["Result"], 0).cumsum()
+    data_frame["Total Loss"] = np.where(loss, data_frame["Result"], 0).cumsum()
 
-    data_frame["Total Trade"] = data_frame["Gain Count"] + data_frame["Loss Count"]
-    data_frame["Win Rate"] = data_frame["Gain Count"] / data_frame["Total Trade"]
-    data_frame["Loss Rate"] = data_frame["Loss Count"] / data_frame["Total Trade"]
+    total_trade = data_frame["Gain Count"] + data_frame["Loss Count"]
+    win_rate = data_frame["Gain Count"] / total_trade
+    loss_rate = data_frame["Loss Count"] / total_trade
+
+    data_frame["Total Trade"] = total_trade
+    data_frame["Win Rate"] = win_rate
+    data_frame["Loss Rate"] = loss_rate
 
     # expected mathematical calculation
     em_gain = data_frame["Mean Gain"] * data_frame["Win Rate"]
     em_loss = data_frame["Mean Loss"] * data_frame["Loss Rate"]
     data_frame["EM"] = em_gain - abs(em_loss)
-    data_frame = data_frame.query("Result != 0")
 
     return data_frame
