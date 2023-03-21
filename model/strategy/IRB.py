@@ -103,6 +103,22 @@ def IRB_strategy(dataframe):
     return data_frame
 
 # %%
+def check_error(dataframe):
+    data_frame = dataframe.loc[:,["Signal", "Close Position"]]
+
+    data_frame["Signal_Shifted"] = data_frame["Signal"].shift(1)
+
+    null_signal = data_frame["Signal"].isnull()
+    null_signal_shift = data_frame["Signal_Shifted"].isnull()
+
+    data_frame["Check_Error"] = (null_signal & (data_frame["Signal_Shifted"] == 1)) | \
+                                (null_signal_shift & data_frame["Close Position"])
+
+    if data_frame["Check_Error"].any():
+        print("Error Found")
+
+    data_frame["Check_error"] = data_frame["Check_Error"].values
+
 def calculate_results(dataframe, check_error=False):
     is_close_position = dataframe["Close Position"]
     is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
