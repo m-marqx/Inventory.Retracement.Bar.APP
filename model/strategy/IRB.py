@@ -245,7 +245,6 @@ def run_IRB_model_fixed(
 
 
 # %%
-# TODO6: Esse aqui eu acho que poderia fazer em um arquivo separado fora de strategy inclusive, mas ele se encaixa no 50 tons de result.
 def EM_Calculation(dataframe):
     data_frame = dataframe.query("Result != 0")[["Result"]].copy()
 
