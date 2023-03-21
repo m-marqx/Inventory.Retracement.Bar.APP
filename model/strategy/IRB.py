@@ -100,7 +100,7 @@ def calculate_irb_signals(dataframe):
             "Entry_Price": entry_price,
             "Take_Profit": take_profit,
             "Stop_Loss": stop_loss,
-            "Close Position": close_position,
+            "Close_Position": close_position,
             "high": high,
             "low": low,
         }
@@ -111,7 +111,7 @@ def calculate_irb_signals(dataframe):
 
 # %%
 def check_error(dataframe):
-    columns = ["Signal", "Close Position"]
+    columns = ["Signal", "Close_Position"]
     data_frame = dataframe[columns].copy()
 
     data_frame["Signal_Shifted"] = data_frame["Signal"].shift(1)
@@ -119,7 +119,7 @@ def check_error(dataframe):
     is_null_signal = data_frame["Signal"].isnull()
     is_null_signal_shift = data_frame["Signal_Shifted"].isnull()
     has_signal_error = is_null_signal & (data_frame["Signal_Shifted"] == 1)
-    has_close_error = is_null_signal_shift & data_frame["Close Position"]
+    has_close_error = is_null_signal_shift & data_frame["Close_Position"]
 
     has_error = has_signal_error | has_close_error
 
@@ -141,10 +141,10 @@ def calculate_results(dataframe, verify_error=True):
         "Stop_Loss",
         "high",
         "low",
-        "Close Position",
+        "Close_Position",
     ]
     data_frame = dataframe[columns].copy()
-    is_close_position = data_frame["Close Position"]
+    is_close_position = data_frame["Close_Position"]
     is_take_profit = data_frame["high"] > data_frame["Take_Profit"]
     is_stop_loss = data_frame["low"] < data_frame["Stop_Loss"]
 
@@ -175,10 +175,10 @@ def calculate_fixed_pl_results(dataframe, profit, loss, verify_error=False):
         "Stop_Loss",
         "high",
         "low",
-        "Close Position",
+        "Close_Position",
     ]
     data_frame = dataframe[columns].copy()
-    is_close_position = data_frame["Close Position"]
+    is_close_position = data_frame["Close_Position"]
     is_take_profit = data_frame["high"] > data_frame["Take_Profit"]
     is_stop_loss = data_frame["low"] < data_frame["Stop_Loss"]
 
