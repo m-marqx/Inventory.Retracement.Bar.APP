@@ -133,7 +133,7 @@ def check_error(dataframe):
 # %%
 
 
-def calculate_results(dataframe, check_error=False):
+def calculate_results(dataframe, verify_error=True):
     columns = [
         "Signal",
         "Entry_Price",
@@ -160,7 +160,7 @@ def calculate_results(dataframe, check_error=False):
     )
     data_frame["Cumulative_Result"] = data_frame["Result"].cumsum()
 
-    if check_error:
+    if verify_error:
         check_error(data_frame)
 
     return data_frame
