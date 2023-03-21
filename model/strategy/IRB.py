@@ -144,33 +144,23 @@ def calculate_results(dataframe, check_error=False):
     return data_frame
 
 def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
-    is_close_position = dataframe["Close Position"]
-    is_take_profit = dataframe["high"] > dataframe["Take_Profit"]
-    is_stop_loss = dataframe["low"] < dataframe["Stop_Loss"]
+    columns = ["Signal", "Entry_Price", "Take_Profit", "Stop_Loss", "high", "low", "Close Position"]
+    data_frame = dataframe[columns].copy()
+    is_close_position = data_frame["Close Position"]
+    is_take_profit = data_frame["high"] > data_frame["Take_Profit"]
+    is_stop_loss = data_frame["low"] < data_frame["Stop_Loss"]
 
-    dataframe["Result"] = 0
-    dataframe["Result"] = np.where(
-        is_close_position & is_take_profit, profit, dataframe["Result"]
+    data_frame["Result"] = 0
+    data_frame["Result"] = np.where(
+        is_close_position & is_take_profit, profit, data_frame["Result"]
     )
-    dataframe["Result"] = np.where(
-        is_close_position & is_stop_loss, -loss, dataframe["Result"]
+    data_frame["Result"] = np.where(
+        is_close_position & is_stop_loss, -loss, data_frame["Result"]
     )
-    dataframe["Cumulative_Result"] = dataframe["Result"].cumsum()
+    data_frame["Cumulative_Result"] = data_frame["Result"].cumsum()
 
     if check_error:
-        dataframe["Signal_Shifted"] = dataframe["Signal"].shift(1)
-        dataframe["Check_Error"] = np.where(
-            (pd.isnull(dataframe["Signal"])) & (dataframe["Signal_Shifted"] == 1),
-            True,
-            False,
-        )
-        dataframe["Check_Error"] = np.where(
-            (pd.isnull(dataframe["Signal_Shifted"]) & dataframe["Close Position"]),
-            True,
-            dataframe["Check_Error"],
-        )
-    if dataframe[dataframe["Check_Error"]].shape[0] > 0:
-        print("Error Found")
+        check_errors(data_frame)
 
 
 def run_IRB_model(
