@@ -200,9 +200,9 @@ def run_IRB_model_fixed(
         raise ValueError("Either 'dataframe' or 'csv_file' must be provided")
 
     df_filtered = process_data(target, data_frame, length)
-    df_backtest = IRB_strategy(df_filtered)
-
-    calculate_fixed_pl_results(df_backtest, profit, loss, check_error=True)
+    df_strategy = IRB_strategy(df_filtered)
+    df_backtest = calculate_fixed_pl_results(df_strategy, profit, loss, check_error=True)
+    
     return df_backtest
 
 #%%
