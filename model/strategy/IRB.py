@@ -168,6 +168,7 @@ def calculate_results(dataframe, verify_error=True):
 
 # %%
 def calculate_fixed_pl_results(dataframe, profit, loss, verify_error=False):
+    columns = [
         "Signal",
         "Entry_Price",
         "Take_Profit",
