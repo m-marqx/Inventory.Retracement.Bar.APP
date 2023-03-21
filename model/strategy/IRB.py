@@ -245,7 +245,7 @@ def run_IRB_model_fixed(
 
 
 # %%
-def EM_Calculation(dataframe):
+def calculate_expected_value(dataframe):
     data_frame = dataframe.query("Result != 0")[["Result"]].copy()
 
     gain = data_frame["Result"] > 0
