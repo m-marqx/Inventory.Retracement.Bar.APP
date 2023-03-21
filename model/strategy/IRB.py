@@ -111,20 +111,27 @@ def IRB_strategy(dataframe):
 
 # %%
 def check_error(dataframe):
-    data_frame = dataframe.loc[:,["Signal", "Close Position"]]
+    columns = ["Signal", "Close Position"]
+    data_frame = dataframe[columns].copy()
 
     data_frame["Signal_Shifted"] = data_frame["Signal"].shift(1)
 
-    null_signal = data_frame["Signal"].isnull()
-    null_signal_shift = data_frame["Signal_Shifted"].isnull()
+    is_null_signal = data_frame["Signal"].isnull()
+    is_null_signal_shift = data_frame["Signal_Shifted"].isnull()
+    has_signal_error = is_null_signal & (data_frame["Signal_Shifted"] == 1)
+    has_close_error = is_null_signal_shift & data_frame["Close Position"]
 
-    data_frame["Check_Error"] = (null_signal & (data_frame["Signal_Shifted"] == 1)) | \
-                                (null_signal_shift & data_frame["Close Position"])
+    has_error = has_signal_error | has_close_error
 
-    if data_frame["Check_Error"].any():
+    if has_error.any():
         print("Error Found")
 
-    data_frame["Check_error"] = data_frame["Check_Error"].values
+    data_frame["Error"] = has_error
+    return data_frame
+
+
+# %%
+
 
 def calculate_results(dataframe, check_error=False):
     columns = [
