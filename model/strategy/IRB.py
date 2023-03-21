@@ -214,7 +214,7 @@ def run_IRB_model(
 
     df_filtered = process_data(profit, data_frame, length)
     df_strategy = IRB_strategy(df_filtered)
-    df_backtest = calculate_results(df_strategy, check_error=True)
+    df_backtest = calculate_results(df_strategy, True)
 
     return df_backtest
 
@@ -239,9 +239,7 @@ def run_IRB_model_fixed(
 
     df_filtered = process_data(target, data_frame, length)
     df_strategy = IRB_strategy(df_filtered)
-    df_backtest = calculate_fixed_pl_results(
-        df_strategy, profit, loss, check_error=True
-    )
+    df_backtest = calculate_fixed_pl_results(df_strategy, profit, loss, True)
 
     return df_backtest
 
