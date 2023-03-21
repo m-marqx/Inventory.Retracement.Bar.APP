@@ -167,7 +167,7 @@ def calculate_results(dataframe, verify_error=True):
 
 
 # %%
-def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
+def calculate_fixed_pl_results(dataframe, profit, loss, verify_error=False):
         "Signal",
         "Entry_Price",
         "Take_Profit",
@@ -190,8 +190,10 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
     )
     data_frame["Cumulative_Result"] = data_frame["Result"].cumsum()
 
-    if check_error:
-        check_errors(data_frame)
+    if verify_error:
+        check_error(data_frame)
+
+    return data_frame
 
 
 # %%
