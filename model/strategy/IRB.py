@@ -35,7 +35,8 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     candle_downtail = np.minimum(open_price, close_price) - low_price
     candle_uppertail = high - np.maximum(open_price, close_price)
 
-    # Analyze the downtail and uptail of the candle and assign a value to the IRB_Condition column based on the decimal value of the downtail or uptail
+    # Analyze the downtail and uptail of the candle
+    # Assign a value to the IRB_Condition column based on the value of the wick
     bullish_calculation = candle_uppertail / candle_amplitude
     bearish_calculation = candle_downtail / candle_amplitude
 
@@ -62,7 +63,11 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     df_filtered["Stop_Loss"] = np.where(buy_condition, stop_loss, np.nan)
 
     return df_filtered
+
+
+# TODO2: aqui acaba a primeira parte da classe.
 # %%
+
 
 def IRB_strategy(dataframe):
     signal = dataframe["Signal"].values
@@ -91,16 +96,18 @@ def IRB_strategy(dataframe):
 
     data_frame = pd.DataFrame(
         {
-            "Signal": signal, 
-            "Entry_Price": entry_price, 
-            "Take_Profit": take_profit, 
-            "Stop_Loss": stop_loss, 
+            "Signal": signal,
+            "Entry_Price": entry_price,
+            "Take_Profit": take_profit,
+            "Stop_Loss": stop_loss,
             "Close Position": close_position,
             "high": high,
-            "low": low
-            })
+            "low": low,
+        }
+    )
 
     return data_frame
+
 
 # %%
 def check_error(dataframe):
@@ -120,7 +127,15 @@ def check_error(dataframe):
     data_frame["Check_error"] = data_frame["Check_Error"].values
 
 def calculate_results(dataframe, check_error=False):
-    columns = ["Signal", "Entry_Price", "Take_Profit", "Stop_Loss", "high", "low", "Close Position"]
+    columns = [
+        "Signal",
+        "Entry_Price",
+        "Take_Profit",
+        "Stop_Loss",
+        "high",
+        "low",
+        "Close Position",
+    ]
     data_frame = dataframe[columns].copy()
     is_close_position = data_frame["Close Position"]
     is_take_profit = data_frame["high"] > data_frame["Take_Profit"]
@@ -137,14 +152,23 @@ def calculate_results(dataframe, check_error=False):
         is_close_position & is_stop_loss, loss, data_frame["Result"]
     )
     data_frame["Cumulative_Result"] = data_frame["Result"].cumsum()
-    
+
     if check_error:
         check_error(data_frame)
-    
+
     return data_frame
 
+
+# %%
 def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
-    columns = ["Signal", "Entry_Price", "Take_Profit", "Stop_Loss", "high", "low", "Close Position"]
+        "Signal",
+        "Entry_Price",
+        "Take_Profit",
+        "Stop_Loss",
+        "high",
+        "low",
+        "Close Position",
+    ]
     data_frame = dataframe[columns].copy()
     is_close_position = data_frame["Close Position"]
     is_take_profit = data_frame["high"] > data_frame["Take_Profit"]
@@ -163,6 +187,9 @@ def calculate_fixed_pl_results(dataframe, profit, loss, check_error=False):
         check_errors(data_frame)
 
 
+# %%
+
+
 def run_IRB_model(
     profit, length=20, dataframe=Optional[pd.DataFrame], csv_file=Optional[str]
 ):
@@ -178,10 +205,11 @@ def run_IRB_model(
     df_filtered = process_data(profit, data_frame, length)
     df_strategy = IRB_strategy(df_filtered)
     df_backtest = calculate_results(df_strategy, check_error=True)
-    
+
     return df_backtest
 
-#%%
+
+# %%
 def run_IRB_model_fixed(
     target,
     profit,
@@ -201,11 +229,15 @@ def run_IRB_model_fixed(
 
     df_filtered = process_data(target, data_frame, length)
     df_strategy = IRB_strategy(df_filtered)
-    df_backtest = calculate_fixed_pl_results(df_strategy, profit, loss, check_error=True)
-    
+    df_backtest = calculate_fixed_pl_results(
+        df_strategy, profit, loss, check_error=True
+    )
+
     return df_backtest
 
-#%%
+
+# %%
+# TODO6: Esse aqui eu acho que poderia fazer em um arquivo separado fora de strategy inclusive, mas ele se encaixa no 50 tons de result.
 def EM_Calculation(dataframe):
     data_frame = dataframe["Result"].copy()
 
@@ -215,14 +247,22 @@ def EM_Calculation(dataframe):
     data_frame["Gain Count"] = data_frame["Gain Count"].cumsum()
     data_frame["Loss Count"] = data_frame["Loss Count"].cumsum()
 
-    data_frame["Mean Gain"] = data_frame.query("Result > 0")["Result"].expanding().mean()
-    data_frame["Mean Loss"] = data_frame.query("Result < 0")["Result"].expanding().mean()
+    data_frame["Mean Gain"] = (
+        data_frame.query("Result > 0")["Result"].expanding().mean()
+    )
+    data_frame["Mean Loss"] = (
+        data_frame.query("Result < 0")["Result"].expanding().mean()
+    )
 
     data_frame["Mean Gain"].fillna(method="ffill", inplace=True)
     data_frame["Mean Loss"].fillna(method="ffill", inplace=True)
 
-    data_frame["Total Gain"] = np.where(data_frame["Result"] > 0, data_frame["Result"], 0).cumsum()
-    data_frame["Total Loss"] = np.where(data_frame["Result"] < 0, data_frame["Result"], 0).cumsum()
+    data_frame["Total Gain"] = np.where(
+        data_frame["Result"] > 0, data_frame["Result"], 0
+    ).cumsum()
+    data_frame["Total Loss"] = np.where(
+        data_frame["Result"] < 0, data_frame["Result"], 0
+    ).cumsum()
 
     data_frame["Total Trade"] = data_frame["Gain Count"] + data_frame["Loss Count"]
     data_frame["Win Rate"] = data_frame["Gain Count"] / data_frame["Total Trade"]
