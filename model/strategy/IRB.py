@@ -69,7 +69,7 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
 # %%
 
 
-def IRB_strategy(dataframe):
+def calculate_irb_signals(dataframe):
     signal = dataframe["Signal"].values
     entry_price = dataframe["Entry_Price"].values
     take_profit = dataframe["Take_Profit"].values
@@ -213,7 +213,7 @@ def run_IRB_model(
         raise ValueError("Either 'dataframe' or 'csv_name' must be provided")
 
     df_filtered = process_data(profit, data_frame, length)
-    df_strategy = IRB_strategy(df_filtered)
+    df_strategy = calculate_irb_signals(df_filtered)
     df_backtest = calculate_results(df_strategy, True)
 
     return df_backtest
@@ -238,7 +238,7 @@ def run_IRB_model_fixed(
         raise ValueError("Either 'dataframe' or 'csv_file' must be provided")
 
     df_filtered = process_data(target, data_frame, length)
-    df_strategy = IRB_strategy(df_filtered)
+    df_strategy = calculate_irb_signals(df_filtered)
     df_backtest = calculate_fixed_pl_results(df_strategy, profit, loss, True)
 
     return df_backtest
