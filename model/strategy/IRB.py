@@ -176,9 +176,9 @@ def run_IRB_model(
         raise ValueError("Either 'dataframe' or 'csv_name' must be provided")
 
     df_filtered = process_data(profit, data_frame, length)
-    df_backtest = IRB_strategy(df_filtered)
-
-    calculate_results(df_backtest, check_error=True)
+    df_strategy = IRB_strategy(df_filtered)
+    df_backtest = calculate_results(df_strategy, check_error=True)
+    
     return df_backtest
 
 #%%
