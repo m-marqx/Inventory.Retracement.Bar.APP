@@ -64,25 +64,43 @@ def process_data(profit, dataframe, length=20, lowestlow=1, tick_size=0.1):
     return df_filtered
 # %%
 
-def IRB_strategy(df):
-    dataframe = df.copy()
-    dataframe.reset_index(inplace=True)
-    dataframe["Close Position"] = False
+def IRB_strategy(dataframe):
+    signal = dataframe["Signal"].values
+    entry_price = dataframe["Entry_Price"].values
+    take_profit = dataframe["Take_Profit"].values
+    stop_loss = dataframe["Stop_Loss"].values
+    high = dataframe["high"].values
+    low = dataframe["low"].values
+    close_position = np.zeros(len(dataframe), dtype=bool)
 
-    for index in range(1, dataframe.shape[0]):
+    for index in range(1, len(dataframe)):
         prev_index = index - 1
-        if (dataframe["Signal"].iloc[prev_index] == 1) & ~dataframe["Close Position"].iloc[index]:
-            dataframe.loc[index, "Signal"] = dataframe["Signal"].iloc[prev_index]
-            dataframe.loc[index, "Entry_Price"] = dataframe["Entry_Price"].iloc[prev_index]
-            dataframe.loc[index, "Take_Profit"] = dataframe["Take_Profit"].iloc[prev_index]
-            dataframe.loc[index, "Stop_Loss"] = dataframe["Stop_Loss"].iloc[prev_index]
+        signal_condition = signal[prev_index] == 1
+        open_position = ~close_position[index]
+        if signal_condition & open_position:
+            signal[index] = signal[prev_index]
+            entry_price[index] = entry_price[prev_index]
+            take_profit[index] = take_profit[prev_index]
+            stop_loss[index] = stop_loss[prev_index]
+            profit = high[index] > take_profit[index]
+            loss = low[index] < stop_loss[index]
 
-            if (dataframe["high"].iloc[index] > dataframe["Take_Profit"].iloc[index]) ^ (dataframe["low"].iloc[index] < dataframe["Stop_Loss"].iloc[index]):
-                dataframe.loc[index, "Close Position"] = True
-                dataframe.loc[index, "Signal"] = -1
+            if profit ^ loss:
+                close_position[index] = True
+                signal[index] = -1
 
-    return dataframe
+    data_frame = pd.DataFrame(
+        {
+            "Signal": signal, 
+            "Entry_Price": entry_price, 
+            "Take_Profit": take_profit, 
+            "Stop_Loss": stop_loss, 
+            "Close Position": close_position,
+            "high": high,
+            "low": low
+            })
 
+    return data_frame
 
 # %%
 def calculate_results(dataframe, check_error=False):
