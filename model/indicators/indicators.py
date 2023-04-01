@@ -1,24 +1,66 @@
 import pandas as pd
-from moving_average import moving_average
+import numpy as np
+from model import MovingAverage
 
-ma = moving_average()
+ma = MovingAverage()
 
 
-class indicators:
-    def CCI(self, source, length):
-        df = pd.DataFrame()
-        df["TP"] = source
-        df["sma"] = df["TP"].rolling(length).mean()
-        df["mad"] = df["TP"].rolling(length).apply(lambda x: pd.Series(x).mad())
-        df["CCI"] = (df["TP"] - df["sma"]) / (0.015 * df["mad"])
-        return df["CCI"].dropna(axis=0)
+class MACD:
+    def __init__(self, source, fast_length, slow_length, signal_length):
+        self.source = source
+        self.fast_length = fast_length
+        self.slow_length = slow_length
+        self.signal_length = signal_length
 
-    def MACD(self, source, fast_length, slow_length, signal_length):
-        MACD = ma.ema(source, fast_length) - ma.ema(source, slow_length)
-        df = pd.DataFrame()
-        df["MACD"] = pd.DataFrame(MACD).dropna(axis=0)
-        macd_Signal = pd.DataFrame()
-        macd_Signal["MACD"] = df["MACD"]
-        macd_Signal["MACD_Signal"] = ma.ema(macd_Signal["MACD"], signal_length)
-        macd_Signal["Histogram"] = macd_Signal["MACD"] - macd_Signal["MACD_Signal"]
-        return macd_Signal["Histogram"]
+    def set_ema(self):
+        self.fast_ma = ma.ema(self.source, self.fast_length)
+        self.slow_ma = ma.ema(self.source, self.slow_length)
+
+        return self
+
+    def set_sma(self):
+        self.fast_ma = ma.sma(self.source, self.fast_length)
+        self.slow_ma = ma.sma(self.source, self.slow_length)
+
+        return self
+
+    def MACD(self):
+        self.MACD = self.fast_ma - self.slow_ma
+        self.df = pd.DataFrame({"MACD": self.MACD}).dropna(axis=0)
+        self.df["MACD_Signal"] = ma.ema(self.df["MACD"], self.signal_length)
+        self.df["Histogram"] = self.df["MACD"] - self.df["MACD_Signal"]
+
+        return self.df
+
+
+class CCI:
+    def __init__(self, source, length: int = 20):
+        self.source_arr = np.array(source)
+        self.source_df = pd.DataFrame({"source_arr": source})
+        self.length = length
+
+    def CCI_precise(
+    #! this version have more similar results from excel 
+    #! than the other version and TA-lib.
+        self, 
+        smooth_column: str = "sma", 
+        constant: float = 0.015,
+    ):
+        self.df = pd.DataFrame()
+        self.df["TP"] = self.source_arr
+        self.df["sma"] = self.df["TP"].rolling(self.length).mean()
+
+        self.df["mad"] = (
+            self.df["TP"]
+            .rolling(self.length)
+            .apply(lambda x: (pd.Series(x) - pd.Series(x).mean()).abs().mean())
+        )
+
+        self.df["CCI"] = (
+            (self.df["TP"] - self.df[smooth_column]) 
+            / (constant * self.df["mad"])
+        )
+
+        self.df["CCI"].dropna(axis=0, inplace=True)
+
+        return self
