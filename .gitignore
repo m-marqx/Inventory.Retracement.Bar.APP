@@ -155,7 +155,7 @@ cython_debug/
 # ignore this files
 ignore/
 config.py
-_*
+___*
 *.csv
 *.parquet
 *.json
