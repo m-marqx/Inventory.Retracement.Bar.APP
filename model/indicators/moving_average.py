@@ -2,7 +2,23 @@ import pandas as pd
 
 # Indicadores
 class moving_average:
-    def sma(self, source, length):
+    def sma(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
+        """
+        Calculate the Simple Moving Average (SMA) 
+        of the input time series data.
+
+        Parameters:
+        -----------
+        source : pd.DataFrame
+            The time series data to calculate the SMA for.
+        length : int
+            The number of periods to include in the SMA calculation.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The calculated SMA time series data.
+        """
         sma = source.rolling(length).mean()
         return sma.dropna(axis=0)
 
