@@ -2,7 +2,7 @@ import time as t
 from binance.client import Client
 from controller import config
 
-class spot_API:
+class spotAPI:
     def __init__(self):
         self.client = Client(config.api_key, config.secret_key)
 
