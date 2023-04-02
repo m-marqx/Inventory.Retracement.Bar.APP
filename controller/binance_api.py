@@ -353,7 +353,36 @@ class futures_API:
 
     def get_all_futures_klines_df(self,symbol, interval, intervalms):
         klines_list = self.get_All_Klines(interval, intervalms, symbol=symbol)
-        dataframe = pd.DataFrame(klines_list,columns=['open_time','open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore'])
+        timestamp = ['open_time','close_time']
+
+        float_column = [
+            'open','high','low','close',
+            'quote_asset_volume',
+            'taker_buy_quote_asset_volume'
+        ]
+
+        int_column = [
+            'volume',
+            'number_of_trades',
+            'taker_buy_base_asset_volume'
+        ]
+
+        columns=(
+            'open_time',
+            'open','high','low','close','volume',
+            'close_time',
+            'quote_asset_volume',
+            'number_of_trades',
+            'taker_buy_base_asset_volume',
+            'taker_buy_quote_asset_volume',
+            'ignore',
+        )
+
+        dataframe = pd.DataFrame(klines_list,columns=columns)
+
+        dataframe[timestamp] = dataframe[timestamp].astype('datetime64[ms]')
+        dataframe[float_column] = dataframe[float_column].astype(float)
+        dataframe[int_column] = dataframe[int_column].astype(int)
         dataframe.set_index('open_time', inplace=True)
         return dataframe
 
