@@ -2,6 +2,7 @@ import time as t
 from binance.client import Client
 import pandas as pd
 from controller import config
+from binance.helpers import interval_to_milliseconds
 
 class futuresAPI:
     def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
@@ -40,8 +41,7 @@ class futuresAPI:
 
     def get_All_Klines(
         self,
-        interval,
-        interval_ms,
+        interval="2h",
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
     ):
@@ -50,7 +50,8 @@ class futuresAPI:
         timeLoop_list = []
         index = 0
         initial_Time = first_Candle_Time
-        max_Interval = interval_ms * 1500
+        intervalms = interval_to_milliseconds(interval)
+        max_Interval = intervalms * 1500
         initial_Time = initial_Time - max_Interval
         while True:
             index += 1
@@ -85,8 +86,7 @@ class futuresAPI:
 
     def get_Historical_Klines(
         self,
-        interval,
-        interval_ms,
+        interval="2h",
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
     ):
@@ -95,6 +95,7 @@ class futuresAPI:
         timeLoop_list = []
         index = 0
         initial_Time = first_Candle_Time
+        interval_ms = interval_to_milliseconds(interval)
         max_Interval = interval_ms * 1500
         initial_Time = initial_Time - max_Interval
         while True:
@@ -143,7 +144,6 @@ class futuresAPI:
     def get_markPrice_All_Klines(
         self,
         interval,
-        interval_ms,
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
     ):
@@ -152,7 +152,7 @@ class futuresAPI:
         timeLoop = []
         index = 0
         initial_Time = first_Candle_Time
-        max_Interval = interval_ms * 1500
+        max_Interval = interval_to_milliseconds(interval_ms) * 1500
         initial_Time = initial_Time - max_Interval
         while True:
             initial_Time += max_Interval
@@ -185,8 +185,8 @@ class futuresAPI:
                 break
         return kline_List
 
-    def get_all_futures_klines_df(self,symbol, interval, intervalms):
-        klines_list = self.get_All_Klines(interval, intervalms, symbol=symbol)
+    def get_all_futures_klines_df(self,symbol, interval):
+        klines_list = self.get_All_Klines(interval, symbol=symbol)
         timestamp = ['open_time','close_time']
 
         float_column = [
