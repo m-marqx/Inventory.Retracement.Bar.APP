@@ -4,35 +4,6 @@ from model import MovingAverage
 
 ma = MovingAverage()
 
-
-class MACD:
-    def __init__(self, source, fast_length, slow_length, signal_length):
-        self.source = source
-        self.fast_length = fast_length
-        self.slow_length = slow_length
-        self.signal_length = signal_length
-
-    def set_ema(self):
-        self.fast_ma = ma.ema(self.source, self.fast_length)
-        self.slow_ma = ma.ema(self.source, self.slow_length)
-
-        return self
-
-    def set_sma(self):
-        self.fast_ma = ma.sma(self.source, self.fast_length)
-        self.slow_ma = ma.sma(self.source, self.slow_length)
-
-        return self
-
-    def MACD(self):
-        self.MACD = self.fast_ma - self.slow_ma
-        self.df = pd.DataFrame({"MACD": self.MACD}).dropna(axis=0)
-        self.df["MACD_Signal"] = ma.ema(self.df["MACD"], self.signal_length)
-        self.df["Histogram"] = self.df["MACD"] - self.df["MACD_Signal"]
-
-        return self.df
-
-
 class CCI:
     def __init__(self, source, length: int = 20):
         self.source_arr = np.array(source)
@@ -58,7 +29,7 @@ class CCI:
         )
 
         self.df["CCI"] = (
-            (self.df["TP"] - self.df[smooth_column]) 
+            (self.df["TP"] - self.df[smooth_column])
             / (constant * self.df["mad"])
         )
 
