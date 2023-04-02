@@ -1,6 +1,7 @@
 import time as t
 from binance.client import Client
 from controller import config
+from binance.helpers import interval_to_milliseconds
 
 class spotAPI:
     def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
@@ -25,7 +26,6 @@ class spotAPI:
     def get_All_Klines(
         self,
         interval,
-        interval_ms,
         first_Candle_Time=1502942400000,
         symbol="BTCUSDT",
     ):
@@ -34,6 +34,7 @@ class spotAPI:
         timeLoop_list = []
         index = 0
         initial_Time = first_Candle_Time
+        interval_ms = interval_to_milliseconds(interval)
         max_Interval = interval_ms * 1000
         initial_Time = initial_Time - max_Interval
         while True:
@@ -72,7 +73,6 @@ class spotAPI:
     def get_Historical_Klines(
         self,
         interval,
-        interval_ms,
         first_Candle_Time=1502942400000,
         symbol="BTCUSDT",
     ):
@@ -81,6 +81,7 @@ class spotAPI:
         timeLoop_list = []
         index = 0
         initial_Time = first_Candle_Time
+        interval_ms = interval_to_milliseconds(interval)
         max_Interval = interval_ms * 1000
         initial_Time = initial_Time - max_Interval
         while True:
