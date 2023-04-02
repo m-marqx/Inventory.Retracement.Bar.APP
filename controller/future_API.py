@@ -12,18 +12,8 @@ class futures_API:
         info_df = pd.DataFrame(info['symbols'])
         filtered_info = [x['filters'] for x in info_df[info_df['symbol'] == Symbol].to_dict(orient='records')][0]
         df_filtered = pd.DataFrame.from_records(filtered_info)
-        df_filtered.set_index('filterType')
         df_filtered.set_index('filterType',inplace=True)
-        df_filtered['minPrice'] = df_filtered['minPrice'].astype('float64')
-        df_filtered['maxPrice'] = df_filtered['maxPrice'].astype('float64')
-        df_filtered['tickSize'] = df_filtered['tickSize'].astype('float64')
-        df_filtered['stepSize'] = df_filtered['stepSize'].astype('float64')
-        df_filtered['maxQty'] = df_filtered['maxQty'].astype('float64')
-        df_filtered['minQty'] = df_filtered['minQty'].astype('float64')
-        df_filtered['limit'] = df_filtered['limit'].astype('float64')
-        df_filtered['multiplierDown'] = df_filtered['multiplierDown'].astype('float64')
-        df_filtered['multiplierUp'] = df_filtered['multiplierUp'].astype('float64')
-        df_filtered['multiplierDecimal'] = df_filtered['multiplierDecimal'].astype('float64')
+        df_filtered = df_filtered.astype('float64')
         return df_filtered
     
     def get_tick_size(self,Symbol):
