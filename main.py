@@ -1,5 +1,5 @@
 #%%
-from controller.binance_api import futures_API
+from controller.future_API import futuresAPI
 from model.strategy.params.indicators_params import (
     EMA_params,
     MACD_params,
@@ -14,8 +14,8 @@ from model.strategy.strategy import builder_strategy
 from model.strategy.indicators import builder_source
 # %%
 
-fAPI = futures_API()
-BTC = fAPI.get_all_futures_klines_df("BTCUSD_PERP", "2h", 7_200_000)
+fAPI = futuresAPI()
+BTC = fAPI.get_all_futures_klines_df("BTCUSD_PERP", "2h")
 
 # %%
 ema_params = EMA_params()
