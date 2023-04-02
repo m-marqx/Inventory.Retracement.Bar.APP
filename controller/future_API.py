@@ -3,162 +3,6 @@ from binance.client import Client
 import pandas as pd
 from controller import config
 
-# spot Klines
-class spot_API:
-    def __init__(self):
-        self.client = Client(config.api_key, config.secret_key)
-
-    def get_Spot_Kline(
-        self,
-        startTime,
-        endTime,
-        interval="2h",
-        symbol="BTCUSDT",
-    ):
-        request = self.client.get_klines(
-            symbol=symbol,
-            interval=interval,
-            startTime=startTime,
-            endTime=endTime,
-            limit=1000,
-        )
-        return request
-
-    def get_All_Klines(
-        self,
-        interval,
-        interval_ms,
-        first_Candle_Time=1502942400000,
-        symbol="BTCUSDT",
-    ):
-        START = t.time()
-        klines_list = []
-        timeLoop_list = []
-        index = 0
-        initial_Time = first_Candle_Time
-        max_Interval = interval_ms * 1000
-        initial_Time = initial_Time - max_Interval
-        while True:
-            index += 1
-            initial_Time += max_Interval
-            timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
-                request_Time_Start = t.time()
-                klines_Loop = self.get_Spot_Kline(
-                    timeLoop_list[index - 1],
-                    timeLoop_list[index - 1] + max_Interval,
-                    interval,
-                    symbol=symbol,
-                )
-                klines_list.extend(klines_Loop)
-                print("\nLoop : " + str(index))
-                print("\nQty  : " + str(len(klines_list)))
-                request_Time_End = t.time()
-                request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
-                    t.sleep(1.33 - request_Duration)
-            else:
-                print("Else Reached!")
-                lastCall = self.get_Spot_Kline(
-                    timeLoop_list[-1] + 1, int(t.time() * 1000), interval, symbol=symbol
-                )
-                klines_list.extend(lastCall)
-                print("\nQty  : " + str(len(klines_list)))
-                print("\nLoop Ended\n")
-
-                END = t.time()
-                print("\nExecution time: " + str(END - START))
-                break
-        return klines_list
-
-    def get_Historical_Klines(
-        self,
-        interval,
-        interval_ms,
-        first_Candle_Time=1502942400000,
-        symbol="BTCUSDT",
-    ):
-        START = t.time()
-        klines_list = []
-        timeLoop_list = []
-        index = 0
-        initial_Time = first_Candle_Time
-        max_Interval = interval_ms * 1000
-        initial_Time = initial_Time - max_Interval
-        while True:
-            index += 1
-            initial_Time += max_Interval
-            timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
-                request_Time_Start = t.time()
-                klines_Loop = self.get_Spot_Kline(
-                    timeLoop_list[index - 1],
-                    timeLoop_list[index - 1] + max_Interval,
-                    interval,
-                    symbol=symbol,
-                )
-                klines_list.extend(klines_Loop)
-                print("\nLoop : " + str(index))
-                print("\nQty  : " + str(len(klines_list)))
-                request_Time_End = t.time()
-                request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
-                    t.sleep(1.33 - request_Duration)
-            else:
-                print("\nLoop Ended\n")
-
-                END = t.time()
-                print("\nExecution time: " + str(END - START))
-                print(timeLoop_list[index - 1])
-                print(timeLoop_list[-1])
-                break
-        return klines_list
-
-
-class source:
-    def get_Source_List(self, klines):
-        open_Time_List = []
-        open_List = []
-        high_List = []
-        low_List = []
-        close_List = []
-        h2_List = []
-        hlc3_List = []
-        ohlc4_List = []
-        volume_List = []
-        close_Time_List = []
-
-        for x in klines:
-            open_Time_List.append(int(x[0]))
-            open_List.append(float(x[1]))
-            high_List.append(float(x[2]))
-            low_List.append(float(x[3]))
-            close_List.append(float(x[4]))
-            volume_List.append(float(x[5]))
-            close_Time_List.append(int(x[6]))
-
-            h2_List.append(float((float(x[2]) + float(x[3]))) / 2)
-            hlc3_List.append(float((float(x[2]) + float(x[3]) + float(x[4])) / 3))
-            ohlc4_List.append(
-                float((float(x[1]) + float(x[2]) + float(x[3]) + float(x[4])) / 4)
-            )
-
-        kline_Values = {
-            "Open Time": open_Time_List,
-            "Close Time": close_Time_List,
-            "Open": open_List,
-            "High": high_List,
-            "Low": low_List,
-            "Close": close_List,
-            "Volume": volume_List,
-            "H2": h2_List,
-            "HLC3": hlc3_List,
-            "OHLC4": ohlc4_List,
-        }
-        return kline_Values
-
-
-# coin-M Klines
 class futures_API:
     def __init__(self):
         self.client = Client(config.api_key, config.secret_key)
@@ -398,10 +242,10 @@ class futures_API:
             ]
         dataframe.to_csv(
             f'../model/data/{str_name}', 
-            index=True, 
-            header=columns, 
-            sep=';', 
-            decimal='.', 
+            index=True,
+            header=columns,
+            sep=';',
+            decimal='.',
             encoding='utf-8')
         
         return print(str_name+' has been saved')
