@@ -1,11 +1,21 @@
 import time as t
 from binance.client import Client
 from controller import config
+import pandas as pd
 from binance.helpers import interval_to_milliseconds
 
 class spotAPI:
     def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
         self.client = Client(api_key, secret_key)
+
+    def get_ticker_info(self,Symbol):
+        info = self.client.get_exchange_info()
+        info_df = pd.DataFrame(info['symbols'])
+        filtered_info = [x['filters'] for x in info_df[info_df['symbol'] == Symbol].to_dict(orient='records')][0]
+        df_filtered = pd.DataFrame.from_records(filtered_info)
+        df_filtered.set_index('filterType',inplace=True)
+        df_filtered = df_filtered.astype('float64')
+        return df_filtered
 
     def get_Spot_Kline(
         self,
