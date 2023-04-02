@@ -3,8 +3,8 @@ from binance.client import Client
 from controller import config
 
 class spotAPI:
-    def __init__(self):
-        self.client = Client(config.api_key, config.secret_key)
+    def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
+        self.client = Client(api_key, secret_key)
 
     def get_Spot_Kline(
         self,
