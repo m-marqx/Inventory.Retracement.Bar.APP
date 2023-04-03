@@ -15,3 +15,4 @@ class irb_params(BaseModel):
     lowestlow: float = 1
     payoff: float = 2
     tick_size: float = 0.1
+    wick_percentage: float = 0.45
