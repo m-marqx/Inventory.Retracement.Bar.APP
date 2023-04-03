@@ -97,6 +97,7 @@ class GetIrbSignals_buy(BaseStrategy):
         self.lowestlow = params.lowestlow
         self.payoff = params.payoff
         self.tick_size = params.tick_size
+        self.wick_percentage = params.wick_percentage
 
         self.open_price = self.df_filtered["open"]
         self.high_price = self.df_filtered["high"]
@@ -124,7 +125,7 @@ class GetIrbSignals_buy(BaseStrategy):
             self.bearish_calculation,
         )
 
-        self.irb_condition = self.df_filtered["IRB_Condition"] >= 0.45
+        self.irb_condition = self.df_filtered["IRB_Condition"] >= self.wick_percentage
         self.buy_condition = self.irb_condition & self.df_filtered["uptrend"]
 
         self.df_filtered["Signal"] = np.where(self.buy_condition, 1, np.nan)
