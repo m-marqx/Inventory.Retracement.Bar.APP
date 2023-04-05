@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
 from model.strategy.params.strategy_params import (
@@ -6,16 +5,7 @@ from model.strategy.params.strategy_params import (
     trend_params,
     indicators_params,
 )
-
-
-class BaseStrategy(ABC):
-    def __init__(self, dataframe):
-        self.df_filtered = dataframe
-
-    @abstractmethod
-    def execute(self):
-        raise NotImplementedError
-
+from model.utils import BaseStrategy
 
 class calculate_trend(BaseStrategy):
     def __init__(self, dataframe):

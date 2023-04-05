@@ -1,7 +1,10 @@
 from pydantic import BaseModel
-from model.utils import clean_data
-from model.strategy.strategy import BaseStrategy
-from model.strategy.params.indicators_params import EMA_params, MACD_params, CCI_params
+from model.utils import clean_data, BaseStrategy
+from model.strategy.params.indicators_params import (
+    EMA_params,
+    MACD_params,
+    CCI_params
+)
 
 
 class calculate_EMA(BaseStrategy):
@@ -20,7 +23,7 @@ class calculate_EMA(BaseStrategy):
 class calculate_MACD(BaseStrategy):
     def __init__(self, dataframe,  params: MACD_params):
         super().__init__(dataframe)
-        self.source = self.df_filtered[params.source_column] 
+        self.source = self.df_filtered[params.source_column]
         self.fast_length = params.fast_length
         self.slow_length = params.slow_length
         self.signal_length = params.signal_length
@@ -31,7 +34,7 @@ class calculate_MACD(BaseStrategy):
         self.df_filtered['MACD_Histogram'] = self.histogram
         return self.df_filtered
 
-class calculate_CCI(BaseStrategy): 
+class calculate_CCI(BaseStrategy):
     def __init__(self, dataframe, params: CCI_params):
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]

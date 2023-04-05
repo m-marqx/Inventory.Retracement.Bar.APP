@@ -1,5 +1,15 @@
 import numpy as np
-from model.strategy.strategy import BaseStrategy
+import pandas as pd
+from abc import ABC, abstractmethod
+
+class BaseStrategy(ABC):
+    def __init__(self, dataframe: pd.DataFrame):
+        self.df_filtered = dataframe
+
+    @abstractmethod
+    def execute(self):
+        raise NotImplementedError
+
 
 
 class math:
