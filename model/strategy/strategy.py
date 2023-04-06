@@ -332,7 +332,7 @@ class BuilderStrategy(BaseStrategy):
 
     def calculateResults(self):
         self.df_filtered = CalculateResults(self.df_filtered).execute()
-        return self
+
         return self
 
     def execute(self):
