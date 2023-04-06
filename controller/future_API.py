@@ -8,19 +8,21 @@ class FuturesAPI:
     def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
         self.client = Client(api_key, secret_key)
 
-    def get_ticker_info(self,Symbol):
+    def get_ticker_info(self, Symbol):
         info = self.client.futures_coin_exchange_info()
-        info_df = pd.DataFrame(info['symbols'])
-        filtered_info = [x['filters'] for x in info_df[info_df['symbol'] == Symbol].to_dict(orient='records')][0]
+        info_df = pd.DataFrame(info["symbols"])
+        filtered_info = (
+            [x['filters'] for x in info_df[info_df['symbol'] == Symbol]
+            .to_dict(orient='records')][0]
+        )
         df_filtered = pd.DataFrame.from_records(filtered_info)
-        df_filtered.set_index('filterType',inplace=True)
-        df_filtered = df_filtered.astype('float64')
+        df_filtered.set_index("filterType", inplace=True)
+        df_filtered = df_filtered.astype("float64")
         return df_filtered
-    
-    def get_tick_size(self,Symbol):
-        
+
+    def get_tick_size(self, Symbol):
         df = self.get_ticker_info(Symbol)
-        tick_size = df.loc['PRICE_FILTER', 'tickSize']
+        tick_size = df.loc["PRICE_FILTER", "tickSize"]
         return tick_size
 
     def futures_Kline(
@@ -185,58 +187,66 @@ class FuturesAPI:
                 break
         return kline_List
 
-    def get_all_futures_klines_df(self,symbol, interval):
+    def get_all_futures_klines_df(self, symbol, interval):
         klines_list = self.get_All_Klines(interval, symbol=symbol)
-        timestamp = ['open_time','close_time']
+        timestamp = ["open_time", "close_time"]
 
         float_column = [
-            'open','high','low','close',
-            'quote_asset_volume',
-            'taker_buy_quote_asset_volume'
+            "open",
+            "high",
+            "low",
+            "close",
+            "quote_asset_volume",
+            "taker_buy_quote_asset_volume",
         ]
 
-        int_column = [
-            'volume',
-            'number_of_trades',
-            'taker_buy_base_asset_volume'
-        ]
+        int_column = ["volume", "number_of_trades", "taker_buy_base_asset_volume"]
 
-        columns=(
-            'open_time',
-            'open','high','low','close','volume',
-            'close_time',
-            'quote_asset_volume',
-            'number_of_trades',
-            'taker_buy_base_asset_volume',
-            'taker_buy_quote_asset_volume',
-            'ignore',
+        columns = (
+            "open_time",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "close_time",
+            "quote_asset_volume",
+            "number_of_trades",
+            "taker_buy_base_asset_volume",
+            "taker_buy_quote_asset_volume",
+            "ignore",
         )
 
-        dataframe = pd.DataFrame(klines_list,columns=columns)
+        dataframe = pd.DataFrame(klines_list, columns=columns)
 
-        dataframe[timestamp] = dataframe[timestamp].astype('datetime64[ms]')
+        dataframe[timestamp] = dataframe[timestamp].astype("datetime64[ms]")
         dataframe[float_column] = dataframe[float_column].astype(float)
         dataframe[int_column] = dataframe[int_column].astype(int)
-        dataframe.set_index('open_time', inplace=True)
+        dataframe.set_index("open_time", inplace=True)
         return dataframe
 
-    def get_df_to_csv(self,dataframe,name):
-        str_name = f'{name}.csv'
+    def get_df_to_csv(self, dataframe, name):
+        str_name = f"{name}.csv"
         columns = [
-            'open','high','low','close','volume',
-            'close_time',
-            'quote_asset_volume',
-            'number_of_trades',
-            'taker_buy_base_asset_volume',
-            'taker_buy_quote_asset_volume',
-            'ignore',
-            ]
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "close_time",
+            "quote_asset_volume",
+            "number_of_trades",
+            "taker_buy_base_asset_volume",
+            "taker_buy_quote_asset_volume",
+            "ignore",
+        ]
         dataframe.to_csv(
-            f'model/data/{str_name}',
+            f"model/data/{str_name}",
             index=True,
             header=columns,
-            sep=';',
-            decimal='.',
-            encoding='utf-8')
+            sep=";",
+            decimal=".",
+            encoding="utf-8",
+        )
 
-        return print(str_name+' has been saved')
+        return print(str_name + " has been saved")
