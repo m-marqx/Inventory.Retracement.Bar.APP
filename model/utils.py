@@ -29,6 +29,34 @@ class DataProcess:
             self.df_transposed, id_vars=["rank"], var_name="index", value_name="result"
         ).sort_values(by=["rank", "index"])
 
+    def broker_emulator_result(self):
+        self.distance_high_to_open = self.dataframe["high"] - self.dataframe["open"]
+        self.distance_low_to_open = self.dataframe["open"] - self.dataframe["low"]
+        self.broker_emulator = np.where(
+            self.distance_high_to_open < self.distance_low_to_open,
+            self.dataframe["high"],
+            self.dataframe["low"],
+        )
+
+        self.dataframe["order_fill_price"] = self.broker_emulator
+        self.sell_prices = self.dataframe[["Take_Profit", "Stop_Loss"]]
+
+        self.sell_diffs = np.abs(
+            self.sell_prices - self.dataframe["order_fill_price"].values[:, np.newaxis]
+        )
+        self.duplicate = self.dataframe["Signal"] == -2
+
+        self.TP_is_close = self.sell_diffs["Take_Profit"] < self.sell_diffs["Stop_Loss"]
+        self.profit = self.dataframe["Take_Profit"] - self.dataframe["Entry_Price"]
+        self.loss = self.dataframe["Stop_Loss"] - self.dataframe["Entry_Price"]
+        self.dataframe["Result"] = np.where(
+            self.duplicate & self.TP_is_close, self.profit, self.dataframe["Result"]
+        )
+        self.dataframe["Result"] = np.where(
+            self.duplicate & ~self.TP_is_close, self.loss, self.dataframe["Result"]
+        )
+
+        return self
 class Math:
     def calculate_expected_value(self, dataframe):
         data_frame = dataframe.query("Result != 0")[["Result"]].copy()
