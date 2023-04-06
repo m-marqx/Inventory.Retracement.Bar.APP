@@ -5,7 +5,7 @@ from model.strategy.params.strategy_params import (
     TrendParams,
     IndicatorsParams,
 )
-from model.utils import BaseStrategy
+from model.utils import BaseStrategy, DataProcess
 
 
 class CalculateTrend(BaseStrategy):
@@ -276,6 +276,8 @@ class CalculateResults(BaseStrategy):
             self.df_filtered["Result"],
         )
 
+        DataProcess(self.df_filtered).broker_emulator_result()
+
         self.df_filtered["Cumulative_Result"] = (
             self.df_filtered["Result"]
             .cumsum()
@@ -285,7 +287,6 @@ class CalculateResults(BaseStrategy):
             CheckIrbSignals(self.df_filtered).execute()
 
         return self.df_filtered
-
 
 class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):
