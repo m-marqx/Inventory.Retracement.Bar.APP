@@ -49,10 +49,10 @@ class CalculateTrend(BaseStrategy):
 
 
 class SetTrend(BaseStrategy):
-    def __init__(self, dataframe, params: IndicatorsParams):
+    def __init__(self, dataframe, params: IndicatorsParams, trend_params: TrendParams):
         super().__init__(dataframe)
         self.params = params
-        self.trend_params = TrendParams()
+        self.trend_params = trend_params.copy()
 
     def execute(self):
         self.trend = CalculateTrend(self.df_filtered)
@@ -67,7 +67,8 @@ class SetTrend(BaseStrategy):
             self.trend = self.trend.macd_condition(
                 self.params.macd_histogram_trend_value
             )
-        self.params.trend = True
+
+        self.trend.execute()
         return self
 
 
@@ -289,32 +290,14 @@ class CalculateResults(BaseStrategy):
 class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
-        self.trend = CalculateTrend(self.df_filtered)
 
-    def set_trend_params(self, params: IndicatorsParams):
-        #! The copy is necessary to avoid the indicators_params
-        #! being changed when the indicators are setted
-        self.indicators_params = params.copy()
+    def set_trend_params(self, params: IndicatorsParams, trend_params: TrendParams):
+        self.indicators_params = params
+        self.trend_params = trend_params
         return self
 
     def set_trend(self):
-        self.trend = CalculateTrend(self.df_filtered)
-
-        if "ema" in self.df_filtered.columns:
-            self.trend = (
-                self.trend.ema_condition(self.indicators_params.ema_column)
-            )
-
-        if "CCI" in self.df_filtered.columns:
-            self.trend = self.trend.cci_condition(
-                self.indicators_params.cci_trend_value
-            )
-
-        if "MACD_Histogram" in self.df_filtered.columns:
-            self.trend = self.trend.macd_condition(
-                self.indicators_params.macd_histogram_trend_value
-            )
-        self.trend.execute()
+        self.trend = SetTrend(self.df_filtered, self.indicators_params, self.trend_params).execute()
         return self
 
     def set_irb_params(self, params: IrbParams):

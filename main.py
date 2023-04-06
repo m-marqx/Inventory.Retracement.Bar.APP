@@ -1,3 +1,4 @@
+# %%
 from controller.future_API import FuturesAPI
 from model.strategy.params.indicators_params import (
     EmaParams,
@@ -5,6 +6,7 @@ from model.strategy.params.indicators_params import (
     CCIParams,
 )
 from model.strategy.params.strategy_params import (
+    TrendParams,
     IrbParams,
     IndicatorsParams,
 )
@@ -23,6 +25,7 @@ cci_params = CCIParams()
 
 
 irb_params = IrbParams(wick_percentage=0.02)
+trend_params = TrendParams(ema=True, cci=True, macd=True)
 indicators_params = IndicatorsParams()
 
 #%%
@@ -43,7 +46,7 @@ df = (
     BuilderStrategy(
         df,
     )
-    .set_trend_params(indicators_params)
+    .set_trend_params(indicators_params, trend_params)
     .set_trend()
     .set_irb_params(irb_params)
     .get_irb_signals()
