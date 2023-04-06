@@ -168,9 +168,14 @@ class CalculateIrbSignals(BaseStrategy):
     def execute(self):
         for index in range(1, len(self.df_filtered)):
             prev_index = index - 1
-            self.signal_condition = self.signal_arr[prev_index] == 1
-            self.open_position = ~self.close_position_arr[index]
-            if self.signal_condition & self.open_position:
+            self.signal_condition[index] = self.signal_arr[prev_index] == 1
+            if self.close_position_arr[prev_index]:
+                self.signal_arr[index] = np.nan
+                self.entry_price_arr[index] = np.nan
+                self.take_profit_arr[index] = np.nan
+                self.stop_loss_arr[index] = np.nan
+
+            if self.signal_condition[index]:
                 self.signal_arr[index] = self.signal_arr[prev_index]
                 self.entry_price_arr[index] = self.entry_price_arr[prev_index]
                 self.take_profit_arr[index] = self.take_profit_arr[prev_index]
@@ -186,9 +191,13 @@ class CalculateIrbSignals(BaseStrategy):
                     < self.stop_loss_arr[index]
                 )
 
-                if self.profit ^ self.loss:
+                if self.profit | self.loss:
                     self.close_position_arr[index] = True
                     self.signal_arr[index] = -1
+
+                elif self.profit & self.loss:
+                    self.close_position_arr[index] = True
+                    self.signal_arr[index] = -2
 
         self.df_signals = pd.DataFrame(
             {
