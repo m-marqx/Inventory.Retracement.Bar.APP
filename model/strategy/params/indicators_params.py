@@ -17,3 +17,4 @@ class CCIParams(BaseModel):
     source_column: str = "close"
     length: int = 20
     ma_type: str = "sma"
+    constant: int = 0.015
