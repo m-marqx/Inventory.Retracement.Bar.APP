@@ -291,7 +291,7 @@ class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
 
-    def set_trend_params(self, params: IndicatorsParams, trend_params: TrendParams):
+    def set_trend_params(self, params: IndicatorsParams = IndicatorsParams(), trend_params: TrendParams = TrendParams()):
         self.indicators_params = params
         self.trend_params = trend_params
         return self
@@ -300,7 +300,7 @@ class BuilderStrategy(BaseStrategy):
         self.trend = SetTrend(self.df_filtered, self.indicators_params, self.trend_params).execute()
         return self
 
-    def set_irb_params(self, params: IrbParams):
+    def set_irb_params(self, params: IrbParams = IrbParams()):
         self.irb_params = params
         return self
 
