@@ -57,6 +57,48 @@ class DataProcess:
         )
 
         return self
+
+    def adjusted_price(self):
+        self.broker_emulator_result()
+
+        self.data_frame = self.dataframe.copy()
+        self.data_frame["Adjusted_Price"] = np.nan
+
+        self.data_frame["Adjusted_Price"] = np.where(
+            (self.data_frame["high"] > self.data_frame["Take_Profit"])
+            & self.data_frame["Close_Position"],
+            self.data_frame["Take_Profit"],
+            self.data_frame["Adjusted_Price"],
+        )
+
+        self.data_frame["Adjusted_Price"] = np.where(
+            (self.data_frame["low"] < self.data_frame["Stop_Loss"])
+            & self.data_frame["Close_Position"],
+            self.data_frame["Stop_Loss"],
+            self.data_frame["Adjusted_Price"],
+        )
+
+        self.data_frame["Adjusted_Price"] = np.where(
+            (self.data_frame["high"] > self.data_frame["Take_Profit"])
+            & self.data_frame["Close_Position"],
+            self.data_frame["Take_Profit"],
+            self.data_frame["Adjusted_Price"],
+        )
+
+        self.data_frame["Adjusted_Price"] = np.where(
+            self.duplicate & self.TP_is_close,
+            self.data_frame["Take_Profit"],
+            self.data_frame["Adjusted_Price"],
+        )
+
+        self.data_frame["Adjusted_Price"] = np.where(
+            self.duplicate & ~self.TP_is_close,
+            self.data_frame["Stop_Loss"],
+            self.data_frame["Adjusted_Price"],
+        )
+
+        return self.data_frame["Adjusted_Price"]
+
 class Math:
     def calculate_expected_value(self, dataframe):
         data_frame = dataframe.query("Result != 0")[["Result"]].copy()
