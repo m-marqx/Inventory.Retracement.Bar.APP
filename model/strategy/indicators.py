@@ -51,7 +51,6 @@ class CalculateCCI(BaseStrategy):
             self.CCI.set_ema()
 
         self.df_filtered['CCI'] = self.CCI.CCI()['CCI']
-        self.df_filtered['CCI'].shift(self.length - 1)
         return self.df_filtered
 
 class BuilderSource(BaseStrategy):
