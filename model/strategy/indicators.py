@@ -57,7 +57,7 @@ class BuilderSource(BaseStrategy):
         super().__init__(dataframe)
         self.df_filtered = CleanData(self.df_filtered).execute()
 
-    def set_EMA_params(self, params: EmaParams):
+    def set_EMA_params(self, params: EmaParams = EmaParams()):
         self.ema_params = params
         return self
 
@@ -65,7 +65,7 @@ class BuilderSource(BaseStrategy):
         CalculateEma(self.df_filtered, self.ema_params).execute()
         return self
 
-    def set_CCI_params(self, params: CCIParams):
+    def set_CCI_params(self, params: CCIParams = CCIParams()):
         self.cci_params = params
         return self
 
@@ -73,7 +73,7 @@ class BuilderSource(BaseStrategy):
         CalculateCCI(self.df_filtered, self.cci_params).execute()
         return self
 
-    def set_MACD_params(self, params: MACDParams):
+    def set_MACD_params(self, params: MACDParams = MACDParams()):
         self.macd_params = params
         return self
 
