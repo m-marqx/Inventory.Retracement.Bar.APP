@@ -11,6 +11,23 @@ class BaseStrategy(ABC):
         raise NotImplementedError
 
 
+class DataProcess:
+    def __init__(self, dataframe: pd.DataFrame):
+        self.dataframe = dataframe
+
+    def classify_dataframe(self, index: bool = False):
+        if index:
+            self.df_transposed = self.dataframe.copy().T
+        else:
+            self.df_transposed = self.dataframe.reset_index(drop=True).copy().T
+
+        self.last_column = [self.df_transposed.columns[-1]]
+        self.df_transposed["rank"] = (
+            self.df_transposed[self.last_column].rank(method="min") - 1
+        )
+        self.df_melted = pd.melt(
+            self.df_transposed, id_vars=["rank"], var_name="index", value_name="result"
+        ).sort_values(by=["rank", "index"])
 
 class Math:
     def calculate_expected_value(self, dataframe):
