@@ -153,8 +153,6 @@ class GetIrbSignalsBuy(BaseStrategy):
 class CalculateIrbSignals(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
-
-    def execute(self):
         self.signal_arr = self.df_filtered["Signal"].to_numpy()
         self.entry_price_arr = self.df_filtered["Entry_Price"].to_numpy()
         self.take_profit_arr = self.df_filtered["Take_Profit"].to_numpy()
@@ -163,6 +161,11 @@ class CalculateIrbSignals(BaseStrategy):
         self.low_price_arr = self.df_filtered["low"].to_numpy()
         self.close_position_arr = np.zeros(len(self.df_filtered), dtype=bool)
 
+        self.signal_condition = self.signal_arr == 1
+        self.profit = np.nan
+        self.loss = np.nan
+
+    def execute(self):
         for index in range(1, len(self.df_filtered)):
             prev_index = index - 1
             self.signal_condition = self.signal_arr[prev_index] == 1
