@@ -199,18 +199,13 @@ class CalculateIrbSignals(BaseStrategy):
                     self.close_position_arr[index] = True
                     self.signal_arr[index] = -2
 
-        self.df_signals = pd.DataFrame(
-            {
-                "Signal": self.signal_arr,
-                "Entry_Price": self.entry_price_arr,
-                "Take_Profit": self.take_profit_arr,
-                "Stop_Loss": self.stop_loss_arr,
-                "Close_Position": self.close_position_arr,
-                "high": self.high_price_arr,
-                "low": self.low_price_arr,
-            }
-        )
+
+        self.df_filtered["Signal"] = self.signal_arr
+        self.df_filtered["Entry_Price"] = self.entry_price_arr
+        self.df_filtered["Take_Profit"] = self.take_profit_arr
+        self.df_filtered["Stop_Loss"] = self.stop_loss_arr
         self.df_filtered["Close_Position"] = self.close_position_arr
+        self.df_filtered["Signal_Condition"] = self.signal_condition
 
         return self.df_filtered
 
