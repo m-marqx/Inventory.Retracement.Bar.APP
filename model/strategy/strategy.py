@@ -296,7 +296,7 @@ class BuilderStrategy(BaseStrategy):
         self.trend_params = trend_params
         return self
 
-    def set_trend(self):
+    def get_trend(self):
         self.trend = SetTrend(self.df_filtered, self.indicators_params, self.trend_params).execute()
         return self
 

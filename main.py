@@ -47,7 +47,7 @@ df = (
         df,
     )
     .set_trend_params(indicators_params, trend_params)
-    .set_trend()
+    .get_trend()
     .set_irb_params(irb_params)
     .get_irb_signals()
     .calculate_irb_signals()
