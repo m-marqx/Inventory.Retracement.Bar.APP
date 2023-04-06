@@ -280,5 +280,6 @@ class Plot:
 
         # Exibir o gráfico
         return self
-    # Exibir o gráfico
-    fig.show()
+
+    def fig_to_html(self, title: str, open_file: bool = False):
+        pio.write_html(self.fig, file=title + ".html", auto_open=open_file)
