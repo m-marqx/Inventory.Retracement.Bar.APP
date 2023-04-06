@@ -38,19 +38,18 @@ class CalculateCCI(BaseStrategy):
     def __init__(self, dataframe, params: CCIParams):
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
-        self.length = params.length
-        self.ma_type = params.ma_type
+        self.params = params
 
     def execute(self):
         from model.indicators.CCI import CCI
-        self.CCI = CCI(self.source, self.length)
+        self.CCI = CCI(self.source, self.params.length)
 
-        if self.ma_type == "sma":
+        if self.params.ma_type == "sma":
             self.CCI.set_sma()
-        if self.ma_type == "ema":
+        if self.params.ma_type == "ema":
             self.CCI.set_ema()
 
-        self.df_filtered['CCI'] = self.CCI.CCI()['CCI']
+        self.df_filtered["CCI"] = self.CCI.CCI(self.params.constant)["CCI"]
         return self.df_filtered
 
 class BuilderSource(BaseStrategy):
