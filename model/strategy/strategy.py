@@ -35,9 +35,7 @@ class CalculateTrend(BaseStrategy):
 
     def cci_condition(self, trend_value: int):
         if "CCI" in self.df_filtered.columns:
-            self.conditions["CCI"] = (self.df_filtered["CCI"]
-            > trend_value
-        )
+            self.conditions["CCI"] = self.df_filtered["CCI"] > trend_value
 
         else:
             raise ValueError("CCI column not found")
