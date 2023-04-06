@@ -10,21 +10,21 @@ class MACD:
         self.signal_length = signal_length
 
     def set_ema(self):
-        self.fast_ma = ma.ema(self.source, self.fast_length)
-        self.slow_ma = ma.ema(self.source, self.slow_length)
+        self.fast_ma = ma.Ema(self.source, self.fast_length)
+        self.slow_ma = ma.Ema(self.source, self.slow_length)
 
         return self
 
     def set_sma(self):
-        self.fast_ma = ma.sma(self.source, self.fast_length)
-        self.slow_ma = ma.sma(self.source, self.slow_length)
+        self.fast_ma = ma.Sma(self.source, self.fast_length)
+        self.slow_ma = ma.Sma(self.source, self.slow_length)
 
         return self
 
     def MACD(self):
         self.MACD = self.fast_ma - self.slow_ma
         self.data_frame = pd.DataFrame({"MACD": self.MACD}).dropna(axis=0)
-        self.data_frame["MACD_Signal"] = ma.ema(self.data_frame["MACD"], self.signal_length)
+        self.data_frame["MACD_Signal"] = ma.Ema(self.data_frame["MACD"], self.signal_length)
         self.data_frame["Histogram"] = self.data_frame["MACD"] - self.data_frame["MACD_Signal"]
 
         return self.data_frame

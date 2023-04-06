@@ -4,7 +4,7 @@ import pandas as pd
 from controller import config
 from binance.helpers import interval_to_milliseconds
 
-class futuresAPI:
+class FuturesAPI:
     def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
         self.client = Client(api_key, secret_key)
 

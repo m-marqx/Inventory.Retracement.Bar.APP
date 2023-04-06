@@ -3,7 +3,7 @@ import pandas as pd
 # Indicadores
 class MovingAverage:
     """
-    A class for calculating Simple Moving Average (SMA) 
+    A class for calculating Simple Moving Average (SMA)
     and Exponential Moving Average (EMA) of time series data.
 
     Attributes:
@@ -20,9 +20,10 @@ class MovingAverage:
         Calculate the Exponential Moving Average (EMA)
         of the input time series data.
     """
-    def sma(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
+
+    def Sma(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
         """
-        Calculate the Simple Moving Average (SMA) 
+        Calculate the Simple Moving Average (SMA)
         of the input time series data.
 
         Parameters:
@@ -40,9 +41,9 @@ class MovingAverage:
         sma = source.rolling(length).mean()
         return sma.dropna(axis=0)
 
-    def ema(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
+    def Ema(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
         """
-        Calculate the Exponential Moving Average (EMA) 
+        Calculate the Exponential Moving Average (EMA)
         of the input time series data.
 
         Parameters:

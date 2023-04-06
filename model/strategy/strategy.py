@@ -1,13 +1,14 @@
 import pandas as pd
 import numpy as np
 from model.strategy.params.strategy_params import (
-    irb_params,
-    trend_params,
-    indicators_params,
+    IrbParams,
+    TrendParams,
+    IndicatorsParams,
 )
 from model.utils import BaseStrategy
 
-class calculate_trend(BaseStrategy):
+
+class CalculateTrend(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
         self.conditions = pd.DataFrame()
@@ -49,14 +50,14 @@ class calculate_trend(BaseStrategy):
         return self.df_filtered
 
 
-class set_trend(BaseStrategy):
-    def __init__(self, dataframe, params: indicators_params):
+class SetTrend(BaseStrategy):
+    def __init__(self, dataframe, params: IndicatorsParams):
         super().__init__(dataframe)
         self.params = params
-        self.trend_params = trend_params()
+        self.trend_params = TrendParams()
 
     def execute(self):
-        self.trend = calculate_trend(self.df_filtered)
+        self.trend = CalculateTrend(self.df_filtered)
 
         if self.trend_params.ema:
             self.trend = self.trend.ema_condition(self.params.ema_column)
@@ -73,7 +74,7 @@ class set_trend(BaseStrategy):
 
 
 # %%
-class set_ticksize(BaseStrategy):
+class SetTicksize(BaseStrategy):
     def __init__(self, tick_size=0.1):
         self.tick_size = tick_size
 
@@ -81,8 +82,8 @@ class set_ticksize(BaseStrategy):
         return self.tick_size
 
 
-class GetIrbSignals_buy(BaseStrategy):
-    def __init__(self, dataframe, params: irb_params):
+class GetIrbSignalsBuy(BaseStrategy):
+    def __init__(self, dataframe, params: IrbParams):
         super().__init__(dataframe)
         self.lowestlow = params.lowestlow
         self.payoff = params.payoff
@@ -230,8 +231,7 @@ class CheckIrbSignals(BaseStrategy):
         self.df_check["Error"] = has_error
         return self
 
-
-class calculateResults(BaseStrategy):
+class CalculateResults(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
 
@@ -280,19 +280,19 @@ class calculateResults(BaseStrategy):
         return self.df_filtered
 
 
-class builder_strategy(BaseStrategy):
+class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
-        self.trend = calculate_trend(self.df_filtered)
+        self.trend = CalculateTrend(self.df_filtered)
 
-    def set_trend_params(self, params: indicators_params):
+    def set_trend_params(self, params: IndicatorsParams):
         #! The copy is necessary to avoid the indicators_params
         #! being changed when the indicators are setted
         self.indicators_params = params.copy()
         return self
 
     def set_trend(self):
-        self.trend = calculate_trend(self.df_filtered)
+        self.trend = CalculateTrend(self.df_filtered)
 
         if "ema" in self.df_filtered.columns:
             self.trend = (
@@ -311,14 +311,12 @@ class builder_strategy(BaseStrategy):
         self.trend.execute()
         return self
 
-    def set_irb_params(self, params: irb_params):
+    def set_irb_params(self, params: IrbParams):
         self.irb_params = params
         return self
 
     def get_irb_signals(self):
-        self.df_filtered = GetIrbSignals_buy(
-            self.df_filtered, self.irb_params
-        ).execute()
+        self.df_filtered = GetIrbSignalsBuy(self.df_filtered, self.irb_params).execute()
         return self
 
     def calculate_irb_signals(self):
@@ -326,7 +324,8 @@ class builder_strategy(BaseStrategy):
         return self
 
     def calculateResults(self):
-        self.df_filtered = calculateResults(self.df_filtered).execute()
+        self.df_filtered = CalculateResults(self.df_filtered).execute()
+        return self
         return self
 
     def execute(self):

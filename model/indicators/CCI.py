@@ -44,7 +44,7 @@ class CCI:
         return self
 
     def set_ema(self):
-        self.ma = ma.ema(self.source_df, self.length).to_numpy()
+        self.ma = ma.Ema(self.source_df, self.length).to_numpy()
 
         return self
 

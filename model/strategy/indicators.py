@@ -1,14 +1,14 @@
 from pydantic import BaseModel
-from model.utils import clean_data, BaseStrategy
+from model.utils import CleanData, BaseStrategy
 from model.strategy.params.indicators_params import (
-    EMA_params,
-    MACD_params,
-    CCI_params
+    EmaParams,
+    MACDParams,
+    CCIParams
 )
 
 
-class calculate_EMA(BaseStrategy):
-    def __init__(self, dataframe, params: EMA_params):
+class CalculateEma(BaseStrategy):
+    def __init__(self, dataframe, params: EmaParams):
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
         self.length = params.length
@@ -16,12 +16,12 @@ class calculate_EMA(BaseStrategy):
     def execute(self):
         from model.indicators.moving_average import MovingAverage
         ma = MovingAverage()
-        self.ema = ma.ema(self.source, self.length)
-        self.df_filtered['ema'] = self.ema
+        self.ema = ma.Ema(self.source, self.length)
+        self.df_filtered["ema"] = self.ema
         return self.df_filtered
 
-class calculate_MACD(BaseStrategy):
-    def __init__(self, dataframe,  params: MACD_params):
+class CalculateMACD(BaseStrategy):
+    def __init__(self, dataframe, params: MACDParams):
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
         self.fast_length = params.fast_length
@@ -34,8 +34,8 @@ class calculate_MACD(BaseStrategy):
         self.df_filtered['MACD_Histogram'] = self.histogram
         return self.df_filtered
 
-class calculate_CCI(BaseStrategy):
-    def __init__(self, dataframe, params: CCI_params):
+class CalculateCCI(BaseStrategy):
+    def __init__(self, dataframe, params: CCIParams):
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
         self.length = params.length
@@ -54,33 +54,33 @@ class calculate_CCI(BaseStrategy):
         self.df_filtered['CCI'].shift(self.length - 1)
         return self.df_filtered
 
-class builder_source(BaseStrategy):
+class BuilderSource(BaseStrategy):
     def __init__(self, dataframe):
         super().__init__(dataframe)
-        self.df_filtered = clean_data(self.df_filtered).execute()
+        self.df_filtered = CleanData(self.df_filtered).execute()
 
-    def set_EMA_params(self, params: EMA_params):
+    def set_EMA_params(self, params: EmaParams):
         self.ema_params = params
         return self
 
     def set_ema(self):
-        calculate_EMA(self.df_filtered,self.ema_params).execute()
+        CalculateEma(self.df_filtered, self.ema_params).execute()
         return self
 
-    def set_CCI_params(self, params: CCI_params):
+    def set_CCI_params(self, params: CCIParams):
         self.cci_params = params
         return self
 
     def set_cci(self):
-        calculate_CCI(self.df_filtered,self.cci_params).execute()
+        CalculateCCI(self.df_filtered, self.cci_params).execute()
         return self
 
-    def set_MACD_params(self, params: MACD_params):
+    def set_MACD_params(self, params: MACDParams):
         self.macd_params = params
         return self
 
     def set_macd(self):
-        calculate_MACD(self.df_filtered, self.macd_params).execute()
+        CalculateMACD(self.df_filtered, self.macd_params).execute()
         return self
 
     def execute(self):

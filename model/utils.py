@@ -12,7 +12,7 @@ class BaseStrategy(ABC):
 
 
 
-class math:
+class Math:
     def calculate_expected_value(self, dataframe):
         data_frame = dataframe.query("Result != 0")[["Result"]].copy()
 
@@ -60,8 +60,8 @@ class math:
         return data_frame
 
 
-class clean_data(BaseStrategy):
-    #! Don't convert the values to float32 
+class CleanData(BaseStrategy):
+    #! Don't convert the values to float32
     #! because it significantly reduces the precision of the data.
     def __init__(self, dataframe):
         self.dataframe = dataframe.copy()
