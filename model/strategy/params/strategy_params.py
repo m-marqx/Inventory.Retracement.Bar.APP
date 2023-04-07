@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 class IndicatorsParams(BaseModel):
     ema_column: str = "close"
-    macd_histogram_trend_value: int = 0
-    cci_trend_value: int = 0
+    macd_histogram_trend_value: float = 0
+    cci_trend_value: float = 0
 
 class TrendParams(BaseModel):
     ema: bool = False
