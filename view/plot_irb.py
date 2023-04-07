@@ -23,14 +23,14 @@ class Plot:
         self.fig2 = None
 
     def winrate(self):
-        if "Win Rate" not in self.data_frame.columns:
-            self.data_frame["Win Rate"] = ((self.data_frame["Result"] > 0).cumsum()) / (
+        if "Win_Rate" not in self.data_frame.columns:
+            self.data_frame["Win_Rate"] = ((self.data_frame["Result"] > 0).cumsum()) / (
                 (self.data_frame["Result"] < 0).cumsum()
             )
 
         self.fig = px.histogram(
             (
-                self.data_frame.query("(`Win Rate` > 0) and (`Close Position` == True)")
+                self.data_frame.query("(`Win_Rate` > 0) and (`Close_Position` == True)")
             ).iloc[:, -1],
             histnorm="probability",
         )
@@ -38,8 +38,8 @@ class Plot:
         return self
 
     def results(self):
-        self.fig2 = px.histogram(
-            self.data_frame.query("`Close Position` == True").iloc[:, -6]
+        self.fig = px.histogram(
+            self.data_frame.query("`Close_Position` == True")["Result"]
         )
         return self
 
