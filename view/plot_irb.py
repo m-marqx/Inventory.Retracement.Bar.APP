@@ -34,7 +34,7 @@ class Plot:
             ).iloc[:, -1],
             histnorm="probability",
         )
-        self.fig.show()
+        self.fig
         return self
 
     def results(self):
