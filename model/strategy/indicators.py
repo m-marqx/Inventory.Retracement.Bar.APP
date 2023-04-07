@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from model.utils import CleanData, BaseStrategy
 from model.strategy.params.indicators_params import (
     EmaParams,
