@@ -46,6 +46,7 @@ class FuturesAPI:
         interval="2h",
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
+        request_limit=False,
     ):
         START = t.time()
         klines_list = []
@@ -72,7 +73,7 @@ class FuturesAPI:
                 print("\nQty  : " + str(len(klines_list)))
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
+                if request_Duration < 1.33 and request_limit:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
