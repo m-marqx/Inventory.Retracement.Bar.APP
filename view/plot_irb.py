@@ -4,15 +4,21 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
-
+from model.utils import DataProcess
 
 class Plot:
     def __init__(self, dataframe):
         self.data_frame = dataframe.copy()
-        if "open_time" in dataframe.columns:
-            dataframe["Date"] = pd.to_datetime(dataframe["open_time"], unit="ms")
-        elif "Date" not in dataframe.columns:
-            dataframe["Date"] = dataframe.index
+        if "open_time" in self.data_frame.columns:
+            if "open_time" == self.data_frame.index.dtype == "<M8[ns]":
+                self.data_frame["Date"] = self.data_frame.index
+            else:
+                self.data_frame["Date"] = pd.to_datetime(self.data_frame["open_time"], unit="ms")
+
+        elif "Date" not in self.data_frame.columns:
+            self.data_frame["Date"] = self.data_frame.index
+
+        self.data_frame["adjusted_price"] = DataProcess(self.data_frame).adjusted_price()
         self.fig = None
         self.fig2 = None
 
