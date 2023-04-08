@@ -58,3 +58,23 @@ class Backtest:
         df_result = pd.DataFrame(df_result)
         return df_result
 
+    def wick_backtest(
+        self,
+        start=0,
+        end=100,
+        ema_length=20,
+        column="Cumulative_Result"
+    ):
+        df_result = {}
+
+        columns = ["open", "high", "low", "close"]
+        for col in columns:
+            for value in range(start, end + 1, 1):
+                value = value / 100
+                ema_params = EmaParams(length=ema_length, source_column=col)
+                params = IrbParams(wick_percentage=value)
+                arr = self.strategy(self.data_frame, ema_params, params)[column]
+                df_result[f"wick percentage: {value} <br> ema colum: {col}"] = arr
+
+        df_result = pd.DataFrame(df_result)
+        return df_result
