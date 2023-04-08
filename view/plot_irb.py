@@ -91,6 +91,16 @@ class Plot:
             )
         )
 
+        self.fig.add_trace(
+            go.Scatter(
+                x=self.data_frame["Date"],
+                y=self.data_frame["Exit_Price"],
+                name="Exit",
+                mode="markers",
+                marker=dict(color="yellow"),
+            )
+        )
+
         # adicionando o range slider
         self.fig.update_layout(
             title_text="Hoffman Inventory Retracement Bar",
@@ -234,6 +244,16 @@ class Plot:
                 y=self.data_frame["Stop_Loss"],
                 name="Stop Loss",
                 line=dict(color="red"),
+            )
+        )
+
+        self.fig1.add_trace(
+            go.Scatter(
+                x=self.data_frame["Date"],
+                y=self.data_frame["Exit_Price"],
+                name="Exit",
+                mode="markers",
+                marker=dict(color="yellow"),
             )
         )
 
