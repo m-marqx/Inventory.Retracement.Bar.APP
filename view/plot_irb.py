@@ -18,7 +18,7 @@ class Plot:
         elif "Date" not in self.data_frame.columns:
             self.data_frame["Date"] = self.data_frame.index
 
-        self.data_frame["adjusted_price"] = DataProcess(self.data_frame).exit_price()
+        self.data_frame["Exit_Price"] = DataProcess(self.data_frame).exit_price()
         self.fig = None
         self.fig2 = None
 
