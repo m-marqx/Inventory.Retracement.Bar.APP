@@ -22,7 +22,7 @@ from view.plot_irb import Plot
 class InventoryRetracementBarGUI:
     def __init__(self, master):
         self.master = master
-        master.title("Futures Trading Strategy")
+        self.master.title("Futures Trading Strategy")
 
         self.label1 = tk.Label(master, text="Symbol:")
         self.label1.grid(row=0, column=0)
@@ -333,7 +333,9 @@ class InventoryRetracementBarGUI:
             self.get_data_button.config(state="disabled", text="Loading...")
             self.master.update()
 
-            FAPI = FuturesAPI()
+            api_key = os.getenv("BINANCE_API_KEY")
+            secret_key = os.getenv("BINANCE_SECRET_KEY")
+            FAPI = FuturesAPI(api_key, secret_key)
             self.df = FAPI.get_all_futures_klines_df(symbol, interval)
 
             self.insert_text(
@@ -423,3 +425,5 @@ class InventoryRetracementBarGUI:
         except Exception as e:
             self.insert_text(f"Error occurred: {str(e)}\n")
 
+
+# %%
