@@ -289,3 +289,65 @@ class Plot:
 
     def fig_to_html(self, title: str, open_file: bool = False):
         pio.write_html(self.fig, file=title + ".html", auto_open=open_file)
+
+    def grouped_lines(self, index: bool = False):
+        fig = go.Figure()
+        if index:
+            self.data_frame["date"] = self.data_frame.index
+        colors = []
+
+        # Define a lista de cores a serem utilizadas
+
+        color_idx = 0
+        for i, col in enumerate(self.data_frame.columns):
+            if i % 100 == 0:
+                color_idx += 1
+            color = "rgb({},{},{})".format(
+                (color_idx * 50) % 256,
+                (color_idx * 100) % 256,
+                (color_idx * 150) % 256,
+            )
+            colors.append(color)
+            if index:
+                fig.add_trace(
+                    go.Scatter(
+                        x=self.data_frame["date"],
+                        y=self.data_frame[col],
+                        name=col,
+                        line=dict(color=color)
+                    )
+                )
+            else:
+                fig.add_trace(
+                    go.Scatter(
+                        y=self.data_frame[col],
+                        name=col,
+                        line=dict(color=color),
+                        hovertemplate="(%{x}, %{y})",
+                    )
+                )
+
+        fig.update_layout(
+            title={
+                "text": "Hoffman Inventory Retracement Bar",
+                "x": 0.5,
+            },
+            template="plotly_dark",
+            font=dict(
+                family="Georgia",
+                size=18,
+            ),
+            legend_title="Parametros",
+            showlegend=True,
+        )
+
+        if index:
+            fig.update_layout(
+                xaxis=dict(
+                    title="Data",
+                    type="date",
+                    tickformat="%d/%m/%Y",
+                ),
+            )
+
+        return fig
