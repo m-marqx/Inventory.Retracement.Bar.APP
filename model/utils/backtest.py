@@ -45,3 +45,16 @@ class Backtest:
             .calculateResults_new()
             .execute()
         )
+
+    def ema_backtest(self, start=0, end=100, column="Cumulative_Result"):
+        df_result = {}
+        columns = ["open", "high", "low", "close"]
+        for col in columns:
+            for value in range(start, end + 1, 1):
+                ema_params = EmaParams(length=value, source_column=col)
+                arr = self.strategy(self.data_frame, ema_params, IrbParams())[column]
+                df_result[f"length: {value} <br> source: {col}"] = arr
+
+        df_result = pd.DataFrame(df_result)
+        return df_result
+
