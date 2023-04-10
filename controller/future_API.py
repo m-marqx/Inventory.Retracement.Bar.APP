@@ -1,12 +1,11 @@
 import time as t
 from binance.client import Client
 import pandas as pd
-from controller import config
 from binance.helpers import interval_to_milliseconds
 
 class FuturesAPI:
-    def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
-        self.client = Client(api_key, secret_key)
+    def __init__(self):
+        self.client = Client()
 
     def get_ticker_info(self, Symbol):
         info = self.client.futures_coin_exchange_info()

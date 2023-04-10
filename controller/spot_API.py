@@ -1,12 +1,11 @@
 import time as t
 from binance.client import Client
-from controller import config
 import pandas as pd
 from binance.helpers import interval_to_milliseconds
 
 class SpotAPI:
-    def __init__(self, api_key=config.api_key, secret_key=config.secret_key):
-        self.client = Client(api_key, secret_key)
+    def __init__(self):
+        self.client = Client()
 
     def get_ticker_info(self,Symbol):
         info = self.client.get_exchange_info()
