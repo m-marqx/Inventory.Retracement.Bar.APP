@@ -8,10 +8,12 @@ from model.strategy.params.indicators_params import (
 from model.strategy.params.strategy_params import (
     IrbParams,
     IndicatorsParams,
+    TrendParams
 )
 
 from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
+
 
 class Backtest:
     def __init__(self, dataframe: pd.DataFrame):
@@ -51,7 +53,7 @@ class Backtest:
             .set_irb_params(irb_params)
             .get_irb_signals()
             .calculate_irb_signals()
-            .calculateResults_new()
+            .calculateResults()
             .execute()
         )
 
