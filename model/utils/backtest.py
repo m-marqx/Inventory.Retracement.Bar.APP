@@ -25,6 +25,15 @@ class Backtest:
         indicators: IndicatorsParams,
         trend: TrendParams,
     ):
+
+        self.parameters_list = [
+            f"EMA: {ema_params} <br> "
+            f"IRB: {irb_params} <br> "
+            f"Indicadores: {indicators} <br> "
+            f"Filtros {trend}"
+        ]
+
+
         self.data_frame = (
             BuilderSource(
                 self.dataframe,
