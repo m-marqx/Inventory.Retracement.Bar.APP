@@ -33,8 +33,13 @@ class InventoryRetracementBarGUI:
         self.label2 = tk.Label(master, text="Timeframe:")
         self.label2.grid(row=0, column=2)
 
-        self.timeframe_entry = tk.Entry(master, width=10)
-        self.timeframe_entry.grid(row=0, column=3)
+        self.timeframes = ["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"]
+
+        self.timeframe_var = tk.StringVar(master)
+        self.timeframe_var.set(self.timeframes[6])
+
+        self.timeframe_menu = tk.OptionMenu(master, self.timeframe_var, *self.timeframes)
+        self.timeframe_menu.grid(row=0, column=3)
 
         self.get_data_button = tk.Button(master, text="Get Data", command=self.get_data)
         self.get_data_button.grid(row=1, column=1)
