@@ -1,4 +1,4 @@
-# %%
+import os
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
@@ -308,7 +308,12 @@ class Plot:
         return self
 
     def fig_to_html(self, title: str, open_file: bool = False):
-        pio.write_html(self.fig, file=title + ".html", auto_open=open_file)
+        if not os.path.exists("data/html"):
+            os.makedirs("data/html")
+        file_path = os.path.join("data/html", title + ".html")
+        pio.write_html(self.fig, file=file_path, auto_open=open_file)
+        return self
+
 
     def grouped_lines(self, index: bool = False):
         fig = go.Figure()
