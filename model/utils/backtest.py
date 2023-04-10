@@ -46,6 +46,15 @@ class Backtest:
             .execute()
         )
 
+    def run_backtest(self, ema_params, irb_params, indicators, trend):
+        backtest = Backtest(self.dataframe)
+        return backtest.strategy(
+            ema_params,
+            irb_params,
+            indicators,
+            trend,
+        )
+
     def ema_backtest(self, start=0, end=100, column="Cumulative_Result"):
         df_result = {}
         columns = ["open", "high", "low", "close"]
