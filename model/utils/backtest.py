@@ -1,4 +1,6 @@
 import pandas as pd
+import concurrent.futures
+
 from model.strategy.params.indicators_params import (
     EmaParams,
     MACDParams,
@@ -68,14 +70,32 @@ class Backtest:
             trend,
         )
 
-    def ema_backtest(self, start=0, end=100, column="Cumulative_Result"):
+    def ema_backtest(self, start=1, end=100, column="Cumulative_Result"):
         df_result = {}
-        columns = ["open", "high", "low", "close"]
-        for col in columns:
-            for value in range(start, end + 1, 1):
-                ema_params = EmaParams(length=value, source_column=col)
-                arr = self.strategy(self.data_frame, ema_params, IrbParams())[column]
-                df_result[f"length: {value} <br> source: {col}"] = arr
+        results = []
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+
+            for col in ["open", "high", "low", "close"]:
+                for value in range(start, end + 1, 1):
+                    ema_params = EmaParams(length=value, source_column=col)
+                    futures.append(
+                        executor.submit(
+                            self.run_backtest,
+                            ema_params,
+                            IrbParams(),
+                            IndicatorsParams(),
+                            TrendParams(ema=True),
+                        )
+                    )
+
+            for future in concurrent.futures.as_completed(futures):
+                result = future.result()
+                results.append(result)
+                results_values = result[0][column]
+                results_params = result[1][-1]
+                df_result[results_params] = results_values
 
         df_result = pd.DataFrame(df_result)
         return df_result
