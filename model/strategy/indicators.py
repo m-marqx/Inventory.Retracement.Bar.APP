@@ -14,8 +14,9 @@ class CalculateEma(BaseStrategy):
 
     def execute(self):
         from model.indicators.moving_average import MovingAverage
+
         ma = MovingAverage()
-        self.ema = ma.Ema(self.source, self.length)
+        self.ema = ma.ema(self.source, self.length)
         self.df_filtered["ema"] = self.ema
         return self.df_filtered
 
@@ -29,8 +30,9 @@ class CalculateMACD(BaseStrategy):
 
     def execute(self):
         from model.indicators.MACD import MACD
-        self.histogram = MACD(self.source, self.fast_length, self.slow_length, self.signal_length).set_ema().MACD()['Histogram']
-        self.df_filtered['MACD_Histogram'] = self.histogram
+
+        self.histogram = MACD(self.source, self.fast_length, self.slow_length, self.signal_length).set_ema().MACD()["Histogram"]
+        self.df_filtered["MACD_Histogram"] = self.histogram
         return self.df_filtered
 
 class CalculateCCI(BaseStrategy):
@@ -41,6 +43,7 @@ class CalculateCCI(BaseStrategy):
 
     def execute(self):
         from model.indicators.CCI import CCI
+
         self.CCI = CCI(self.source, self.params.length)
 
         if self.params.ma_type == "sma":

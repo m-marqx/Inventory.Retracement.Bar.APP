@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 # Indicadores
 class MovingAverage:
     """
@@ -21,7 +22,7 @@ class MovingAverage:
         of the input time series data.
     """
 
-    def Sma(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
+    def sma(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
         """
         Calculate the Simple Moving Average (SMA)
         of the input time series data.
@@ -41,7 +42,7 @@ class MovingAverage:
         sma = source.rolling(length).mean()
         return sma.dropna(axis=0)
 
-    def Ema(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
+    def ema(self, source: pd.DataFrame, length: int) -> pd.DataFrame:
         """
         Calculate the Exponential Moving Average (EMA)
         of the input time series data.

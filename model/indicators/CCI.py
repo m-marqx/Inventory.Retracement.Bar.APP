@@ -4,6 +4,7 @@ from model import MovingAverage
 
 ma = MovingAverage()
 
+
 class CCI:
     def __init__(self, source, length: int = 20):
         self.source_arr = np.array(source)
@@ -15,8 +16,8 @@ class CCI:
         smooth_column: str = "sma",
         constant: float = 0.015,
     ):
-    #! this version have more similar results from excel
-    #! than the other version and TA-lib.
+        #! this version have more similar results from excel
+        #! than the other version and TA-lib.
 
         self.df = pd.DataFrame()
         self.df["TP"] = self.source_arr
@@ -44,7 +45,7 @@ class CCI:
         return self
 
     def set_ema(self):
-        self.ma = ma.Ema(self.source_df, self.length).to_numpy()
+        self.ma = ma.ema(self.source_df, self.length).to_numpy()
 
         return self
 
