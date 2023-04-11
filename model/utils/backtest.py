@@ -33,8 +33,8 @@ class Backtest:
         self.parameters_list = [
             f"EMA: {ema_params} <br> "
             f"IRB: {irb_params} <br> "
-            f"Indicadores: {indicators} <br> "
-            f"Filtros {trend}"
+            f"Indicators: {indicators} <br> "
+            f"Filters: {trend}"
         ]
 
 
