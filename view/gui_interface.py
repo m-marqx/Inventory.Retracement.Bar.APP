@@ -331,17 +331,15 @@ class InventoryRetracementBarGUI:
 
     def get_data(self):
         symbol = self.symbol_entry.get()
-        interval = self.timeframe_entry.get()
+        interval = self.timeframe_var.get()
 
         try:
             # Change button text to "loading"
             self.get_data_button.config(state="disabled", text="Loading...")
             self.master.update()
 
-            api_key = os.getenv("BINANCE_API_KEY")
-            secret_key = os.getenv("BINANCE_SECRET_KEY")
-            FAPI = FuturesAPI(api_key, secret_key)
-            self.df = FAPI.get_all_futures_klines_df(symbol, interval)
+            fapi = FuturesAPI()
+            self.df = fapi.get_all_futures_klines_df(symbol, interval)
 
             self.insert_text(
                 f"Retrieved {len(self.df)} klines for {symbol} with interval {interval}\n"
