@@ -10,7 +10,7 @@ from model.strategy.params.indicators_params import (
 from model.strategy.params.strategy_params import (
     IrbParams,
     IndicatorsParams,
-    TrendParams
+    TrendParams,
 )
 
 from model.strategy.strategy import BuilderStrategy
@@ -29,14 +29,12 @@ class Backtest:
         indicators: IndicatorsParams,
         trend: TrendParams,
     ):
-
         self.parameters_list = [
             f"EMA: {ema_params} <br> "
             f"IRB: {irb_params} <br> "
             f"Indicators: {indicators} <br> "
             f"Filters: {trend}"
         ]
-
 
         self.data_frame = (
             BuilderSource(
@@ -105,7 +103,7 @@ class Backtest:
         start=0,
         end=100,
         ema_length=20,
-        column="Cumulative_Result"
+        column="Cumulative_Result",
     ):
         df_result = {}
 
@@ -115,8 +113,15 @@ class Backtest:
                 value = value / 100
                 ema_params = EmaParams(length=ema_length, source_column=col)
                 params = IrbParams(wick_percentage=value)
-                arr = self.strategy(self.data_frame, ema_params, params)[column]
-                df_result[f"wick percentage: {value} <br> ema colum: {col}"] = arr
+                results = self.strategy(
+                    ema_params,
+                    params,
+                    IndicatorsParams(),
+                    TrendParams(ema=True),
+                )
+                results_values = results[0][column]
+                results_params = results[1][-1]
+                df_result[results_params] = results_values
 
         df_result = pd.DataFrame(df_result)
         return df_result
