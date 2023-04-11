@@ -56,6 +56,7 @@ class Backtest:
             .calculateResults()
             .execute()
         )
+        return self.data_frame, self.parameters_list
 
     def run_backtest(self, ema_params, irb_params, indicators, trend):
         backtest_df = self.dataframe.copy()
