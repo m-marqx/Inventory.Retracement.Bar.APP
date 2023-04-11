@@ -58,7 +58,8 @@ class Backtest:
         )
 
     def run_backtest(self, ema_params, irb_params, indicators, trend):
-        backtest = Backtest(self.dataframe)
+        backtest_df = self.dataframe.copy()
+        backtest = Backtest(backtest_df)
         return backtest.strategy(
             ema_params,
             irb_params,
