@@ -95,29 +95,6 @@ class Backtest:
 
         return pd.DataFrame(df_result)
 
-    def ema_backtest_old(self, start=0, end=100, column="Cumulative_Result"):
-        df_result = {}
-
-        columns = ["open", "high", "low", "close"]
-        for col in columns:
-            for value in range(start, end + 1, 1):
-                ema_params = EmaParams(length=value, source_column=col)
-                arr = self.run_backtest(ema_params, IrbParams(), IndicatorsParams(),TrendParams(ema=True))
-                df_result[arr[1][-1]] = arr[0][column]
-
-        results_df = pd.DataFrame(df_result)
-        return results_df
-
-            for future in concurrent.futures.as_completed(futures):
-                result = future.result()
-                results.append(result)
-                results_values = result[0][column]
-                results_params = result[1][-1]
-                df_result[results_params] = results_values
-
-        df_result = pd.DataFrame(df_result)
-        return df_result
-
     def wick_backtest(
         self,
         start=0,
