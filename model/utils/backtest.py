@@ -1,5 +1,7 @@
+from itertools import product
+from sklearn.model_selection import ParameterGrid
+from joblib import Parallel, delayed
 import pandas as pd
-import concurrent.futures
 
 from model.strategy.params.indicators_params import (
     EmaParams,
@@ -68,25 +70,43 @@ class Backtest:
             trend,
         )
 
-    def ema_backtest(self, start=1, end=100, column="Cumulative_Result"):
+    def ema_backtest(self, start=0, end=100, column="Cumulative_Result", n_jobs=-1):
         df_result = {}
-        results = []
+        columns = ["open", "high", "low", "close"]
+        ema_param_grid = {'length': range(start, end + 1, 1), 'source_column': columns}
+        param_grid = {
+            'ema_params': ParameterGrid(ema_param_grid),
+            'irb_params': [IrbParams()],
+            'indicators_params': [IndicatorsParams()],
+            'trend_params': [TrendParams(ema=True)]
+        }
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
+        results = Parallel(n_jobs=n_jobs)(
+            delayed(self.run_backtest)(
+                EmaParams(**dict(params[0])),
+                IrbParams(**dict(params[1])),
+                IndicatorsParams(**dict(params[2])),
+                TrendParams(**dict(params[3])),
+            ) for params in product(*param_grid.values())
+        )
 
-            for col in ["open", "high", "low", "close"]:
-                for value in range(start, end + 1, 1):
-                    ema_params = EmaParams(length=value, source_column=col)
-                    futures.append(
-                        executor.submit(
-                            self.run_backtest,
-                            ema_params,
-                            IrbParams(),
-                            IndicatorsParams(),
-                            TrendParams(ema=True),
-                        )
-                    )
+        for params, arr in zip(product(*param_grid.values()), results):
+            df_result[arr[1][-1]] = arr[0][column]
+
+        return pd.DataFrame(df_result)
+
+    def ema_backtest_old(self, start=0, end=100, column="Cumulative_Result"):
+        df_result = {}
+
+        columns = ["open", "high", "low", "close"]
+        for col in columns:
+            for value in range(start, end + 1, 1):
+                ema_params = EmaParams(length=value, source_column=col)
+                arr = self.run_backtest(ema_params, IrbParams(), IndicatorsParams(),TrendParams(ema=True))
+                df_result[arr[1][-1]] = arr[0][column]
+
+        results_df = pd.DataFrame(df_result)
+        return results_df
 
             for future in concurrent.futures.as_completed(futures):
                 result = future.result()
