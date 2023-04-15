@@ -27,3 +27,9 @@ class TrendParamsBacktest(BaseModel):
     cci: List[bool] = [True, False]
 
 
+class BacktestParams(BaseModel):
+    ema_params: EmaParamsBacktest = dict(EmaParamsBacktest())
+    irb_params: IrbParamsBacktest = dict(IrbParamsBacktest())
+    indicators_params: IndicatorsParamsBacktest = dict(IndicatorsParamsBacktest())
+    trend_params: TrendParamsBacktest = dict(TrendParamsBacktest())
+
