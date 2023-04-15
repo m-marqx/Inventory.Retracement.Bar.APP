@@ -21,3 +21,9 @@ class IndicatorsParamsBacktest(BaseModel):
     cci_trend_value: List[int] = np.arange(0, 1, 1)
 
 
+class TrendParamsBacktest(BaseModel):
+    ema: List[bool] = [True, False]
+    macd: List[bool] = [True, False]
+    cci: List[bool] = [True, False]
+
+
