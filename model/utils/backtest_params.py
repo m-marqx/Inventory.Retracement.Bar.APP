@@ -15,3 +15,9 @@ class IrbParamsBacktest(BaseModel):
     wick_percentage: List[float] = np.round(np.arange(0.01, 1.01, 0.01), 2)
 
 
+class IndicatorsParamsBacktest(BaseModel):
+    ema_column: List[str] = ["open", "high", "low", "close"]
+    macd_histogram_trend_value: List[int] = np.arange(0, 1, 1)
+    cci_trend_value: List[int] = np.arange(0, 1, 1)
+
+
