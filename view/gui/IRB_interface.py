@@ -18,20 +18,18 @@ from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
 from view.plot_irb import Plot
 
+from .labels import Label, Grid
 
 class Interface:
     def __init__(self, master):
         self.master = master
         self.master.title("Futures Trading Strategy")
 
-        self.label1 = tk.Label(master, text="Symbol:")
-        self.label1.grid(row=0, column=0)
+        self.label = Label(self.master)
+        self.grid = Grid(self.master)
 
         self.symbol_entry = tk.Entry(master, width=10)
         self.symbol_entry.grid(row=0, column=1)
-
-        self.label2 = tk.Label(master, text="Timeframe:")
-        self.label2.grid(row=0, column=2)
 
         self.timeframes = ["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"]
 
@@ -128,20 +126,11 @@ class Interface:
         # EMA Parameters
         self.options = ["open", "high", "low", "close"]
 
-        self.ema_params_label = tk.Label(master, text="EMA", bg="#333333", fg="#FFFFFF")
-        self.ema_params_label.grid(row=4, column=0, columnspan=4, sticky="NSWE")
-
-        self.label_ema_source = tk.Label(master, text="EMA Source Column:")
-        self.label_ema_source.grid(row=5, column=0)
-
         self.ema_source_var = tk.StringVar()
         self.ema_source_entry = tk.OptionMenu(
             master, self.ema_source_var, *self.options
         )
         self.ema_source_entry.grid(row=5, column=1)
-
-        self.label_ema_length = tk.Label(master, text="EMA Length:")
-        self.label_ema_length.grid(row=5, column=2)
 
         self.ema_length_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
@@ -149,38 +138,21 @@ class Interface:
         self.ema_length_entry.grid(row=5, column=3)
 
         # MACD Parameters
-        self.macd_params_label = tk.Label(
-            master, text="MACD", bg="#333333", fg="#FFFFFF"
-        )
-        self.macd_params_label.grid(row=6, column=0, columnspan=4, sticky="NSWE")
-
-        self.label_macd_source = tk.Label(master, text="MACD Source Column:")
-        self.label_macd_source.grid(row=7, column=0)
-
         self.macd_source_var = tk.StringVar()
         self.macd_source_entry = tk.OptionMenu(
             master, self.macd_source_var, *self.options
         )
         self.macd_source_entry.grid(row=7, column=1)
 
-        self.label_macd_fast_length = tk.Label(master, text="MACD Fast Length:")
-        self.label_macd_fast_length.grid(row=7, column=2)
-
         self.macd_fast_length_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
         )
         self.macd_fast_length_entry.grid(row=7, column=3)
 
-        self.label_macd_slow_length = tk.Label(master, text="MACD Slow Length:")
-        self.label_macd_slow_length.grid(row=8, column=0)
-
         self.macd_slow_length_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
         )
         self.macd_slow_length_entry.grid(row=8, column=1)
-
-        self.label_macd_signal_length = tk.Label(master, text="MACD Signal Length:")
-        self.label_macd_signal_length.grid(row=8, column=2)
 
         self.macd_signal_length_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
@@ -188,28 +160,16 @@ class Interface:
         self.macd_signal_length_entry.grid(row=8, column=3)
 
         # CCI Parameters
-        self.cci_params_label = tk.Label(master, text="CCI", bg="#333333", fg="#FFFFFF")
-        self.cci_params_label.grid(row=9, column=0, columnspan=4, sticky="NSWE")
-
-        self.label_cci_source = tk.Label(master, text="CCI Source Column:")
-        self.label_cci_source.grid(row=10, column=0)
-
         self.cci_source_var = tk.StringVar()
         self.cci_source_entry = tk.OptionMenu(
             master, self.cci_source_var, *self.options
         )
         self.cci_source_entry.grid(row=10, column=1)
 
-        self.label_cci_length = tk.Label(master, text="CCI Length:")
-        self.label_cci_length.grid(row=10, column=2)
-
         self.cci_length_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
         )
         self.cci_length_entry.grid(row=10, column=3)
-
-        self.label_cci_ma_type = tk.Label(master, text="CCI MA Type:")
-        self.label_cci_ma_type.grid(row=11, column=0)
 
         self.ma_options = ["sma", "ema"]
         self.cci_ma_type_var = tk.StringVar()
@@ -218,85 +178,43 @@ class Interface:
         )
         self.cci_ma_type_entry.grid(row=11, column=1)
 
-        self.label_cci_constant = tk.Label(master, text="CCI Constant:")
-        self.label_cci_constant.grid(row=11, column=2)
-
         self.cci_constant_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10
         )
         self.cci_constant_entry.grid(row=11, column=3)
 
         # IRB Parameters
-        self.irb_params_label = tk.Label(
-            master, text="IRB Params", bg="#333333", fg="#FFFFFF"
-        )
-        self.irb_params_label.grid(row=12, column=0, columnspan=4, sticky="NSWE")
-
-        self.irb_lowestlow_label = tk.Label(master, text="Lowest Low:")
-        self.irb_lowestlow_label.grid(row=13, column=0)
-
         self.irb_lowestlow_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10, value=1
         )
         self.irb_lowestlow_entry.grid(row=13, column=1)
-
-        self.irb_payoff_label = tk.Label(master, text="Payoff:")
-        self.irb_payoff_label.grid(row=13, column=2)
 
         self.irb_payoff_entry = ttk.Spinbox(
             master, width=10, increment=0.1, from_=0, to=1e10, value=2
         )
         self.irb_payoff_entry.grid(row=13, column=3)
 
-        self.irb_tick_size_label = tk.Label(master, text="Tick Size:")
-        self.irb_tick_size_label.grid(row=14, column=0)
-
         self.irb_tick_size_entry = ttk.Spinbox(
             master, width=10, increment=0.1, from_=0, to=1e10, value=0.1
         )
         self.irb_tick_size_entry.grid(row=14, column=1)
-
-        self.irb_wick_percentage_label = tk.Label(master, text="Wick Percentage:")
-        self.irb_wick_percentage_label.grid(row=14, column=2)
 
         self.irb_wick_percentage_entry = ttk.Spinbox(
             master, width=10, increment=0.01, from_=0, to=1, value=0.02
         )
         self.irb_wick_percentage_entry.grid(row=14, column=3)
 
-        self.trend_params_label = tk.Label(
-            master, text="Trend Params", bg="#333333", fg="#FFFFFF"
-        )
-        self.trend_params_label.grid(row=15, column=0, columnspan=4, sticky="NSWE")
-
-        self.trend_ema_label = tk.Label(master, text="EMA:")
-        self.trend_ema_label.grid(row=16, column=0)
-
         self.ema_var = tk.BooleanVar()
         self.trend_ema_entry = tk.Checkbutton(master, width=10, variable=self.ema_var)
         self.trend_ema_entry.grid(row=16, column=1)
-
-        self.trend_cci_label = tk.Label(master, text="CCI:")
-        self.trend_cci_label.grid(row=16, column=2)
 
         self.cci_var = tk.BooleanVar()
         self.trend_cci_entry = tk.Checkbutton(master, width=10, variable=self.cci_var)
         self.trend_cci_entry.grid(row=16, column=3)
 
-        self.trend_macd_label = tk.Label(master, text="MACD:")
-        self.trend_macd_label.grid(row=17, column=0)
-
         self.macd_var = tk.BooleanVar()
         self.trend_macd_entry = tk.Checkbutton(master, width=10, variable=self.macd_var)
         self.trend_macd_entry.grid(row=17, column=1)
-
-        self.indicators_params_label = tk.Label(
-            master, text="Indicators Params", bg="#333333", fg="#FFFFFF"
-        )
-        self.indicators_params_label.grid(row=18, column=0, columnspan=4, sticky="NSWE")
-
-        self.indicators_ema_column_label = tk.Label(master, text="EMA Column:")
-        self.indicators_ema_column_label.grid(row=19, column=0)
 
         self.indicators_ema_column_var = tk.StringVar()
         self.indicators_ema_column_entry = tk.OptionMenu(
@@ -304,20 +222,10 @@ class Interface:
         )
         self.indicators_ema_column_entry.grid(row=19, column=1)
 
-        self.indicators_macd_histogram_trend_value_label = tk.Label(
-            master, text="MACD Histogram Trend Value:"
-        )
-        self.indicators_macd_histogram_trend_value_label.grid(row=19, column=2)
-
         self.indicators_macd_histogram_trend_value_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10, value=0
         )
         self.indicators_macd_histogram_trend_value_entry.grid(row=19, column=3)
-
-        self.indicators_cci_trend_value_label = tk.Label(
-            master, text="CCI Trend Value:"
-        )
-        self.indicators_cci_trend_value_label.grid(row=20, column=0)
 
         self.indicators_cci_trend_value_label_entry = ttk.Spinbox(
             master, width=10, increment=1, from_=0, to=1e10, value=0
