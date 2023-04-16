@@ -19,7 +19,7 @@ from model.strategy.indicators import BuilderSource
 from view.plot_irb import Plot
 
 
-class InventoryRetracementBarGUI:
+class Interface:
     def __init__(self, master):
         self.master = master
         self.master.title("Futures Trading Strategy")

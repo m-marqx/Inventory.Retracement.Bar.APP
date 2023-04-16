@@ -1,7 +1,7 @@
 import tkinter as tk
-from view.gui_interface import InventoryRetracementBarGUI
+from view.gui import Interface
 
 
 root = tk.Tk()
-GUI = InventoryRetracementBarGUI(root)
+GUI = Interface(root)
 root.mainloop()
