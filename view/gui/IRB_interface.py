@@ -19,6 +19,8 @@ from model.strategy.indicators import BuilderSource
 from view.plot_irb import Plot
 
 from .labels import Label, Grid
+from .data import GetDataGUI
+
 
 class Interface:
     def __init__(self, master):
@@ -27,31 +29,13 @@ class Interface:
 
         self.label = Label(self.master)
         self.grid = Grid(self.master)
-
-        self.symbol_entry = tk.Entry(master, width=10)
-        self.symbol_entry.grid(row=0, column=1)
-
-        self.timeframes = ["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"]
-
-        self.timeframe_var = tk.StringVar(master)
-        self.timeframe_var.set(self.timeframes[6])
-
-        self.timeframe_menu = tk.OptionMenu(master, self.timeframe_var, *self.timeframes)
-        self.timeframe_menu.grid(row=0, column=3)
-
-        self.get_data_button = tk.Button(master, text="Get Data", command=self.get_data)
-        self.get_data_button.grid(row=1, column=1)
+        self.get_data = GetDataGUI(self.master)
 
         self.run_strategy_button = tk.Button(
             master, text="Run Strategy", command=self.run_strategy
         )
         self.run_strategy_button.grid(row=1, column=2)
 
-        self.text_widget = tk.Text(master, height=8, width=80)
-        self.text_widget.grid(row=2, column=0, columnspan=4)
-        self.text_widget.configure(state="disabled")
-
-        # self.df = pd.read_parquet('BTCPERP.parquet')
         self.strategy = pd.DataFrame()
         # Verifique o número de colunas do dataframe
         self.cols = [
@@ -232,36 +216,6 @@ class Interface:
         )
         self.indicators_cci_trend_value_label_entry.grid(row=20, column=1)
 
-    def insert_text(self, text):
-        self.text_widget.configure(state="normal")
-        self.text_widget.insert(tk.END, f"{text}\n")
-        self.text_widget.configure(state="disabled")
-
-    def get_data(self):
-        symbol = self.symbol_entry.get()
-        interval = self.timeframe_var.get()
-
-        try:
-            # Change button text to "loading"
-            self.get_data_button.config(state="disabled", text="Loading...")
-            self.master.update()
-
-            fapi = FuturesAPI()
-            self.df = fapi.get_all_futures_klines_df(symbol, interval)
-
-            self.insert_text(
-                f"Retrieved {len(self.df)} klines for {symbol} with interval {interval}\n"
-            )
-
-        except Exception as e:
-            # Handle the exception, for example, show an error message in the text widget
-            self.insert_text(f"Error occurred: {str(e)}\n")
-
-        finally:
-            # Change button text back to "Get Data"
-            self.get_data_button.config(state="normal", text="Get Data")
-            self.master.update()
-
     def run_strategy(self):
         if self.ema_var.get():
             self.ema_params = EmaParams(
@@ -303,7 +257,7 @@ class Interface:
         )
 
         try:
-            self.source_df = BuilderSource(self.df)
+            self.source_df = BuilderSource(self.get_data.df)
 
             if self.ema_var.get():
                 self.source_df = self.source_df.set_EMA_params(
@@ -332,9 +286,9 @@ class Interface:
                 .execute()
             )
 
-            self.insert_text("Strategy executed successfully.\n")
+            self.get_data.insert_text("Strategy executed successfully.\n")
         except Exception as e:
-            self.insert_text(f"Error occurred: {str(e)}\n")
+            self.get_data.insert_text(f"Error occurred: {str(e)}\n")
 
 
 # %%
