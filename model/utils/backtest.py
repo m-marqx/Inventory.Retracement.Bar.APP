@@ -17,7 +17,7 @@ from model.strategy.params.strategy_params import (
 
 from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
-
+from model.utils.backtest_params import BacktestParams
 
 class Backtest:
     def __init__(self, dataframe: pd.DataFrame):
@@ -97,28 +97,28 @@ class Backtest:
 
     def wick_backtest(
         self,
-        start=0,
-        end=100,
-        ema_length=20,
         column="Cumulative_Result",
+        n_jobs=-1,
+        params: BacktestParams = BacktestParams(),
     ):
         df_result = {}
+        param_grid = {
+            'ema_params': ParameterGrid(params.ema_params),
+            'irb_params': ParameterGrid(params.irb_params),
+            'indicators_params': [IndicatorsParams()],
+            'trend_params': [TrendParams(ema=True)]
+        }
 
-        columns = ["open", "high", "low", "close"]
-        for col in columns:
-            for value in range(start, end + 1, 1):
-                value = value / 100
-                ema_params = EmaParams(length=ema_length, source_column=col)
-                params = IrbParams(wick_percentage=value)
-                results = self.strategy(
-                    ema_params,
-                    params,
-                    IndicatorsParams(),
-                    TrendParams(ema=True),
-                )
-                results_values = results[0][column]
-                results_params = results[1][-1]
-                df_result[results_params] = results_values
+        results = Parallel(n_jobs=n_jobs)(
+            delayed(self.run_backtest)(
+                EmaParams(**dict(params[0])),
+                IrbParams(**dict(params[1])),
+                IndicatorsParams(**dict(params[2])),
+                TrendParams(**dict(params[3])),
+            ) for params in product(*param_grid.values())
+        )
 
-        df_result = pd.DataFrame(df_result)
-        return df_result
+        for params, arr in zip(product(*param_grid.values()), results):
+            df_result[arr[1][-1]] = arr[0][column]
+
+        return pd.DataFrame(df_result)
