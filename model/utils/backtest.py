@@ -70,12 +70,15 @@ class Backtest:
             trend,
         )
 
-    def ema_backtest(self, start=0, end=100, column="Cumulative_Result", n_jobs=-1):
+    def ema_backtest(
+        self,
+        column="Cumulative_Result",
+        n_jobs=-1,
+        params: BacktestParams = BacktestParams(),
+    ):
         df_result = {}
-        columns = ["open", "high", "low", "close"]
-        ema_param_grid = {'length': range(start, end + 1, 1), 'source_column': columns}
         param_grid = {
-            'ema_params': ParameterGrid(ema_param_grid),
+            'ema_params': ParameterGrid(params().ema_params),
             'irb_params': [IrbParams()],
             'indicators_params': [IndicatorsParams()],
             'trend_params': [TrendParams(ema=True)]
