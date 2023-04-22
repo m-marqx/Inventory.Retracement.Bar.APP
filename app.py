@@ -27,22 +27,7 @@ from view.dashboard.graph import GraphLayout
 server = app.server
 
 data_frame = pd.DataFrame()
-fig = px.line(data_frame).update_layout(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    xaxis=dict(
-        showgrid=False,
-        showticklabels=False,
-        zeroline=False,
-        title="",
-    ),
-    yaxis=dict(
-        showgrid=True,
-        showticklabels=False,
-        zeroline=False,
-        title="",
-    )
-)
+
 
 # update the DropdownMenu items
 @app.callback(
@@ -282,7 +267,6 @@ def run_strategy(
         raise dash.exceptions.PreventUpdate
 
     global data_params
-    global fig
     global data_frame
 
     if "run_button" in ctx.triggered[0]["prop_id"]:
