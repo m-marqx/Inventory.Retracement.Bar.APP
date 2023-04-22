@@ -57,7 +57,7 @@ app.layout = dbc.Container(
                                 )
                             ),
                             id="data_collapse",
-                            is_open=False,
+                            is_open=True,
                             style={"margin-top": "10px"},
                         ),
                         html.Hr(),
