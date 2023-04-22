@@ -25,9 +25,23 @@ from view.dashboard.utils import (
 from view.dashboard.graph import GraphLayout
 
 
-data_frame = pd.read_parquet("BTCUSD_PERP_2h.parquet")
-fig = GraphLayout(data_frame).plot_close("BTCUSD", "2h")
-
+data_frame = pd.DataFrame()
+fig = px.line(data_frame).update_layout(
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    xaxis=dict(
+        showgrid=False,
+        showticklabels=False,
+        zeroline=False,
+        title="",
+    ),
+    yaxis=dict(
+        showgrid=True,
+        showticklabels=False,
+        zeroline=False,
+        title="",
+    )
+)
 
 # update the DropdownMenu items
 @app.callback(
@@ -283,8 +297,6 @@ def analyze(
             len(data_params) > 1 and data_params[-1] != data_params[-2]
         )
 
-        if empty_data_frame:
-            data_frame = get_data(symbol, interval)
         if is_same_data_params:
             data_params = [data_params[-1]]
             print(f"{data_params} is same params")
