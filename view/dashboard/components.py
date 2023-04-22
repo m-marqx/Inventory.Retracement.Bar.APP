@@ -319,7 +319,6 @@ filter_components = dbc.Row(
         dbc.Col(
             dbc.Checklist(
                 indicators_filter,
-                value="ema",
                 id="checklist",
                 input_class_name="btn-check",
                 label_class_name="btn btn-primary",
