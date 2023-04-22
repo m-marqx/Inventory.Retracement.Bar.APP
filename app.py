@@ -256,7 +256,7 @@ data_params = []
         Input("checklist", "value"),
     ],
 )
-def analyze(
+def run_strategy(
     run_button,
     symbol,
     interval,
