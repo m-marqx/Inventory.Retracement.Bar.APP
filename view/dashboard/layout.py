@@ -164,6 +164,23 @@ app.layout = dbc.Container(
                                 style={
                                     "height": "80vh",
                                 },
+                                figure={
+                                        "layout": {
+                                            "paper_bgcolor": "rgba(0,0,0,0)",
+                                            "plot_bgcolor": "rgba(0,0,0,0)",
+                                            "xaxis": {
+                                                "showgrid": False,
+                                                "showticklabels": False,
+                                                "zeroline": False,
+                                                "title": ""
+                                            },
+                                            "yaxis": {
+                                                "showticklabels": False,
+                                                "zeroline": False,
+                                                "title": ""
+                                            }
+                                        }
+                                }
                             ),
                             style={
                                 "overflow": "hidden",
