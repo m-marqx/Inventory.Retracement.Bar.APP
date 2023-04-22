@@ -29,8 +29,6 @@ class GraphLayout:
                 showgrid=False,
             ),
             yaxis=dict(
-                # gridcolor="#D7DDE5",
-                gridcolor="#C2C9D1",
                 zeroline=False,
                 showgrid=True,
                 gridwidth=1,
