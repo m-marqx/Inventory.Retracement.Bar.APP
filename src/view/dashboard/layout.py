@@ -18,7 +18,6 @@ app = dash.Dash(
     external_stylesheets=[MORPH],
     title="Inventory Retracement Bar",
 )
-server = app.server
 
 app.layout = dbc.Container(
     [

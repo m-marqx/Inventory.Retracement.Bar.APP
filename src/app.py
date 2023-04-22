@@ -24,6 +24,7 @@ from view.dashboard.utils import (
 
 from view.dashboard.graph import GraphLayout
 
+server = app.server
 
 data_frame = pd.DataFrame()
 fig = px.line(data_frame).update_layout(
