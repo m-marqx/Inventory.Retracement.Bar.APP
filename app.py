@@ -287,7 +287,7 @@ def analyze(
     global data_frame
 
     if "run_button" in ctx.triggered[0]["prop_id"]:
-        # check if ticker or interval changed
+
         data_params.append(symbol + interval)
         empty_data_frame = data_frame.shape[0] == 0
         is_same_data_params = (
@@ -296,7 +296,8 @@ def analyze(
         is_different_data_params = (
             len(data_params) > 1 and data_params[-1] != data_params[-2]
         )
-
+        if empty_data_frame:
+            data_frame = get_data(symbol, interval)
         if is_same_data_params:
             data_params = [data_params[-1]]
             print(f"{data_params} is same params")
@@ -309,13 +310,14 @@ def analyze(
         macd_bool = False
         cci_bool = False
 
-        for bool_param in checklist:
-            if bool_param == "ema":
-                ema_bool = True
-            if bool_param == "macd":
-                macd_bool = True
-            if bool_param == "cci":
-                cci_bool = True
+        if checklist is not None:
+            for bool_param in checklist:
+                if bool_param == "ema":
+                    ema_bool = True
+                if bool_param == "macd":
+                    macd_bool = True
+                if bool_param == "cci":
+                    cci_bool = True
 
         builder_params = BuilderParams(
             ema_params=EmaParams(
