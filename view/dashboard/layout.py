@@ -11,11 +11,11 @@ from view.dashboard.components import (
     get_data_components,
 )
 
-external_stylesheets = ["assets/style.css"]
+MORPH = dbc.themes.MORPH
 
 app = dash.Dash(
     "Dashboard",
-    external_stylesheets=external_stylesheets,
+    external_stylesheets=[MORPH],
     title="Inventory Retracement Bar",
 )
 server = app.server
