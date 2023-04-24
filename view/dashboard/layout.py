@@ -58,15 +58,16 @@ app.layout = dbc.Container(
                         dbc.Button(
                             "Get Data",
                             id="data_button",
-                            style={"border-radius": "5px"},
                             className="d-grid gap-2 col-6 mx-auto w-100",
+                            outline=True,
+                            color="primary",
                         ),
                         dbc.Collapse(
                             dbc.Card(
                                 dbc.CardBody(
                                     get_data_components,
                                     style={"display": "flex", "flex-direction": "row"},
-                                )
+                                ),
                             ),
                             id="data_collapse",
                             is_open=True,
@@ -76,8 +77,9 @@ app.layout = dbc.Container(
                         dbc.Button(
                             "Modify Indicators Parameters",
                             id="operating_button",
-                            style={"border-radius": "5px"},
                             className="d-grid gap-2 col-6 mx-auto w-100",
+                            outline=True,
+                            color="primary",
                         ),
                         dbc.Collapse(
                             dbc.Card(
@@ -102,8 +104,9 @@ app.layout = dbc.Container(
                         dbc.Button(
                             "Modify Strategy Parameters",
                             id="shape_button",
-                            style={"border-radius": "5px"},
                             className="d-grid gap-2 col-6 mx-auto w-100",
+                            outline=True,
+                            color="primary",
                         ),
                         dbc.Collapse(
                             style={"margin-top": "10px"},
@@ -136,8 +139,9 @@ app.layout = dbc.Container(
                         dbc.Button(
                             "Modify Trend Parameters",
                             id="coordinates_button",
-                            style={"border-radius": "5px"},
                             className="d-grid gap-2 col-6 mx-auto w-100",
+                            outline=True,
+                            color="primary",
                         ),
                         dbc.Collapse(
                             style={"margin-top": "10px"},
@@ -162,12 +166,10 @@ app.layout = dbc.Container(
                                 "border-radius": "20px",
                             },
                             color="primary",
-                            outline=True,
+                            outline=False,
                             className="d-grid gap-2 col-6 mx-auto w-100",
                         ),
-                        html.Hr(),
                     ],
-                    width=3,
                 ),
                 dbc.Col(
                     [
