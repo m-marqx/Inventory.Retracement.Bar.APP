@@ -192,7 +192,10 @@ app.layout = dbc.Container(
                                             "yaxis": {
                                                 "showticklabels": False,
                                                 "zeroline": False,
-                                                "title": ""
+                                                "gridcolor":"#434343",
+                                                "griddash":"dash",
+                                                "title": "",
+                                                "exponentformat":"none",
                                             }
                                         }
                                 }
@@ -200,14 +203,14 @@ app.layout = dbc.Container(
                             style={
                                 "overflow": "hidden",
                                 "border-radius": "75px",
-                                "background": "linear-gradient(145deg, #d8dde1, #f0f5fa)",
-                                "box-shadow": "16px 16px 32px #b4bcc8, -16px -16px 32px #feffff",
+                                "background": "#262626",
                             },
+
                         ),
                     ],
                     width=9,
                 ),
-            ]
+            ],
         ),
         html.Hr(),
     ],
