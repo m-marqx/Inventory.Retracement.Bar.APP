@@ -380,7 +380,6 @@ header_color = "#1f1f1f"
 menu = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink(["DASHBOARD"], href="/", active=True)),
-        dbc.NavItem(dbc.NavLink(["BACKTEST"], href="/backtest")),
     ],
     pills=False,
 )
