@@ -372,5 +372,25 @@ get_data_components = dbc.Row(
     [
         dbc.Col(dbc.CardGroup([symbol_components])),
         dbc.Col(dbc.CardGroup([interval_components])),
-    ]
+    ],
+)
+
+header_color = "#1f1f1f"
+
+menu = dbc.Nav(
+    [
+        dbc.NavItem(dbc.NavLink(["DASHBOARD"], href="/", active=True)),
+        dbc.NavItem(dbc.NavLink(["BACKTEST"], href="/backtest")),
+    ],
+    pills=False,
+)
+
+navbar_components = dbc.Navbar(
+    [
+        dbc.NavbarToggler(id="navbar-toggler"),
+        dbc.Collapse(menu, id="navbar-collapse", navbar=True),
+    ],
+    color=header_color,
+    dark=True,
+    style={"height":"32px"},
 )

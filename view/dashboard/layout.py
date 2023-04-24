@@ -9,6 +9,8 @@ from view.dashboard.components import (
     irb_parameters_col2,
     filter_components,
     get_data_components,
+    navbar_components,
+    header_color,
 )
 
 theme = dbc.themes.MORPH
@@ -28,12 +30,22 @@ app.layout = dbc.Container(
                     [
                         dcc.Markdown(
                             """
-                            # Inventory Retracement Bar Analysis Dashboard
+                            ### Inventory Retracement Bar
                             """
-                        )
+                            ,style={
+                                'color': 'rgba(255,255,255,0.85)',
+                                "align-items": "center",
+                                "justify-content":"center",
+                                }
+                        ),
+                        navbar_components,
                     ],
                     width=True,
-                    style={"textAlign": "center"},
+                    style={
+                        "textAlign": "center",
+                        "background-color":header_color,
+                        "margin-bottom": "10px"
+                    },
                 ),
             ],
             align="end",
