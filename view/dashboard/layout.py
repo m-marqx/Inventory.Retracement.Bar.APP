@@ -10,7 +10,6 @@ from view.dashboard.components import (
     filter_components,
     get_data_components,
     navbar_components,
-    header_color,
 )
 
 theme = dbc.themes.MORPH
@@ -33,8 +32,8 @@ app.layout = dbc.Container(
                     width=True,
                     style={
                         "textAlign": "center",
-                        "background-color":header_color,
-                        "margin-bottom": "10px"
+                        "background-color":"#262626",
+                        "margin-bottom": "16px"
                     },
                 ),
             ],
