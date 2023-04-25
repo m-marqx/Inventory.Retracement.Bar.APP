@@ -179,6 +179,12 @@ app.layout = dbc.Container(
                                 outline=False,
                                 className="d-grid gap-2 col-6 mx-auto w-100",
                             ),
+                            dbc.Spinner(
+                                html.P("Click Run Button to see results", id='text_output'),
+                                color="primary",
+                                spinner_class_name="spinner-loader",
+                            )
+                    ])
                     ],
                 ),
                 dbc.Col(

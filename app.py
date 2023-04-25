@@ -238,10 +238,10 @@ def toggle_shape_collapse(n_clicks, is_open):
 
 data_params = []
 
-
 @app.callback(
     Output("results", "figure"),
-    Input("run_button", "n_clicks"),
+    Output("text_output", "children"),
+    Input("run_button","n_clicks"),
     State("symbol", "value"),
     State("interval", "label"),
     State("ema_source_column", "label"),
@@ -286,6 +286,7 @@ def run_strategy(
     indicator_cci_trend_value,
     checklist,
 ):
+
     ctx = dash.callback_context
     if not ctx.triggered:
         raise dash.exceptions.PreventUpdate
@@ -363,9 +364,9 @@ def run_strategy(
 
         data_frame = builder(data_frame, builder_params)
         fig = GraphLayout(data_frame).plot_cumulative_results(symbol, interval)
+        text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
 
-    return fig
-
+    return fig, text_output
 
 if __name__ == "__main__":
     app.run_server(debug=True)
