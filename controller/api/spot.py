@@ -3,7 +3,7 @@ from binance.client import Client
 import pandas as pd
 from binance.helpers import interval_to_milliseconds
 
-class SpotAPI:
+class Spot:
     def __init__(self):
         self.client = Client()
 
