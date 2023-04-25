@@ -25,6 +25,14 @@
     transition: background-color .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
 
+.btn:hover {
+    background-color: #8bbb11;
+}
+
+.btn:focus{
+    background-color: #6f9412;
+}
+
 .btn-primary{
     position: relative;
     padding: 1rem 1.5rem;
