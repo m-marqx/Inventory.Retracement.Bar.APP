@@ -42,6 +42,21 @@ class coin_margined:
         )
         return request
 
+    def calculate_max_multiplier(interval):
+        interval_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
+        max_multiplier_limit = 1500
+        max_days_limit = 200
+
+        total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
+
+        time_total_days = total_time_hours / 24
+
+        max_multiplier = max_multiplier_limit - np.argmax(
+            time_total_days <= max_days_limit
+        )
+
+        return max_multiplier
+
     def get_All_Klines(
         self,
         interval="2h",
