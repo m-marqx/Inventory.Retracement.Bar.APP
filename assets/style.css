@@ -209,16 +209,22 @@
 }
 
 .nav-link {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    color: #536d13 !important;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    color: #6f9412;
     font-size: 24px;
     font-weight: 700;
-    background: #1f1f1f !important;
+    background: var(--gray-10) !important;
     opacity: 1;
     padding: 0 0;
     height: 32px;
     font-size: 24px;
+}
+
+.nav-link:hover{
+    color: #c9e75d;
+    box-shadow: 0 2px 0 0 #c9e75d inset;
+    transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out, border-top ease-in-out .2s;
 }
 
 .nav-link.active {
