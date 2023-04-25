@@ -28,16 +28,6 @@ app.layout = dbc.Container(
             [
                 dbc.Col(
                     [
-                        dcc.Markdown(
-                            """
-                            ### Inventory Retracement Bar
-                            """
-                            ,style={
-                                'color': 'rgba(255,255,255,0.85)',
-                                "align-items": "center",
-                                "justify-content":"center",
-                                }
-                        ),
                         navbar_components,
                     ],
                     width=True,
