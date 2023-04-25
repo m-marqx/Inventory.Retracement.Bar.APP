@@ -96,7 +96,7 @@ class coin_margined:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
-                lastCall = self.futures_Kline(timeLoop_list[-1] + 1, "", interval)
+                lastCall = self.futures_Kline(timeLoop_list[-1] + 1, int(t.time() * 1000), interval)
                 klines_list.extend(lastCall)
                 print("\nQty  : " + str(len(klines_list)))
                 print("\nLoop Ended\n")
@@ -199,7 +199,7 @@ class coin_margined:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
-                lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, "", interval)
+                lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, int(t.time() * 1000), interval)
                 kline_List.extend(lastCall)
                 print("\nQty  : " + str(len(kline_List)))
                 print("\nLoop Ended\n")
