@@ -124,7 +124,7 @@
 }
 
 .btn-outline-primary {
-    background: none !important;
+    background: none;
     padding: 1rem 1.5rem;
     color: rgba(255,255,255,0.85) !important;
     border: 1px solid #8bbb11 !important;
@@ -137,6 +137,15 @@
     padding: 1rem 1.5rem;
     border: 1px solid #8bbb11 !important;
     box-shadow: none #ffeded;
+    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+}
+
+.btn.btn-outline-primary:hover {
+    background: #1f2611 ;
+    color: rgba(255,255,255,0.85) !important;
+    padding: 1rem 1.5rem;
+    border: 1px solid #8bbb11 !important;
+    box-shadow: none;
     transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
 }
 
