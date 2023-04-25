@@ -8,6 +8,9 @@
     --gray-7:#8c8c8c;
     --gray-6:#bfbfbf;
 }
+.navbar-collapse {
+    background:var(--gray-10);
+    height:32px;
 }
 
 .btn {
