@@ -247,6 +247,20 @@
     padding: 0 0;
 }
 
+.nav-link:focus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c9e75d;
+    font-size: 24px;
+    font-weight: 700;
+    background: var(--gray-10) !important;
+    opacity: 1;
+    padding: 0 0;
+    height: 32px;
+    font-size: 24px;
+}
+
 .dropdown-toggle{
     background: #536d13 !important;
 }
