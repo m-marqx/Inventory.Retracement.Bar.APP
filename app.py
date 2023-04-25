@@ -301,15 +301,13 @@ def run_strategy(
         is_same_data_params = (
             len(data_params) > 1 and data_params[-1] == data_params[-2]
         )
-        is_different_data_params = (
-            len(data_params) > 1 and data_params[-1] != data_params[-2]
-        )
+
         if empty_data_frame:
             data_frame = get_data(symbol, interval)
-        if is_same_data_params:
+        elif is_same_data_params:
             data_params = [data_params[-1]]
             print(f"{data_params} is same params")
-        if is_different_data_params:
+        else:
             data_frame = get_data(symbol, interval)
             data_params = [data_params[-1]]
             print(f"{data_params} will be reset")
