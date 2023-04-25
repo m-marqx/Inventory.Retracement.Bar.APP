@@ -1,6 +1,7 @@
 import time as t
 from binance.client import Client
 import pandas as pd
+import numpy as np
 from binance.helpers import interval_to_milliseconds
 from .utils import Klines
 
@@ -70,8 +71,10 @@ class coin_margined:
         index = 0
         initial_Time = first_Candle_Time
         intervalms = interval_to_milliseconds(interval)
-        max_Interval = intervalms * 1500
+        max_multiplier = self.calculate_max_multiplier(interval)
+        max_Interval = intervalms * max_multiplier
         initial_Time = initial_Time - max_Interval
+
         while True:
             index += 1
             initial_Time += max_Interval
@@ -171,8 +174,10 @@ class coin_margined:
         timeLoop = []
         index = 0
         initial_Time = first_Candle_Time
-        max_Interval = interval_to_milliseconds(interval_ms) * 1500
+        max_multiplier = self.calculate_max_multiplier(interval)
+        max_Interval = interval_to_milliseconds(interval) * max_multiplier
         initial_Time = initial_Time - max_Interval
+
         while True:
             initial_Time += max_Interval
             index += 1
