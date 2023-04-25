@@ -96,15 +96,23 @@
 }
 
 .form-check-label.btn.btn-primary{
-    background-color: #141414 !important;
+    background-color: var(--gray-11);
+    border-radius: 20px;
     transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
-
+.form-check-label.btn.btn-primary:hover{
+    background-color: #8bbb1126;
+    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+}
 .form-check-label.btn.btn-primary.active{
-    background-color: #8bbb11 !important;
+    background-color: #8bbb11;
     transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
 
+.form-check-label.btn.btn-primary.active:hover{
+    background-color: #8bbb11bf;
+    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+}
 
 .btn-lg {
     width: 190px;
