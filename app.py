@@ -367,4 +367,4 @@ def run_strategy(
     return fig, text_output
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=False)
