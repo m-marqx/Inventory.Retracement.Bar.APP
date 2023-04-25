@@ -9,6 +9,7 @@ class GraphLayout:
         self.title_color = "rgba(255,255,255,0.85)"
         self.label_color = "rgba(255,255,255,0.65)"
         self.primary_color = "#8bbb11"
+        self.grid_color = "#595959"
 
 
     def fig_layout(self, fig, column, symbol: str, interval: str):
@@ -40,11 +41,11 @@ class GraphLayout:
                 showgrid=True,
                 gridwidth=1,
                 griddash="dash",
-                gridcolor="#434343",
+                gridcolor=self.grid_color,
                 exponentformat="none",
                 dtick=ticks,
                 title={
-                    "text": f"{symbol[:3]}",
+                    "text": f"{symbol[-3:]}",
                     "font": {"color": self.label_color},
                 },
                 color=self.title_color
