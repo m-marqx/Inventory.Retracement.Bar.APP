@@ -208,7 +208,7 @@ app.layout = dbc.Container(
                                             "yaxis": {
                                                 "showticklabels": False,
                                                 "zeroline": False,
-                                                "gridcolor":"#434343",
+                                                "gridcolor":"#595959",
                                                 "griddash":"dash",
                                                 "title": "",
                                                 "exponentformat":"none",
@@ -217,12 +217,6 @@ app.layout = dbc.Container(
                                 },
                                 className="graph",
                             ),
-                            style={
-                                "overflow": "hidden",
-                                "border-radius": "75px",
-                                "background": "#262626",
-                            },
-
                         ),
                     ],
                     width=9,
