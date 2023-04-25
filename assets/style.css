@@ -1,5 +1,13 @@
 :root {
     --default-height:40px;
+    --gray-12:#141414;
+    --gray-11:#1f1f1f;
+    --gray-10:#262626;
+    --gray-9:#434343;
+    --gray-8:#595959;
+    --gray-7:#8c8c8c;
+    --gray-6:#bfbfbf;
+}
 }
 
 .btn {
