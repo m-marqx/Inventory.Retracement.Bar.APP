@@ -37,6 +37,8 @@ class SpotAPI:
         interval,
         first_Candle_Time=1502942400000,
         symbol="BTCUSDT",
+        max_limit=1000,
+        request_limit=False,
     ):
         START = t.time()
         klines_list = []
@@ -44,13 +46,13 @@ class SpotAPI:
         index = 0
         initial_Time = first_Candle_Time
         interval_ms = interval_to_milliseconds(interval)
-        max_Interval = interval_ms * 1000
+        max_Interval = interval_ms * max_limit
         initial_Time = initial_Time - max_Interval
         while True:
             index += 1
             initial_Time += max_Interval
             timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
+            if timeLoop_list[-1] + max_Interval < int(t.time() * max_limit):
                 request_Time_Start = t.time()
                 klines_Loop = self.get_Spot_Kline(
                     timeLoop_list[index - 1],
@@ -61,14 +63,18 @@ class SpotAPI:
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
                 print("\nQty  : " + str(len(klines_list)))
+
                 request_Time_End = t.time()
                 request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
+                if request_Duration < 1.33 and request_limit:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
                 lastCall = self.get_Spot_Kline(
-                    timeLoop_list[-1] + 1, int(t.time() * 1000), interval, symbol=symbol
+                    timeLoop_list[-1] + 1,
+                    int(t.time() * 1000),
+                    interval,
+                    symbol
                 )
                 klines_list.extend(lastCall)
                 print("\nQty  : " + str(len(klines_list)))
