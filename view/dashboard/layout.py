@@ -213,7 +213,6 @@ app.layout = dbc.Container(
                 ),
             ],
         ),
-        html.Hr(),
     ],
     fluid=True,
     style={"font-family": "Open Sans"},
