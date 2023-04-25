@@ -198,7 +198,8 @@ app.layout = dbc.Container(
                                                 "exponentformat":"none",
                                             }
                                         }
-                                }
+                                },
+                                className="graph",
                             ),
                             style={
                                 "overflow": "hidden",

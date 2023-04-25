@@ -8,6 +8,13 @@
     --gray-7:#8c8c8c;
     --gray-6:#bfbfbf;
 }
+
+.graph{
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--gray-10);
+}
+
 .navbar-collapse {
     background:var(--gray-10);
     height:32px;
