@@ -312,3 +312,7 @@ hr {
     border-bottom: 1px solid white;
     opacity: 0.25 !important;
 }
+
+p {
+    color: rgba(255,255,255,0.45)
+}
