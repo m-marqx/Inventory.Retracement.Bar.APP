@@ -3,7 +3,7 @@ from binance.client import Client
 import pandas as pd
 from binance.helpers import interval_to_milliseconds
 
-class FuturesAPI:
+class coin_margined:
     def __init__(self):
         self.client = Client()
 

@@ -1,4 +1,4 @@
-from controller.future_API import FuturesAPI
+from controller.api.coin_futures import coin_margined
 import dash_bootstrap_components as dbc
 
 from model.strategy.params.indicators_params import (
@@ -73,11 +73,12 @@ indicators_filter = [
     {"label": "MACD", "value": "macd"},
 ]
 
+
 def get_data(symbol, interval):
     if symbol.endswith("USD"):
         symbol += "_PERP"
 
-    fapi = FuturesAPI()
+    fapi = coin_margined()
     data_frame = fapi.get_all_futures_klines_df(symbol, interval)
     return data_frame
 
