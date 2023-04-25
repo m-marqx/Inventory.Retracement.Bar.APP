@@ -14,10 +14,11 @@ from view.dashboard.components import (
 
 theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
+icons = 'https://use.fontawesome.com/releases/v5.15.3/css/all.css'
 
 app = dash.Dash(
     "Dashboard",
-    external_stylesheets=[theme, style_sheet],
+    external_stylesheets=[icons, theme, style_sheet],
     title="Inventory Retracement Bar",
 )
 
