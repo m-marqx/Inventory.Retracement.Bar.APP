@@ -50,125 +50,135 @@ app.layout = dbc.Container(
             ],
             align="end",
         ),
-        html.Hr(),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        dbc.Button(
-                            "Get Data",
-                            id="data_button",
-                            className="d-grid gap-2 col-6 mx-auto w-100",
-                            outline=True,
-                            color="primary",
-                        ),
-                        dbc.Collapse(
-                            dbc.Card(
-                                dbc.CardBody(
-                                    get_data_components,
-                                    style={"display": "flex", "flex-direction": "row"},
-                                ),
+                        dbc.Col([
+                            dbc.Button(
+                                [
+                                    "Get Data",
+                                    html.I(className="fa fa-chevron-up ml-2", id="data_icon"),
+                                ],
+                                id="data_button",
+                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                outline=True,
+                                color="secondary",
                             ),
-                            id="data_collapse",
-                            is_open=True,
-                            style={"margin-top": "10px"},
-                        ),
-                        html.Hr(),
-                        dbc.Button(
-                            "Modify Indicators Parameters",
-                            id="operating_button",
-                            className="d-grid gap-2 col-6 mx-auto w-100",
-                            outline=True,
-                            color="primary",
-                        ),
-                        dbc.Collapse(
-                            dbc.Card(
-                                dbc.CardBody(
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                indicators_parameters_col1,
-                                            ),
-                                            dbc.Col(
-                                                indicators_parameters_col2,
-                                            ),
-                                        ]
+                            dbc.Collapse(
+                                dbc.Card(
+                                    dbc.CardBody(
+                                        get_data_components,
+                                        style={"display": "flex", "flex-direction": "row"},
                                     ),
                                 ),
+                                id="data_collapse",
+                                is_open=True,
+                                style={"margin-top": "10px"},
                             ),
-                            id="operating_collapse",
-                            is_open=False,
-                            style={"margin-top": "10px"},
-                        ),
-                        html.Hr(),
-                        dbc.Button(
-                            "Modify Strategy Parameters",
-                            id="shape_button",
-                            className="d-grid gap-2 col-6 mx-auto w-100",
-                            outline=True,
-                            color="primary",
-                        ),
-                        dbc.Collapse(
-                            style={"margin-top": "10px"},
-                            children=dbc.Card(
-                                dbc.CardBody(
-                                    dbc.Row(
-                                        [
-                                            dbc.Col(
-                                                irb_parameters_col1,
-                                                style={
-                                                    "display": "flex",
-                                                    "flex-direction": "column",
-                                                },
-                                            ),
-                                            dbc.Col(
-                                                irb_parameters_col2,
-                                                style={
-                                                    "display": "flex",
-                                                    "flex-direction": "column",
-                                                },
-                                            ),
-                                        ]
+                            dbc.Button(
+                                [
+                                    "Modify Indicators Parameters",
+                                    html.I(className="fa fa-chevron-down ml-2", id="operating_icon"),
+                                ],
+                                id="operating_button",
+                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                outline=True,
+                                color="secondary",
+                            ),
+                            dbc.Collapse(
+                                dbc.Card(
+                                    dbc.CardBody(
+                                        dbc.Row(
+                                            [
+                                                dbc.Col(
+                                                    indicators_parameters_col1,
+                                                ),
+                                                dbc.Col(
+                                                    indicators_parameters_col2,
+                                                ),
+                                            ]
+                                        ),
                                     ),
-                                )
+                                ),
+                                id="operating_collapse",
+                                is_open=False,
+                                style={"margin-top": "10px"},
                             ),
-                            id="shape_collapse",
-                            is_open=False,
-                        ),
-                        html.Hr(),
-                        dbc.Button(
-                            "Modify Trend Parameters",
-                            id="coordinates_button",
-                            className="d-grid gap-2 col-6 mx-auto w-100",
-                            outline=True,
-                            color="primary",
-                        ),
-                        dbc.Collapse(
-                            style={"margin-top": "10px"},
-                            children=dbc.Card(
-                                dbc.CardBody(
-                                    filter_components,
-                                    style={
-                                        "display": "flex",
-                                        "flex-direction": "column",
-                                    },
-                                )
+                            dbc.Button(
+                                [
+                                    "Modify Strategy Parameters",
+                                    html.I(className="fa fa-chevron-down ml-2", id="shape_icon"),
+                                ],
+                                id="shape_button",
+                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                outline=True,
+                                color="secondary",
                             ),
-                            id="coordinates_collapse",
-                            is_open=False,
-                        ),
-                        html.Hr(),
-                        dbc.Button(
-                            "Run Strategy",
-                            id="run_button",
-                            style={
-                                "margin": "5px",
-                                "border-radius": "20px",
-                            },
-                            color="primary",
-                            outline=False,
-                            className="d-grid gap-2 col-6 mx-auto w-100",
-                        ),
+                            dbc.Collapse(
+                                style={"margin-top": "10px"},
+                                children=dbc.Card(
+                                    dbc.CardBody(
+                                        dbc.Row(
+                                            [
+                                                dbc.Col(
+                                                    irb_parameters_col1,
+                                                    style={
+                                                        "display": "flex",
+                                                        "flex-direction": "column",
+                                                    },
+                                                ),
+                                                dbc.Col(
+                                                    irb_parameters_col2,
+                                                    style={
+                                                        "display": "flex",
+                                                        "flex-direction": "column",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                    )
+                                ),
+                                id="shape_collapse",
+                                is_open=False,
+                            ),
+                            dbc.Button(
+                                [
+                                    "Modify Trend Parameters",
+                                    html.I(className="fa fa-chevron-down ml-2", id="coordinates_icon", style={"transformY": "2px"}),
+                                ],
+                                id="coordinates_button",
+                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                outline=True,
+                                color="secondary",
+                            ),
+                            dbc.Collapse(
+                                style={"margin-top": "10px"},
+                                children=dbc.Card(
+                                    dbc.CardBody(
+                                        filter_components,
+                                        style={
+                                            "display": "flex",
+                                            "flex-direction": "column",
+                                        },
+                                    )
+                                ),
+                                id="coordinates_collapse",
+                                is_open=False,
+                            ),
+                        ], class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container"),
+                        dbc.Col([
+                            dbc.Button(
+                                "Run Strategy",
+                                id="run_button",
+                                style={
+                                    "margin": "5px",
+                                    "border-radius": "20px",
+                                },
+                                color="primary",
+                                outline=False,
+                                className="d-grid gap-2 col-6 mx-auto w-100",
+                            ),
                     ],
                 ),
                 dbc.Col(

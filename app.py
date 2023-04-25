@@ -167,49 +167,73 @@ def update_label(m1,m5,m15,m30,h1,h2,h4,h6,h8,h12,d1,d3,w1,M1):
 ### Callback to make shape parameters menu expand
 @app.callback(
     Output("shape_collapse", "is_open"),
-    [Input("shape_button", "n_clicks")],
-    [State("shape_collapse", "is_open")],
+    Output("shape_icon", "className"),
+    Input("shape_button", "n_clicks"),
+    State("shape_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-    if n_clicks:
-        return not is_open
-    return is_open
+
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    if is_open:
+        return False, "fa fa-chevron-down ml-2"
+    else:
+        return True, "fa fa-chevron-up ml-2"
 
 
 ### Callback to make get_data parameters menu expand
 @app.callback(
     Output("data_collapse", "is_open"),
-    [Input("data_button", "n_clicks")],
-    [State("data_collapse", "is_open")],
+    Output("data_icon", "className"),
+    Input("data_button", "n_clicks"),
+    State("data_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-    if n_clicks:
-        return not is_open
-    return is_open
+
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    if is_open:
+        return False, "fa fa-chevron-down"
+    else:
+        return True, "fa fa-chevron-up"
 
 
 ### Callback to make operating parameters menu expand
 @app.callback(
     Output("operating_collapse", "is_open"),
-    [Input("operating_button", "n_clicks")],
-    [State("operating_collapse", "is_open")],
+    Output("operating_icon", "className"),
+    Input("operating_button", "n_clicks"),
+    State("operating_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-    if n_clicks:
-        return not is_open
-    return is_open
+
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    if is_open:
+        return False, "fa fa-chevron-down ml-2"
+    else:
+        return True, "fa fa-chevron-up ml-2"
 
 
 ### Callback to make coordinates menu expand
 @app.callback(
     Output("coordinates_collapse", "is_open"),
-    [Input("coordinates_button", "n_clicks")],
-    [State("coordinates_collapse", "is_open")],
+    Output("coordinates_icon", "className"),
+    Input("coordinates_button", "n_clicks"),
+    State("coordinates_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-    if n_clicks:
-        return not is_open
-    return is_open
+
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    if is_open:
+        return False, "fa fa-chevron-down ml-2"
+    else:
+        return True, "fa fa-chevron-up ml-2"
 
 
 data_params = []
