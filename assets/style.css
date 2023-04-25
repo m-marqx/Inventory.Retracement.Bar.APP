@@ -25,7 +25,6 @@
     border-radius: 10px;
     color: rgba(255,255,255,0.85) !important;
     padding: 1rem 1.5rem;
-    background-color: #8bbb11 !important;
     border: none;
     box-shadow: none !important;
     height: var(--default-height);
@@ -47,6 +46,7 @@
     position: relative;
     padding: 1rem 1.5rem;
     border: none;
+    background-color: #6f9412;
     border-radius: 10px;
     box-shadow: none;
     transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
@@ -128,8 +128,8 @@
     width: 190px;
     height: 254px;
     border-radius: 30px;
-    background: #262626;
-    box-shadow: none #3c3c3c;
+    background: var(--gray-9);
+    box-shadow: none;
     transition: background-color .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
 
@@ -160,9 +160,9 @@
 }
 
 .btn.btn-outline-primary:focus {
-    background: #1f2611 !important;
+    background: #2e3c10 !important;
     padding: 1rem 1.5rem;
-    color: rgba(255,255,255,0.85) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
     box-shadow: none !important;
     transition: background-color .0s ease-in-out,border .0s ease-in-out,box-shadow .0s ease-in-out,color .0s ease-in-out;
 }
