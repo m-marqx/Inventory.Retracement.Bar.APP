@@ -7,11 +7,11 @@ class FuturesAPI:
     def __init__(self):
         self.client = Client()
 
-    def get_ticker_info(self, Symbol):
+    def get_ticker_info(self, symbol):
         info = self.client.futures_coin_exchange_info()
         info_df = pd.DataFrame(info["symbols"])
         filtered_info = (
-            [x['filters'] for x in info_df[info_df['symbol'] == Symbol]
+            [x['filters'] for x in info_df[info_df['symbol'] == symbol]
             .to_dict(orient='records')][0]
         )
         df_filtered = pd.DataFrame.from_records(filtered_info)
@@ -19,8 +19,8 @@ class FuturesAPI:
         df_filtered = df_filtered.astype("float64")
         return df_filtered
 
-    def get_tick_size(self, Symbol):
-        df = self.get_ticker_info(Symbol)
+    def get_tick_size(self, symbol):
+        df = self.get_ticker_info(symbol)
         tick_size = df.loc["PRICE_FILTER", "tickSize"]
         return tick_size
 
