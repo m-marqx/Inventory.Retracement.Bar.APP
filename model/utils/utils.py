@@ -188,3 +188,12 @@ class ConvertDataFrame:
         )
 
         return print(str_name + " has been saved")
+
+    def get_df_to_parquet(self, name) -> None:
+        str_name = f"{name}.parquet"
+        self.dataframe.to_parquet(
+            f"model/data/{str_name}",
+            index=True,
+        )
+
+        return print(str_name + " has been saved")
