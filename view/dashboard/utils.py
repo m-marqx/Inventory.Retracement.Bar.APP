@@ -75,6 +75,7 @@ indicators_filter = [
 
 
 def get_data(symbol, interval):
+    symbol = symbol.upper() #Avoid errors when the symbol is in lowercase
     if symbol.endswith("USD"):
         symbol += "_PERP"
 
