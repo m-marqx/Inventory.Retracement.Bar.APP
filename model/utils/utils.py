@@ -174,3 +174,17 @@ class ConvertDataFrame:
 
         if not os.path.exists("model/data"):
             os.mkdir("model/data")
+
+    def get_df_to_csv(self, name) -> None:
+        str_name = f"{name}.csv"
+        columns = self.dataframe.columns
+        self.dataframe.to_csv(
+            f"model/data/{str_name}",
+            index=True,
+            header=columns,
+            sep=";",
+            decimal=".",
+            encoding="utf-8",
+        )
+
+        return print(str_name + " has been saved")
