@@ -43,7 +43,7 @@ class coin_margined:
         )
         return request
 
-    def calculate_max_multiplier(interval):
+    def calculate_max_multiplier(self,interval):
         interval_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
         max_multiplier_limit = 1500
         max_days_limit = 200
