@@ -6,7 +6,7 @@ from binance.helpers import interval_to_milliseconds
 from .utils import Klines
 
 
-class coin_margined:
+class CoinMargined:
     def __init__(self):
         self.client = Client()
 
