@@ -43,18 +43,21 @@ class coin_margined:
         )
         return request
 
-    def calculate_max_multiplier(self,interval):
-        interval_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
-        max_multiplier_limit = 1500
-        max_days_limit = 200
+    def calculate_max_multiplier(self, interval):
+        if interval != "1M":
+            interval_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
+            max_multiplier_limit = 1500
+            max_days_limit = 200
 
-        total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
+            total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
 
-        time_total_days = total_time_hours / 24
+            time_total_days = total_time_hours / 24
 
-        max_multiplier = max_multiplier_limit - np.argmax(
-            time_total_days <= max_days_limit
-        )
+            max_multiplier = max_multiplier_limit - np.argmax(
+                time_total_days <= max_days_limit
+            )
+        else:
+            max_multiplier = 6
 
         return max_multiplier
 
@@ -70,7 +73,12 @@ class coin_margined:
         timeLoop_list = []
         index = 0
         initial_Time = first_Candle_Time
-        intervalms = interval_to_milliseconds(interval)
+
+        if interval == "1M":
+            intervalms = 2678000000
+        else:
+            intervalms = interval_to_milliseconds(interval)
+
         max_multiplier = self.calculate_max_multiplier(interval)
         max_Interval = intervalms * max_multiplier
         initial_Time = initial_Time - max_Interval
@@ -213,4 +221,3 @@ class coin_margined:
         klines_list = self.get_All_Klines(interval, symbol=symbol)
         klines_df = Klines(klines_list).klines_df()
         return klines_df
-    
