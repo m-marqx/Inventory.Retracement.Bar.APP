@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from abc import ABC, abstractmethod
+import os
 
 class BaseStrategy(ABC):
     def __init__(self, dataframe: pd.DataFrame):
@@ -166,3 +167,10 @@ class CleanData(BaseStrategy):
             self.df_filtered = self.dataframe[self.columns.keys()].copy()
             self.df_filtered.rename(columns=self.columns, inplace=True)
         return self.df_filtered
+
+class ConvertDataFrame:
+    def __init__(self,  dataframe):
+        self.dataframe = dataframe
+
+        if not os.path.exists("model/data"):
+            os.mkdir("model/data")
