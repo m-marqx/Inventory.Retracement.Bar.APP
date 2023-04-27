@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from abc import ABC, abstractmethod
-import os
+import pathlib
 
 class BaseStrategy(ABC):
     def __init__(self, dataframe: pd.DataFrame):
@@ -172,8 +172,9 @@ class ConvertDataFrame:
     def __init__(self,  dataframe):
         self.dataframe = dataframe
 
-        if not os.path.exists("model/data"):
-            os.mkdir("model/data")
+        data_path = pathlib.Path("model","data")
+        if not data_path.is_dir():
+            data_path.mkdir()
 
     def get_df_to_csv(self, name) -> None:
         str_name = f"{name}.csv"
