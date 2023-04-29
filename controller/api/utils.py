@@ -35,6 +35,7 @@ class Klines:
 
         dataframe = pd.DataFrame(self.klines_list, columns=columns)
 
+        dataframe["open_time_ms"] = dataframe["open_time"]
         dataframe[timestamp] = dataframe[timestamp].astype("datetime64[ms]")
         dataframe[float_column] = dataframe[float_column].astype(float)
         dataframe[int_column] = dataframe[int_column].astype(int)
