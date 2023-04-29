@@ -31,7 +31,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: background-color .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
 
 .btn:hover {
@@ -60,7 +60,7 @@
     border-radius: 10px;
     background: #c9e75d !important;
     box-shadow: none !important;
-    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .3s ease-in-out, color .3s ease-in-out;
 }
 
 .btn-primary:hover{
@@ -81,47 +81,46 @@
     border-top: 1px solid #8bbb11 !important;
     border-right: 1px solid #8bbb11 !important;
     border-left: 1px solid #8bbb11 !important;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
 }
 
 .btn.btn-outline-secondary:active {
     background: none !important;
     padding: 1rem 1.5rem;
     box-shadow: none;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+    transition: background .08s ease-in-out;
 }
 
 .btn.btn-outline-secondary:hover {
     background: #1f2611 ;
     padding: 1rem 1.5rem;
     box-shadow: none;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+    transition: background .08s ease-in-out;
 }
 
 .btn.btn-outline-secondary:focus {
     background: #2e3c10 !important;
     padding: 1rem 1.5rem;
     box-shadow: none;
-    transition: background-color .0s ease-in-out,border .0s ease-in-out,box-shadow .0s ease-in-out,color .0s ease-in-out;
+    transition: background .08s ease-in-out,
 }
 
 .form-check-label.btn.btn-primary{
     background: var(--gray-11);
     border-radius: 20px;
-    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out;
 }
 .form-check-label.btn.btn-primary:hover{
     background: #8bbb1126;
-    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out;
 }
 .form-check-label.btn.btn-primary.active{
     background: #8bbb11;
-    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out;
 }
 
 .form-check-label.btn.btn-primary.active:hover{
     background: #8bbb11bf;
-    transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out;
 }
 
 .btn-lg {
@@ -130,7 +129,7 @@
     border-radius: 30px;
     background: var(--gray-9);
     box-shadow: none;
-    transition: background-color .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
+    transition: background .15s ease-in-out;
 }
 
 .btn-outline-primary {
@@ -138,7 +137,7 @@
     padding: 1rem 1.5rem;
     color: rgba(255,255,255,0.85) !important;
     border: 1px solid #8bbb11 !important;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+    transition: background .08s ease-in-out,border .08s ease-in-out,color .08s ease-in-out;
 }
 
 .btn.btn-outline-primary:active {
@@ -147,7 +146,7 @@
     padding: 1rem 1.5rem;
     border: 1px solid #8bbb11 !important;
     box-shadow: none #ffeded;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+    transition: background .08s ease-in-out,border .08s ease-in-out,color .08s ease-in-out;
 }
 
 .btn.btn-outline-primary:hover {
@@ -156,7 +155,7 @@
     padding: 1rem 1.5rem;
     border: 1px solid #8bbb11 !important;
     box-shadow: none;
-    transition: background-color .08s ease-in-out,border .08s ease-in-out,box-shadow .08s ease-in-out,color .08s ease-in-out;
+    transition: background .08s ease-in-out,border .08s ease-in-out,color .08s ease-in-out;
 }
 
 .btn.btn-outline-primary:focus {
@@ -164,7 +163,7 @@
     padding: 1rem 1.5rem;
     color: rgba(255, 255, 255, 0.85) !important;
     box-shadow: none !important;
-    transition: background-color .0s ease-in-out,border .0s ease-in-out,box-shadow .0s ease-in-out,color .0s ease-in-out;
+    transition: background .08s ease-in-out, color .08s ease-in-out;
 }
 
 .card-body {
@@ -195,7 +194,7 @@
     appearance: none;
     border-radius: 0.375rem;
     box-shadow: none !important;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: background .15s ease-in-out;
     height: var(--default-height);
 }
 
