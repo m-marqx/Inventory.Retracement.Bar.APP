@@ -1,4 +1,4 @@
-import time as t
+import time
 from binance.client import Client
 import pandas as pd
 import numpy as np
@@ -120,7 +120,7 @@ class CoinMargined:
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
     ):
-        START = t.time()
+        START = time.time()
         klines_list = []
         timeLoop_list = []
         index = 0
@@ -132,8 +132,8 @@ class CoinMargined:
             index += 1
             initial_Time += max_Interval
             timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
-                request_Time_Start = t.time()
+            if timeLoop_list[-1] + max_Interval < int(time.time() * 1000):
+                request_Time_Start = time.time()
                 klines_Loop = self.futures_Kline(
                     timeLoop_list[index - 1],
                     timeLoop_list[index - 1] + max_Interval,
@@ -143,14 +143,14 @@ class CoinMargined:
                 klines_list.extend(klines_Loop)
                 print("\nLoop : " + str(index))
                 print("\nQty  : " + str(len(klines_list)))
-                request_Time_End = t.time()
+                request_Time_End = time.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("\nLoop Ended\n")
 
-                END = t.time()
+                END = time.time()
                 print("\nExecution time: " + str(END - START))
                 break
         return klines_list
@@ -177,7 +177,7 @@ class CoinMargined:
         first_Candle_Time=1597118400000,
         symbol="BTCUSD_PERP",
     ):
-        START = t.time()
+        START = time.time()
         kline_List = []
         timeLoop = []
         index = 0
@@ -190,8 +190,8 @@ class CoinMargined:
             initial_Time += max_Interval
             index += 1
             timeLoop.append(initial_Time)
-            if timeLoop[-1] + max_Interval < int(t.time() * 1000):
-                request_Time_Start = t.time()
+            if timeLoop[-1] + max_Interval < int(time.time() * 1000):
+                request_Time_Start = time.time()
                 klines_Loop = self.markPrice_futures_Kline(
                     timeLoop[index - 1],
                     timeLoop[index - 1] + max_Interval,
@@ -201,18 +201,18 @@ class CoinMargined:
                 kline_List.extend(klines_Loop)
                 print("\nLoop : " + str(index))
                 print("\nQty  : " + str(len(kline_List)))
-                request_Time_End = t.time()
+                request_Time_End = time.time()
                 request_Duration = request_Time_End - request_Time_Start
                 if request_Duration < 1.33:
                     t.sleep(1.33 - request_Duration)
             else:
                 print("Else Reached!")
-                lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, int(t.time() * 1000), interval)
+                lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, int(time.time() * 1000), interval)
                 kline_List.extend(lastCall)
                 print("\nQty  : " + str(len(kline_List)))
                 print("\nLoop Ended\n")
 
-                END = t.time()
+                END = time.time()
                 print("\nExecution time: " + str(END - START))
                 break
         return kline_List
