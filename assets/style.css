@@ -49,7 +49,7 @@
 
 .btn.btn-primary:active{
     position: relative;
-    color: rgba(255,255,255,0.85) !important;
+    color: rgba(31,38,17,0.85) !important;
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 10px;
