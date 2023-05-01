@@ -218,6 +218,8 @@ class CoinMargined:
         return kline_List
 
     def get_all_futures_klines_df(self, symbol, interval):
-        klines_list = self.get_All_Klines(interval, symbol=symbol)
+        klines_list = self.get_All_Klines(symbol=symbol,interval=interval)
         klines_df = Klines(klines_list).klines_df()
-        return klines_df
+        ohlc_columns = klines_df.columns[0:4].to_list()
+        open_time_column = klines_df.columns[-1]
+        return klines_df[ohlc_columns + [open_time_column]]
