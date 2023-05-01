@@ -15,11 +15,6 @@
     background: var(--gray-10);
 }
 
-.navbar-collapse {
-    background:var(--gray-10);
-    height:32px;
-}
-
 .btn {
     position: relative;
     border-radius: 10px;
@@ -209,6 +204,11 @@
     background: var(--gray-8) !important;
     transition: background .15s ease-in-out;
 
+}
+
+.navbar-collapse {
+    background:var(--gray-10);
+    height:32px;
 }
 
 .nav-link {
