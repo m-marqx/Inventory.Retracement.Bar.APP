@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from binance.helpers import interval_to_milliseconds
 from .utils import Klines
+from math import ceil
 
 
 class CoinMargined:
@@ -64,54 +65,33 @@ class CoinMargined:
     def get_All_Klines(
         self,
         interval="2h",
-        first_Candle_Time=1597118400000,
+        start_time=1597118400000,
         symbol="BTCUSD_PERP",
-        request_limit=False,
     ):
-        START = t.time()
+        START = time.time()
+        time_delta = (time.time() * 1000 - start_time)
+        time_delta_ratio = time_delta / interval_to_milliseconds(interval)
+        request_qty = time_delta_ratio / self.calculate_max_multiplier(interval)
+
+        #get list for all end_times
+        end_times = np.empty((ceil(request_qty)))
+        end_times = np.arange(ceil(request_qty)) * (time_delta / request_qty) + start_time
+        end_times = np.append(end_times,(time.time() * 1000))
+
         klines_list = []
-        timeLoop_list = []
-        index = 0
-        initial_Time = first_Candle_Time
 
-        if interval == "1M":
-            intervalms = 2678000000
-        else:
-            intervalms = interval_to_milliseconds(interval)
-
-        max_multiplier = self.calculate_max_multiplier(interval)
-        max_Interval = intervalms * max_multiplier
-        initial_Time = initial_Time - max_Interval
-
-        while True:
-            index += 1
-            initial_Time += max_Interval
-            timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(t.time() * 1000):
-                request_Time_Start = t.time()
-                klines_Loop = self.futures_Kline(
-                    timeLoop_list[index - 1],
-                    timeLoop_list[index - 1] + max_Interval,
+        for index in range(0,len(end_times) - 1):
+            klines_list.extend(
+                self.futures_Kline(
+                    int(end_times[index]),
+                    int(end_times[index+1]),
                     interval,
-                    symbol=symbol,
+                    symbol
                 )
-                klines_list.extend(klines_Loop)
-                print("\nLoop : " + str(index))
-                print("\nQty  : " + str(len(klines_list)))
-                request_Time_End = t.time()
-                request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33 and request_limit:
-                    t.sleep(1.33 - request_Duration)
-            else:
-                print("Else Reached!")
-                lastCall = self.futures_Kline(timeLoop_list[-1] + 1, int(t.time() * 1000), interval)
-                klines_list.extend(lastCall)
-                print("\nQty  : " + str(len(klines_list)))
-                print("\nLoop Ended\n")
+            )
+            print("\nQty  : " + str(len(klines_list)))
 
-                END = t.time()
-                print("\nExecution time: " + str(END - START))
-                break
+        print(time.time() - START)
         return klines_list
 
     def get_Historical_Klines(
