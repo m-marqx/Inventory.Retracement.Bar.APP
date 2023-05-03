@@ -172,15 +172,16 @@ class ConvertDataFrame:
     def __init__(self,  dataframe):
         self.dataframe = dataframe
 
-        data_path = pathlib.Path("model","data")
-        if not data_path.is_dir():
-            data_path.mkdir()
+        self.data_path = pathlib.Path("model","data")
+        if not self.data_path.is_dir():
+            self.data_path.mkdir()
 
     def get_df_to_csv(self, name) -> None:
         str_name = f"{name}.csv"
+        dataframe_path = self.data_path.joinpath(str_name)
         columns = self.dataframe.columns
         self.dataframe.to_csv(
-            f"model/data/{str_name}",
+            dataframe_path,
             index=True,
             header=columns,
             sep=";",
@@ -192,8 +193,9 @@ class ConvertDataFrame:
 
     def get_df_to_parquet(self, name) -> None:
         str_name = f"{name}.parquet"
+        dataframe_path = self.data_path.joinpath(str_name)
         self.dataframe.to_parquet(
-            f"model/data/{str_name}",
+            dataframe_path,
             index=True,
         )
 
