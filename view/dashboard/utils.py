@@ -79,8 +79,8 @@ def get_data(symbol, interval):
     if symbol.endswith("USD"):
         symbol += "_PERP"
 
-    fapi = CoinMargined()
-    data_frame = fapi.get_all_futures_klines_df(symbol, interval)
+    fapi = CoinMargined(symbol, interval)
+    data_frame = fapi.get_all_futures_klines_df()
     return data_frame
 
 
