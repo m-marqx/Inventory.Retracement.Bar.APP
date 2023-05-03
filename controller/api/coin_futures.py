@@ -5,6 +5,7 @@ import numpy as np
 from binance.helpers import interval_to_milliseconds
 from .utils import Klines
 from math import ceil
+import pathlib
 
 
 class CoinMargined:
@@ -89,6 +90,18 @@ class CoinMargined:
 
         print(time.time() - START)
         return klines_list
+
+    def update_data(self):
+        data_path = pathlib.Path("model","data")
+        data_name = f"{self.symbol}_{self.interval}.parquet"
+        dataframe_path = data_path.joinpath(data_name)
+        data_frame = pd.read_parquet(dataframe_path)
+        last_time = data_frame["open_time_ms"][-1]
+        new_data = self.get_All_Klines(last_time) #Returns a list with all klines without columns names
+        new_dataframe = Klines(new_data).klines_df().reindex(columns=data_frame.columns)
+        old_dataframe = data_frame.iloc[:-1,:] #Remove last row
+        refresh_dataframe = pd.concat([old_dataframe,new_dataframe])
+        return refresh_dataframe
 
     def get_Historical_Klines(
         self,
