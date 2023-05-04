@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+from binance.helpers import interval_to_milliseconds
 
 class Klines:
     def __init__(self, klines_list):
@@ -46,3 +48,20 @@ class KlineAnalyzer:
     def __init__(self, symbol, interval):
         self.symbol = symbol
         self.interval = interval
+
+    def calculate_max_multiplier(self):
+        if self.interval != "1M":
+            interval_hours = interval_to_milliseconds(self.interval) / 1000 / 60 / 60
+            max_multiplier_limit = 1500
+            max_days_limit = 200
+
+            total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
+            time_total_days = total_time_hours / 24
+
+            max_multiplier = max_multiplier_limit - np.argmax(
+                time_total_days <= max_days_limit
+            )
+        else:
+            max_multiplier = 6
+
+        return max_multiplier

@@ -3,7 +3,7 @@ from binance.client import Client
 import pandas as pd
 import numpy as np
 from binance.helpers import interval_to_milliseconds
-from .utils import Klines
+from .utils import Klines, KlineAnalyzer
 from math import ceil
 import pathlib
 
@@ -13,6 +13,7 @@ class CoinMargined:
         self.client = Client()
         self.symbol = symbol
         self.interval = interval
+        self.utils = KlineAnalyzer(self.symbol, self.interval)
 
     def get_ticker_info(self):
         info = self.client.futures_coin_exchange_info()
@@ -45,24 +46,6 @@ class CoinMargined:
         )
         return request
 
-    def calculate_max_multiplier(self):
-        if self.interval != "1M":
-            interval_hours = interval_to_milliseconds(self.interval) / 1000 / 60 / 60
-            max_multiplier_limit = 1500
-            max_days_limit = 200
-
-            total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
-
-            time_total_days = total_time_hours / 24
-
-            max_multiplier = max_multiplier_limit - np.argmax(
-                time_total_days <= max_days_limit
-            )
-        else:
-            max_multiplier = 6
-
-        return max_multiplier
-
     def get_All_Klines(
         self,
         start_time=1597118400000,
@@ -70,7 +53,7 @@ class CoinMargined:
         START = time.time()
         time_delta = (time.time() * 1000 - start_time)
         time_delta_ratio = time_delta / interval_to_milliseconds(self.interval)
-        request_qty = time_delta_ratio / self.calculate_max_multiplier()
+        request_qty = time_delta_ratio / self.utils.calculate_max_multiplier()
 
         #get list for all end_times
         end_times = np.empty((ceil(request_qty)))
