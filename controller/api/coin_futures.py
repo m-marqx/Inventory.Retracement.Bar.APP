@@ -50,17 +50,11 @@ class CoinMargined:
         self,
         start_time=1597118400000,
     ):
-        START = time.time()
-        time_delta = (time.time() * 1000 - start_time)
-        time_delta_ratio = time_delta / interval_to_milliseconds(self.interval)
-        request_qty = time_delta_ratio / self.utils.calculate_max_multiplier()
-
-        #get list for all end_times
-        end_times = np.empty((ceil(request_qty)))
-        end_times = np.arange(ceil(request_qty)) * (time_delta / request_qty) + start_time
-        end_times = np.append(end_times,(time.time() * 1000))
 
         klines_list = []
+        end_times = self.utils.get_end_times(start_time)
+
+        START = time.time()
 
         for index in range(0,len(end_times) - 1):
             klines_list.extend(
