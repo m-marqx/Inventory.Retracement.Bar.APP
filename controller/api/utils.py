@@ -41,3 +41,8 @@ class Klines:
         dataframe[int_column] = dataframe[int_column].astype(int)
         dataframe.set_index("open_time", inplace=True)
         return dataframe
+
+class KlineAnalyzer:
+    def __init__(self, symbol, interval):
+        self.symbol = symbol
+        self.interval = interval
