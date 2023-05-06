@@ -104,6 +104,11 @@ class CoinMargined:
         self.klines = refresh_dataframe.copy()
         return self
 
+    def to_DataFrame(self):
+        klines_df = KlinesUtils(self.klines).klines_df()
+        self.klines = klines_df.copy()
+        return self.klines
+
     def to_OHLC_DataFrame(self):
         klines_df = KlinesUtils(self.klines).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
@@ -113,7 +118,3 @@ class CoinMargined:
         self.klines = klines_df.copy()
         return self.klines
 
-    def get_all_futures_klines_df_complete(self):
-        klines_df = KlinesUtils(self.klines).klines_df()
-        self.klines = klines_df.copy()
-        return self.klines
