@@ -80,43 +80,6 @@ class CoinMargined:
         refresh_dataframe = pd.concat([old_dataframe,new_dataframe])
         return refresh_dataframe
 
-    def get_Historical_Klines(
-        self,
-        first_Candle_Time=1597118400000,
-    ):
-        START = time.time()
-        klines_list = []
-        timeLoop_list = []
-        index = 0
-        initial_Time = first_Candle_Time
-        interval_ms = interval_to_milliseconds(self.interval)
-        max_Interval = interval_ms * 1500
-        initial_Time = initial_Time - max_Interval
-        while True:
-            index += 1
-            initial_Time += max_Interval
-            timeLoop_list.append(initial_Time)
-            if timeLoop_list[-1] + max_Interval < int(time.time() * 1000):
-                request_Time_Start = time.time()
-                klines_Loop = self.futures_Kline(
-                    timeLoop_list[index - 1],
-                    timeLoop_list[index - 1] + max_Interval,
-                )
-                klines_list.extend(klines_Loop)
-                print("\nLoop : " + str(index))
-                print("\nQty  : " + str(len(klines_list)))
-                request_Time_End = time.time()
-                request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
-                    time.sleep(1.33 - request_Duration)
-            else:
-                print("\nLoop Ended\n")
-
-                END = time.time()
-                print("\nExecution time: " + str(END - START))
-                break
-        return klines_list
-
     def markPrice_futures_Kline(
         self,
         startTime,
