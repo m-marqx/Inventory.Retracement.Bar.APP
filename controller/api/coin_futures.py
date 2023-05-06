@@ -60,6 +60,20 @@ class CoinMargined:
         )
         return request
 
+    def spot_Kline(
+        self,
+        startTime,
+        endTime,
+    ):
+        request = self.client.get_klines(
+            symbol=self.symbol,
+            interval=self.interval,
+            startTime=startTime,
+            endTime=endTime,
+            limit=1000,
+        )
+        return request
+
     def get_All_Klines(
         self,
         start_time=1597118400000,
