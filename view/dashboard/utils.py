@@ -80,7 +80,7 @@ def get_data(symbol, interval):
         symbol += "_PERP"
 
     fapi = CoinMargined(symbol, interval)
-    data_frame = fapi.get_all_futures_klines_df()
+    data_frame = fapi.get_All_Klines().get_all_futures_klines_df()
     return data_frame
 
 
