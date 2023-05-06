@@ -46,10 +46,30 @@ class CoinMargined:
         )
         return request
 
+    def markPrice_futures_Kline(
+        self,
+        startTime,
+        endTime,
+    ):
+        request = self.client.futures_coin_mark_price_klines(
+            symbol=self.symbol,
+            interval=self.interval,
+            startTime=startTime,
+            endTime=endTime,
+            limit=1500,
+        )
+        return request
+
     def get_All_Klines(
         self,
         start_time=1597118400000,
+        klines_function="futures",
     ):
+
+        if klines_function == "futures":
+            klines_function = self.futures_Kline
+        else:
+            klines_function = self.markPrice_futures_Kline
 
         klines_list = []
         end_times = self.utils.get_end_times(start_time)
@@ -58,7 +78,7 @@ class CoinMargined:
 
         for index in range(0,len(end_times) - 1):
             klines_list.extend(
-                self.futures_Kline(
+                klines_function(
                     int(end_times[index]),
                     int(end_times[index+1]),
                 )
@@ -79,62 +99,6 @@ class CoinMargined:
         old_dataframe = data_frame.iloc[:-1,:] #Remove last row
         refresh_dataframe = pd.concat([old_dataframe,new_dataframe])
         return refresh_dataframe
-
-    def markPrice_futures_Kline(
-        self,
-        startTime,
-        endTime,
-    ):
-        request = self.client.futures_coin_mark_price_klines(
-            symbol=self.symbol,
-            interval=self.interval,
-            startTime=startTime,
-            endTime=endTime,
-            limit=1500,
-        )
-        return request
-
-    def get_markPrice_All_Klines(
-        self,
-        first_Candle_Time=1597118400000,
-    ):
-        START = time.time()
-        kline_List = []
-        timeLoop = []
-        index = 0
-        initial_Time = first_Candle_Time
-        max_multiplier = self.calculate_max_multiplier()
-        max_Interval = interval_to_milliseconds(self.interval) * max_multiplier
-        initial_Time = initial_Time - max_Interval
-
-        while True:
-            initial_Time += max_Interval
-            index += 1
-            timeLoop.append(initial_Time)
-            if timeLoop[-1] + max_Interval < int(time.time() * 1000):
-                request_Time_Start = time.time()
-                klines_Loop = self.markPrice_futures_Kline(
-                    timeLoop[index - 1],
-                    timeLoop[index - 1] + max_Interval,
-                )
-                kline_List.extend(klines_Loop)
-                print("\nLoop : " + str(index))
-                print("\nQty  : " + str(len(kline_List)))
-                request_Time_End = time.time()
-                request_Duration = request_Time_End - request_Time_Start
-                if request_Duration < 1.33:
-                    time.sleep(1.33 - request_Duration)
-            else:
-                print("Else Reached!")
-                lastCall = self.markPrice_futures_Kline(timeLoop[-1] + 1, int(time.time() * 1000))
-                kline_List.extend(lastCall)
-                print("\nQty  : " + str(len(kline_List)))
-                print("\nLoop Ended\n")
-
-                END = time.time()
-                print("\nExecution time: " + str(END - START))
-                break
-        return kline_List
 
     def get_all_futures_klines_df(self):
         klines_list = self.get_All_Klines()
