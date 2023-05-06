@@ -5,7 +5,7 @@ from .utils import KlinesUtils, KlineTimes
 import pathlib
 
 
-class CoinMargined:
+class KlineAPI:
     def __init__(self, symbol, interval, api="futures"):
         self.client = Client()
         self.symbol = symbol

@@ -1,4 +1,4 @@
-from controller.api.coin_futures import CoinMargined
+from controller.api.coin_futures import KlineAPI
 import dash_bootstrap_components as dbc
 
 from model.strategy.params.indicators_params import (
@@ -79,7 +79,7 @@ def get_data(symbol, interval):
     if symbol.endswith("USD"):
         symbol += "_PERP"
 
-    fapi = CoinMargined(symbol, interval)
+    fapi = KlineAPI(symbol, interval)
     data_frame = fapi.get_Klines().to_OHLC_DataFrame()
     return data_frame
 
