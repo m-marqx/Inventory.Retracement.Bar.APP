@@ -15,11 +15,10 @@ class CoinMargined:
     def get_ticker_info(self):
         info = self.client.futures_coin_exchange_info()
         info_df = pd.DataFrame(info["symbols"])
-        filtered_info = (
-            [x['filters'] for x in info_df[info_df['symbol'] == self.symbol]
-            .to_dict(orient='records')][0]
-        )
-        df_filtered = pd.DataFrame.from_records(filtered_info)
+        symbol_info = info_df.query(f"symbol == '{self.symbol}'")
+
+        filters_info = symbol_info["filters"].explode().to_list()
+        df_filtered = pd.DataFrame(filters_info)
         df_filtered.set_index("filterType", inplace=True)
         df_filtered = df_filtered.astype("float64")
         return df_filtered
