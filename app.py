@@ -1,7 +1,11 @@
 import dash
 import plotly.express as px
 import pandas as pd
+import pathlib
 from dash.dependencies import Input, Output, State
+
+from controller.api.klines_api import KlineAPI
+from model.utils.utils import SaveDataFrame
 
 from model.strategy.params.indicators_params import (
     EmaParams,
@@ -155,7 +159,7 @@ def update_label(sma_click, ema_click):
         Input("1M", "n_clicks"),
     ],
 )
-def update_label(m1,m5,m15,m30,h1,h2,h4,h6,h8,h12,d1,d3,w1,M1):
+def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1):
     ctx = dash.callback_context
     if not ctx.triggered:
         return "Interval"
@@ -172,7 +176,6 @@ def update_label(m1,m5,m15,m30,h1,h2,h4,h6,h8,h12,d1,d3,w1,M1):
     State("shape_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 
@@ -190,7 +193,6 @@ def toggle_shape_collapse(n_clicks, is_open):
     State("data_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 
@@ -208,7 +210,6 @@ def toggle_shape_collapse(n_clicks, is_open):
     State("operating_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 
@@ -226,7 +227,6 @@ def toggle_shape_collapse(n_clicks, is_open):
     State("coordinates_collapse", "is_open"),
 )
 def toggle_shape_collapse(n_clicks, is_open):
-
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 
@@ -236,12 +236,10 @@ def toggle_shape_collapse(n_clicks, is_open):
         return True, "fa fa-chevron-up ml-2"
 
 
-data_params = []
-
 @app.callback(
     Output("results", "figure"),
     Output("text_output", "children"),
-    Input("run_button","n_clicks"),
+    Input("run_button", "n_clicks"),
     State("symbol", "value"),
     State("interval", "label"),
     State("ema_source_column", "label"),
@@ -286,31 +284,25 @@ def run_strategy(
     indicator_cci_trend_value,
     checklist,
 ):
-
     ctx = dash.callback_context
     if not ctx.triggered:
         raise dash.exceptions.PreventUpdate
 
-    global data_params
-    global data_frame
-
     if "run_button" in ctx.triggered[0]["prop_id"]:
+        data_path = pathlib.Path("model", "data")
+        data_symbol = f"{symbol}_PERP"
+        data_name = f"{data_symbol}_{interval}.parquet"
+        dataframe_path = data_path.joinpath(data_name)
 
-        data_params.append(symbol + interval)
-        empty_data_frame = data_frame.shape[0] == 0
-        is_same_data_params = (
-            len(data_params) > 1 and data_params[-1] == data_params[-2]
-        )
+        if dataframe_path.is_file():
+            data_frame = pd.read_parquet(dataframe_path)
+            data_frame = KlineAPI(data_symbol, interval).update_data()
+            print(f"Dataframe for {data_symbol}_{interval} is updated")
 
-        if empty_data_frame:
-            data_frame = get_data(symbol, interval)
-        elif is_same_data_params:
-            data_params = [data_params[-1]]
-            print(f"{data_params} is same params")
         else:
             data_frame = get_data(symbol, interval)
-            data_params = [data_params[-1]]
-            print(f"{data_params} will be reset")
+
+        SaveDataFrame(data_frame).to_parquet(f"{data_symbol}_{interval}")
 
         ema_bool = False
         macd_bool = False
@@ -328,7 +320,7 @@ def run_strategy(
         builder_params = BuilderParams(
             ema_params=EmaParams(
                 source_column=ema_source_column,
-                length=ema_length
+                length=ema_length,
             ),
             macd_params=MACDParams(
                 source_column=macd_source_column,
@@ -356,7 +348,7 @@ def run_strategy(
             trend_params=TrendParams(
                 ema=ema_bool,
                 macd=macd_bool,
-                cci=cci_bool
+                cci=cci_bool,
             ),
         )
 
@@ -365,6 +357,7 @@ def run_strategy(
         text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
 
     return fig, text_output
+
 
 if __name__ == "__main__":
     app.run(debug=False)
