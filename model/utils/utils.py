@@ -3,6 +3,7 @@ import pandas as pd
 from abc import ABC, abstractmethod
 import pathlib
 
+
 class BaseStrategy(ABC):
     def __init__(self, dataframe: pd.DataFrame):
         self.df_filtered = dataframe
@@ -100,6 +101,7 @@ class DataProcess:
 
         return self.data_frame["Exit_Price"]
 
+
 class Math:
     def calculate_expected_value(self, dataframe):
         data_frame = dataframe.query("Result != 0")[["Result"]].copy()
@@ -173,11 +175,11 @@ class SaveDataFrame:
     def __init__(self, dataframe):
         self.dataframe = dataframe
 
-        self.data_path = pathlib.Path("model","data")
+        self.data_path = pathlib.Path("model", "data")
         if not self.data_path.is_dir():
             self.data_path.mkdir()
 
-    def get_df_to_csv(self, name) -> None:
+    def to_csv(self, name) -> None:
         str_name = f"{name}.csv"
         dataframe_path = self.data_path.joinpath(str_name)
         columns = self.dataframe.columns
@@ -192,7 +194,7 @@ class SaveDataFrame:
 
         return print(str_name + " has been saved")
 
-    def get_df_to_parquet(self, name) -> None:
+    def to_parquet(self, name) -> None:
         str_name = f"{name}.parquet"
         dataframe_path = self.data_path.joinpath(str_name)
         self.dataframe.to_parquet(
