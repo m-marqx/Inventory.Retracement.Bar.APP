@@ -1,7 +1,7 @@
 import time
 from binance.client import Client
 import pandas as pd
-from .utils import KlinesUtils, KlineAnalyzer
+from .utils import KlinesUtils, KlineTimes
 import pathlib
 
 
@@ -10,7 +10,7 @@ class CoinMargined:
         self.client = Client()
         self.symbol = symbol
         self.interval = interval
-        self.utils = KlineAnalyzer(self.symbol, self.interval)
+        self.utils = KlineTimes(self.symbol, self.interval)
 
     def get_ticker_info(self):
         info = self.client.futures_coin_exchange_info()

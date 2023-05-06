@@ -48,7 +48,7 @@ class KlinesUtils:
         return dataframe
 
 
-class KlineAnalyzer:
+class KlineTimes:
     def __init__(self, symbol, interval):
         self.symbol = symbol
         self.interval = interval
