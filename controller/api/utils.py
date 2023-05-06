@@ -5,7 +5,7 @@ from math import ceil
 from binance.helpers import interval_to_milliseconds
 
 
-class KlinesUtils:
+class KlineUtils:
     def __init__(self, klines_list):
         self.klines_list = klines_list
 
@@ -20,7 +20,7 @@ class KlinesUtils:
             "volume",
             "quote_asset_volume",
             "taker_buy_quote_asset_volume",
-            "taker_buy_base_asset_volume"
+            "taker_buy_base_asset_volume",
         ]
 
         int_column = ["number_of_trades"]

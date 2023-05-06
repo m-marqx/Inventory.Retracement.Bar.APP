@@ -1,7 +1,7 @@
 import time
 from binance.client import Client
 import pandas as pd
-from .utils import KlinesUtils, KlineTimes
+from .utils import KlineUtils, KlineTimes
 import pathlib
 
 
@@ -97,7 +97,7 @@ class KlineAPI:
         last_time = data_frame["open_time_ms"][-1]
         new_data = self.get_Klines(last_time)
         new_dataframe = (
-            KlinesUtils(new_data).klines_df().reindex(columns=data_frame.columns)
+            KlineUtils(new_data).klines_df().reindex(columns=data_frame.columns)
         )
         old_dataframe = data_frame.iloc[:-1, :]
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
@@ -105,16 +105,15 @@ class KlineAPI:
         return self
 
     def to_DataFrame(self):
-        klines_df = KlinesUtils(self.klines).klines_df()
+        klines_df = KlineUtils(self.klines).klines_df()
         self.klines = klines_df.copy()
         return self.klines
 
     def to_OHLC_DataFrame(self):
-        klines_df = KlinesUtils(self.klines).klines_df()
+        klines_df = KlineUtils(self.klines).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]
         klines_df = klines_df[ohlc_columns + [open_time_column]]
 
         self.klines = klines_df.copy()
         return self.klines
-
