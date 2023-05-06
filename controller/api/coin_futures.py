@@ -104,7 +104,7 @@ class CoinMargined:
         self.klines = refresh_dataframe.copy()
         return self
 
-    def get_all_futures_klines_df(self):
+    def to_OHLC_DataFrame(self):
         klines_df = KlinesUtils(self.klines).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]

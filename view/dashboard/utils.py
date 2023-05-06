@@ -80,7 +80,7 @@ def get_data(symbol, interval):
         symbol += "_PERP"
 
     fapi = CoinMargined(symbol, interval)
-    data_frame = fapi.get_Klines().get_all_futures_klines_df()
+    data_frame = fapi.get_Klines().to_OHLC_DataFrame()
     return data_frame
 
 
