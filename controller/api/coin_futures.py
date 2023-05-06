@@ -20,7 +20,13 @@ class CoinMargined:
             )
 
     def get_ticker_info(self):
-        info = self.client.futures_coin_exchange_info()
+        if self.api == "mark price":
+            raise ValueError("Mark Price doesn't have a ticker info")
+        elif self.api == "futures":
+            info = self.client.futures_coin_exchange_info()
+        else:
+            info = self.client.get_exchange_info()
+
         info_df = pd.DataFrame(info["symbols"])
         symbol_info = info_df.query(f"symbol == '{self.symbol}'")
 
