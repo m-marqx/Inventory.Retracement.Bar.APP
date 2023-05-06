@@ -17,11 +17,13 @@ class KlinesUtils:
             "high",
             "low",
             "close",
+            "volume",
             "quote_asset_volume",
             "taker_buy_quote_asset_volume",
+            "taker_buy_base_asset_volume"
         ]
 
-        int_column = ["volume", "number_of_trades", "taker_buy_base_asset_volume"]
+        int_column = ["number_of_trades"]
 
         columns = (
             "open_time",
@@ -42,8 +44,8 @@ class KlinesUtils:
 
         dataframe["open_time_ms"] = dataframe["open_time"]
         dataframe[timestamp] = dataframe[timestamp].astype("datetime64[ms]")
-        dataframe[float_column] = dataframe[float_column].astype(float)
-        dataframe[int_column] = dataframe[int_column].astype(int)
+        dataframe[float_column] = dataframe[float_column].astype("float64")
+        dataframe[int_column] = dataframe[int_column].astype("int64")
         dataframe.set_index("open_time", inplace=True)
         return dataframe
 
