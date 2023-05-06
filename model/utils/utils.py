@@ -168,8 +168,9 @@ class CleanData(BaseStrategy):
             self.df_filtered.rename(columns=self.columns, inplace=True)
         return self.df_filtered
 
-class ConvertDataFrame:
-    def __init__(self,  dataframe):
+
+class SaveDataFrame:
+    def __init__(self, dataframe):
         self.dataframe = dataframe
 
         self.data_path = pathlib.Path("model","data")
