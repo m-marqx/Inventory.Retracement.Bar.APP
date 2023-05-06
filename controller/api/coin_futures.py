@@ -1,10 +1,7 @@
 import time
 from binance.client import Client
 import pandas as pd
-import numpy as np
-from binance.helpers import interval_to_milliseconds
 from .utils import Klines, KlineAnalyzer
-from math import ceil
 import pathlib
 
 
