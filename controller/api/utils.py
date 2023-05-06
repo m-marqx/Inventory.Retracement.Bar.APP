@@ -5,7 +5,7 @@ from math import ceil
 from binance.helpers import interval_to_milliseconds
 
 
-class Klines:
+class KlinesUtils:
     def __init__(self, klines_list):
         self.klines_list = klines_list
 
@@ -47,6 +47,7 @@ class Klines:
         dataframe.set_index("open_time", inplace=True)
         return dataframe
 
+
 class KlineAnalyzer:
     def __init__(self, symbol, interval):
         self.symbol = symbol
@@ -73,14 +74,13 @@ class KlineAnalyzer:
         self,
         start_time=1597118400000,
     ):
-        time_delta = (time.time() * 1000 - start_time)
+        time_delta = time.time() * 1000 - start_time
         time_delta_ratio = time_delta / interval_to_milliseconds(self.interval)
         request_qty = time_delta_ratio / self.calculate_max_multiplier()
 
         end_times = (
-            np.arange(ceil(request_qty))
-            * (time_delta / request_qty) + start_time
-            )
-        end_times = np.append(end_times,(time.time() * 1000))
+            np.arange(ceil(request_qty)) * (time_delta / request_qty) + start_time
+        )
+        end_times = np.append(end_times, time.time() * 1000)
 
         return end_times

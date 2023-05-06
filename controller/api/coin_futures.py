@@ -1,7 +1,7 @@
 import time
 from binance.client import Client
 import pandas as pd
-from .utils import Klines, KlineAnalyzer
+from .utils import KlinesUtils, KlineAnalyzer
 import pathlib
 
 
@@ -120,19 +120,19 @@ class CoinMargined:
         data_frame = pd.read_parquet(dataframe_path)
         last_time = data_frame["open_time_ms"][-1]
         new_data = self.get_All_Klines(last_time)
-        new_dataframe = Klines(new_data).klines_df().reindex(columns=data_frame.columns)
+        new_dataframe = KlinesUtils(new_data).klines_df().reindex(columns=data_frame.columns)
         old_dataframe = data_frame.iloc[:-1,:]
         refresh_dataframe = pd.concat([old_dataframe,new_dataframe])
         return refresh_dataframe
 
     def get_all_futures_klines_df(self):
         klines_list = self.get_All_Klines()
-        klines_df = Klines(klines_list).klines_df()
+        klines_df = KlinesUtils(klines_list).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]
         return klines_df[ohlc_columns + [open_time_column]]
 
     def get_all_futures_klines_df_complete(self):
         klines_list = self.get_All_Klines()
-        klines_df = Klines(klines_list).klines_df()
+        klines_df = KlinesUtils(klines_list).klines_df()
         return klines_df
