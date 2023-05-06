@@ -1,4 +1,4 @@
-from controller.api.coin_futures import KlineAPI
+from controller.api.klines_api import KlineAPI
 import dash_bootstrap_components as dbc
 
 from model.strategy.params.indicators_params import (
