@@ -95,14 +95,11 @@ class KlineAPI:
         dataframe_path = data_path.joinpath(data_name)
         data_frame = pd.read_parquet(dataframe_path)
         last_time = data_frame["open_time_ms"][-1]
-        new_data = self.get_Klines(last_time)
-        new_dataframe = (
-            KlineUtils(new_data).klines_df().reindex(columns=data_frame.columns)
-        )
+        new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
         old_dataframe = data_frame.iloc[:-1, :]
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
         self.klines = refresh_dataframe.copy()
-        return self
+        return self.klines
 
     def to_DataFrame(self):
         klines_df = KlineUtils(self.klines).klines_df()
