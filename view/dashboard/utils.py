@@ -75,12 +75,12 @@ indicators_filter = [
 
 
 def get_data(symbol, interval):
-    symbol = symbol.upper() #Avoid errors when the symbol is in lowercase
+    symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
     if symbol.endswith("USD"):
         symbol += "_PERP"
 
     fapi = CoinMargined(symbol, interval)
-    data_frame = fapi.get_All_Klines().get_all_futures_klines_df()
+    data_frame = fapi.get_Klines().get_all_futures_klines_df()
     return data_frame
 
 

@@ -62,7 +62,7 @@ class CoinMargined:
         )
         return request
 
-    def get_All_Klines(
+    def get_Klines(
         self,
         start_time=1502942400000,
     ):
@@ -95,7 +95,7 @@ class CoinMargined:
         dataframe_path = data_path.joinpath(data_name)
         data_frame = pd.read_parquet(dataframe_path)
         last_time = data_frame["open_time_ms"][-1]
-        new_data = self.get_All_Klines(last_time)
+        new_data = self.get_Klines(last_time)
         new_dataframe = (
             KlinesUtils(new_data).klines_df().reindex(columns=data_frame.columns)
         )
