@@ -28,7 +28,7 @@ class CoinMargined:
         return df_filtered
 
     def get_tick_size(self):
-        df = self.get_ticker_info(self.symbol)
+        df = self.get_ticker_info()
         tick_size = df.loc["PRICE_FILTER", "tickSize"]
         return tick_size
 
