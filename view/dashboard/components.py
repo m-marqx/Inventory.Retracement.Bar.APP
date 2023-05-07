@@ -9,6 +9,7 @@ from .utils import (
     source_ohlc_items,
     indicators_filter,
     intervals,
+    api_types,
 )
 
 
@@ -368,8 +369,28 @@ interval_components = dbc.Row(
     ]
 )
 
+api_radio_components = dbc.Row(
+    [
+        dbc.Col(
+            [
+                dbc.RadioItems(
+                    api_types,
+                    id="api_types",
+                    class_name="btn-group",
+                    input_class_name="btn-ghost btn-check",
+                    label_class_name="btn-ghost btn btn-primary",
+                    label_checked_class_name="active",
+                    value='futures',
+                ),
+                dbc.Col(id='api_types_output'),
+            ],
+        ),
+    ]
+)
+
 get_data_components = dbc.Row(
     [
+        api_radio_components,
         dbc.Col(dbc.CardGroup([symbol_components])),
         dbc.Col(dbc.CardGroup([interval_components])),
     ],

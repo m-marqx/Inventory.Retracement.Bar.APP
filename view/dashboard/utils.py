@@ -73,6 +73,11 @@ indicators_filter = [
     {"label": "MACD", "value": "macd"},
 ]
 
+api_types = [
+    {"label": "Spot", "value": "spot"},
+    {"label": "Futures", "value": "coin_margined"},
+    {"label": "Mark Price", "value": "mark_price"},
+]
 
 def get_data(symbol, interval):
     symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
