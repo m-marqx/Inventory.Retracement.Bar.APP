@@ -26,6 +26,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    font-weight: 400;
     transition: background .15s ease-in-out,border .15s ease-in-out,box-shadow .15s ease-in-out,color .15s ease-in-out;
 }
 
@@ -49,11 +50,11 @@
 
 .btn.btn-primary:active{
     position: relative;
-    color: rgba(31,38,17,0.85) !important;
+    color: rgba(31,38,17,0.85);
     padding: 1rem 1.5rem;
     border: none;
     border-radius: 10px;
-    background: #c9e75d !important;
+    background: #c9e75d;
     box-shadow: none !important;
     transition: background .3s ease-in-out, color .3s ease-in-out;
 }
