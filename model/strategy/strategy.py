@@ -275,6 +275,7 @@ class CalculateResults(BaseStrategy):
             self.df_filtered["Result"],
         )
 
+        #Update Result column with broker emulator
         DataProcess(self.df_filtered).broker_emulator_result()
 
         self.df_filtered["Cumulative_Result"] = (
