@@ -29,10 +29,6 @@ from view.dashboard.utils import (
 from view.dashboard.graph import GraphLayout
 
 server = app.server
-
-data_frame = pd.DataFrame()
-
-
 # update the DropdownMenu items
 @app.callback(
     Output("ema_source_column", "label"),
@@ -240,6 +236,7 @@ def toggle_shape_collapse(n_clicks, is_open):
     Output("results", "figure"),
     Output("text_output", "children"),
     Input("run_button", "n_clicks"),
+    State('api_types', 'value'),
     State("symbol", "value"),
     State("interval", "label"),
     State("ema_source_column", "label"),
@@ -263,6 +260,7 @@ def toggle_shape_collapse(n_clicks, is_open):
 )
 def run_strategy(
     run_button,
+    api_type,
     symbol,
     interval,
     ema_source_column,
@@ -289,20 +287,37 @@ def run_strategy(
         raise dash.exceptions.PreventUpdate
 
     if "run_button" in ctx.triggered[0]["prop_id"]:
+
+        symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
+
+        print(f"api type: {api_type}")
+        if api_type in ("coin_margined", "mark_price"):
+            print(True)
+            if symbol.endswith("USD"):
+                data_symbol = f"{symbol}_PERP"
+                print("Modified symbol")
+            else:
+                data_symbol = f"{symbol}"
+                print("Still same symbol")
+        else:
+            print(False)
+            data_symbol = symbol
+
         data_path = pathlib.Path("model", "data")
-        data_symbol = f"{symbol}_PERP"
-        data_name = f"{data_symbol}_{interval}.parquet"
-        dataframe_path = data_path.joinpath(data_name)
+        data_name = f"{data_symbol}_{interval}_{api_type}"
+        data_file = f"{data_name}.parquet"
+        dataframe_path = data_path.joinpath(data_file)
+        print(dataframe_path)
 
         if dataframe_path.is_file():
             data_frame = pd.read_parquet(dataframe_path)
-            data_frame = KlineAPI(data_symbol, interval).update_data()
-            print(f"Dataframe for {data_symbol}_{interval} is updated")
+            data_frame = KlineAPI(data_symbol, interval, api=api_type).update_data()
+            print(f"Dataframe for {data_name} is updated")
 
         else:
-            data_frame = get_data(symbol, interval)
+            data_frame = get_data(data_symbol, interval, api_type)
 
-        SaveDataFrame(data_frame).to_parquet(f"{data_symbol}_{interval}")
+        SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
         ema_bool = False
         macd_bool = False
@@ -353,11 +368,11 @@ def run_strategy(
         )
 
         data_frame = builder(data_frame, builder_params)
-        fig = GraphLayout(data_frame).plot_cumulative_results(symbol, interval)
+        fig = GraphLayout(data_frame).plot_cumulative_results(data_symbol, interval)
         text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
 
     return fig, text_output
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
