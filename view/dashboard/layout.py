@@ -44,6 +44,40 @@ app.layout = dbc.Container(
             [
                 dbc.Col(
                     [
+                        dbc.Col(
+                            dcc.Graph(
+                                id="results",
+                                style={
+                                    "height": "80vh",
+                                },
+                                figure={
+                                        "layout": {
+                                            "paper_bgcolor": "rgba(0,0,0,0)",
+                                            "plot_bgcolor": "rgba(0,0,0,0)",
+                                            "xaxis": {
+                                                "showgrid": False,
+                                                "showticklabels": False,
+                                                "zeroline": False,
+                                                "title": ""
+                                            },
+                                            "yaxis": {
+                                                "showticklabels": False,
+                                                "zeroline": False,
+                                                "gridcolor":"#595959",
+                                                "griddash":"dash",
+                                                "title": "",
+                                                "exponentformat":"none",
+                                            }
+                                        }
+                                },
+                                className="graph",
+                            ),
+                        ),
+                    ],
+                    width=9,
+                ),
+                dbc.Col(
+                    [
                         dbc.Col([
                             dbc.Button(
                                 [
@@ -176,40 +210,6 @@ app.layout = dbc.Container(
                             )
                     ])
                     ],
-                ),
-                dbc.Col(
-                    [
-                        html.Div(
-                            dcc.Graph(
-                                id="results",
-                                style={
-                                    "height": "80vh",
-                                },
-                                figure={
-                                        "layout": {
-                                            "paper_bgcolor": "rgba(0,0,0,0)",
-                                            "plot_bgcolor": "rgba(0,0,0,0)",
-                                            "xaxis": {
-                                                "showgrid": False,
-                                                "showticklabels": False,
-                                                "zeroline": False,
-                                                "title": ""
-                                            },
-                                            "yaxis": {
-                                                "showticklabels": False,
-                                                "zeroline": False,
-                                                "gridcolor":"#595959",
-                                                "griddash":"dash",
-                                                "title": "",
-                                                "exponentformat":"none",
-                                            }
-                                        }
-                                },
-                                className="graph",
-                            ),
-                        ),
-                    ],
-                    width=9,
                 ),
             ],
         ),
