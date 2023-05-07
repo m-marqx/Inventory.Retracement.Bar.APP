@@ -19,10 +19,22 @@ class KlineAPI:
                 "Klines function should be either" "'coin_margined', 'mark_price' or 'spot'"
             )
 
+    def get_exchange_symbol_info(self):
+        if self.api == "mark_price":
+            raise ValueError("Mark Price doesn't have a exchange simbol info")
+        if self.api == "coin_margined":
+            info = self.client.futures_coin_exchange_info()
+        else:
+            info = self.client.get_exchange_info()
+
+        info_df = pd.DataFrame(info["symbols"])
+        symbol_info = info_df.query(f"symbol == '{self.symbol}'")
+        return symbol_info
+
     def get_ticker_info(self):
         if self.api == "mark_price":
             raise ValueError("Mark Price doesn't have a ticker info")
-        elif self.api == "coin_margined":
+        if self.api == "coin_margined":
             info = self.client.futures_coin_exchange_info()
         else:
             info = self.client.get_exchange_info()
