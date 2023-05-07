@@ -6,23 +6,23 @@ import pathlib
 
 
 class KlineAPI:
-    def __init__(self, symbol, interval, api="futures"):
+    def __init__(self, symbol, interval, api="coin_margined"):
         self.client = Client()
         self.symbol = symbol
         self.interval = interval
         self.utils = KlineTimes(self.symbol, self.interval)
         self.klines = None
         self.api = api.lower()
-        self.api_list = ["futures", "mark price", "spot"]
+        self.api_list = ["coin_margined", "mark_price", "spot"]
         if self.api not in self.api_list:
             raise ValueError(
-                "Klines function should be either" "'futures', 'mark price' or 'spot'"
+                "Klines function should be either" "'coin_margined', 'mark_price' or 'spot'"
             )
 
     def get_ticker_info(self):
-        if self.api == "mark price":
+        if self.api == "mark_price":
             raise ValueError("Mark Price doesn't have a ticker info")
-        elif self.api == "futures":
+        elif self.api == "coin_margined":
             info = self.client.futures_coin_exchange_info()
         else:
             info = self.client.get_exchange_info()
@@ -46,9 +46,9 @@ class KlineAPI:
         startTime,
         endTime,
     ):
-        if self.api == "futures":
+        if self.api == "coin_margined":
             api_get_klines = self.client.futures_coin_klines
-        elif self.api == "mark price":
+        elif self.api == "mark_price":
             api_get_klines = self.client.futures_coin_mark_price_klines
         else:  # spot
             api_get_klines = self.client.get_klines
@@ -67,7 +67,7 @@ class KlineAPI:
         start_time=1502942400000,
     ):
         if (
-            self.api == "futures" or self.api == "mark price"
+            self.api == "coin_margined" or self.api == "mark_price"
         ) and start_time < 1597118400000:
             start_time = 1597118400000
 
