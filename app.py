@@ -311,7 +311,8 @@ def run_strategy(
 
         if dataframe_path.is_file():
             data_frame = pd.read_parquet(dataframe_path)
-            data_frame = KlineAPI(data_symbol, interval, api=api_type).update_data()
+            kline_api = KlineAPI(data_symbol, interval, api_type)
+            data_frame = kline_api.update_data()
             print(f"Dataframe for {data_name} is updated")
 
         else:
@@ -368,7 +369,8 @@ def run_strategy(
         )
 
         data_frame = builder(data_frame, builder_params)
-        fig = GraphLayout(data_frame).plot_cumulative_results(data_symbol, interval)
+        graph_layout = GraphLayout(data_frame,data_symbol, interval, api_type)
+        fig = graph_layout.plot_cumulative_results()
         text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
 
     return fig, text_output
