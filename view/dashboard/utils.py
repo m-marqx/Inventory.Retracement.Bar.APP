@@ -79,12 +79,8 @@ api_types = [
     {"label": "Mark Price", "value": "mark_price"},
 ]
 
-def get_data(symbol, interval):
-    symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
-    if symbol.endswith("USD"):
-        symbol += "_PERP"
-
-    fapi = KlineAPI(symbol, interval)
+def get_data(symbol, interval, api):
+    fapi = KlineAPI(symbol, interval, api)
     data_frame = fapi.get_Klines().to_OHLC_DataFrame()
     return data_frame
 
