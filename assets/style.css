@@ -305,6 +305,19 @@
     }
 }
 
+.btn-group .form-check {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.btn-group {
+    box-shadow: none !important;
+    background: none !important;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
 .btn-ghost {
     background: none !important;
     color: rgba(255, 255, 255,0.45) !important;
