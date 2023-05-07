@@ -91,7 +91,7 @@ class KlineAPI:
 
     def update_data(self):
         data_path = pathlib.Path("model", "data")
-        data_name = f"{self.symbol}_{self.interval}.parquet"
+        data_name = f"{self.symbol}_{self.interval}_{self.api}.parquet"
         dataframe_path = data_path.joinpath(data_name)
         data_frame = pd.read_parquet(dataframe_path)
         last_time = data_frame["open_time_ms"][-1]
