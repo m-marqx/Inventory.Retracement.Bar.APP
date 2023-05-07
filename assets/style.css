@@ -305,6 +305,18 @@
     }
 }
 
+.btn-ghost {
+    background: none !important;
+    color: rgba(255, 255, 255,0.45) !important;
+    font-weight: 400 !important;
+}
+
+.btn-ghost.btn.btn-primary.active {
+    background: none !important;
+    color: #c9e75d !important;
+
+}
+
 body {
     background: var(--gray-11);
 }
