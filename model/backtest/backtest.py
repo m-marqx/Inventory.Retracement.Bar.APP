@@ -17,7 +17,7 @@ from model.strategy.params.strategy_params import (
 
 from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
-from model.utils.backtest_params import BacktestParams
+from .backtest_params import BacktestParams
 
 class Backtest:
     def __init__(self, dataframe: pd.DataFrame):
@@ -78,7 +78,7 @@ class Backtest:
     ):
         df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params().ema_params),
+            'ema_params': ParameterGrid(params.ema_params),
             'irb_params': [IrbParams()],
             'indicators_params': [IndicatorsParams()],
             'trend_params': [TrendParams(ema=True)]
@@ -134,10 +134,10 @@ class Backtest:
     ):
         df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params().ema_params),
-            'irb_params': ParameterGrid(params().irb_params),
-            'indicators_params': ParameterGrid(params().indicators_params),
-            'trend_params': ParameterGrid(params().trend_params),
+            'ema_params': ParameterGrid(params.ema_params),
+            'irb_params': ParameterGrid(params.irb_params),
+            'indicators_params': ParameterGrid(params.indicators_params),
+            'trend_params': ParameterGrid(params.trend_params),
         }
 
         results = Parallel(n_jobs=n_jobs)(
