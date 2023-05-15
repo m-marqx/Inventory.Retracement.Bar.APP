@@ -1,7 +1,7 @@
-import dash
-import plotly.express as px
-import pandas as pd
 import pathlib
+import dash
+import pandas as pd
+import view.dashboard.pages.home
 from dash.dependencies import Input, Output, State
 
 from controller.api.klines_api import KlineAPI
@@ -375,6 +375,18 @@ def run_strategy(
 
     return fig, text_output
 
+@app.callback(
+    Output("home", "active"),
+    Input("home", "n_clicks"),
+)
+def toggle_active_links(home):
+    home = True
+    ctx = dash.callback_context
+    if "home" in ctx.triggered[0]["prop_id"]:
+        home = True
+
+    return home
 
 if __name__ == "__main__":
+
     app.run(debug=True)

@@ -1,5 +1,4 @@
 from controller.api.klines_api import KlineAPI
-import dash_bootstrap_components as dbc
 
 from model.strategy.params.indicators_params import (
     EmaParams,
@@ -16,68 +15,6 @@ from model.strategy.indicators import BuilderSource
 from model.strategy.strategy import BuilderStrategy
 from pydantic import BaseModel
 
-
-ema_ohlc_items = [
-    dbc.DropdownMenuItem("Close", id="ema_close"),
-    dbc.DropdownMenuItem("Open", id="ema_open"),
-    dbc.DropdownMenuItem("High", id="ema_high"),
-    dbc.DropdownMenuItem("Low", id="ema_low"),
-]
-
-macd_ohlc_items = [
-    dbc.DropdownMenuItem("Close", id="macd_close"),
-    dbc.DropdownMenuItem("Open", id="macd_open"),
-    dbc.DropdownMenuItem("High", id="macd_high"),
-    dbc.DropdownMenuItem("Low", id="macd_low"),
-]
-
-cci_ohlc_items = [
-    dbc.DropdownMenuItem("Close", id="cci_close"),
-    dbc.DropdownMenuItem("Open", id="cci_open"),
-    dbc.DropdownMenuItem("High", id="cci_high"),
-    dbc.DropdownMenuItem("Low", id="cci_low"),
-]
-
-source_ohlc_items = [
-    dbc.DropdownMenuItem("Close", id="source_close"),
-    dbc.DropdownMenuItem("Open", id="source_open"),
-    dbc.DropdownMenuItem("High", id="source_high"),
-    dbc.DropdownMenuItem("Low", id="source_low"),
-]
-
-cci_ma_type_items = [
-    dbc.DropdownMenuItem("SMA", id="sma"),
-    dbc.DropdownMenuItem("EMA", id="ema"),
-]
-
-intervals = [
-    dbc.DropdownMenuItem("1min", id="1m"),
-    dbc.DropdownMenuItem("5min", id="5m"),
-    dbc.DropdownMenuItem("15min", id="15m"),
-    dbc.DropdownMenuItem("30min", id="30m"),
-    dbc.DropdownMenuItem("1h", id="1h"),
-    dbc.DropdownMenuItem("2h", id="2h"),
-    dbc.DropdownMenuItem("4h", id="4h"),
-    dbc.DropdownMenuItem("6h", id="6h"),
-    dbc.DropdownMenuItem("8h", id="8h"),
-    dbc.DropdownMenuItem("12h", id="12h"),
-    dbc.DropdownMenuItem("1d", id="1d"),
-    dbc.DropdownMenuItem("3d", id="3d"),
-    dbc.DropdownMenuItem("1w", id="1w"),
-    dbc.DropdownMenuItem("1M", id="1M"),
-]
-
-indicators_filter = [
-    {"label": "EMA", "value": "ema"},
-    {"label": "CCI", "value": "cci"},
-    {"label": "MACD", "value": "macd"},
-]
-
-api_types = [
-    {"label": "Spot", "value": "spot"},
-    {"label": "Futures", "value": "coin_margined"},
-    {"label": "Mark Price", "value": "mark_price"},
-]
 
 def get_data(symbol, interval, api):
     fapi = KlineAPI(symbol, interval, api)
