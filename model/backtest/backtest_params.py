@@ -22,9 +22,9 @@ class IndicatorsParamsBacktest(BaseModel):
 
 
 class TrendParamsBacktest(BaseModel):
-    ema: List[bool] = [True, False]
-    macd: List[bool] = [True, False]
-    cci: List[bool] = [True, False]
+    ema: List[bool] = [True]
+    macd: List[bool] = [False]
+    cci: List[bool] = [False]
 
 
 class BacktestParams(BaseModel):
