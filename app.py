@@ -29,6 +29,8 @@ from view.dashboard.utils import (
 from view.dashboard.graph import GraphLayout
 
 server = app.server
+
+
 # update the DropdownMenu items
 @app.callback(
     Output("ema_source_column", "label"),
@@ -236,7 +238,7 @@ def toggle_shape_collapse(n_clicks, is_open):
     Output("results", "figure"),
     Output("text_output", "children"),
     Input("run_button", "n_clicks"),
-    State('api_types', 'value'),
+    State("api_types", "value"),
     State("symbol", "value"),
     State("interval", "label"),
     State("ema_source_column", "label"),
@@ -287,7 +289,6 @@ def run_strategy(
         raise dash.exceptions.PreventUpdate
 
     if "run_button" in ctx.triggered[0]["prop_id"]:
-
         symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
 
         print(f"api type: {api_type}")
@@ -369,11 +370,12 @@ def run_strategy(
         )
 
         data_frame = builder(data_frame, builder_params)
-        graph_layout = GraphLayout(data_frame,data_symbol, interval, api_type)
+        graph_layout = GraphLayout(data_frame, data_symbol, interval, api_type)
         fig = graph_layout.plot_cumulative_results()
         text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
 
     return fig, text_output
+
 
 @app.callback(
     Output("home", "active"),
@@ -381,18 +383,26 @@ def run_strategy(
     Input("home", "n_clicks"),
     Input("backtest", "n_clicks"),
 )
-def toggle_active_links(home,backtest):
-    home = True
+def toggle_active_links(home, backtest):
     ctx = dash.callback_context
-    if "home" in ctx.triggered[0]["prop_id"]:
-        home = True
-        backtest = False
-    if "backtest" in ctx.triggered[0]["prop_id"]:
-        backtest = True
-        home = False
 
-    return home, backtest
+    pages = {
+        "home": True,
+        "backtest": False,
+    }
+
+    button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+
+    for i in pages:
+        if i == button_id:
+            pages[i] = True
+        else:
+            pages[i] = False
+
+    pages_values = list(pages.values())
+
+    return pages_values[0], pages_values[1]
+
 
 if __name__ == "__main__":
-
     app.run(debug=True)
