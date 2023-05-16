@@ -4,10 +4,25 @@ from .utils import (
     intervals,
     api_types,
 )
+
 menu = dbc.Nav(
     [
-        dbc.NavItem(dbc.NavLink(["DASHBOARD"], href="/", active=True, id="home")),
-        dbc.NavItem(dbc.NavLink(["BACKTEST"], href="/backtest", active=False, id="backtest")),
+        dbc.NavItem(
+            dbc.NavLink(
+                ["DASHBOARD"],
+                href="/",
+                active=True,
+                id="home",
+            )
+        ),
+        dbc.NavItem(
+            dbc.NavLink(
+                ["BACKTEST"],
+                href="/backtest",
+                active=False,
+                id="backtest",
+            )
+        ),
     ],
     pills=False,
 )
@@ -17,7 +32,7 @@ navbar_components = dbc.Navbar(
         dbc.NavbarToggler(id="navbar-toggler"),
         dbc.Collapse(menu, id="navbar-collapse", navbar=True),
     ],
-    style={"height":"32px"},
+    style={"height": "32px"},
 )
 
 symbol_components = dbc.Row(
@@ -68,9 +83,9 @@ api_radio_components = dbc.Row(
                     input_class_name="btn-ghost btn-check",
                     label_class_name="btn-ghost btn btn-primary",
                     label_checked_class_name="active",
-                    value='futures',
+                    value="futures",
                 ),
-                dbc.Col(id='api_types_output'),
+                dbc.Col(id="api_types_output"),
             ],
         ),
     ]
