@@ -377,15 +377,21 @@ def run_strategy(
 
 @app.callback(
     Output("home", "active"),
+    Output("backtest", "active"),
     Input("home", "n_clicks"),
+    Input("backtest", "n_clicks"),
 )
-def toggle_active_links(home):
+def toggle_active_links(home,backtest):
     home = True
     ctx = dash.callback_context
     if "home" in ctx.triggered[0]["prop_id"]:
         home = True
+        backtest = False
+    if "backtest" in ctx.triggered[0]["prop_id"]:
+        backtest = True
+        home = False
 
-    return home
+    return home, backtest
 
 if __name__ == "__main__":
 
