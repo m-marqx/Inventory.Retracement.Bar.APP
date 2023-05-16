@@ -92,7 +92,6 @@ def layout():
                                             ),
                                             id="data_collapse",
                                             is_open=True,
-                                            style={"margin-top": "10px"},
                                         ),
                                         dbc.Button(
                                             [
@@ -124,7 +123,6 @@ def layout():
                                             ),
                                             id="operating_collapse",
                                             is_open=False,
-                                            style={"margin-top": "10px"},
                                         ),
                                         dbc.Button(
                                             [
@@ -140,7 +138,6 @@ def layout():
                                             color="secondary",
                                         ),
                                         dbc.Collapse(
-                                            style={"margin-top": "10px"},
                                             children=dbc.Card(
                                                 dbc.CardBody(
                                                     dbc.Row(
@@ -181,7 +178,6 @@ def layout():
                                             color="secondary",
                                         ),
                                         dbc.Collapse(
-                                            style={"margin-top": "10px"},
                                             children=dbc.Card(
                                                 dbc.CardBody(
                                                     filter_components,
