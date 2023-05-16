@@ -53,5 +53,7 @@ def display_page_content(pathname):
     path = app.strip_relative_path(pathname)
     if not path:
         return layout.layout()
-    else:
-        return "404"
+    if path == "backtest":
+        return "Work in progress"
+
+    return "404"
