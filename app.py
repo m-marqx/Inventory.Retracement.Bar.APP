@@ -168,12 +168,12 @@ def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1):
 
 ### Callback to make shape parameters menu expand
 @app.callback(
-    Output("shape_collapse", "is_open"),
-    Output("shape_icon", "className"),
-    Input("shape_button", "n_clicks"),
-    State("shape_collapse", "is_open"),
+    Output("strategy_params_collapse", "is_open"),
+    Output("strategy_params_icon", "className"),
+    Input("strategy_params_button", "n_clicks"),
+    State("strategy_params_collapse", "is_open"),
 )
-def toggle_shape_collapse(n_clicks, is_open):
+def toggle_strategy_params_collapse(n_clicks, is_open):
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 

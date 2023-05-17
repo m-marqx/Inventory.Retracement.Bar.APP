@@ -129,10 +129,10 @@ def layout():
                                                 "Modify Strategy Parameters",
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
-                                                    id="shape_icon",
+                                                    id="strategy_params_icon",
                                                 ),
                                             ],
-                                            id="shape_button",
+                                            id="strategy_params_button",
                                             className="d-grid gap-2 col-6 mx-auto w-100",
                                             outline=True,
                                             color="secondary",
@@ -160,7 +160,7 @@ def layout():
                                                     ),
                                                 )
                                             ),
-                                            id="shape_collapse",
+                                            id="strategy_params_collapse",
                                             is_open=False,
                                         ),
                                         dbc.Button(
