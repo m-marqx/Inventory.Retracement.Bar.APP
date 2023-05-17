@@ -219,12 +219,12 @@ def toggle_indicator_params_collapse(n_clicks, is_open):
 
 ### Callback to make coordinates menu expand
 @app.callback(
-    Output("coordinates_collapse", "is_open"),
-    Output("coordinates_icon", "className"),
-    Input("coordinates_button", "n_clicks"),
-    State("coordinates_collapse", "is_open"),
+    Output("trend_params_collapse", "is_open"),
+    Output("trend_params_icon", "className"),
+    Input("trend_params_button", "n_clicks"),
+    State("trend_params_collapse", "is_open"),
 )
-def toggle_shape_collapse(n_clicks, is_open):
+def toggle_strategy_params_collapse(n_clicks, is_open):
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 

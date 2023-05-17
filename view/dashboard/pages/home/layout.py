@@ -168,11 +168,11 @@ def layout():
                                                 "Modify Trend Parameters",
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
-                                                    id="coordinates_icon",
+                                                    id="trend_params_icon",
                                                     style={"transformY": "2px"},
                                                 ),
                                             ],
-                                            id="coordinates_button",
+                                            id="trend_params_button",
                                             className="d-grid gap-2 col-6 mx-auto w-100",
                                             outline=True,
                                             color="secondary",
@@ -187,7 +187,7 @@ def layout():
                                                     },
                                                 )
                                             ),
-                                            id="coordinates_collapse",
+                                            id="trend_params_collapse",
                                             is_open=False,
                                         ),
                                     ],
