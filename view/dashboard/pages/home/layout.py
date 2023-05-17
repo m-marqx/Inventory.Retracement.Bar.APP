@@ -98,10 +98,10 @@ def layout():
                                                 "Modify Indicators Parameters",
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
-                                                    id="operating_icon",
+                                                    id="indicator_params_icon",
                                                 ),
                                             ],
-                                            id="operating_button",
+                                            id="indicator_params_button",
                                             className="d-grid gap-2 col-6 mx-auto w-100",
                                             outline=True,
                                             color="secondary",
@@ -121,7 +121,7 @@ def layout():
                                                     ),
                                                 ),
                                             ),
-                                            id="operating_collapse",
+                                            id="indicator_params_collapse",
                                             is_open=False,
                                         ),
                                         dbc.Button(
