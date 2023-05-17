@@ -185,12 +185,12 @@ def toggle_strategy_params_collapse(n_clicks, is_open):
 
 ### Callback to make get_data parameters menu expand
 @app.callback(
-    Output("data_collapse", "is_open"),
-    Output("data_icon", "className"),
-    Input("data_button", "n_clicks"),
-    State("data_collapse", "is_open"),
+    Output("get_data_collapse", "is_open"),
+    Output("get_data_icon", "className"),
+    Input("get_data_button", "n_clicks"),
+    State("get_data_collapse", "is_open"),
 )
-def toggle_shape_collapse(n_clicks, is_open):
+def toggle_get_data_collapse(n_clicks, is_open):
     if not n_clicks:
         raise dash.exceptions.PreventUpdate
 

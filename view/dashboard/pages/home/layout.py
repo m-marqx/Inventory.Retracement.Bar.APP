@@ -72,10 +72,10 @@ def layout():
                                                 "Get Data",
                                                 html.I(
                                                     className="fa fa-chevron-up ml-2",
-                                                    id="data_icon",
+                                                    id="get_data_icon",
                                                 ),
                                             ],
-                                            id="data_button",
+                                            id="get_data_button",
                                             className="d-grid gap-2 col-6 mx-auto w-100",
                                             outline=True,
                                             color="secondary",
@@ -90,7 +90,7 @@ def layout():
                                                     },
                                                 ),
                                             ),
-                                            id="data_collapse",
+                                            id="get_data_collapse",
                                             is_open=True,
                                         ),
                                         dbc.Button(
