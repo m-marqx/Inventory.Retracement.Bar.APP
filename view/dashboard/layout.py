@@ -3,7 +3,9 @@ import dash
 from dash import dcc
 import dash_bootstrap_components as dbc
 
-from view.dashboard.pages import layout
+from view.dashboard.pages import (
+    main_page,
+)
 from view.dashboard.pages.general.components import navbar_components
 
 from dash.dependencies import Input, Output

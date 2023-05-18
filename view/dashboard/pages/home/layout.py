@@ -23,7 +23,7 @@ app = dash.Dash(
 )
 
 
-def layout():
+def main_page():
     return [
         dbc.Container(
             [

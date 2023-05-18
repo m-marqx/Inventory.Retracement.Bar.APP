@@ -1,1 +1,1 @@
-from .home import layout
+from .home.layout import main_page
