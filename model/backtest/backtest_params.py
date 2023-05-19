@@ -28,25 +28,25 @@ class TrendParamsBacktest(BaseModel):
 
 
 class BacktestParams(BaseModel):
-    ema_params: EmaParamsBacktest = dict(EmaParamsBacktest())
-    irb_params: IrbParamsBacktest = dict(IrbParamsBacktest())
-    indicators_params: IndicatorsParamsBacktest = dict(IndicatorsParamsBacktest())
-    trend_params: TrendParamsBacktest = dict(TrendParamsBacktest())
+    ema_params: EmaParamsBacktest = EmaParamsBacktest()
+    irb_params: IrbParamsBacktest = IrbParamsBacktest()
+    indicators_params: IndicatorsParamsBacktest = IndicatorsParamsBacktest()
+    trend_params: TrendParamsBacktest = TrendParamsBacktest()
 
     @property
     def total_combinations(self):
         num_combinations = (
-            len(self.ema_params["length"])
-            * len(self.ema_params["source_column"])
-            * len(self.irb_params["lowestlow"])
-            * len(self.irb_params["payoff"])
-            * len(self.irb_params["ticksize"])
-            * len(self.irb_params["wick_percentage"])
-            * len(self.indicators_params["ema_column"])
-            * len(self.indicators_params["macd_histogram_trend_value"])
-            * len(self.indicators_params["cci_trend_value"])
-            * len(self.trend_params["ema"])
-            * len(self.trend_params["macd"])
-            * len(self.trend_params["cci"])
+            len(self.ema_params.length)
+            * len(self.ema_params.source_column)
+            * len(self.irb_params.lowestlow)
+            * len(self.irb_params.payoff)
+            * len(self.irb_params.ticksize)
+            * len(self.irb_params.wick_percentage)
+            * len(self.indicators_params.ema_column)
+            * len(self.indicators_params.macd_histogram_trend_value)
+            * len(self.indicators_params.cci_trend_value)
+            * len(self.trend_params.ema)
+            * len(self.trend_params.macd)
+            * len(self.trend_params.cci)
         )
         return num_combinations
