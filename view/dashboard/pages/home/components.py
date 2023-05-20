@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
+from view.dashboard.pages.lang.en_US import lang
 
 from .utils import (
     ema_ohlc_items,
@@ -14,7 +15,7 @@ from .utils import (
 indicators_first_col = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("EMA Source Column"),
+            dbc.Label(lang["EMA_SOURCE_COLUMN"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -28,7 +29,7 @@ indicators_first_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "EMA Length",
+                lang["EMA_LENGTH"],
                 html_for="ema_length",
                 width=45,
             ),
@@ -44,7 +45,7 @@ indicators_first_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "MACD Fast Length",
+                lang["MACD_FAST_LENGTH"],
                 html_for="macd_fast_length",
                 width=45,
             ),
@@ -60,7 +61,7 @@ indicators_first_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "CCI Source Column",
+                lang["CCI_SOURCE_COLUMN"],
                 html_for="cci_source_column",
                 width=45,
             ),
@@ -76,7 +77,7 @@ indicators_first_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "CCI Length",
+                lang["CCI_LENGTH"],
                 html_for="cci_length",
                 width=45,
             ),
@@ -95,7 +96,7 @@ indicators_first_col = dbc.Row(
 indicators_second_col = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("MACD Source Column"),
+            dbc.Label(lang["MACD_SOURCE_COLUMN"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -110,7 +111,7 @@ indicators_second_col = dbc.Row(
         dcc.Store(id="macd_source_column_value"),
         dbc.Col(
             dbc.Label(
-                "MACD Signal Length",
+                lang["MACD_SIGNAL_LENGTH"],
                 html_for="macd_signal_length",
                 width=45,
             ),
@@ -126,7 +127,7 @@ indicators_second_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "MACD Slow Length",
+                lang["MACD_SLOW_LENGTH"],
                 html_for="macd_slow_length",
                 width=45,
             ),
@@ -142,7 +143,7 @@ indicators_second_col = dbc.Row(
         ),
         dbc.Col(
             dbc.Label(
-                "CCI MA Type",
+                lang["CCI_MA_TYPE"],
                 html_for="cci_ma_type",
                 width=45,
             ),
@@ -151,14 +152,14 @@ indicators_second_col = dbc.Row(
         dbc.Col(
             dbc.DropdownMenu(
                 children=cci_ma_type_items,
-                label="CCI MA Type",
+                label=lang["CCI_MA_TYPE"],
                 id="cci_ma_type",
             ),
             width=45,
         ),
         dbc.Col(
             dbc.Label(
-                "CCI Constant",
+                lang["CCI_CONSTANT"],
                 html_for="cci_constant",
                 width=45,
             ),
@@ -181,7 +182,7 @@ indicators_parameters_col2 = dbc.CardGroup([indicators_second_col])
 irb_components_first_col = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("IRB Lowest Low"),
+            dbc.Label(lang["LOWEST_LOW"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -194,7 +195,7 @@ irb_components_first_col = dbc.Row(
             width=45,
         ),
         dbc.Col(
-            dbc.Label("IRB Payoff"),
+            dbc.Label(lang["PAYOFF"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -211,7 +212,7 @@ irb_components_first_col = dbc.Row(
 irb_components_second_col = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("IRB Tick Size"),
+            dbc.Label(lang["TICK_SIZE"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -224,7 +225,7 @@ irb_components_second_col = dbc.Row(
             width=45,
         ),
         dbc.Col(
-            dbc.Label("IRB Wick Percentage"),
+            dbc.Label(lang["WICK_PERCENTAGE"]),
             width=45,
             style={
                 "margin-top": "10px",
@@ -248,7 +249,7 @@ irb_parameters_col2 = dbc.CardGroup([irb_components_second_col])
 macd_bullish_value_components = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("MACD Bullish Value"),
+            dbc.Label(lang["MACD_BULLISH_VALUE"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -266,7 +267,7 @@ macd_bullish_value_components = dbc.Row(
 cci_bullish_value_components = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("CCI Bullish Value"),
+            dbc.Label(lang["CCI_BULLISH_VALUE"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -291,7 +292,7 @@ macd_cci_components = dbc.Row(
 filter_components = dbc.Row(
     [
         dbc.Col(
-            dbc.Label("Crossover Price Source"),
+            dbc.Label(lang["CROSSOVER_PRICE_SOURCE"]),
             width=45,
             style={"margin-top": "10px"},
         ),
@@ -306,7 +307,7 @@ filter_components = dbc.Row(
         macd_cci_components,
         dbc.Col(
             html.Label(
-                "Activate Indicator",
+                lang["ACTIVATE_INDICATOR"],
                 style={
                     "font-weight": "bold",
                     "font-size": "20px",

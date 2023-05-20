@@ -2,6 +2,9 @@
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
+from view.dashboard.pages.general.components import get_data_components
+from view.dashboard.pages.lang.en_US import lang
+
 from .components import (
     indicators_parameters_col1,
     indicators_parameters_col2,
@@ -9,8 +12,6 @@ from .components import (
     irb_parameters_col2,
     filter_components,
 )
-
-from view.dashboard.pages.general.components import get_data_components
 
 theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
@@ -196,7 +197,7 @@ def main_page():
                                 dbc.Col(
                                     [
                                         dbc.Button(
-                                            "Run Strategy",
+                                            lang["RUN_STRATEGY"],
                                             id="run_button",
                                             style={
                                                 "margin": "5px",
