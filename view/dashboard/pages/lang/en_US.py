@@ -43,4 +43,8 @@ lang = {
 
     #Main Button
     "RUN_STRATEGY" : "Run Strategy",
+
+    #Results
+    "EMPTY_RESULT": "Click Run Button to see results",
+
 }
