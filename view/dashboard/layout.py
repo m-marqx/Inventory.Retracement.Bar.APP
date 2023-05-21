@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 
 from view.dashboard.pages import (
     main_page,
+    backtest,
 )
 from view.dashboard.pages.general.components import navbar_components
 
@@ -56,6 +57,6 @@ def display_page_content(pathname):
     if not path:
         return main_page()
     if path == "backtest":
-        return "Work in progress"
+        return backtest()
 
     return "404"
