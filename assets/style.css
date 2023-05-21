@@ -15,6 +15,30 @@
     background: var(--gray-10);
 }
 
+.dropdown-toggle.nav-link, .navbar {
+    background: var(--gray-10) !important;
+}
+
+.dropdown-toggle.nav-link:hover {
+    background: var(--gray-10) !important;
+}
+
+.nav-link-lang:hover {
+    border: 2px solid #c9e75d;
+    box-shadow: none !important;
+}
+
+.dropdown-menu.show.dropdown-menu-end {
+    display: grid;
+    padding: 0px;
+    background: none !important;
+    align-content: center;
+    justify-items: end;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    margin-top: 0px !important;
+}
+
 .btn {
     position: relative;
     border-radius: 10px;
@@ -234,7 +258,7 @@
 .nav-link:hover{
     color: #c9e75d;
     box-shadow: 0 2px 0 0 #c9e75d inset;
-    transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out, border-top ease-in-out .2s;
+    transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .nav-link.active {

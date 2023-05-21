@@ -1,4 +1,6 @@
 import dash_bootstrap_components as dbc
+from dash import html
+from view.dashboard.pages.lang import en_US, pt_BR
 
 from .utils import (
     intervals,
@@ -9,7 +11,7 @@ menu = dbc.Nav(
     [
         dbc.NavItem(
             dbc.NavLink(
-                ["DASHBOARD"],
+                "DASHBOARD",
                 href="/",
                 active=True,
                 id="home",
@@ -17,20 +19,50 @@ menu = dbc.Nav(
         ),
         dbc.NavItem(
             dbc.NavLink(
-                ["BACKTEST"],
+                "BACKTEST",
                 href="/backtest",
                 active=False,
                 id="backtest",
             )
         ),
     ],
-    pills=False,
+)
+
+lang_menu = dbc.Col(
+    [
+        dbc.NavItem(
+            dbc.NavLink(
+                "EN",
+                href="?lang=en_US",
+                active="partial",
+                id="en_US_lang",
+                class_name="nav-link-lang"
+            )
+        ),
+        dbc.NavItem(
+            dbc.NavLink(
+                "PT",
+                href="?lang=pt_BR",
+                active=False,
+                id="pt_BR_lang",
+                class_name="nav-link-lang"
+            )
+        ),
+    ],
+    id="lang_menu",
+    width=5,
 )
 
 navbar_components = dbc.Navbar(
     [
-        dbc.NavbarToggler(id="navbar-toggler"),
         dbc.Collapse(menu, id="navbar-collapse", navbar=True),
+        dbc.DropdownMenu(
+            lang_menu,
+            id="navbar-dropdown",
+            nav=True,
+            align_end=True,
+            label="文/A",
+        ),
     ],
     style={"height": "32px"},
 )
