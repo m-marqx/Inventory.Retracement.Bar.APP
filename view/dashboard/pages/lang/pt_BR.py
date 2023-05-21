@@ -1,4 +1,4 @@
-lang = {
+pt_BR = {
     # Obter Dados
     "GET_DATA_BUTTON": "Obter Dados",
     "SPOT": "Spot",

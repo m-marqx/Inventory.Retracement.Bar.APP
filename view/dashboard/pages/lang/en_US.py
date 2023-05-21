@@ -1,4 +1,4 @@
-lang = {
+en_US = {
     # Get Data
     "GET_DATA_BUTTON" : "Get Data",
     "SPOT" : "Spot",
