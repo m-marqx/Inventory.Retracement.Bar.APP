@@ -1,11 +1,13 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 
+from .utils import DropdownMenuItems
 
 
 class MainPageComponents:
     def __init__(self, lang):
         self.lang = lang
+        self.dropdown_menu_item = DropdownMenuItems(lang)
 
     @property
     def indicators_first_col(self):
@@ -18,7 +20,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
-                        children=ema_ohlc_items,
+                        children=self.dropdown_menu_item.ema_ohlc_items,
                         label="Column",
                         id="ema_source_column",
                     ),
@@ -66,7 +68,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
-                        children=cci_ohlc_items,
+                        children=self.dropdown_menu_item.cci_ohlc_items,
                         label="Column",
                         id="cci_source_column",
                     ),
@@ -102,7 +104,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
-                        children=macd_ohlc_items,
+                        children=self.dropdown_menu_item.macd_ohlc_items,
                         label="Column",
                         id="macd_source_column",
                     ),
@@ -151,7 +153,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
-                        children=cci_ma_type_items,
+                        children=self.dropdown_menu_item.cci_ma_type_items,
                         label=self.lang["CCI_MA_TYPE"],
                         id="cci_ma_type",
                     ),
@@ -320,7 +322,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
-                        children=source_ohlc_items,
+                        children=self.dropdown_menu_item.source_ohlc_items,
                         label="Column",
                         id="source_crossover_column",
                     ),
@@ -340,7 +342,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.Checklist(
-                        indicators_filter,
+                        self.dropdown_menu_item.indicators_filter,
                         id="checklist",
                         input_class_name="btn-check",
                         label_class_name="btn btn-primary",
