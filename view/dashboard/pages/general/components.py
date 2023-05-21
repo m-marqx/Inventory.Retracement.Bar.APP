@@ -64,7 +64,6 @@ navbar_components = dbc.Navbar(
             label="文/A",
         ),
     ],
-    style={"height": "32px"},
 )
 
 symbol_components = dbc.Row(
