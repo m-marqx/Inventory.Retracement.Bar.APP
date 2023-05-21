@@ -1,13 +1,20 @@
 import dash_bootstrap_components as dbc
-from dash import html, dcc
+from dash import html, dcc, register_page
 
 from view.dashboard.pages.lang import en_US, pt_BR
 from view.dashboard.pages.general.components import get_data_components
 
 from .components import BacktestComponents
 
+register_page(
+    __name__,
+    path="/backtest",
+    title="Backtest",
+    name="backtest",
+    description="Rob Hoffman's Inventory Retracement Bar exhaustive search backtest",
+)
 
-def backtest(lang="en_US"):
+def layout(lang="en_US"):
     if lang == "en_US":
         lang = en_US
     elif lang == "pt_BR":
