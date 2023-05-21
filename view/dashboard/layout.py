@@ -54,7 +54,7 @@ app.layout = dbc.Container(
 def display_page_content(pathname):
     path = app.strip_relative_path(pathname)
     if not path:
-        return layout.layout()
+        return main_page()
     if path == "backtest":
         return "Work in progress"
 
