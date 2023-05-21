@@ -19,7 +19,11 @@ app = dash.Dash(
 )
 
 
-def main_page():
+def main_page(lang="en_US"):
+    if lang == "en_US":
+        lang = en_US
+    elif lang == "pt_BR":
+        lang = pt_BR
 
     main_page_components = MainPageComponents(lang)
 
@@ -68,7 +72,7 @@ def main_page():
                                     [
                                         dbc.Button(
                                             [
-                                                "Get Data",
+                                                lang["GET_DATA_BUTTON"],
                                                 html.I(
                                                     className="fa fa-chevron-up ml-2",
                                                     id="get_data_icon",
@@ -94,7 +98,7 @@ def main_page():
                                         ),
                                         dbc.Button(
                                             [
-                                                "Modify Indicators Parameters",
+                                                lang["MODIFY_INDICATORS_PARAMETERS_BUTTON"],
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
                                                     id="indicator_params_icon",
@@ -125,7 +129,7 @@ def main_page():
                                         ),
                                         dbc.Button(
                                             [
-                                                "Modify Strategy Parameters",
+                                                lang["MODIFY_STRATEGY_PARAMETERS_BUTTON"],
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
                                                     id="strategy_params_icon",
@@ -164,7 +168,7 @@ def main_page():
                                         ),
                                         dbc.Button(
                                             [
-                                                "Modify Trend Parameters",
+                                                lang["MODIFY_TREND_PARAMETERS_BUTTON"],
                                                 html.I(
                                                     className="fa fa-chevron-down ml-2",
                                                     id="trend_params_icon",
@@ -207,7 +211,7 @@ def main_page():
                                         ),
                                         dbc.Spinner(
                                             html.P(
-                                                "Click Run Button to see results",
+                                                lang["EMPTY_RESULT"],
                                                 id="text_output",
                                             ),
                                             color="primary",
