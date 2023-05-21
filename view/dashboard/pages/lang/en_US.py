@@ -29,7 +29,7 @@ lang = {
 
     # Modify Strategy Parameters
     "MODIFY_STRATEGY_PARAMETERS_BUTTON" : "Modify Strategy Parameters",
-    "LOWEST_LOW" : "IRB Lowest Low",
+    "LOWEST_LOW" : "Lowest Low",
     "TICK_SIZE" : "Tick Size",
     "PAYOFF" : "Payoff",
     "WICK_PERCENTAGE" : "Wick Percentage",
