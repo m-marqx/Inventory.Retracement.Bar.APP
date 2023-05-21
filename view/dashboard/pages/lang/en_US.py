@@ -47,4 +47,29 @@ lang = {
     #Results
     "EMPTY_RESULT": "Click Run Button to see results",
 
+    # Backtest
+    "MIN_LENGTH": "Min Length",
+    "MAX_LENGTH": "Max Length",
+
+    # Backtest Parameters
+    "MAX_EMA_LENGTH" : "Max EMA Length",
+    "MIN_EMA_LENGTH" : "Min EMA Length",
+
+    # Strategy Parameters
+    "MIN_LOWEST_LOW_LENGTH": "Min Lowest Low Length",
+    "MAX_LOWEST_LOW_LENGTH": "Max Lowest Low Length",
+
+    "MIN_PAYOFF" : "Min Payoff",
+    "MAX_PAYOFF" : "Max Payoff",
+
+    "MIN_WICK_PERCENTAGE" : "Min Wick Percentage",
+    "MAX_WICK_PERCENTAGE" : "Max Wick Percentage",
+
+    # Trend Parameters
+    "MIN_MACD_BULLISH_VALUE" : "Min MACD Bullish Value",
+    "MAX_MACD_BULLISH_VALUE" : "Max MACD Bullish Value",
+
+    "MIN_CCI_BULLISH_VALUE" : "Min CCI Bullish Value",
+    "MAX_CCI_BULLISH_VALUE" : "Max CCI Bullish Value",
+
 }

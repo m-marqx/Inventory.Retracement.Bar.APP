@@ -47,4 +47,30 @@ lang = {
     #Results
     "EMPTY_RESULT": "Clique no Botão Executar para ver os resultados",
 
+    # Backtest
+    "MIN_LENGTH": "Min Períodos",
+    "MAX_LENGTH": "Max Periodos",
+
+    # Parâmetros de Indicadores
+    "MAX_EMA_LENGTH": "Periodos Máximos da EMA",
+    "MIN_EMA_LENGTH": "Periodos Mínimos da EMA",
+
+
+    #Parâmetros de Estratégia
+    "MIN_LOWEST_LOW_LENGTH": "Periodos Mínimos da Mínima Mais Baixa",
+    "MAX_LOWEST_LOW_LENGTH": "Periodos Máximos da Mínima Mais Baixa",
+
+    "MIN_PAYOFF": "Payoff Mínimo",
+    "MAX_PAYOFF": "Payoff Máximo",
+
+    "MIN_WICK_PERCENTAGE": "Porcentagem Mínima do Wick",
+    "MAX_WICK_PERCENTAGE": "Porcentagem Máxima do Wick",
+
+    #Parâmetros de Tendência
+    "MIN_MACD_BULLISH_VALUE": "Valor Bullish Mínimo do MACD",
+    "MAX_MACD_BULLISH_VALUE": "Valor Bullish Máximo do MACD",
+
+    "MIN_CCI_BULLISH_VALUE": "Valor Bullish Mínimo do CCI",
+    "MAX_CCI_BULLISH_VALUE": "Valor Bullish Máximo do CCI",
+
 }
