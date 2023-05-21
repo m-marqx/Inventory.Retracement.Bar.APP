@@ -3,15 +3,10 @@ import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from view.dashboard.pages.general.components import get_data_components
-from view.dashboard.pages.lang.en_US import lang
+from view.dashboard.pages.lang import en_US, pt_BR
 
-from .components import (
-    indicators_parameters_col1,
-    indicators_parameters_col2,
-    irb_parameters_col1,
-    irb_parameters_col2,
-    filter_components,
-)
+from .components import MainPageComponents
+
 
 theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
@@ -25,6 +20,9 @@ app = dash.Dash(
 
 
 def main_page():
+
+    main_page_components = MainPageComponents(lang)
+
     return [
         dbc.Container(
             [
@@ -113,10 +111,10 @@ def main_page():
                                                     dbc.Row(
                                                         [
                                                             dbc.Col(
-                                                                indicators_parameters_col1,
+                                                                main_page_components.indicators_parameters_col1,
                                                             ),
                                                             dbc.Col(
-                                                                indicators_parameters_col2,
+                                                                main_page_components.indicators_parameters_col2,
                                                             ),
                                                         ]
                                                     ),
@@ -144,14 +142,14 @@ def main_page():
                                                     dbc.Row(
                                                         [
                                                             dbc.Col(
-                                                                irb_parameters_col1,
+                                                                main_page_components.irb_parameters_col1,
                                                                 style={
                                                                     "display": "flex",
                                                                     "flex-direction": "column",
                                                                 },
                                                             ),
                                                             dbc.Col(
-                                                                irb_parameters_col2,
+                                                                main_page_components.irb_parameters_col2,
                                                                 style={
                                                                     "display": "flex",
                                                                     "flex-direction": "column",
@@ -181,7 +179,7 @@ def main_page():
                                         dbc.Collapse(
                                             children=dbc.Card(
                                                 dbc.CardBody(
-                                                    filter_components,
+                                                    main_page_components.filter_components,
                                                     style={
                                                         "display": "flex",
                                                         "flex-direction": "column",
