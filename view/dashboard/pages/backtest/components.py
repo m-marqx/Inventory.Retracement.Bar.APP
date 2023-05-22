@@ -20,7 +20,7 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="min_backtest_ema_length",
-                            value=0,
+                            value=20,
                             type="number",
                         ),
                         width=45,
@@ -43,7 +43,7 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="max_backtest_ema_length",
-                            value=100,
+                            value=21,
                             type="number",
                         ),
                         width=45,
