@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from controller.api.klines_api import KlineAPI
 
 class GraphLayout:
@@ -83,4 +84,67 @@ class GraphLayout:
         column = "close"
         fig = px.line(x=self.data_frame.index, y=self.data_frame[column], color_discrete_sequence=[self.primary_color])
         self.fig_layout(fig, column)
+        return fig
+
+    def grouped_lines(self):
+        fig = go.Figure()
+        total_lines = self.data_frame.shape[1]
+
+        color_idx = 0
+        for i, col in enumerate(self.data_frame.columns):
+            if i % (total_lines // 5) == 0:
+                color_idx += 1
+            if color_idx == 1:
+                color = "#d89614"
+            elif color_idx == 2:
+                color = "#1668dc"
+            elif color_idx == 3:
+                color = "#642ab5"
+            elif color_idx == 4:
+                color = "#cb2b83"
+            else:
+                color = "#d32029"
+
+            fig.add_trace(
+                go.Scatter(
+                    y=self.data_frame[col],
+                    name=col,
+                    line=dict(color=color),
+                    hovertemplate="(%{x}, %{y})",
+                )
+            )
+
+
+        ticks = self.data_frame[self.data_frame.columns[0]].std() / 2
+
+        fig.update_layout(
+            paper_bgcolor=self.tranp_color,
+            plot_bgcolor=self.tranp_color,
+            title={
+                "text": f"{self.symbol} - {self.interval}",
+                "x": 0.5,
+                "font": {"color": self.title_color},
+            },
+            font=dict(
+                size=18,
+            ),
+            legend_title="Trade Signals",
+            showlegend=False,
+            xaxis_rangeslider_visible=False,
+            xaxis=dict(
+                showgrid=False,
+                color=self.title_color
+            ),
+            yaxis=dict(
+                zeroline=False,
+                showgrid=True,
+                gridwidth=1,
+                griddash="dash",
+                gridcolor=self.grid_color,
+                exponentformat="none",
+                dtick=ticks,
+                color=self.title_color
+            ),
+        )
+
         return fig
