@@ -78,7 +78,7 @@ class Backtest:
     ):
         df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params.ema_params),
+            'ema_params': ParameterGrid(params.ema_params.dict()),
             'irb_params': [IrbParams()],
             'indicators_params': [IndicatorsParams()],
             'trend_params': [TrendParams(ema=True)]
@@ -106,8 +106,8 @@ class Backtest:
     ):
         df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params.ema_params),
-            'irb_params': ParameterGrid(params.irb_params),
+            'ema_params': ParameterGrid(params.ema_params.dict()),
+            'irb_params': ParameterGrid(params.irb_params.dict()),
             'indicators_params': [IndicatorsParams()],
             'trend_params': [TrendParams(ema=True)]
         }
@@ -132,12 +132,11 @@ class Backtest:
         n_jobs=-1,
         params: BacktestParams = BacktestParams(),
     ):
-        df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params.ema_params),
-            'irb_params': ParameterGrid(params.irb_params),
-            'indicators_params': ParameterGrid(params.indicators_params),
-            'trend_params': ParameterGrid(params.trend_params),
+            'ema_params': ParameterGrid(params.ema_params.dict()),
+            'irb_params': ParameterGrid(params.irb_params.dict()),
+            'indicators_params': ParameterGrid(params.indicators_params.dict()),
+            'trend_params': ParameterGrid(params.trend_params.dict()),
         }
 
         results = Parallel(n_jobs=n_jobs)(
@@ -148,6 +147,8 @@ class Backtest:
                 TrendParams(**dict(params[3])),
             ) for params in product(*param_grid.values())
         )
+
+        df_result = {}
 
         for params, arr in zip(product(*param_grid.values()), results):
             df_result[arr[1][-1]] = arr[0][column]
@@ -162,9 +163,9 @@ class Backtest:
     ):
         df_result = {}
         param_grid = {
-            'ema_params': ParameterGrid(params.ema_params),
+            'ema_params': ParameterGrid(params.ema_params.dict()),
             'irb_params': [IrbParams()],
-            'indicators_params': ParameterGrid(params.indicators_params),
+            'indicators_params': ParameterGrid(params.indicators_params.dict()),
             'trend_params': [TrendParams(ema=True)]
         }
 
@@ -191,8 +192,8 @@ class Backtest:
         df_result = {}
         param_grid = {
             'ema_params': [EmaParams()],
-            'irb_params': ParameterGrid(params.irb_params),
-            'indicators_params': ParameterGrid(params.indicators_params),
+            'irb_params': ParameterGrid(params.irb_params.dict()),
+            'indicators_params': ParameterGrid(params.indicators_params.dict()),
             'trend_params': [TrendParams(ema=True)]
         }
 
