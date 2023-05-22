@@ -14,8 +14,6 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Label(
                             self.lang["MIN_EMA_LENGTH"],
-                            html_for="ema_length",
-                            width=45,
                         ),
                         style={"margin-top": "10px"},
                     ),
@@ -39,8 +37,6 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Label(
                             self.lang["MAX_EMA_LENGTH"],
-                            html_for="ema_length",
-                            width=45,
                         ),
                         style={"margin-top": "10px"},
                     ),
