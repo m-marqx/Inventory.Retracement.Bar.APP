@@ -432,30 +432,23 @@ def run_strategy(
     if "run_button" in ctx.triggered[0]["prop_id"]:
         symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
 
-        print(f"api type: {api_type}")
         if api_type in ("coin_margined", "mark_price"):
-            print(True)
             if symbol.endswith("USD"):
                 data_symbol = f"{symbol}_PERP"
-                print("Modified symbol")
             else:
                 data_symbol = f"{symbol}"
-                print("Still same symbol")
         else:
-            print(False)
             data_symbol = symbol
 
         data_path = pathlib.Path("model", "data")
         data_name = f"{data_symbol}_{interval}_{api_type}"
         data_file = f"{data_name}.parquet"
         dataframe_path = data_path.joinpath(data_file)
-        print(dataframe_path)
 
         if dataframe_path.is_file():
             data_frame = pd.read_parquet(dataframe_path)
             kline_api = KlineAPI(data_symbol, interval, api_type)
             data_frame = kline_api.update_data()
-            print(f"Dataframe for {data_name} is updated")
 
         else:
             data_frame = get_data(data_symbol, interval, api_type)
@@ -514,8 +507,7 @@ def run_strategy(
         graph_layout = GraphLayout(data_frame, data_symbol, interval, api_type)
         fig = graph_layout.plot_cumulative_results()
         text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
-
-    return fig, text_output
+        return fig, text_output
 
 
 @app.callback(
