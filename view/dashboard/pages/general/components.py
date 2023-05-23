@@ -1,5 +1,5 @@
 import dash_bootstrap_components as dbc
-from dash import html
+from dash import html, dcc
 from view.dashboard.pages.lang import en_US, pt_BR
 
 from .utils import (
@@ -34,20 +34,21 @@ lang_menu = dbc.Col(
             dbc.NavLink(
                 "EN",
                 href="?lang=en_US",
-                active="partial",
                 id="en_US_lang",
-                class_name="nav-link-lang"
+                class_name="nav-link-lang",
+                n_clicks_timestamp=1,
             )
         ),
         dbc.NavItem(
             dbc.NavLink(
                 "PT",
                 href="?lang=pt_BR",
-                active=False,
                 id="pt_BR_lang",
-                class_name="nav-link-lang"
+                class_name="nav-link-lang",
+                n_clicks_timestamp=0,
             )
         ),
+        dcc.Store(id="lang_selection", storage_type="local"),
     ],
     id="lang_menu",
     width=5,
