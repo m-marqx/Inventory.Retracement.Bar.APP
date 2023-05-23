@@ -146,9 +146,22 @@ def run_backtest(
         ema_range = range(min_backtest_ema_length, max_backtest_ema_length + 1)
         lowest_low_range = range(backtest_min_lowestlow, backtest_max_lowestlow + 1)
         payoff_range = range(backtest_min_payoff, backtest_max_payoff + 1)
-        wick_percentage_range = np.arange(backtest_min_wick_percentage, backtest_max_wick_percentage + 0.01, 0.01)
-        macd_histogram_trend_value_range = range(backtest_min_indicator_macd_histogram_trend_value, backtest_max_indicator_macd_histogram_trend_value + 1)
-        cci_trend_value_range = range(backtest_min_indicator_cci_trend_value, backtest_max_indicator_cci_trend_value + 1)
+
+        wick_percentage_range = np.arange(
+            backtest_min_wick_percentage,
+            backtest_max_wick_percentage + 0.01,
+            0.01,
+        )
+
+        macd_histogram_trend_value_range = range(
+            backtest_min_indicator_macd_histogram_trend_value,
+            backtest_max_indicator_macd_histogram_trend_value + 1,
+        )
+
+        cci_trend_value_range = range(
+            backtest_min_indicator_cci_trend_value,
+            backtest_max_indicator_cci_trend_value + 1,
+        )
 
         backtest_params = BacktestParams(
             ema_params={
@@ -181,9 +194,20 @@ def run_backtest(
         filtered_df = transposed_df_last_column[transposed_df_last_column > 0]
         filtered_df.dropna(inplace=True)
 
-        filtered_df_sorted = filtered_df.sort_values(by=filtered_df.columns[-1], ascending=False).index
+        filtered_df_sorted = filtered_df.sort_values(
+            by=filtered_df.columns[-1],
+            ascending=False,
+        ).index
+
         final_data_frame = transposed_df.loc[filtered_df_sorted].T
-        graph_layout = GraphLayout(final_data_frame, data_symbol, interval, api_type)
+
+        graph_layout = GraphLayout(
+            final_data_frame,
+            data_symbol,
+            interval,
+            api_type,
+        )
+
         fig = graph_layout.grouped_lines()
         text_output = f"Best Result: {final_data_frame.iloc[-1,0]}"
 
