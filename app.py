@@ -2,9 +2,8 @@ import pathlib
 import dash
 from dash import Input, Output, State
 import pandas as pd
+import numpy as np
 from controller.api.klines_api import KlineAPI
-from model.utils.utils import SaveDataFrame
-
 from model.strategy.params import (
     EmaParams,
     MACDParams,
@@ -14,23 +13,21 @@ from model.strategy.params import (
     IndicatorsParams,
 )
 
-from view.dashboard.layout import app
+from model.backtest import Backtest, BacktestParams
+from model.utils.utils import SaveDataFrame
 
+from view.dashboard.layout import app
+from view.dashboard.graph import GraphLayout
 from view.dashboard.utils import (
     BuilderParams,
     get_data,
     builder,
 )
 
-from view.dashboard.graph import GraphLayout
-
-import numpy as np
-
-from model.backtest import Backtest, BacktestParams
-
 server = app.server
 
-#set language properties
+
+# set language properties
 @app.callback(
     Output("lang_selection", "data"),
     Output("home", "href"),
@@ -39,11 +36,10 @@ server = app.server
     Output("pt_BR_lang", "active"),
     Input("pt_BR_lang", "n_clicks_timestamp"),
     Input("en_US_lang", "n_clicks_timestamp"),
-    State("lang_selection", "data")
+    State("lang_selection", "data"),
 )
-def lang_selection(pt_BR,en_US, lang_selected):
-
-    #This condition will trigger when the user access the app
+def lang_selection(pt_BR, en_US, lang_selected):
+    # This condition will trigger when the user access the app
     if lang_selected == "?lang=pt_BR":
         pt_BR_lang = True
         en_US_lang = False
@@ -51,7 +47,7 @@ def lang_selection(pt_BR,en_US, lang_selected):
         pt_BR_lang = False
         en_US_lang = True
 
-    #This condition will trigger when the user clicks on the language button
+    # This condition will trigger when the user clicks on the language button
     if pt_BR > en_US:
         lang_selection_data = "?lang=pt_BR"
         pt_BR_lang = True
@@ -65,69 +61,58 @@ def lang_selection(pt_BR,en_US, lang_selected):
     backtest_url = f"/backtest{lang_selection_data}"
     return lang_selection_data, home_url, backtest_url, en_US_lang, pt_BR_lang
 
-#set the backtest params
+
+# set the backtest params
 @app.callback(
     Output("backtest_results", "figure"),
     Output("backtest_text_output", "children"),
-
-    #Get Data
+    # Get Data
     Input("backtest_run_button", "n_clicks"),
     State("api_types", "value"),
     State("symbol", "value"),
     State("interval", "label"),
-
-    #Indicators Params
+    # Indicators Params
     State("min_backtest_ema_length", "value"),
     State("max_backtest_ema_length", "value"),
-
-    #Strategy Params - min values
+    # Strategy Params - min values
     State("backtest_min_lowestlow", "value"),
     State("backtest_min_payoff", "value"),
     State("backtest_min_wick_percentage", "value"),
-
-    #Strategy Params - max values
+    # Strategy Params - max values
     State("backtest_max_lowestlow", "value"),
     State("backtest_max_payoff", "value"),
     State("backtest_max_wick_percentage", "value"),
-
-    #Trend Params - min values
+    # Trend Params - min values
     State("backtest_min_indicator_macd_histogram_trend_value", "value"),
     State("backtest_min_indicator_cci_trend_value", "value"),
-
-    #Trend Params - max values
+    # Trend Params - max values
     State("backtest_max_indicator_macd_histogram_trend_value", "value"),
     State("backtest_max_indicator_cci_trend_value", "value"),
 )
 def run_backtest(
-    #Get Data
+    # Get Data
     backtest_run_button,
     api_type,
     symbol,
     interval,
-
-    #Indicators Params
+    # Indicators Params
     min_backtest_ema_length,
     max_backtest_ema_length,
-
-    #Strategy Params - min values
+    # Strategy Params - min values
     backtest_min_lowestlow,
     backtest_min_payoff,
     backtest_min_wick_percentage,
-
-    #Strategy Params - max values
+    # Strategy Params - max values
     backtest_max_lowestlow,
     backtest_max_payoff,
     backtest_max_wick_percentage,
-
-    #Trend Params - min values
+    # Trend Params - min values
     backtest_min_indicator_macd_histogram_trend_value,
     backtest_min_indicator_cci_trend_value,
-
-    #Trend Params - max values
+    # Trend Params - max values
     backtest_max_indicator_macd_histogram_trend_value,
     backtest_max_indicator_cci_trend_value,
 ):
-
     ctx = dash.callback_context
     if not ctx.triggered:
         raise dash.exceptions.PreventUpdate
@@ -168,23 +153,23 @@ def run_backtest(
         backtest_params = BacktestParams(
             ema_params={
                 "length": list(ema_range),
-                "source_column": ["open", "high", "low", "close"]
+                "source_column": ["open", "high", "low", "close"],
             },
             irb_params={
                 "lowestlow": list(lowest_low_range),
                 "payoff": list(payoff_range),
                 "ticksize": [0.1],
-                "wick_percentage": np.round(wick_percentage_range,2).tolist()
+                "wick_percentage": np.round(wick_percentage_range, 2).tolist(),
             },
             indicators_params={
                 "ema_column": ["open", "high", "low", "close"],
                 "macd_histogram_trend_value": list(macd_histogram_trend_value_range),
-                "cci_trend_value": list(cci_trend_value_range)
+                "cci_trend_value": list(cci_trend_value_range),
             },
             TrendParamsBacktest={
-                "ema" : [True],
-                "macd" : [False],
-                "cci" : [False],
+                "ema": [True],
+                "macd": [False],
+                "cci": [False],
             },
         )
 
@@ -202,6 +187,7 @@ def run_backtest(
         text_output = f"Best Result: {final_data_frame.iloc[-1,0]}"
 
         return fig, text_output
+
 
 # update the DropdownMenu items
 @app.callback(
