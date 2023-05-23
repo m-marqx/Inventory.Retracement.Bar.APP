@@ -29,8 +29,7 @@ from view.dashboard.graph import GraphLayout
 
 import numpy as np
 
-from model.backtest.backtest_params import BacktestParams
-from model.backtest.backtest import Backtest
+from model.backtest import Backtest, BacktestParams
 
 server = app.server
 
