@@ -1,8 +1,7 @@
 import pathlib
 import dash
+from dash import Input, Output, State
 import pandas as pd
-from dash.dependencies import Input, Output, State
-
 from controller.api.klines_api import KlineAPI
 from model.utils.utils import SaveDataFrame
 
