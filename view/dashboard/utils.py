@@ -1,11 +1,9 @@
 from controller.api.klines_api import KlineAPI
 
-from model.strategy.params.indicators_params import (
+from model.strategy.params import (
     EmaParams,
     MACDParams,
     CCIParams,
-)
-from model.strategy.params.strategy_params import (
     TrendParams,
     IrbParams,
     IndicatorsParams,

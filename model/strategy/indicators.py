@@ -1,5 +1,5 @@
 from model.utils import CleanData, BaseStrategy
-from model.strategy.params.indicators_params import (
+from model.strategy.params import (
     EmaParams,
     MACDParams,
     CCIParams

@@ -6,12 +6,10 @@ from dash.dependencies import Input, Output, State
 from controller.api.klines_api import KlineAPI
 from model.utils.utils import SaveDataFrame
 
-from model.strategy.params.indicators_params import (
+from model.strategy.params import (
     EmaParams,
     MACDParams,
     CCIParams,
-)
-from model.strategy.params.strategy_params import (
     TrendParams,
     IrbParams,
     IndicatorsParams,
