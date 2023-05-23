@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
-from model.strategy.params.strategy_params import (
+from model.strategy.params import (
     IrbParams,
     TrendParams,
     IndicatorsParams,
 )
+
 from model.utils import BaseStrategy, DataProcess
 
 

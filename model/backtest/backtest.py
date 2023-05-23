@@ -3,13 +3,10 @@ from sklearn.model_selection import ParameterGrid
 from joblib import Parallel, delayed
 import pandas as pd
 
-from model.strategy.params.indicators_params import (
+from model.strategy.params import (
     EmaParams,
     MACDParams,
     CCIParams,
-)
-
-from model.strategy.params.strategy_params import (
     IrbParams,
     IndicatorsParams,
     TrendParams,
