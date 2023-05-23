@@ -175,13 +175,14 @@ def run_backtest(
 
         backtest = Backtest(data_frame)
         backtest_df = backtest.param_grid_backtest(params=backtest_params)
-        backtest_transposed = backtest_df.T
+        transposed_df = backtest_df.T
+        transposed_df_last_column = transposed_df.iloc[:, [-1]]
 
-        filtered_df = backtest_transposed.iloc[:,[-1]][backtest_transposed.iloc[:,[-1]] > 0]
+        filtered_df = transposed_df_last_column[transposed_df_last_column > 0]
         filtered_df.dropna(inplace=True)
 
         filtered_df_sorted = filtered_df.sort_values(by=filtered_df.columns[-1], ascending=False).index
-        final_data_frame = backtest_transposed.loc[filtered_df_sorted].T
+        final_data_frame = transposed_df.loc[filtered_df_sorted].T
         graph_layout = GraphLayout(final_data_frame, data_symbol, interval, api_type)
         fig = graph_layout.grouped_lines()
         text_output = f"Best Result: {final_data_frame.iloc[-1,0]}"
