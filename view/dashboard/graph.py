@@ -3,6 +3,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from controller.api.klines_api import KlineAPI
 
+
 class GraphLayout:
     def __init__(
         self,
@@ -21,15 +22,14 @@ class GraphLayout:
         self.interval = interval
         self.api = api
 
-
     def fig_layout(self, fig, column):
         ticks = self.data_frame[column].std() / 2
 
-        #In the pair names, the "mark_price" has the same values as the "coin_margined".
+        # In the pair names, the "mark_price" has the same values as the "coin_margined".
         if self.api == "mark_price":
             self.api = "coin_margined"
 
-        kline_api = KlineAPI(self.symbol,self.interval,self.api)
+        kline_api = KlineAPI(self.symbol, self.interval, self.api)
         symbol_info = kline_api.get_exchange_symbol_info()
         coin_name = list(symbol_info.baseAsset)[0]
         currency_name = list(symbol_info.quoteAsset)[0]
@@ -52,10 +52,10 @@ class GraphLayout:
             xaxis=dict(
                 showgrid=False,
                 title={
-                    "text":"Date",
+                    "text": "Date",
                     "font": {"color": self.label_color},
                 },
-                color=self.title_color
+                color=self.title_color,
             ),
             yaxis=dict(
                 zeroline=False,
@@ -69,20 +69,28 @@ class GraphLayout:
                     "text": f"{currency_name}",
                     "font": {"color": self.label_color},
                 },
-                color=self.title_color
+                color=self.title_color,
             ),
         )
         return fig
 
     def plot_cumulative_results(self):
         column = "Cumulative_Result"
-        fig = px.line(x=self.data_frame.index, y=self.data_frame[column], color_discrete_sequence=[self.primary_color])
+        fig = px.line(
+            x=self.data_frame.index,
+            y=self.data_frame[column],
+            color_discrete_sequence=[self.primary_color],
+        )
         self.fig_layout(fig, column)
         return fig
 
     def plot_close(self):
         column = "close"
-        fig = px.line(x=self.data_frame.index, y=self.data_frame[column], color_discrete_sequence=[self.primary_color])
+        fig = px.line(
+            x=self.data_frame.index,
+            y=self.data_frame[column],
+            color_discrete_sequence=[self.primary_color],
+        )
         self.fig_layout(fig, column)
         return fig
 
@@ -114,7 +122,6 @@ class GraphLayout:
                 )
             )
 
-
         ticks = self.data_frame[self.data_frame.columns[0]].std() / 2
 
         fig.update_layout(
@@ -131,10 +138,7 @@ class GraphLayout:
             legend_title="Trade Signals",
             showlegend=False,
             xaxis_rangeslider_visible=False,
-            xaxis=dict(
-                showgrid=False,
-                color=self.title_color
-            ),
+            xaxis=dict(showgrid=False, color=self.title_color),
             yaxis=dict(
                 zeroline=False,
                 showgrid=True,
@@ -143,7 +147,7 @@ class GraphLayout:
                 gridcolor=self.grid_color,
                 exponentformat="none",
                 dtick=ticks,
-                color=self.title_color
+                color=self.title_color,
             ),
         )
 
