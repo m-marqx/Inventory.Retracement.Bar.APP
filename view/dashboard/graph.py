@@ -96,11 +96,18 @@ class GraphLayout:
 
     def grouped_lines(self):
         fig = go.Figure()
-        total_lines = self.data_frame.shape[1]
+        total_columns = self.data_frame.shape[1]
+        columns = self.data_frame.columns
+        first_column = self.data_frame.columns[0]
+
+        if total_columns < 5:
+            color_variations = 1
+        else:
+            color_variations = total_columns // 5
 
         color_idx = 0
-        for i, col in enumerate(self.data_frame.columns):
-            if i % (total_lines // 5) == 0:
+        for i, column in enumerate(columns):
+            if i % color_variations == 0:
                 color_idx += 1
             if color_idx == 1:
                 color = "#d89614"
@@ -115,14 +122,14 @@ class GraphLayout:
 
             fig.add_trace(
                 go.Scatter(
-                    y=self.data_frame[col],
-                    name=col,
+                    y=self.data_frame[column],
+                    name=column,
                     line=dict(color=color),
                     hovertemplate="(%{x}, %{y})",
                 )
             )
 
-        ticks = self.data_frame[self.data_frame.columns[0]].std() / 2
+        ticks = self.data_frame[first_column].std() / 2
 
         fig.update_layout(
             paper_bgcolor=self.tranp_color,
