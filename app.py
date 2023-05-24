@@ -61,7 +61,6 @@ def lang_selection(pt_BR, en_US, lang_selected):
     backtest_url = f"/backtest{lang_selection_data}"
     return lang_selection_data, home_url, backtest_url, en_US_lang, pt_BR_lang
 
-
 # set the backtest params
 @app.callback(
     Output("backtest_results", "figure"),
@@ -141,6 +140,8 @@ def run_backtest(
         else:
             data_frame = get_data(data_symbol, interval, api_type)
 
+        # For some reason, the data in Deploy is aways duplicated.
+        data_frame.drop_duplicates(inplace=True)
         SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
         ema_range = range(min_backtest_ema_length, max_backtest_ema_length + 1)
@@ -185,7 +186,6 @@ def run_backtest(
                 "cci": [False],
             },
         )
-
         backtest = Backtest(data_frame)
         backtest_df = backtest.param_grid_backtest(params=backtest_params)
         transposed_df = backtest_df.T
@@ -195,7 +195,7 @@ def run_backtest(
         filtered_df.dropna(inplace=True)
 
         filtered_df_sorted = filtered_df.sort_values(
-            by=filtered_df.columns[-1],
+            by=str(filtered_df.columns[-1]),
             ascending=False,
         ).index
 
@@ -212,7 +212,6 @@ def run_backtest(
         text_output = f"Best Result: {final_data_frame.iloc[-1,0]}"
 
         return fig, text_output
-
 
 # update the DropdownMenu items
 @app.callback(
