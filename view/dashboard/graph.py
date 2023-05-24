@@ -151,4 +151,9 @@ class GraphLayout:
             ),
         )
 
+        # The x-axis is added using this loop because adding the x-axis with
+        # the go.Scatter() method would significantly increase the execution time.
+        for scatter in fig.data:
+            scatter.x = self.data_frame.index
+
         return fig
