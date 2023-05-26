@@ -186,32 +186,22 @@ def run_backtest(
                 "cci": [False],
             },
         )
-        backtest = Backtest(data_frame)
-        backtest_df = backtest.param_grid_backtest(params=backtest_params)
-        transposed_df = backtest_df.T
-        transposed_df_last_column = transposed_df.iloc[:, [-1]]
-
-        filtered_df = transposed_df_last_column[transposed_df_last_column > 0]
-        filtered_df.dropna(inplace=True)
-
-        filtered_df_sorted = filtered_df.sort_values(
-            by=str(filtered_df.columns[-1]),
-            ascending=False,
-        ).index
-
-        final_data_frame = transposed_df.loc[filtered_df_sorted].T
+        data_frame = (
+            Backtest(data_frame)
+            .run_param_grid_backtest(backtest_params)
+        )
 
         graph_layout = GraphLayout(
-            final_data_frame,
+            data_frame,
             data_symbol,
             interval,
             api_type,
         )
 
         fig = graph_layout.grouped_lines()
-        text_output = f"Best Result: {final_data_frame.iloc[-1,0]}"
+        text_output = f"Best Result: {data_frame.iloc[-1,0]}"
 
-        return fig, text_output
+    return fig, text_output
 
 # update the DropdownMenu items
 @app.callback(
