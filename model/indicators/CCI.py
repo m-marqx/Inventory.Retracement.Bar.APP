@@ -6,7 +6,7 @@ ma = MovingAverage()
 
 
 class CCI:
-    def __init__(self, source, length: int = 20):
+    def __init__(self, source: pd.Series, length: int = 20):
         self.source_arr = np.array(source)
         self.source_df = pd.DataFrame({"source_arr": source})
         self.length = length
@@ -49,8 +49,7 @@ class CCI:
 
         return self
 
-    def CCI(self, constant: float = 0.015):
-        # mad calculation
+    def CCI(self, constant: float = 0.015) -> pd.DataFrame:
         self.window = np.lib.stride_tricks.sliding_window_view(self.source_arr, self.length)
 
         self.mean_window = np.mean(self.window, axis=1)
