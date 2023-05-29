@@ -53,7 +53,7 @@ class CCI:
         self,
         smooth_column: str = "sma",
         constant: float = 0.015,
-    ):
+    ) -> pd.Series:
         """
         Calculate CCI using a precise method.
         this version have more similar results from excel
@@ -87,9 +87,7 @@ class CCI:
             / (constant * self.df["mad"])
         )
 
-        self.df["CCI"].dropna(axis=0, inplace=True)
-
-        return self
+        return self.df["CCI"].dropna(axis=0, inplace=True)
 
     def set_sma(self):
         """
