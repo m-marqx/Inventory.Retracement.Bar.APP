@@ -5,7 +5,7 @@ ma = MovingAverage()
 
 
 class MACD:
-    def __init__(self, source, fast_length, slow_length, signal_length):
+    def __init__(self, source: pd.Series, fast_length: int, slow_length: int, signal_length: int):
         self.source = source
         self.fast_length = fast_length
         self.slow_length = slow_length
