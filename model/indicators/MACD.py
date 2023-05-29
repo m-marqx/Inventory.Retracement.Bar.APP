@@ -23,7 +23,7 @@ class MACD:
 
         return self
 
-    def MACD(self):
+    def MACD(self) -> pd.DataFrame:
         self.MACD = self.fast_ma - self.slow_ma
         self.data_frame = pd.DataFrame({"MACD": self.MACD}).dropna(axis=0)
         self.data_frame["MACD_Signal"] = ma.ema(self.data_frame["MACD"], self.signal_length)
