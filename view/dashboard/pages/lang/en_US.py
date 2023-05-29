@@ -5,7 +5,7 @@ en_US = {
     "FUTURES": "Futures",
     "MARK_PRICE": "Mark Price",
     "SYMBOL": "Symbol",
-    "INTERVAL": "Interval",
+    "TIMEFRAME": "Timeframe",
     # General
     "SOURCE": "Source",
     "OPEN": "Open",

@@ -5,7 +5,7 @@ pt_BR = {
     "FUTURES": "Futuros",
     "MARK_PRICE": "Preço de Marcação",
     "SYMBOL": "Símbolo",
-    "INTERVAL": "Intervalo",
+    "TIMEFRAME": "Timeframe",
     # Geral
     "SOURCE": "Fonte",
     "OPEN": "Abertura",
