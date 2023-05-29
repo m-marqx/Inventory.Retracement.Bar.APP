@@ -14,7 +14,7 @@ class CCI:
     -----------
     source_arr : numpy.ndarray
         The input time series data as a NumPy array.
-    source_df : pandas.DataFrame
+    source : pd.Series
         The input time series data as a DataFrame.
     length : int
         The number of periods to include in the CCI calculation.
@@ -46,7 +46,7 @@ class CCI:
             The number of periods to include in the CCI calculation, by default 20.
         """
         self.source_arr = np.array(source)
-        self.source_df = pd.DataFrame({"source_arr": source})
+        self.source = source
         self.length = length
 
     def CCI_precise(
@@ -112,7 +112,7 @@ class CCI:
         CCI
             The CCI object.
         """
-        self.ma = ma.ema(self.source_df, self.length).to_numpy()
+        self.ma = ma.ema(self.source, self.length).to_numpy()
 
         return self
 
@@ -137,7 +137,7 @@ class CCI:
         self.mad = np.mean(self.abs_diff, axis=1)
 
         self.df = pd.DataFrame()
-        self.df["source"] = self.source_df[self.length - 1 :]
+        self.df["source"] = self.source[self.length - 1 :]
         self.df["mad"] = self.mad
         self.df["ma"] = self.ma
         self.df["CCI"] = (
