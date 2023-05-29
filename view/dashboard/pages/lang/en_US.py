@@ -1,75 +1,61 @@
 en_US = {
     # Get Data
-    "GET_DATA_BUTTON" : "Get Data",
-    "SPOT" : "Spot",
-    "FUTURES" : "Futures",
-    "MARK_PRICE" : "Mark Price",
-    "SYMBOL" : "Symbol",
-    "INTERVAL" : "Interval",
-
+    "GET_DATA_BUTTON": "Get Data",
+    "SPOT": "Spot",
+    "FUTURES": "Futures",
+    "MARK_PRICE": "Mark Price",
+    "SYMBOL": "Symbol",
+    "INTERVAL": "Interval",
     # General
-    "COLUMN" : "Column",
-    "OPEN" : "Open",
-    "HIGH" : "High",
-    "LOW" : "Low",
-    "CLOSE" : "Close",
-
+    "SOURCE": "Source",
+    "OPEN": "Open",
+    "HIGH": "High",
+    "LOW": "Low",
+    "CLOSE": "Close",
     # Modify Indicators Parameters
-    "MODIFY_INDICATORS_PARAMETERS_BUTTON" : "Modify Indicators Parameters",
-    "EMA_SOURCE_COLUMN" : "EMA Source Column",
-    "MACD_SOURCE_COLUMN" : "MACD Source Column",
-    "EMA_LENGTH" : "EMA Length",
-    "MACD_SIGNAL_LENGTH" : "MACD Signal Length",
-    "MACD_FAST_LENGTH" : "MACD Fast Length",
-    "MACD_SLOW_LENGTH" : "MACD Slow Length",
-    "CCI_SOURCE_COLUMN" : "CCI Source Column",
-    "CCI_MA_TYPE" : "CCI MA Type",
-    "CCI_LENGTH" : "CCI Length",
-    "CCI_CONSTANT" : "CCI Constant",
-
+    "MODIFY_INDICATORS_PARAMETERS_BUTTON": "Modify Indicators Parameters",
+    "EMA_SOURCE_PRICE": "EMA Source Price",
+    "MACD_SOURCE_PRICE": "MACD Source Price",
+    "EMA_LENGTH": "EMA Length",
+    "MACD_SIGNAL_LENGTH": "MACD Signal Length",
+    "MACD_FAST_LENGTH": "MACD Fast Length",
+    "MACD_SLOW_LENGTH": "MACD Slow Length",
+    "CCI_SOURCE_PRICE": "CCI Source Price",
+    "CCI_MA_TYPE": "CCI MA Type",
+    "CCI_LENGTH": "CCI Length",
+    "CCI_CONSTANT": "CCI Constant",
     # Modify Strategy Parameters
-    "MODIFY_STRATEGY_PARAMETERS_BUTTON" : "Modify Strategy Parameters",
-    "LOWEST_LOW" : "Lowest Low",
-    "TICK_SIZE" : "Tick Size",
-    "PAYOFF" : "Payoff",
-    "WICK_PERCENTAGE" : "Wick Percentage",
-
+    "MODIFY_STRATEGY_PARAMETERS_BUTTON": "Modify Strategy Parameters",
+    "LOWEST_LOW": "Lowest Low",
+    "TICK_SIZE": "Tick Size",
+    "PAYOFF": "Payoff",
+    "WICK_PERCENTAGE": "Wick Percentage",
     # Modify Trend Parameters
-    "MODIFY_TREND_PARAMETERS_BUTTON" : "Modify Trend Parameters",
-    "CROSSOVER_PRICE_SOURCE" : "Crossover Price Source",
-    "MACD_BULLISH_VALUE" : "MACD Bullish Value",
-    "CCI_BULLISH_VALUE" : "CCI Bullish Value",
+    "MODIFY_TREND_PARAMETERS_BUTTON": "Modify Trend Parameters",
+    "CROSSOVER_PRICE_SOURCE": "Crossover Price Source",
+    "MACD_BULLISH_VALUE": "MACD Bullish Value",
+    "CCI_BULLISH_VALUE": "CCI Bullish Value",
     "ACTIVATE_INDICATOR": "Activate Indicator",
-
-    #Main Button
-    "RUN_STRATEGY" : "Run Strategy",
-
-    #Results
+    # Main Button
+    "RUN_STRATEGY": "Run Strategy",
+    # Results
     "EMPTY_RESULT": "Click Run Button to see results",
-
     # Backtest
     "MIN_LENGTH": "Min Length",
     "MAX_LENGTH": "Max Length",
-
     # Backtest Parameters
-    "MAX_EMA_LENGTH" : "Max EMA Length",
-    "MIN_EMA_LENGTH" : "Min EMA Length",
-
+    "MAX_EMA_LENGTH": "Max EMA Length",
+    "MIN_EMA_LENGTH": "Min EMA Length",
     # Strategy Parameters
     "MIN_LOWEST_LOW_LENGTH": "Min Lowest Low Length",
     "MAX_LOWEST_LOW_LENGTH": "Max Lowest Low Length",
-
-    "MIN_PAYOFF" : "Min Payoff",
-    "MAX_PAYOFF" : "Max Payoff",
-
-    "MIN_WICK_PERCENTAGE" : "Min Wick Percentage",
-    "MAX_WICK_PERCENTAGE" : "Max Wick Percentage",
-
+    "MIN_PAYOFF": "Min Payoff",
+    "MAX_PAYOFF": "Max Payoff",
+    "MIN_WICK_PERCENTAGE": "Min Wick Percentage",
+    "MAX_WICK_PERCENTAGE": "Max Wick Percentage",
     # Trend Parameters
-    "MIN_MACD_BULLISH_VALUE" : "Min MACD Bullish Value",
-    "MAX_MACD_BULLISH_VALUE" : "Max MACD Bullish Value",
-
-    "MIN_CCI_BULLISH_VALUE" : "Min CCI Bullish Value",
-    "MAX_CCI_BULLISH_VALUE" : "Max CCI Bullish Value",
-
+    "MIN_MACD_BULLISH_VALUE": "Min MACD Bullish Value",
+    "MAX_MACD_BULLISH_VALUE": "Max MACD Bullish Value",
+    "MIN_CCI_BULLISH_VALUE": "Min CCI Bullish Value",
+    "MAX_CCI_BULLISH_VALUE": "Max CCI Bullish Value",
 }
