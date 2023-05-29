@@ -14,14 +14,14 @@ class MainPageComponents:
         return dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label(self.lang["EMA_SOURCE_COLUMN"]),
+                    dbc.Label(self.lang["EMA_SOURCE_PRICE"]),
                     width=45,
                     style={"margin-top": "10px"},
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
                         children=self.dropdown_menu_item.ema_ohlc_items,
-                        label="Column",
+                        label=self.lang["SOURCE"],
                         id="ema_source_column",
                     ),
                     width=45,
@@ -60,7 +60,7 @@ class MainPageComponents:
                 ),
                 dbc.Col(
                     dbc.Label(
-                        self.lang["CCI_SOURCE_COLUMN"],
+                        self.lang["CCI_SOURCE_PRICE"],
                         html_for="cci_source_column",
                         width=45,
                     ),
@@ -69,7 +69,7 @@ class MainPageComponents:
                 dbc.Col(
                     dbc.DropdownMenu(
                         children=self.dropdown_menu_item.cci_ohlc_items,
-                        label="Column",
+                        label=self.lang["SOURCE"],
                         id="cci_source_column",
                     ),
                     width=45,
@@ -98,14 +98,14 @@ class MainPageComponents:
         return dbc.Row(
             [
                 dbc.Col(
-                    dbc.Label(self.lang["MACD_SOURCE_COLUMN"]),
+                    dbc.Label(self.lang["MACD_SOURCE_PRICE"]),
                     width=45,
                     style={"margin-top": "10px"},
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
                         children=self.dropdown_menu_item.macd_ohlc_items,
-                        label="Column",
+                        label=self.lang["SOURCE"],
                         id="macd_source_column",
                     ),
                     width=45,
@@ -322,7 +322,7 @@ class MainPageComponents:
                 dbc.Col(
                     dbc.DropdownMenu(
                         children=self.dropdown_menu_item.source_ohlc_items,
-                        label="Column",
+                        label=self.lang["SOURCE"],
                         id="source_crossover_column",
                     ),
                     width=45,

@@ -210,12 +210,13 @@ def run_backtest(
     Input("ema_high", "n_clicks"),
     Input("ema_low", "n_clicks"),
     Input("ema_close", "n_clicks"),
+    State("ema_source_column", "label"),
 )
-def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
+def update_label(open_clicks, high_clicks, low_clicks, close_clicks, ema_source):
     global ema_button_id
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Column"
+        return ema_source
     else:
         ema_button_id = ctx.triggered[0]["prop_id"].split(".")[0]
         if ema_button_id == "ema_close":
@@ -234,11 +235,12 @@ def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
     Input("macd_high", "n_clicks"),
     Input("macd_low", "n_clicks"),
     Input("macd_close", "n_clicks"),
+    State("macd_source_column", "label"),
 )
-def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
+def update_label(open_clicks, high_clicks, low_clicks, close_clicks, macd_source):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Column"
+        return macd_source
     else:
         if ctx.triggered[0]["prop_id"].split(".")[0] == "macd_open":
             return "open"
@@ -256,11 +258,12 @@ def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
     Input("cci_high", "n_clicks"),
     Input("cci_low", "n_clicks"),
     Input("cci_close", "n_clicks"),
+    State("cci_source_column", "label"),
 )
-def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
+def update_label(open_clicks, high_clicks, low_clicks, close_clicks, cci_source):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Column"
+        return cci_source
     else:
         if ctx.triggered[0]["prop_id"].split(".")[0] == "cci_open":
             return "open"
@@ -278,11 +281,12 @@ def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
     Input("source_high", "n_clicks"),
     Input("source_low", "n_clicks"),
     Input("source_close", "n_clicks"),
+    State("source_crossover_column", "label"),
 )
-def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
+def update_label(open_clicks, high_clicks, low_clicks, close_clicks, source_crossover):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Column"
+        return source_crossover
     else:
         if ctx.triggered[0]["prop_id"].split(".")[0] == "source_open":
             return "open"
@@ -298,11 +302,12 @@ def update_label(open_clicks, high_clicks, low_clicks, close_clicks):
     Output("cci_ma_type", "label"),
     Input("sma", "n_clicks"),
     Input("ema", "n_clicks"),
+    State("cci_ma_type", "label"),
 )
-def update_label(sma_click, ema_click):
+def update_label(sma_click, ema_click, cci_ma_type):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Column"
+        return cci_ma_type
     else:
         if ctx.triggered[0]["prop_id"].split(".")[0] == "sma":
             return "sma"
@@ -312,27 +317,26 @@ def update_label(sma_click, ema_click):
 
 @app.callback(
     Output("interval", "label"),
-    [
-        Input("1m", "n_clicks"),
-        Input("5m", "n_clicks"),
-        Input("15m", "n_clicks"),
-        Input("30m", "n_clicks"),
-        Input("1h", "n_clicks"),
-        Input("2h", "n_clicks"),
-        Input("4h", "n_clicks"),
-        Input("6h", "n_clicks"),
-        Input("8h", "n_clicks"),
-        Input("12h", "n_clicks"),
-        Input("1d", "n_clicks"),
-        Input("3d", "n_clicks"),
-        Input("1w", "n_clicks"),
-        Input("1M", "n_clicks"),
-    ],
+    Input("1m", "n_clicks"),
+    Input("5m", "n_clicks"),
+    Input("15m", "n_clicks"),
+    Input("30m", "n_clicks"),
+    Input("1h", "n_clicks"),
+    Input("2h", "n_clicks"),
+    Input("4h", "n_clicks"),
+    Input("6h", "n_clicks"),
+    Input("8h", "n_clicks"),
+    Input("12h", "n_clicks"),
+    Input("1d", "n_clicks"),
+    Input("3d", "n_clicks"),
+    Input("1w", "n_clicks"),
+    Input("1M", "n_clicks"),
+    State("interval", "label"),
 )
-def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1):
+def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1, interval_label):
     ctx = dash.callback_context
     if not ctx.triggered:
-        return "Interval"
+        return interval_label
     else:
         interval = ctx.triggered[0]["prop_id"].split(".")[0]
         return interval

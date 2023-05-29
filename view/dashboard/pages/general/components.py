@@ -98,14 +98,14 @@ class GeneralComponents:
         return dbc.Row(
             [
                 dbc.Col(
-                    self.lang["INTERVAL"],
+                    dbc.Label(self.lang["TIMEFRAME"]),
                     width=45,
                     style={"margin-top": "10px"},
                 ),
                 dbc.Col(
                     dbc.DropdownMenu(
                         children=intervals,
-                        label="Timeframe",
+                        label=self.lang["TIMEFRAME"],
                         id="interval",
                     ),
                     width=45,
@@ -132,6 +132,16 @@ class GeneralComponents:
                     ],
                 ),
             ]
+        )
+
+    @property
+    def get_data_components(self):
+        return dbc.Row(
+            [
+                self.api_radio_components,
+                dbc.Col(dbc.CardGroup([self.symbol_components])),
+                dbc.Col(dbc.CardGroup([self.interval_components])),
+            ],
         )
 
     @property
