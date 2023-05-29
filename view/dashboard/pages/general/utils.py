@@ -17,8 +17,9 @@ intervals = [
     dbc.DropdownMenuItem("1M", id="1M"),
 ]
 
-api_types = [
-    {"label": "Spot", "value": "spot"},
-    {"label": "Futures", "value": "coin_margined"},
-    {"label": "Mark Price", "value": "mark_price"},
-]
+def api_types(lang):
+    return [
+        {"label": lang["SPOT"], "value": "spot"},
+        {"label": lang["FUTURES"], "value": "coin_margined"},
+        {"label": lang["MARK_PRICE"], "value": "mark_price"},
+    ]

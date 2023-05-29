@@ -2,7 +2,7 @@
 # from view.dashboard.layout import app
 from dash import dcc, html, register_page
 import dash_bootstrap_components as dbc
-from view.dashboard.pages.general.components import get_data_components
+from view.dashboard.pages.general.components import GeneralComponents
 from view.dashboard.pages.lang import en_US, pt_BR
 
 from .components import MainPageComponents
@@ -20,6 +20,7 @@ register_page(
     description="Rob Hoffman's Inventory Retracement Bar simple backtest.",
 )
 
+
 def layout(lang="en_US"):
     if lang == "en_US":
         lang = en_US
@@ -27,6 +28,7 @@ def layout(lang="en_US"):
         lang = pt_BR
 
     main_page_components = MainPageComponents(lang)
+    general_components = GeneralComponents(lang)
 
     return [
         dbc.Container(
@@ -87,7 +89,7 @@ def layout(lang="en_US"):
                                         dbc.Collapse(
                                             dbc.Card(
                                                 dbc.CardBody(
-                                                    get_data_components,
+                                                    general_components.get_data_components,
                                                     style={
                                                         "display": "flex",
                                                         "flex-direction": "row",

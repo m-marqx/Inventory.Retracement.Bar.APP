@@ -67,66 +67,79 @@ navbar_components = dbc.Navbar(
     ],
 )
 
-symbol_components = dbc.Row(
-    [
-        # Get Data
-        dbc.Col(
-            dbc.Label("Symbol"),
-            width=45,
-            style={"margin-top": "10px"},
-        ),
-        dbc.Col(
-            dbc.Input(
-                id="symbol",
-                value="BTCUSD",
-                type="text",
-            ),
-            width=45,
-        ),
-    ]
-)
 
-interval_components = dbc.Row(
-    [
-        dbc.Col(
-            dbc.Label("Interval"),
-            width=45,
-            style={"margin-top": "10px"},
-        ),
-        dbc.Col(
-            dbc.DropdownMenu(
-                children=intervals,
-                label="Timeframe",
-                id="interval",
-            ),
-            width=45,
-        ),
-    ]
-)
+class GeneralComponents:
+    def __init__(self, lang):
+        self.lang = lang
 
-api_radio_components = dbc.Row(
-    [
-        dbc.Col(
+    @property
+    def symbol_components(self):
+        return dbc.Row(
             [
-                dbc.RadioItems(
-                    api_types,
-                    id="api_types",
-                    class_name="btn-group",
-                    input_class_name="btn-ghost btn-check",
-                    label_class_name="btn-ghost btn btn-primary",
-                    label_checked_class_name="active",
-                    value="futures",
+                # Get Data
+                dbc.Col(
+                    dbc.Label(self.lang["SYMBOL"]),
+                    width=45,
+                    style={"margin-top": "10px"},
                 ),
-                dbc.Col(id="api_types_output"),
-            ],
-        ),
-    ]
-)
+                dbc.Col(
+                    dbc.Input(
+                        id="symbol",
+                        value="BTCUSD",
+                        type="text",
+                    ),
+                    width=45,
+                ),
+            ]
+        )
 
-get_data_components = dbc.Row(
-    [
-        api_radio_components,
-        dbc.Col(dbc.CardGroup([symbol_components])),
-        dbc.Col(dbc.CardGroup([interval_components])),
-    ],
-)
+    @property
+    def interval_components(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    self.lang["INTERVAL"],
+                    width=45,
+                    style={"margin-top": "10px"},
+                ),
+                dbc.Col(
+                    dbc.DropdownMenu(
+                        children=intervals,
+                        label="Timeframe",
+                        id="interval",
+                    ),
+                    width=45,
+                ),
+            ]
+        )
+
+    @property
+    def api_radio_components(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dbc.RadioItems(
+                            api_types(self.lang),
+                            id="api_types",
+                            class_name="btn-group",
+                            input_class_name="btn-ghost btn-check",
+                            label_class_name="btn-ghost btn btn-primary",
+                            label_checked_class_name="active",
+                            value="futures",
+                        ),
+                        dbc.Col(id="api_types_output"),
+                    ],
+                ),
+            ]
+        )
+
+    @property
+    def get_data_components(self):
+        return dbc.Row(
+            [
+                self.api_radio_components,
+                dbc.Col(dbc.CardGroup([self.symbol_components])),
+                dbc.Col(dbc.CardGroup([self.interval_components])),
+            ],
+        )

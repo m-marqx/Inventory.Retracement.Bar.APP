@@ -4,7 +4,7 @@ import psutil
 from dash import html, dcc, register_page
 
 from view.dashboard.pages.lang import en_US, pt_BR
-from view.dashboard.pages.general.components import get_data_components
+from view.dashboard.pages.general.components import GeneralComponents
 
 from .components import BacktestComponents
 
@@ -23,6 +23,7 @@ def layout(lang="en_US"):
         lang = pt_BR
 
     backtest_components = BacktestComponents(lang)
+    general_components = GeneralComponents(lang)
 
     mem = psutil.virtual_memory()
     available_ram = mem.available
@@ -92,7 +93,7 @@ def layout(lang="en_US"):
                                             dbc.Collapse(
                                                 dbc.Card(
                                                     dbc.CardBody(
-                                                        get_data_components,
+                                                        general_components.get_data_components,
                                                         style={
                                                             "display": "flex",
                                                             "flex-direction": "row",
@@ -182,7 +183,9 @@ def layout(lang="en_US"):
                                             ),
                                             dbc.Button(
                                                 [
-                                                    lang["MODIFY_TREND_PARAMETERS_BUTTON"],
+                                                    lang[
+                                                        "MODIFY_TREND_PARAMETERS_BUTTON"
+                                                    ],
                                                     html.I(
                                                         className="fa fa-chevron-down ml-2",
                                                         id="trend_params_icon",
