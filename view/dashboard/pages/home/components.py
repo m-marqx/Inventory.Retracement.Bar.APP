@@ -110,7 +110,6 @@ class MainPageComponents:
                     ),
                     width=45,
                 ),
-                dcc.Store(id="macd_source_column_value"),
                 dbc.Col(
                     dbc.Label(
                         self.lang["MACD_SIGNAL_LENGTH"],
