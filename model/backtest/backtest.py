@@ -195,31 +195,3 @@ class Backtest:
             df_result[arr[1][-1]] = arr[0][column]
 
         return pd.DataFrame(df_result)
-
-    def trend_wick_backtest(
-        self,
-        column="Cumulative_Result",
-        n_jobs=-1,
-        params: BacktestParams = BacktestParams(),
-    ):
-        df_result = {}
-        param_grid = {
-            'ema_params': [EmaParams()],
-            'irb_params': ParameterGrid(params.irb_params.dict()),
-            'indicators_params': ParameterGrid(params.indicators_params.dict()),
-            'trend_params': [TrendParams(ema=True)]
-        }
-
-        results = Parallel(n_jobs=n_jobs)(
-            delayed(self.run_backtest)(
-                EmaParams(**dict(params[0])),
-                IrbParams(**dict(params[1])),
-                IndicatorsParams(**dict(params[2])),
-                TrendParams(**dict(params[3])),
-            ) for params in product(*param_grid.values())
-        )
-
-        for params, arr in zip(product(*param_grid.values()), results):
-            df_result[arr[1][-1]] = arr[0][column]
-
-        return pd.DataFrame(df_result)
