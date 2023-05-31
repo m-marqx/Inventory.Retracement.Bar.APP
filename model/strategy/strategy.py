@@ -72,8 +72,6 @@ class SetTrend(BaseStrategy):
         self.trend.execute()
         return self
 
-
-# %%
 class SetTicksize(BaseStrategy):
     def __init__(self, tick_size=0.1):
         self.tick_size = tick_size
@@ -201,6 +199,14 @@ class CalculateIrbSignals(BaseStrategy):
 
 
         self.df_filtered["Signal"] = self.signal_arr
+        self.df_filtered["Signal"].fillna(0, inplace=True)
+
+        self.df_filtered["Position"] = np.where(
+            self.df_filtered["Signal"] != self.df_filtered["Signal"].shift(),
+            self.df_filtered["Signal"],
+            0
+        ).astype('int8')
+
         self.df_filtered["Entry_Price"] = self.entry_price_arr
         self.df_filtered["Take_Profit"] = self.take_profit_arr
         self.df_filtered["Stop_Loss"] = self.stop_loss_arr
@@ -208,7 +214,6 @@ class CalculateIrbSignals(BaseStrategy):
         self.df_filtered["Signal_Condition"] = self.signal_condition
 
         return self.df_filtered
-
 
 class CheckIrbSignals(BaseStrategy):
     def __init__(self, dataframe):
@@ -316,7 +321,6 @@ class BuilderStrategy(BaseStrategy):
 
     def calculateResults(self):
         self.df_filtered = CalculateResults(self.df_filtered).execute()
-
         return self
 
     def execute(self):
