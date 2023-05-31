@@ -7,6 +7,19 @@ import pathlib
 
 class KlineAPI:
     def __init__(self, symbol, interval, api="coin_margined"):
+        """
+        Initialize the KlineAPI object.
+
+        Parameters:
+        -----------
+        symbol : str
+            The symbol for which to retrieve Kline data.
+        interval : str
+            The time interval for the Kline data (e.g., '1m', '5m', '1h', etc.).
+        api : str, optional
+            The API type to use for retrieving the data. Valid options are 'coin_margined',
+            'mark_price', or 'spot'. (default: 'coin_margined')
+        """
         self.client = Client()
         self.symbol = symbol
         self.interval = interval
@@ -16,12 +29,20 @@ class KlineAPI:
         self.api_list = ["coin_margined", "mark_price", "spot"]
         if self.api not in self.api_list:
             raise ValueError(
-                "Klines function should be either" "'coin_margined', 'mark_price' or 'spot'"
+                "Klines function should be either 'coin_margined', 'mark_price' or 'spot'"
             )
 
     def get_exchange_symbol_info(self):
+        """
+        Get the exchange symbol information for the specified symbol.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The exchange symbol information as a DataFrame.
+        """
         if self.api == "mark_price":
-            raise ValueError("Mark Price doesn't have a exchange simbol info")
+            raise ValueError("Mark Price doesn't have an exchange symbol info")
         if self.api == "coin_margined":
             info = self.client.futures_coin_exchange_info()
         else:
@@ -32,6 +53,14 @@ class KlineAPI:
         return symbol_info
 
     def get_ticker_info(self):
+        """
+        Get the ticker information for the specified symbol.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The ticker information as a DataFrame.
+        """
         if self.api == "mark_price":
             raise ValueError("Mark Price doesn't have a ticker info")
         if self.api == "coin_margined":
@@ -49,6 +78,14 @@ class KlineAPI:
         return df_filtered
 
     def get_tick_size(self):
+        """
+        Get the tick size for the specified symbol.
+
+        Returns:
+        --------
+        float
+            The tick size.
+        """
         df = self.get_ticker_info()
         tick_size = df.loc["PRICE_FILTER", "tickSize"]
         return tick_size
@@ -58,6 +95,21 @@ class KlineAPI:
         startTime,
         endTime,
     ):
+        """
+        Request Kline data for the specified time range.
+
+        Parameters:
+        -----------
+        startTime : int
+            The start time for the data range in milliseconds.
+        endTime : int
+            The end time for the data range in milliseconds.
+
+        Returns:
+        --------
+        list
+            The requested Kline data as a list.
+        """
         if self.api == "coin_margined":
             api_get_klines = self.client.futures_coin_klines
         elif self.api == "mark_price":
@@ -78,6 +130,19 @@ class KlineAPI:
         self,
         start_time=1502942400000,
     ):
+        """
+        Get Kline data for the specified start time.
+
+        Parameters:
+        -----------
+        start_time : int, optional
+            The start time for retrieving Kline data in milliseconds. (default: 1502942400000)
+
+        Returns:
+        --------
+        KlineAPI
+            The KlineAPI object.
+        """
         if (
             self.api == "coin_margined" or self.api == "mark_price"
         ) and start_time < 1597118400000:
@@ -102,6 +167,14 @@ class KlineAPI:
         return self
 
     def update_data(self):
+        """
+        Update the Kline data.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The updated Kline data as a DataFrame.
+        """
         data_path = pathlib.Path("model", "data")
         data_name = f"{self.symbol}_{self.interval}_{self.api}.parquet"
         dataframe_path = data_path.joinpath(data_name)
@@ -114,11 +187,27 @@ class KlineAPI:
         return self.klines
 
     def to_DataFrame(self):
+        """
+        Convert the Kline data to a DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The Kline data as a DataFrame.
+        """
         klines_df = KlineUtils(self.klines).klines_df()
         self.klines = klines_df.copy()
         return self.klines
 
     def to_OHLC_DataFrame(self):
+        """
+        Convert the Kline data to an OHLC DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The Kline data as an OHLC DataFrame.
+        """
         klines_df = KlineUtils(self.klines).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]
