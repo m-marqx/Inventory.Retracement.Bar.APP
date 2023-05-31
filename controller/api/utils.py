@@ -7,9 +7,25 @@ from binance.helpers import interval_to_milliseconds
 
 class KlineUtils:
     def __init__(self, klines_list):
+        """
+        Initialize the KlineUtils object.
+
+        Parameters:
+        -----------
+        klines_list : list
+            The list of Kline data.
+        """
         self.klines_list = klines_list
 
     def klines_df(self) -> pd.DataFrame:
+        """
+        Convert the Kline data to a DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The Kline data as a DataFrame.
+        """
         timestamp = ["open_time", "close_time"]
 
         float_column = [
