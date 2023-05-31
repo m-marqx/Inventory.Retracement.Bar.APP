@@ -68,10 +68,28 @@ class KlineUtils:
 
 class KlineTimes:
     def __init__(self, symbol, interval):
+        """
+        Initialize the KlineTimes object
+
+        Parameters:
+        -----------
+        symbol : str
+            The symbol of the asset.
+        interval : str
+            The interval of the Kline data.
+        """
         self.symbol = symbol
         self.interval = interval
 
     def calculate_max_multiplier(self):
+        """
+        Calculate the maximum multiplier based on the interval.
+
+        Returns:
+        --------
+        int
+            The maximum multiplier.
+        """
         if self.interval != "1M":
             interval_hours = interval_to_milliseconds(self.interval) / 1000 / 60 / 60
             max_multiplier_limit = 1500
@@ -92,6 +110,19 @@ class KlineTimes:
         self,
         start_time=1597118400000,
     ):
+        """
+        Get the end times for retrieving Kline data.
+
+        Parameters:
+        -----------
+        start_time : int, optional
+            The start time for retrieving Kline data in milliseconds. (default: 1597118400000)
+
+        Returns:
+        --------
+        numpy.ndarray
+            The array of end times.
+        """
         time_delta = time.time() * 1000 - start_time
         time_delta_ratio = time_delta / interval_to_milliseconds(self.interval)
         request_qty = time_delta_ratio / self.calculate_max_multiplier()
