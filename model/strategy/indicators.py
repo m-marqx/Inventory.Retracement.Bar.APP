@@ -8,17 +8,36 @@ from model.strategy.params import (
 
 class CalculateEma(BaseStrategy):
     def __init__(self, dataframe, params: EmaParams):
+        """
+        Initialize the CalculateEma object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        params : EmaParams
+            The parameters for EMA calculation.
+        """
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
         self.length = params.length
 
     def execute(self):
+        """
+        Execute the EMA calculation.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The dataframe with EMA values.
+        """
         from model.indicators.moving_average import MovingAverage
 
         ma = MovingAverage()
         self.ema = ma.ema(self.source, self.length)
         self.df_filtered["ema"] = self.ema
         return self.df_filtered
+
 
 class CalculateMACD(BaseStrategy):
     def __init__(self, dataframe, params: MACDParams):
