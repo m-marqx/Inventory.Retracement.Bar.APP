@@ -110,34 +110,114 @@ class CalculateCCI(BaseStrategy):
         self.df_filtered["CCI"] = self.CCI.CCI(self.params.constant)["CCI"]
         return self.df_filtered
 
+
 class BuilderSource(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the BuilderSource object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
         self.df_filtered = CleanData(self.df_filtered).execute()
 
     def set_EMA_params(self, params: EmaParams = EmaParams()):
+        """
+        Set the parameters for EMA calculation.
+
+        Parameters:
+        -----------
+        params : EmaParams, optional
+            The parameters for EMA calculation.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         self.ema_params = params
         return self
 
     def set_ema(self):
+        """
+        Execute the EMA calculation and set the EMA values in the dataframe.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         CalculateEma(self.df_filtered, self.ema_params).execute()
         return self
 
     def set_CCI_params(self, params: CCIParams = CCIParams()):
+        """
+        Set the parameters for CCI calculation.
+
+        Parameters:
+        -----------
+        params : CCIParams, optional
+            The parameters for CCI calculation.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         self.cci_params = params
         return self
 
     def set_cci(self):
+        """
+        Execute the CCI calculation and set the CCI values in the dataframe.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         CalculateCCI(self.df_filtered, self.cci_params).execute()
         return self
 
     def set_MACD_params(self, params: MACDParams = MACDParams()):
+        """
+        Set the parameters for MACD calculation.
+
+        Parameters:
+        -----------
+        params : MACDParams, optional
+            The parameters for MACD calculation.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         self.macd_params = params
         return self
 
     def set_macd(self):
+        """
+        Execute the MACD calculation and set the MACD histogram values in the dataframe.
+
+        Returns:
+        --------
+        BuilderSource
+            The BuilderSource object.
+        """
         CalculateMACD(self.df_filtered, self.macd_params).execute()
         return self
 
     def execute(self):
+        """
+        Execute the data cleaning and strategy calculations.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe.
+        """
         return self.df_filtered
