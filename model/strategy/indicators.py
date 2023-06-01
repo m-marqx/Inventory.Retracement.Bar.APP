@@ -41,6 +41,16 @@ class CalculateEma(BaseStrategy):
 
 class CalculateMACD(BaseStrategy):
     def __init__(self, dataframe, params: MACDParams):
+        """
+        Initialize the CalculateMACD object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        params : MACDParams
+            The parameters for MACD calculation.
+        """
         super().__init__(dataframe)
         self.source = self.df_filtered[params.source_column]
         self.fast_length = params.fast_length
@@ -48,6 +58,14 @@ class CalculateMACD(BaseStrategy):
         self.signal_length = params.signal_length
 
     def execute(self):
+        """
+        Execute the MACD calculation.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The dataframe with MACD histogram values.
+        """
         from model.indicators.MACD import MACD
 
         self.histogram = MACD(self.source, self.fast_length, self.slow_length, self.signal_length).set_ema().MACD()["Histogram"]
