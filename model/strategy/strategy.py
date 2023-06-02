@@ -342,9 +342,25 @@ class CalculateIrbSignals(BaseStrategy):
 
 class CheckIrbSignals(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the CheckIrbSignals object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
 
     def execute(self):
+        """
+        Execute the checking of IRB signals.
+
+        Returns:
+        --------
+        CheckIrbSignals
+            The CheckIrbSignals object.
+        """
         columns = ["Signal", "Close_Position"]
         self.df_check = self.df_filtered[columns].copy()
 
