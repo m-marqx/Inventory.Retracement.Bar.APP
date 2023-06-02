@@ -106,11 +106,31 @@ class CalculateTrend(BaseStrategy):
 
 class SetTrend(BaseStrategy):
     def __init__(self, dataframe, params: IndicatorsParams, trend_params: TrendParams):
+        """
+        Initialize the SetTrend object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        params : IndicatorsParams
+            The parameters for indicators.
+        trend_params : TrendParams
+            The parameters for trend calculation.
+        """
         super().__init__(dataframe)
         self.params = params
         self.trend_params = trend_params.copy()
 
     def execute(self):
+        """
+        Execute the setting of trends.
+
+        Returns:
+        --------
+        SetTrend
+            The SetTrend object.
+        """
         self.trend = CalculateTrend(self.df_filtered)
 
         if self.trend_params.ema:
