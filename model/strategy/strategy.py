@@ -386,9 +386,30 @@ class CheckIrbSignals(BaseStrategy):
 
 class CalculateResults(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the CalculateResults object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
 
     def execute(self, verify_error=True):
+        """
+        Execute the calculation of results.
+
+        Parameters:
+        -----------
+        verify_error : bool, optional
+            Whether to verify for errors in the calculation (default is True).
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe with calculated results.
+        """
         self.is_close_position = self.df_filtered["Close_Position"]
         self.is_take_profit = (
             self.df_filtered["high"]
