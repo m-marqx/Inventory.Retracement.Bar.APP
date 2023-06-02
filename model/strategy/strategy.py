@@ -173,6 +173,16 @@ class SetTicksize(BaseStrategy):
 
 class GetIrbSignalsBuy(BaseStrategy):
     def __init__(self, dataframe, params: IrbParams):
+        """
+        Initialize the GetIrbSignalsBuy object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        params : IrbParams
+            The parameters for IRB signals.
+        """
         super().__init__(dataframe)
         self.lowestlow = params.lowestlow
         self.payoff = params.payoff
@@ -185,6 +195,14 @@ class GetIrbSignalsBuy(BaseStrategy):
         self.close_price = self.df_filtered["close"]
 
     def execute(self):
+        """
+        Execute the calculation of IRB signals.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe with IRB signals.
+        """
         self.candle_amplitude = self.high_price - self.low_price
         self.candle_downtail = (
             np.minimum(self.open_price, self.close_price) - self.low_price
