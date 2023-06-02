@@ -149,9 +149,25 @@ class SetTrend(BaseStrategy):
 
 class SetTicksize(BaseStrategy):
     def __init__(self, tick_size=0.1):
+        """
+        Initialize the SetTicksize object.
+
+        Parameters:
+        -----------
+        tick_size : float, optional
+            The tick size, by default 0.1.
+        """
         self.tick_size = tick_size
 
     def execute(self):
+        """
+        Execute the tick size setting.
+
+        Returns:
+        --------
+        float
+            The tick size.
+        """
         return self.tick_size
 
 
