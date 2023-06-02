@@ -259,6 +259,14 @@ class GetIrbSignalsBuy(BaseStrategy):
 
 class CalculateIrbSignals(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the CalculateIrbSignals object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
         self.signal_arr = self.df_filtered["Signal"].to_numpy()
         self.entry_price_arr = self.df_filtered["Entry_Price"].to_numpy()
@@ -273,6 +281,14 @@ class CalculateIrbSignals(BaseStrategy):
         self.loss = np.nan
 
     def execute(self):
+        """
+        Execute the calculation of IRB signals.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe with calculated signals.
+        """
         for index in range(1, len(self.df_filtered)):
             prev_index = index - 1
             self.signal_condition[index] = self.signal_arr[prev_index] == 1
