@@ -458,32 +458,108 @@ class CalculateResults(BaseStrategy):
 
 class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the BuilderStrategy object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
 
     def set_trend_params(self, params: IndicatorsParams = IndicatorsParams(), trend_params: TrendParams = TrendParams()):
+        """
+        Set the parameters for trend analysis.
+
+        Parameters:
+        -----------
+        params : IndicatorsParams, optional
+            The parameters for indicators (default is IndicatorsParams()).
+        trend_params : TrendParams, optional
+            The parameters for trend analysis (default is TrendParams()).
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.indicators_params = params
         self.trend_params = trend_params
         return self
 
     def get_trend(self):
+        """
+        Get the trend analysis.
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.trend = SetTrend(self.df_filtered, self.indicators_params, self.trend_params).execute()
         return self
 
     def set_irb_params(self, params: IrbParams = IrbParams()):
+        """
+        Set the parameters for IRB signals.
+
+        Parameters:
+        -----------
+        params : IrbParams, optional
+            The parameters for IRB signals (default is IrbParams()).
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.irb_params = params
         return self
 
     def get_irb_signals(self):
+        """
+        Get the IRB signals.
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.df_filtered = GetIrbSignalsBuy(self.df_filtered, self.irb_params).execute()
         return self
 
     def calculate_irb_signals(self):
+        """
+        Calculate the IRB signals.
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.df_filtered = CalculateIrbSignals(self.df_filtered).execute()
         return self
 
     def calculateResults(self):
+        """
+        Calculate the results.
+
+        Returns:
+        --------
+        BuilderStrategy
+            The BuilderStrategy object.
+        """
         self.df_filtered = CalculateResults(self.df_filtered).execute()
         return self
 
     def execute(self):
+        """
+        Execute the strategy.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe.
+        """
         return self.df_filtered
