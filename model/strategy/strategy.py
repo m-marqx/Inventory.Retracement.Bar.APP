@@ -11,10 +11,31 @@ from model.utils import BaseStrategy, DataProcess
 
 class CalculateTrend(BaseStrategy):
     def __init__(self, dataframe):
+        """
+        Initialize the CalculateTrend object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The input dataframe.
+        """
         super().__init__(dataframe)
         self.conditions = pd.DataFrame()
 
     def ema_condition(self, source_column: str):
+        """
+        Set the EMA condition for trend calculation.
+
+        Parameters:
+        -----------
+        source_column : str
+            The source column name.
+
+        Returns:
+        --------
+        CalculateTrend
+            The CalculateTrend object.
+        """
         if "ema" in self.df_filtered.columns:
             self.conditions["ema"] = (
                 self.df_filtered[source_column] > self.df_filtered["ema"]
@@ -24,6 +45,19 @@ class CalculateTrend(BaseStrategy):
         return self
 
     def macd_condition(self, trend_value: int):
+        """
+        Set the MACD condition for trend calculation.
+
+        Parameters:
+        -----------
+        trend_value : int
+            The trend value for MACD calculation.
+
+        Returns:
+        --------
+        CalculateTrend
+            The CalculateTrend object.
+        """
         if "MACD_Histogram" in self.df_filtered.columns:
             self.conditions["MACD_Histogram"] = (
                 self.df_filtered["MACD_Histogram"]
@@ -35,6 +69,19 @@ class CalculateTrend(BaseStrategy):
         return self
 
     def cci_condition(self, trend_value: int):
+        """
+        Set the CCI condition for trend calculation.
+
+        Parameters:
+        -----------
+        trend_value : int
+            The trend value for CCI calculation.
+
+        Returns:
+        --------
+        CalculateTrend
+            The CalculateTrend object.
+        """
         if "CCI" in self.df_filtered.columns:
             self.conditions["CCI"] = self.df_filtered["CCI"] > trend_value
 
@@ -43,6 +90,14 @@ class CalculateTrend(BaseStrategy):
         return self
 
     def execute(self):
+        """
+        Execute the trend calculation.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The processed dataframe with a boolean value indicating the trend.
+        """
         self.conditions["uptrend"] = self.conditions.all(axis=1)
         self.df_filtered["uptrend"] = self.conditions["uptrend"]
         self.df_filtered["uptrend"].fillna(True, inplace=True)
