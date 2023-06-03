@@ -1,4 +1,6 @@
 from itertools import product
+import torch
+import gpuparallel
 from sklearn.model_selection import ParameterGrid
 from joblib import Parallel, delayed
 import pandas as pd
@@ -14,12 +16,19 @@ from model.strategy.params import (
 
 from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
-from .backtest_params import BacktestParams
+from model.backtest.backtest_params import BacktestParams
 
 class Backtest:
-    def __init__(self, dataframe: pd.DataFrame):
+    def __init__(self, dataframe: pd.DataFrame, hardware_type: str = "GPU"):
         self.dataframe = dataframe.copy()
+
         self.strategy_df = pd.DataFrame()
+        self.parameters_list = []
+
+        if torch.cuda.is_available() and hardware_type == "GPU":
+            self.hardware = "GPU"
+        else:
+            self.hardware = "CPU"
 
     def strategy(
         self,
@@ -70,6 +79,8 @@ class Backtest:
         column="Cumulative_Result",
         n_jobs=-1,
         params: BacktestParams = BacktestParams(),
+        n_gpu=1,
+        n_workers_per_gpu=4,
     ):
         param_grid = {
             'ema_params': ParameterGrid(params.ema_params.dict()),
@@ -78,8 +89,15 @@ class Backtest:
             'trend_params': ParameterGrid(params.trend_params.dict()),
         }
 
-        results = Parallel(n_jobs=n_jobs)(
-            delayed(self.run_backtest)(
+        if self.hardware == "GPU":
+            parallelizer = gpuparallel.GPUParallel(n_gpu, n_workers_per_gpu, progressbar=False)
+            delayed_strategy = gpuparallel.delayed(self.run_backtest)
+        else:
+            parallelizer = Parallel(n_jobs)
+            delayed_strategy = delayed(self.run_backtest)
+
+        results = parallelizer(
+            delayed_strategy(
                 EmaParams(**dict(params[0])),
                 IrbParams(**dict(params[1])),
                 IndicatorsParams(**dict(params[2])),
