@@ -14,7 +14,7 @@ from model.strategy.params import (
 )
 
 from model.backtest import Backtest, BacktestParams
-from model.utils.utils import SaveDataFrame
+from model.utils.utils import SaveDataFrame, DataProcess
 
 from view.dashboard.layout import app
 from view.dashboard.graph import GraphLayout
@@ -189,7 +189,7 @@ def run_backtest(
         backtest = Backtest(data_frame, force_cpu=True)
         data_frame = backtest.param_grid_backtest(params=backtest_params)
 
-        data_frame = Backtest(data_frame).best_positive_results
+        data_frame = DataProcess(data_frame).best_positive_results
 
         graph_layout = GraphLayout(
             data_frame,

@@ -106,6 +106,20 @@ class DataProcess:
             value_name="result",
         ).sort_values(by=["rank", "index"])
 
+    @property
+    def best_positive_results(self):
+        df_transposed_last_column = self.df_transposed.iloc[:, [-1]]
+
+        filtered_df = df_transposed_last_column[df_transposed_last_column > 0]
+        filtered_df.dropna(inplace=True)
+
+        filtered_df_sorted = filtered_df.sort_values(
+            by=str(filtered_df.columns[-1]),
+            ascending=False,
+        ).index
+
+        return self.df_transposed.loc[filtered_df_sorted].T
+
 
 class Math:
     def calculate_expected_value(self, dataframe):

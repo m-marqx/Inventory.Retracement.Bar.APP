@@ -111,17 +111,3 @@ class Backtest:
             df_result[arr[1][-1]] = arr[0][column]
 
         return pd.DataFrame(df_result)
-
-    @property
-    def best_positive_results(self):
-        df_transposed_last_column = self.dataframe.iloc[:, [-1]]
-
-        filtered_df = df_transposed_last_column[df_transposed_last_column > 0]
-        filtered_df.dropna(inplace=True)
-
-        filtered_df_sorted = filtered_df.sort_values(
-            by=str(filtered_df.columns[-1]),
-            ascending=False,
-        ).index
-
-        return self.dataframe.loc[filtered_df_sorted].T
