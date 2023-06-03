@@ -143,13 +143,3 @@ class GeneralComponents:
                 dbc.Col(dbc.CardGroup([self.interval_components])),
             ],
         )
-
-    @property
-    def get_data_components(self):
-        return dbc.Row(
-            [
-                self.api_radio_components,
-                dbc.Col(dbc.CardGroup([self.symbol_components])),
-                dbc.Col(dbc.CardGroup([self.interval_components])),
-            ],
-        )
