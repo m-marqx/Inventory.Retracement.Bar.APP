@@ -36,6 +36,12 @@ en_US = {
     "MACD_BULLISH_VALUE": "MACD Bullish Value",
     "CCI_BULLISH_VALUE": "CCI Bullish Value",
     "ACTIVATE_INDICATOR": "Activate Indicator",
+    # Modify Hardware Parameters
+    "MODIFY_HARDWARE_PARAMETERS_BUTTON": "Modify Hardware Parameters",
+    "GPU_NUMBER": "GPU Number",
+    "CPU_CORES_NUMBER": "CPU Cores Number",
+    "WORKERS_NUMBERS": "Workers Numbers",
+    "HARDWARE_TYPE": "Hardware Type",
     # Main Button
     "RUN_STRATEGY": "Run Strategy",
     # Results

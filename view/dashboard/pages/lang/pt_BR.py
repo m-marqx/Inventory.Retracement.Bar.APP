@@ -36,6 +36,12 @@ pt_BR = {
     "MACD_BULLISH_VALUE": "Valor Bullish do  MACD",
     "CCI_BULLISH_VALUE": "Valor Bullish do CCI",
     "ACTIVATE_INDICATOR": "Ativar Indicador",
+    # Modificar Parâmetros de Hardware
+    "MODIFY_HARDWARE_PARAMETERS_BUTTON": "Modificar Parâmetros de Hardware",
+    "GPU_NUMBER": "Número de GPU",
+    "CPU_CORES_NUMBER": "Número de Cores do CPU",
+    "WORKERS_NUMBERS": "Número de workers",
+    "HARDWARE_TYPE": "Tipo de Hardware",
     # Main Button
     "RUN_STRATEGY": "Executar Estratégia",
     # Results
