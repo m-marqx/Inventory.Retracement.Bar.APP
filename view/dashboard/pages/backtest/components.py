@@ -294,3 +294,192 @@ class BacktestComponents:
     @property
     def filter_components_col1(self):
         return dbc.CardGroup([self.filter_components])
+
+    @property
+    def hardware_radio_components_label(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Label(
+                        self.lang["HARDWARE_TYPE"],
+                        width=45,
+                        style={"margin-top": "10px"},
+                        className="center",
+                    ),
+                ],
+                className="center",
+            )
+        )
+
+    @property
+    def hardware_radio_components_input(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.RadioItems(
+                                [
+                                    {"label": "CPU", "value": "CPU"},
+                                    {"label": "GPU", "value": "GPU"},
+                                ],
+                                id="hardware_types",
+                                class_name="btn-group",
+                                input_class_name="btn-ghost btn-check",
+                                label_class_name="btn-ghost btn btn-primary",
+                                label_checked_class_name="active",
+                                value="CPU",
+                            ),
+                            dbc.Col(id="hardware_types_output"),
+                        ],
+                        class_name="center",
+                    ),
+                ]
+            )
+        )
+
+    @property
+    def hardware_gpu_label(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Label(
+                        self.lang["GPU_NUMBER"]
+                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                )
+            )
+        )
+
+    @property
+    def hardware_gpu_input(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Input(
+                        id="backtest_gpu_number",
+                        value=1,
+                        type="number",
+                    ),
+                    width=45,
+                ),
+            )
+        )
+
+    @property
+    def hardware_cpu_cores_label(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Label(
+                        self.lang["CPU_CORES_NUMBER"]
+                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                )
+            )
+        )
+
+    @property
+    def hardware_cpu_cores_input(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Input(
+                        id="backtest_cpu_cores_number",
+                        value=-1,
+                        type="number",
+                    ),
+                    width=45,
+                ),
+            )
+        )
+
+    @property
+    def hardware_worker_label(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Label(
+                        self.lang["WORKERS_NUMBERS"]
+                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                )
+            )
+        )
+
+    @property
+    def hardware_worker_input(self):
+        return (
+            dbc.Row(
+                dbc.Col(
+                    dbc.Input(
+                        id="backtest_workers_number",
+                        value=4,
+                        type="number",
+                    ),
+                    width=45,
+                ),
+            )
+        )
+
+    @property
+    def hardware_components_col1(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.CardGroup(self.hardware_radio_components_label),
+                    dbc.CardGroup(self.hardware_gpu_label),
+                    dbc.CardGroup(self.hardware_cpu_cores_label),
+                    dbc.CardGroup(self.hardware_worker_label),
+                ],
+            ),
+        )
+
+    @property
+    def hardware_components_col2(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.CardGroup(self.hardware_radio_components_input),
+                    dbc.CardGroup(self.hardware_gpu_input),
+                    dbc.CardGroup(self.hardware_cpu_cores_input),
+                    dbc.CardGroup(self.hardware_worker_input),
+                ],
+            )
+        )
+
+    @property
+    def hardware_components(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(dbc.CardGroup(self.hardware_radio_components_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_radio_components_input)),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(dbc.CardGroup(self.hardware_gpu_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_gpu_input)),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_input)),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(dbc.CardGroup(self.hardware_worker_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_worker_input)),
+                ],
+                class_name="center-row",
+            ),
+        )
