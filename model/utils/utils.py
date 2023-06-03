@@ -17,20 +17,6 @@ class BrokerEmulator:
     def __init__(self, dataframe: pd.DataFrame):
         self.dataframe = dataframe
 
-    def classify_dataframe(self, index: bool = False):
-        if index:
-            self.df_transposed = self.dataframe.copy().T
-        else:
-            self.df_transposed = self.dataframe.reset_index(drop=True).copy().T
-
-        self.last_column = [self.df_transposed.columns[-1]]
-        self.df_transposed["rank"] = (
-            self.df_transposed[self.last_column].rank(method="min") - 1
-        )
-        self.df_melted = pd.melt(
-            self.df_transposed, id_vars=["rank"], var_name="index", value_name="result"
-        ).sort_values(by=["rank", "index"])
-
     def broker_emulator_result(self):
         self.distance_high_to_open = self.dataframe["high"] - self.dataframe["open"]
         self.distance_low_to_open = self.dataframe["open"] - self.dataframe["low"]
@@ -105,6 +91,20 @@ class DataProcess:
     def __init__(self, data_frame):
         self.df_transposed = data_frame.copy().T
         self.last_column_name = self.df_transposed.columns[-1]
+
+    def classify_dataframe(self, index: bool = False):
+        if not index:
+            self.df_transposed = self.df_transposed.reset_index(drop=True).copy().T
+
+        self.df_transposed["rank"] = (
+            self.df_transposed[self.last_column_name].rank(method="min") - 1
+        )
+        return pd.melt(
+            self.df_transposed,
+            id_vars=["rank"],
+            var_name="index",
+            value_name="result",
+        ).sort_values(by=["rank", "index"])
 
 
 class Math:
