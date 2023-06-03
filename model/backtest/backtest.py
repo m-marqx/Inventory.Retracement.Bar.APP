@@ -94,7 +94,7 @@ class Backtest:
 
         return pd.DataFrame(df_result)
 
-    def run_param_grid_backtest(self, backtest_params: BacktestParams):
+    def best_positive_results(self, backtest_params: BacktestParams):
         backtest = Backtest(self.dataframe)
         backtest_df = backtest.param_grid_backtest(params=backtest_params)
         transposed_df = backtest_df.T

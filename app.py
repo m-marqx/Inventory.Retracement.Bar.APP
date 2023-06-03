@@ -188,7 +188,7 @@ def run_backtest(
         )
         data_frame = (
             Backtest(data_frame)
-            .run_param_grid_backtest(backtest_params)
+            .best_positive_results(backtest_params)
         )
 
         graph_layout = GraphLayout(
