@@ -101,6 +101,11 @@ class BrokerEmulator:
 
         return self.data_frame["Exit_Price"]
 
+class DataProcess:
+    def __init__(self, data_frame):
+        self.df_transposed = data_frame.copy().T
+        self.last_column_name = self.df_transposed.columns[-1]
+
 
 class Math:
     def calculate_expected_value(self, dataframe):
