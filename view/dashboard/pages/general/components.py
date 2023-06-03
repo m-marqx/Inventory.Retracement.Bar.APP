@@ -130,6 +130,7 @@ class GeneralComponents:
                         ),
                         dbc.Col(id="api_types_output"),
                     ],
+                    class_name="reset-center-row",
                 ),
             ]
         )
