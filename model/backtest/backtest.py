@@ -112,13 +112,11 @@ class Backtest:
 
         return pd.DataFrame(df_result)
 
-    def best_positive_results(self, backtest_params: BacktestParams):
-        backtest = Backtest(self.dataframe)
-        backtest_df = backtest.param_grid_backtest(params=backtest_params)
-        transposed_df = backtest_df.T
-        transposed_df_last_column = transposed_df.iloc[:, [-1]]
+    @property
+    def best_positive_results(self):
+        df_transposed_last_column = self.dataframe.iloc[:, [-1]]
 
-        filtered_df = transposed_df_last_column[transposed_df_last_column > 0]
+        filtered_df = df_transposed_last_column[df_transposed_last_column > 0]
         filtered_df.dropna(inplace=True)
 
         filtered_df_sorted = filtered_df.sort_values(
@@ -126,4 +124,4 @@ class Backtest:
             ascending=False,
         ).index
 
-        return transposed_df.loc[filtered_df_sorted].T
+        return self.dataframe.loc[filtered_df_sorted].T

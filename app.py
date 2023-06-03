@@ -186,10 +186,10 @@ def run_backtest(
                 "cci": [False],
             },
         )
-        data_frame = (
-            Backtest(data_frame)
-            .best_positive_results(backtest_params)
-        )
+        backtest = Backtest(data_frame, force_cpu=True)
+        data_frame = backtest.param_grid_backtest(params=backtest_params)
+
+        data_frame = Backtest(data_frame).best_positive_results
 
         graph_layout = GraphLayout(
             data_frame,
