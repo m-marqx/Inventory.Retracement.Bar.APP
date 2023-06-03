@@ -27,7 +27,6 @@ from view.dashboard.utils import (
 server = app.server
 
 
-# set language properties
 @app.callback(
     Output("lang_selection", "data"),
     Output("home", "href"),
@@ -61,7 +60,7 @@ def lang_selection(pt_BR, en_US, lang_selected):
     backtest_url = f"/backtest{lang_selection_data}"
     return lang_selection_data, home_url, backtest_url, en_US_lang, pt_BR_lang
 
-# set the backtest params
+
 @app.callback(
     Output("backtest_results", "figure"),
     Output("backtest_text_output", "children"),
@@ -203,7 +202,7 @@ def run_backtest(
 
     return fig, text_output
 
-# update the DropdownMenu items
+
 @app.callback(
     Output("ema_source_column", "label"),
     Input("ema_open", "n_clicks"),
@@ -342,7 +341,6 @@ def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1, inte
         return interval
 
 
-### Callback to make shape parameters menu expand
 @app.callback(
     Output("strategy_params_collapse", "is_open"),
     Output("strategy_params_icon", "className"),
@@ -359,7 +357,6 @@ def toggle_strategy_params_collapse(n_clicks, is_open):
         return True, "fa fa-chevron-up ml-2"
 
 
-### Callback to make get_data parameters menu expand
 @app.callback(
     Output("get_data_collapse", "is_open"),
     Output("get_data_icon", "className"),
@@ -376,7 +373,6 @@ def toggle_get_data_collapse(n_clicks, is_open):
         return True, "fa fa-chevron-up"
 
 
-### Callback to make operating parameters menu expand
 @app.callback(
     Output("indicator_params_collapse", "is_open"),
     Output("indicator_params_icon", "className"),
@@ -393,7 +389,6 @@ def toggle_indicator_params_collapse(n_clicks, is_open):
         return True, "fa fa-chevron-up ml-2"
 
 
-### Callback to make coordinates menu expand
 @app.callback(
     Output("trend_params_collapse", "is_open"),
     Output("trend_params_icon", "className"),
