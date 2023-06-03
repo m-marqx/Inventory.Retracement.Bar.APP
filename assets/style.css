@@ -9,6 +9,31 @@
     --gray-6:#bfbfbf;
 }
 
+.center {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.center-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;}
+
+.reset-center-row {
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .graph{
     overflow: hidden;
     border-radius: 20px;
