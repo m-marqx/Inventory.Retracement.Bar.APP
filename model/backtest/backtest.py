@@ -19,7 +19,7 @@ from .backtest_params import BacktestParams
 class Backtest:
     def __init__(self, dataframe: pd.DataFrame):
         self.dataframe = dataframe.copy()
-        self.data_frame = pd.DataFrame()
+        self.strategy_df = pd.DataFrame()
 
     def strategy(
         self,
@@ -35,7 +35,7 @@ class Backtest:
             f"Filters: {trend}"
         ]
 
-        self.data_frame = (
+        self.strategy_df = (
             BuilderSource(
                 self.dataframe,
             )
@@ -43,9 +43,9 @@ class Backtest:
             .set_ema()
             .execute()
         )
-        self.data_frame = (
+        self.strategy_df = (
             BuilderStrategy(
-                self.data_frame,
+                self.strategy_df,
             )
             .set_trend_params(indicators, trend)
             .get_trend()
@@ -55,7 +55,7 @@ class Backtest:
             .calculateResults()
             .execute()
         )
-        return self.data_frame, self.parameters_list
+        return self.strategy_df, self.parameters_list
 
     def run_backtest(self, ema_params, irb_params, indicators, trend):
         backtest_df = self.dataframe.copy()
