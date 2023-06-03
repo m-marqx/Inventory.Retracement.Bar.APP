@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
-from model.utils import DataProcess
+from model.utils import BrokerEmulator
 
 class Plot:
     def __init__(self, dataframe):
@@ -18,7 +18,7 @@ class Plot:
         elif "Date" not in self.data_frame.columns:
             self.data_frame["Date"] = self.data_frame.index
 
-        self.data_frame["Exit_Price"] = DataProcess(self.data_frame).exit_price()
+        self.data_frame["Exit_Price"] = BrokerEmulator(self.data_frame).exit_price()
         self.fig = None
         self.fig2 = None
 

@@ -6,7 +6,7 @@ from model.strategy.params import (
     IndicatorsParams,
 )
 
-from model.utils import BaseStrategy, DataProcess
+from model.utils import BaseStrategy, BrokerEmulator
 
 
 class CalculateTrend(BaseStrategy):
@@ -444,7 +444,7 @@ class CalculateResults(BaseStrategy):
         )
 
         #Update Result column with broker emulator
-        DataProcess(self.df_filtered).broker_emulator_result()
+        BrokerEmulator(self.df_filtered).broker_emulator_result()
 
         self.df_filtered["Cumulative_Result"] = (
             self.df_filtered["Result"]

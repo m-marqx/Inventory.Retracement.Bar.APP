@@ -13,7 +13,7 @@ class BaseStrategy(ABC):
         raise NotImplementedError
 
 
-class DataProcess:
+class BrokerEmulator:
     def __init__(self, dataframe: pd.DataFrame):
         self.dataframe = dataframe
 
