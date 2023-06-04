@@ -86,6 +86,12 @@ def lang_selection(pt_BR, en_US, lang_selected):
     # Trend Params - max values
     State("backtest_max_indicator_macd_histogram_trend_value", "value"),
     State("backtest_max_indicator_cci_trend_value", "value"),
+    # Hardware Params
+    State("hardware_types", "value"),
+    State("backtest_gpu_number", "value"),
+    State("backtest_cpu_cores_number", "value"),
+    State("backtest_workers_number", "value"),
+
 )
 def run_backtest(
     # Get Data
@@ -110,6 +116,11 @@ def run_backtest(
     # Trend Params - max values
     backtest_max_indicator_macd_histogram_trend_value,
     backtest_max_indicator_cci_trend_value,
+    # Hardware Params
+    hardware_type,
+    backtest_cpu_cores_number,
+    backtest_gpu_number,
+    backtest_workers_number,
 ):
     ctx = dash.callback_context
     if not ctx.triggered:
@@ -185,8 +196,13 @@ def run_backtest(
                 "cci": [False],
             },
         )
-        backtest = Backtest(data_frame, force_cpu=True)
-        data_frame = backtest.param_grid_backtest(params=backtest_params)
+        backtest = Backtest(data_frame, hardware_type)
+        data_frame = backtest.param_grid_backtest(
+            params=backtest_params,
+            n_jobs=backtest_cpu_cores_number,
+            n_gpu=backtest_gpu_number,
+            n_workers_per_gpu=backtest_workers_number,
+        )
 
         data_frame = DataProcess(data_frame).best_positive_results
 
@@ -394,6 +410,21 @@ def toggle_indicator_params_collapse(n_clicks, is_open):
     Output("trend_params_icon", "className"),
     Input("trend_params_button", "n_clicks"),
     State("trend_params_collapse", "is_open"),
+)
+def toggle_strategy_params_collapse(n_clicks, is_open):
+    if not n_clicks:
+        raise dash.exceptions.PreventUpdate
+
+    if is_open:
+        return False, "fa fa-chevron-down ml-2"
+    else:
+        return True, "fa fa-chevron-up ml-2"
+
+@app.callback(
+    Output("hardware_params_collapse", "is_open"),
+    Output("hardware_params_icon", "className"),
+    Input("hardware_params_button", "n_clicks"),
+    State("hardware_params_collapse", "is_open"),
 )
 def toggle_strategy_params_collapse(n_clicks, is_open):
     if not n_clicks:

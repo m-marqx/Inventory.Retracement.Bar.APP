@@ -16,6 +16,7 @@ register_page(
     description="Rob Hoffman's Inventory Retracement Bar exhaustive search backtest",
 )
 
+
 def layout(lang="en_US"):
     if lang == "en_US":
         lang = en_US
@@ -206,6 +207,31 @@ def layout(lang="en_US"):
                                                 id="trend_params_collapse",
                                                 is_open=False,
                                             ),
+                                            dbc.Button(
+                                                [
+                                                    lang[
+                                                        "MODIFY_HARDWARE_PARAMETERS_BUTTON"
+                                                    ],
+                                                    html.I(
+                                                        className="fa fa-chevron-down ml-2",
+                                                        id="hardware_params_icon",
+                                                        style={"transformY": "2px"},
+                                                    ),
+                                                ],
+                                                id="hardware_params_button",
+                                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                                outline=True,
+                                                color="secondary",
+                                            ),
+                                            dbc.Collapse(
+                                                children=dbc.Card(
+                                                    dbc.CardBody(
+                                                        backtest_components.hardware_components,
+                                                    )
+                                                ),
+                                                id="hardware_params_collapse",
+                                                is_open=False,
+                                            ),
                                         ],
                                         class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container",
                                     ),
@@ -233,6 +259,7 @@ def layout(lang="en_US"):
                                         ]
                                     ),
                                 ],
+                                width=3,
                             ),
                         ],
                     ),
