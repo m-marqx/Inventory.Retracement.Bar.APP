@@ -1,12 +1,9 @@
-# %%
+import pathlib
 import dash
 from dash import dcc
 import dash_bootstrap_components as dbc
-import pathlib
 
 from view.dashboard.pages.general.components import navbar_components
-
-from dash.dependencies import Input, Output
 
 theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
