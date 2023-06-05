@@ -238,7 +238,7 @@ def layout(lang="en_US"):
                                     dbc.Col(
                                         [
                                             dbc.Button(
-                                                lang["RUN_STRATEGY"],
+                                                lang["RUN_BACKTEST"],
                                                 id="backtest_run_button",
                                                 style={
                                                     "margin": "5px",

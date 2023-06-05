@@ -64,4 +64,6 @@ pt_BR = {
     "MAX_MACD_BULLISH_VALUE": "Valor Bullish Máximo do MACD",
     "MIN_CCI_BULLISH_VALUE": "Valor Bullish Mínimo do CCI",
     "MAX_CCI_BULLISH_VALUE": "Valor Bullish Máximo do CCI",
+    # Backtest Button
+    "RUN_BACKTEST": "Rodar Backtest"
 }

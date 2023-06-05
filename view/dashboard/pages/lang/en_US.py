@@ -64,4 +64,6 @@ en_US = {
     "MAX_MACD_BULLISH_VALUE": "Max MACD Bullish Value",
     "MIN_CCI_BULLISH_VALUE": "Min CCI Bullish Value",
     "MAX_CCI_BULLISH_VALUE": "Max CCI Bullish Value",
+    # Backtest Button
+    "RUN_BACKTEST": "Run Backtest",
 }
