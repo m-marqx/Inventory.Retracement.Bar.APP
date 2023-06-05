@@ -261,92 +261,168 @@ class MainPageComponents:
         return dbc.CardGroup(self.irb_components_second_col)
 
     @property
-    def macd_bullish_value_components(self):
-        return dbc.Row(
-            [
-                dbc.Col(
-                    dbc.Label(self.lang["MACD_BULLISH_VALUE"]),
+    def trend_indicators_label1(self):
+        return (
+            dbc.Row(
+                dbc.Label(
+                    self.lang["ACTIVATE_INDICATOR"],
                     width=45,
                     style={"margin-top": "10px"},
+                    class_name="center"
                 ),
-                dbc.Col(
-                    dbc.Input(
-                        id="indicator_macd_histogram_trend_value",
-                        value=0,
-                        type="number",
-                    ),
-                    width=45,
-                ),
-            ]
+                class_name="center",
+            ),
         )
 
     @property
-    def cci_bullish_value_components(self):
-        return dbc.Row(
-            [
-                dbc.Col(
-                    dbc.Label(self.lang["CCI_BULLISH_VALUE"]),
+    def trend_indicators_label2(self):
+        return (
+            dbc.Row(
+                dbc.Label(
+                    self.lang["CROSSOVER_PRICE_SOURCE"],
                     width=45,
                     style={"margin-top": "10px"},
+                    class_name="center"
                 ),
-                dbc.Col(
-                    dbc.Input(
-                        id="indicator_cci_trend_value",
-                        value=0,
-                        type="number",
-                    ),
-                    width=45,
-                ),
-            ]
+                class_name="center",
+            ),
         )
 
     @property
-    def macd_cci_components(self):
-        return dbc.Row(
-            [
-                dbc.Col(dbc.CardGroup([self.macd_bullish_value_components])),
-                dbc.Col(dbc.CardGroup([self.cci_bullish_value_components])),
-            ]
+    def trend_indicators_label3(self):
+        return (
+            dbc.Row(
+                dbc.Label(
+                    self.lang["MACD_BULLISH_VALUE"],
+                    width=45,
+                    style={"margin-top": "10px"},
+                    class_name="center"
+                ),
+                class_name="center",
+            ),
         )
+
+    @property
+    def trend_indicators_label4(self):
+        return (
+            dbc.Row(
+                dbc.Label(
+                    self.lang["CCI_BULLISH_VALUE"],
+                    width=45,
+                    style={"margin-top": "10px"},
+                    class_name="center"
+                ),
+                class_name="center",
+            ),
+        )
+
+    @property
+    def trend_indicators_input1(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.Checklist(
+                            self.dropdown_menu_item.indicators_filter,
+                            id="checklist",
+                            class_name="vertical-items-container",
+                            input_class_name="btn-check",
+                            label_class_name="btn btn-primary",
+                            label_checked_class_name="active",
+                            inline=True,
+                        ),
+                    ),
+                ],
+                class_name="center"
+            ),
+        )
+
+    @property
+    def trend_indicators_input2(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.DropdownMenu(
+                            self.dropdown_menu_item.source_ohlc_items,
+                            label=self.lang["SOURCE"],
+                            id="source_crossover_column",
+                        ),
+                    ),
+                ],
+                class_name="center",
+                style={"justify-content": "normal"},
+            ),
+        )
+
+    @property
+    def trend_indicators_input3(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.Input(
+                            id="indicator_macd_histogram_trend_value",
+                            value=0,
+                            type="number",
+                        ),
+                    ),
+                ],
+                class_name="center"
+            ),
+        )
+
+    @property
+    def trend_indicators_input4(self):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        dbc.Input(
+                            id="indicator_cci_trend_value",
+                            value=0,
+                            type="number",
+                        ),
+                    ),
+                ],
+                class_name="center"
+            ),
+        )
+
 
     @property
     def filter_components(self):
-        return dbc.Row(
-            [
-                dbc.Col(
-                    dbc.Label(self.lang["CROSSOVER_PRICE_SOURCE"]),
-                    width=45,
-                    style={"margin-top": "10px"},
-                ),
-                dbc.Col(
-                    dbc.DropdownMenu(
-                        children=self.dropdown_menu_item.source_ohlc_items,
-                        label=self.lang["SOURCE"],
-                        id="source_crossover_column",
-                    ),
-                    width=45,
-                ),
-                self.macd_cci_components,
-                dbc.Col(
-                    dbc.Label(
-                        self.lang["ACTIVATE_INDICATOR"],
-                        style={
-                            "font-weight": "bold",
-                            "font-size": "20px",
-                            "margin-top": "10px",
-                        },
-                    ),
-                    width=45,
-                ),
-                dbc.Col(
-                    dbc.Checklist(
-                        self.dropdown_menu_item.indicators_filter,
-                        id="checklist",
-                        input_class_name="btn-check",
-                        label_class_name="btn btn-primary",
-                        label_checked_class_name="active",
-                        inline=True,
-                    )
-                ),
-            ]
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(self.trend_indicators_label1, width=6),
+                    dbc.Col(self.trend_indicators_input1, width=6),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(self.trend_indicators_label2, width=6),
+                    dbc.Col(
+                        self.trend_indicators_input2,
+                        style={"justify-content": "normal"},
+                        width=6,
+                        ),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(self.trend_indicators_label3, width=6),
+                    dbc.Col(self.trend_indicators_input3, width=6),
+                ],
+                class_name="center-row",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(self.trend_indicators_label4, width=6),
+                    dbc.Col(self.trend_indicators_input4, width=6),
+                ],
+                class_name="center-row",
+            ),
         )
