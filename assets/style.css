@@ -154,6 +154,12 @@
   transition: background 0.08s ease-in-out;
 }
 
+.vertical-items-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
 .form-check-label.btn.btn-primary {
   background: var(--gray-11);
   border-radius: 20px;
