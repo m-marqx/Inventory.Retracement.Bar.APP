@@ -350,7 +350,3 @@ class MainPageComponents:
                 ),
             ]
         )
-
-    @property
-    def filter_components_col1(self):
-        return dbc.CardGroup([self.filter_components])
