@@ -17,6 +17,10 @@
   justify-items: center;
 }
 
+.dropdown-toggle {
+  width: 100%;
+}
+
 .center-row {
   display: flex;
   align-items: center;
