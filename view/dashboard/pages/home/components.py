@@ -254,11 +254,11 @@ class MainPageComponents:
 
     @property
     def irb_parameters_col1(self):
-        return dbc.CardGroup([self.irb_components_first_col])
+        return dbc.CardGroup(self.irb_components_first_col)
 
     @property
     def irb_parameters_col2(self):
-        return dbc.CardGroup([self.irb_components_second_col])
+        return dbc.CardGroup(self.irb_components_second_col)
 
     @property
     def macd_bullish_value_components(self):
