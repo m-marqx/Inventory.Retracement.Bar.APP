@@ -260,33 +260,18 @@ class BacktestComponents:
         )
 
     @property
-    def macd_cci_components(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.Col(dbc.CardGroup([self.macd_bullish_value_components])),
-                    dbc.Col(dbc.CardGroup([self.cci_bullish_value_components])),
-                ]
-            )
-        )
-
-    @property
     def filter_components(self):
         return (
             dbc.Row(
                 [
-                    self.macd_cci_components,
                     dbc.Col(
-                        html.Label(
-                            self.lang["ACTIVATE_INDICATOR"],
-                            style={
-                                "font-weight": "bold",
-                                "font-size": "20px",
-                                "margin-top": "10px",
-                            },
+                        dbc.CardGroup([self.macd_bullish_value_components]),
+                        width=6,
                         ),
-                        width=45,
-                    ),
+                    dbc.Col(
+                        dbc.CardGroup([self.cci_bullish_value_components]),
+                        width=6,
+                        ),
                 ]
             )
         )
