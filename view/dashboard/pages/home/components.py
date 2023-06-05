@@ -1,5 +1,4 @@
 import dash_bootstrap_components as dbc
-from dash import html, dcc
 
 from .utils import DropdownMenuItems
 
@@ -329,7 +328,7 @@ class MainPageComponents:
                 ),
                 self.macd_cci_components,
                 dbc.Col(
-                    html.Label(
+                    dbc.Label(
                         self.lang["ACTIVATE_INDICATOR"],
                         style={
                             "font-weight": "bold",
