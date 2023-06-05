@@ -240,6 +240,9 @@
 .form-label {
   color: white !important;
   opacity: 0.65;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .form-control {
