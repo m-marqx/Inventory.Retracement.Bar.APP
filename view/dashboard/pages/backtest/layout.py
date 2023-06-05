@@ -241,7 +241,7 @@ def layout(lang="en_US"):
                                                 lang["RUN_BACKTEST"],
                                                 id="backtest_run_button",
                                                 style={
-                                                    "margin": "5px",
+                                                    "margin": "10px",
                                                     "border-radius": "20px",
                                                 },
                                                 color="primary",

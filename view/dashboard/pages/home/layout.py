@@ -205,7 +205,7 @@ def layout(lang="en_US"):
                                             lang["RUN_STRATEGY"],
                                             id="run_button",
                                             style={
-                                                "margin": "5px",
+                                                "margin-top": "10px",
                                                 "border-radius": "20px",
                                             },
                                             color="primary",
