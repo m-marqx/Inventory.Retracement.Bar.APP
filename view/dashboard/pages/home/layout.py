@@ -119,9 +119,11 @@ def layout(lang="en_US"):
                                                         [
                                                             dbc.Col(
                                                                 main_page_components.indicators_parameters_col1,
+                                                                width=6,
                                                             ),
                                                             dbc.Col(
                                                                 main_page_components.indicators_parameters_col2,
+                                                                width=6,
                                                             ),
                                                         ]
                                                     ),
@@ -150,6 +152,7 @@ def layout(lang="en_US"):
                                                         [
                                                             dbc.Col(
                                                                 main_page_components.irb_parameters_col1,
+                                                                width=6,
                                                                 style={
                                                                     "display": "flex",
                                                                     "flex-direction": "column",
@@ -157,6 +160,7 @@ def layout(lang="en_US"):
                                                             ),
                                                             dbc.Col(
                                                                 main_page_components.irb_parameters_col2,
+                                                                width=6,
                                                                 style={
                                                                     "display": "flex",
                                                                     "flex-direction": "column",
@@ -223,6 +227,7 @@ def layout(lang="en_US"):
                                     ]
                                 ),
                             ],
+                            width=3,
                         ),
                     ],
                 ),

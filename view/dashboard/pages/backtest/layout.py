@@ -127,9 +127,11 @@ def layout(lang="en_US"):
                                                                 [
                                                                     dbc.Col(
                                                                         backtest_components.indicators_parameters_col1,
+                                                                        width=6,
                                                                     ),
                                                                     dbc.Col(
                                                                         backtest_components.indicators_parameters_col2,
+                                                                        width=6,
                                                                     ),
                                                                 ]
                                                             )
@@ -166,6 +168,7 @@ def layout(lang="en_US"):
                                                                             "display": "flex",
                                                                             "flex-direction": "column",
                                                                         },
+                                                                        width=6,
                                                                     ),
                                                                     dbc.Col(
                                                                         backtest_components.irb_parameters_col2,
@@ -173,6 +176,7 @@ def layout(lang="en_US"):
                                                                             "display": "flex",
                                                                             "flex-direction": "column",
                                                                         },
+                                                                        width=6,
                                                                     ),
                                                                 ]
                                                             ),
