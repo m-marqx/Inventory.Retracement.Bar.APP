@@ -157,7 +157,7 @@ def layout(lang="en_US"):
                                                 color="secondary",
                                             ),
                                             dbc.Collapse(
-                                                children=dbc.Card(
+                                                dbc.Card(
                                                     dbc.CardBody(
                                                         [
                                                             dbc.Row(
@@ -203,7 +203,7 @@ def layout(lang="en_US"):
                                                 color="secondary",
                                             ),
                                             dbc.Collapse(
-                                                children=dbc.Card(
+                                                dbc.Card(
                                                     dbc.CardBody(
                                                         backtest_components.filter_components,
                                                     )
@@ -228,7 +228,7 @@ def layout(lang="en_US"):
                                                 color="secondary",
                                             ),
                                             dbc.Collapse(
-                                                children=dbc.Card(
+                                                dbc.Card(
                                                     dbc.CardBody(
                                                         backtest_components.hardware_components,
                                                     )

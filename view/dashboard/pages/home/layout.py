@@ -1,5 +1,3 @@
-# %%
-# from view.dashboard.layout import app
 from dash import dcc, html, register_page
 import dash_bootstrap_components as dbc
 from view.dashboard.pages.general.components import GeneralComponents
@@ -146,7 +144,7 @@ def layout(lang="en_US"):
                                             color="secondary",
                                         ),
                                         dbc.Collapse(
-                                            children=dbc.Card(
+                                            dbc.Card(
                                                 dbc.CardBody(
                                                     dbc.Row(
                                                         [
@@ -188,7 +186,7 @@ def layout(lang="en_US"):
                                             color="secondary",
                                         ),
                                         dbc.Collapse(
-                                            children=dbc.Card(
+                                            dbc.Card(
                                                 dbc.CardBody(
                                                     main_page_components.filter_components,
                                                     style={
