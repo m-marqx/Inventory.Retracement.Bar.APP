@@ -292,10 +292,6 @@ class BacktestComponents:
         )
 
     @property
-    def filter_components_col1(self):
-        return dbc.CardGroup([self.filter_components])
-
-    @property
     def hardware_radio_components_label(self):
         return (
             dbc.Row(
@@ -422,32 +418,6 @@ class BacktestComponents:
                     ),
                     width=45,
                 ),
-            )
-        )
-
-    @property
-    def hardware_components_col1(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.CardGroup(self.hardware_radio_components_label),
-                    dbc.CardGroup(self.hardware_gpu_label),
-                    dbc.CardGroup(self.hardware_cpu_cores_label),
-                    dbc.CardGroup(self.hardware_worker_label),
-                ],
-            ),
-        )
-
-    @property
-    def hardware_components_col2(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.CardGroup(self.hardware_radio_components_input),
-                    dbc.CardGroup(self.hardware_gpu_input),
-                    dbc.CardGroup(self.hardware_cpu_cores_input),
-                    dbc.CardGroup(self.hardware_worker_input),
-                ],
             )
         )
 
