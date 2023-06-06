@@ -403,7 +403,7 @@ class BacktestComponents:
                 dbc.Col(
                     dbc.Input(
                         id="backtest_workers_number",
-                        value=4,
+                        value=4 if self.gpu_count > 0 else 0,
                         type="number",
                         disabled=self.disable_gpu_input,
                     ),
@@ -424,15 +424,15 @@ class BacktestComponents:
             ),
             dbc.Row(
                 [
-                    dbc.Col(dbc.CardGroup(self.hardware_gpu_label)),
-                    dbc.Col(dbc.CardGroup(self.hardware_gpu_input)),
+                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_input)),
                 ],
                 class_name="center-row",
             ),
             dbc.Row(
                 [
-                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_label)),
-                    dbc.Col(dbc.CardGroup(self.hardware_cpu_cores_input)),
+                    dbc.Col(dbc.CardGroup(self.hardware_gpu_label)),
+                    dbc.Col(dbc.CardGroup(self.hardware_gpu_input)),
                 ],
                 class_name="center-row",
             ),
