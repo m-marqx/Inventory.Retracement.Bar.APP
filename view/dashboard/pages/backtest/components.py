@@ -5,7 +5,10 @@ import psutil
 
 class BacktestComponents:
     def __init__(self, lang):
+
         self.lang = lang
+        self.gpu_count = torch.cuda.device_count()
+        self.disable_gpu_input = self.gpu_count == 0
 
     @property
     def indicators_first_col(self):
@@ -341,8 +344,9 @@ class BacktestComponents:
                 dbc.Col(
                     dbc.Input(
                         id="backtest_gpu_number",
-                        value=torch.cuda.device_count(),
+                        value=self.gpu_count,
                         type="number",
+                        disabled=self.disable_gpu_input,
                     ),
                     width=45,
                 ),
@@ -401,6 +405,7 @@ class BacktestComponents:
                         id="backtest_workers_number",
                         value=4,
                         type="number",
+                        disabled=self.disable_gpu_input,
                     ),
                     width=45,
                 ),
