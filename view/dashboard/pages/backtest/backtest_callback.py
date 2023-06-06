@@ -42,8 +42,8 @@ class RunBacktest:
         State("backtest_max_indicator_cci_trend_value", "value"),
         # Hardware Params
         State("hardware_types", "value"),
-        State("backtest_gpu_number", "value"),
         State("backtest_cpu_cores_number", "value"),
+        State("backtest_gpu_number", "value"),
         State("backtest_workers_number", "value"),
     )
     def run_backtest(
