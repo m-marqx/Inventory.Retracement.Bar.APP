@@ -40,7 +40,7 @@ pt_BR = {
     "MODIFY_HARDWARE_PARAMETERS_BUTTON": "Modificar Parâmetros de Hardware",
     "GPU_NUMBER": "Número de GPU",
     "CPU_CORES_NUMBER": "Número de Cores do CPU",
-    "WORKERS_NUMBERS": "Número de workers",
+    "GPU_WORKERS_NUMBERS": "Número de workers da GPU",
     "HARDWARE_TYPE": "Tipo de Hardware",
     # Main Button
     "RUN_STRATEGY": "Executar Estratégia",
@@ -65,5 +65,5 @@ pt_BR = {
     "MIN_CCI_BULLISH_VALUE": "Valor Bullish Mínimo do CCI",
     "MAX_CCI_BULLISH_VALUE": "Valor Bullish Máximo do CCI",
     # Backtest Button
-    "RUN_BACKTEST": "Rodar Backtest"
+    "RUN_BACKTEST": "Rodar Backtest",
 }

@@ -388,7 +388,7 @@ class BacktestComponents:
             dbc.Row(
                 dbc.Col(
                     dbc.Label(
-                        self.lang["WORKERS_NUMBERS"]
+                        self.lang["GPU_WORKERS_NUMBERS"]
                     ),
                     width=45,
                     style={"margin-top": "10px"},
