@@ -281,6 +281,11 @@
   transition: background 0.15s ease-in-out;
 }
 
+.form-control:disabled {
+  color: rgba(255, 255, 255, 0.25);
+  background: var(--gray-11) !important;
+}
+
 .navbar {
   height: 32px !important;
 }
