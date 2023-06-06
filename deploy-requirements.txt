@@ -1,0 +1,14 @@
+dash
+dash-bootstrap-components
+gunicorn
+joblib
+numpy
+pandas
+plotly
+pydantic
+scikit_learn
+python-binance
+pyarrow
+psutil
+torch
+gpuparallel
