@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+import torch
 import psutil
 
 
@@ -340,7 +341,7 @@ class BacktestComponents:
                 dbc.Col(
                     dbc.Input(
                         id="backtest_gpu_number",
-                        value=1,
+                        value=torch.cuda.device_count(),
                         type="number",
                     ),
                     width=45,
