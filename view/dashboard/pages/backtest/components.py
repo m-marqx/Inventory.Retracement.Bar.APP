@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+import psutil
 
 
 class BacktestComponents:
@@ -368,7 +369,7 @@ class BacktestComponents:
                 dbc.Col(
                     dbc.Input(
                         id="backtest_cpu_cores_number",
-                        value=-1,
+                        value=psutil.cpu_count(),
                         type="number",
                     ),
                     width=45,
