@@ -222,3 +222,83 @@ class SaveDataFrame:
         )
 
         return print(str_name + " has been saved")
+
+class CalculateTradePerformance:
+    def __init__(
+        self,
+        data_frame: pd.DataFrame,
+        capital: float,
+        percent: bool = False,
+    ):
+        self.data_frame = data_frame.copy()
+        self.gain_condition = self.data_frame["Result"] > 0
+        self.loss_condition = self.data_frame["Result"] < 0
+        self.close_trade = self.data_frame["Result"] != 0
+        self.data_frame["Capital"] = capital
+        self.data_frame["Result"] = np.where(
+            ~self.close_trade,
+            np.nan,
+            self.data_frame["Result"],
+        )
+        self.percent = percent
+
+    def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str):
+        self.data_frame["Result"] = np.where(
+            self.gain_condition,
+            gain,
+            self.data_frame["Result"],
+        )
+        self.data_frame["Result"] = np.where(
+            self.loss_condition,
+            loss,
+            self.data_frame["Result"],
+        )
+        if method == "sum":
+            self.data_frame["Cumulative_Result"] = (
+                self.data_frame["Result"]
+                .cumsum()
+            )
+
+            self.data_frame["Cumulative_Result"].ffill(inplace=True)
+            self.data_frame["Capital"] = (
+                self.data_frame["Cumulative_Result"]
+                + self.data_frame["Capital"]
+            )
+        elif method == "prod":
+            self.data_frame["Cumulative_Result"] = (
+                self.data_frame["Result"]
+                .cumprod()
+            )
+
+            self.data_frame["Cumulative_Result"].ffill(inplace=True)
+            self.data_frame["Capital"] = (
+                self.data_frame["Cumulative_Result"]
+                * self.data_frame["Capital"]
+            )
+
+        if self.percent:
+            self.data_frame["Result"] = (self.data_frame["Result"] - 1) * 100
+            self.data_frame["Cumulative_Result"] = (
+                self.data_frame["Cumulative_Result"] - 1
+            ) * 100
+
+        return self
+
+    def normal(self, qty: float) -> pd.DataFrame:
+        if self.percent:
+            gain = (
+                self.data_frame["Take_Profit"]
+                / self.data_frame["Entry_Price"]
+                * qty
+            )
+            loss = (
+                self.data_frame["Stop_Loss"]
+                / self.data_frame["Entry_Price"]
+                * qty
+            )
+            self.update_results(gain, loss, "prod")
+        else:
+            gain = self.data_frame["Result"] * qty
+            loss = self.data_frame["Result"] * qty
+            self.update_results(gain, loss, "sum")
+        return self.data_frame
