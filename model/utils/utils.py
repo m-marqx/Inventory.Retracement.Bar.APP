@@ -284,6 +284,15 @@ class CalculateTradePerformance:
 
         return self
 
+    def fixed(self, gain: float, loss: float) -> pd.DataFrame:
+        if self.percent:
+            gain = gain / 100 + 1
+            loss = loss / 100 + 1
+            self.update_results(gain, loss, "prod")
+        else:
+            self.update_results(gain, loss, "sum")
+        return self.data_frame
+
     def normal(self, qty: float) -> pd.DataFrame:
         if self.percent:
             gain = (
