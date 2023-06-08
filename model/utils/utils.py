@@ -234,7 +234,8 @@ class CalculateTradePerformance:
         self.gain_condition = self.data_frame["Result"] > 0
         self.loss_condition = self.data_frame["Result"] < 0
         self.close_trade = self.data_frame["Result"] != 0
-        self.data_frame["Capital"] = capital
+        self.capital = capital
+        self.data_frame["Capital"] = self.capital
         self.data_frame["Result"] = np.where(
             ~self.close_trade,
             np.nan,
@@ -254,7 +255,7 @@ class CalculateTradePerformance:
                 -loss,
                 self.data_frame["Result"],
             )
-            self.data_frame["Result"] = (self.data_frame["Result"] +2)
+            self.data_frame["Result"] = self.data_frame["Result"] + 2
 
         else:
             self.data_frame["Result"] = np.where(
@@ -276,9 +277,8 @@ class CalculateTradePerformance:
             self.data_frame["Cumulative_Result"] = (
                 self.data_frame["Result"]
                 .cumsum()
+                .ffill()
             )
-
-            self.data_frame["Cumulative_Result"].ffill(inplace=True)
             self.data_frame["Capital"] = (
                 self.data_frame["Cumulative_Result"]
                 + self.data_frame["Capital"]
@@ -287,9 +287,8 @@ class CalculateTradePerformance:
             self.data_frame["Cumulative_Result"] = (
                 self.data_frame["Result"]
                 .cumprod()
+                .ffill()
             )
-
-            self.data_frame["Cumulative_Result"].ffill(inplace=True)
             self.data_frame["Capital"] = (
                 self.data_frame["Cumulative_Result"]
                 * self.data_frame["Capital"]
@@ -300,6 +299,9 @@ class CalculateTradePerformance:
             self.data_frame["Cumulative_Result"] = (
                 self.data_frame["Cumulative_Result"] - 1
             ) * 100
+
+        self.data_frame["Cumulative_Result"].fillna(0, inplace=True)
+        self.data_frame["Capital"].fillna(self.capital, inplace=True)
 
         return self
 
