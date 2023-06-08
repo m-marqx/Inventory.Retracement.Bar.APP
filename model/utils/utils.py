@@ -88,9 +88,10 @@ class BrokerEmulator:
         return self.data_frame["Exit_Price"]
 
 class DataProcess:
-    def __init__(self, data_frame):
+    def __init__(self, data_frame: pd.DataFrame, min_value: float = 0.0):
         self.df_transposed = data_frame.copy().T
         self.last_column_name = self.df_transposed.columns[-1]
+        self.min_value = min_value
 
     def classify_dataframe(self, index: bool = False):
         if not index:
@@ -110,7 +111,7 @@ class DataProcess:
     def best_positive_results(self):
         df_transposed_last_column = self.df_transposed.iloc[:, [-1]]
 
-        filtered_df = df_transposed_last_column[df_transposed_last_column > 0]
+        filtered_df = df_transposed_last_column[df_transposed_last_column > self.min_value]
         filtered_df.dropna(inplace=True)
 
         filtered_df_sorted = filtered_df.sort_values(
