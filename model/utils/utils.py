@@ -268,17 +268,10 @@ class CalculateTradePerformance:
                 self.data_frame["Result"],
             )
 
-    def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str):
-        self.data_frame["Result"] = np.where(
-            self.gain_condition,
-            gain,
-            self.data_frame["Result"],
-        )
-        self.data_frame["Result"] = np.where(
-            self.loss_condition,
-            loss,
-            self.data_frame["Result"],
-        )
+    def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str, reverse_results: bool):
+
+        self.calculate_results(gain, loss, reverse_results)
+
         if method == "sum":
             self.data_frame["Cumulative_Result"] = (
                 self.data_frame["Result"]
@@ -314,9 +307,9 @@ class CalculateTradePerformance:
         if self.percent:
             gain = gain / 100 + 1
             loss = loss / 100 + 1
-            self.update_results(gain, loss, "prod")
+            self.update_results(gain, loss, "prod", False)
         else:
-            self.update_results(gain, loss, "sum")
+            self.update_results(gain, loss, "sum", False)
         return self.data_frame
 
     def normal(self, qty: float) -> pd.DataFrame:
@@ -331,9 +324,9 @@ class CalculateTradePerformance:
                 / self.data_frame["Entry_Price"]
                 * qty
             )
-            self.update_results(gain, loss, "prod")
+            self.update_results(gain, loss, "prod", False)
         else:
             gain = self.data_frame["Result"] * qty
             loss = self.data_frame["Result"] * qty
-            self.update_results(gain, loss, "sum")
+            self.update_results(gain, loss, "sum", False)
         return self.data_frame
