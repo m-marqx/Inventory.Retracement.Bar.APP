@@ -40,6 +40,7 @@ class BacktestParams(BaseModel):
     irb_params: IrbParamsBacktest = IrbParamsBacktest()
     indicators_params: IndicatorsParamsBacktest = IndicatorsParamsBacktest()
     trend_params: TrendParamsBacktest = TrendParamsBacktest()
+    result_params: ResultParamsBacktest = ResultParamsBacktest()
 
     @property
     def total_combinations(self):
@@ -56,5 +57,12 @@ class BacktestParams(BaseModel):
             * len(self.trend_params.ema)
             * len(self.trend_params.macd)
             * len(self.trend_params.cci)
+            * len(self.result_params.capital)
+            * len(self.result_params.percent)
+            * len(self.result_params.gain)
+            * len(self.result_params.loss)
+            * len(self.result_params.method)
+            * len(self.result_params.qty)
+            * len(self.result_params.coin_margined)
         )
         return num_combinations
