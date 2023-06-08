@@ -26,6 +26,14 @@ class TrendParamsBacktest(BaseModel):
     macd: List[bool] = [False]
     cci: List[bool] = [False]
 
+class ResultParamsBacktest(BaseModel):
+    capital: List[float] = [100_000]
+    percent: List[bool] = [True]
+    gain: List[float] = [2]
+    loss: List[float] = [-1]
+    method: List[str] = ["Fixed"]
+    qty: List[float] = [1]
+    coin_margined: List[bool] = [True]
 
 class BacktestParams(BaseModel):
     ema_params: EmaParamsBacktest = EmaParamsBacktest()
