@@ -1,1 +1,7 @@
-from model.utils.utils import CleanData, BaseStrategy, Math, BrokerEmulator
+from model.utils.utils import (
+    CleanData,
+    BaseStrategy,
+    Math,
+    BrokerEmulator,
+    CalculateTradePerformance,
+)
