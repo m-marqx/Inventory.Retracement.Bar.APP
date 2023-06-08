@@ -23,3 +23,10 @@ def api_types(lang):
         {"label": lang["FUTURES"], "value": "coin_margined"},
         {"label": lang["MARK_PRICE"], "value": "mark_price"},
     ]
+
+def result_types(lang):
+    return [
+        {"label": lang["FIXED"], "value": "fixed"},
+        {"label": lang["NORMAL"], "value": "normal"},
+        {"label": lang["PERCENTAGE"], "value": "normal"},
+    ]
