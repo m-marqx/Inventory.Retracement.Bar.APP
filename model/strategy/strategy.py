@@ -100,7 +100,7 @@ class CalculateTrend(BaseStrategy):
         """
         self.conditions["uptrend"] = self.conditions.all(axis=1)
         self.df_filtered["uptrend"] = self.conditions["uptrend"]
-        self.df_filtered["uptrend"].fillna(True, inplace=True)
+        self.df_filtered["uptrend"].fillna(False, inplace=True)
         return self.df_filtered
 
 
