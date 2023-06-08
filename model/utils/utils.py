@@ -312,21 +312,34 @@ class CalculateTradePerformance:
             self.update_results(gain, loss, "sum", False)
         return self.data_frame
 
-    def normal(self, qty: float) -> pd.DataFrame:
+    def normal(self, qty: float, coin_margined: bool) -> pd.DataFrame:
         if self.percent:
-            gain = (
-                self.data_frame["Take_Profit"]
-                / self.data_frame["Entry_Price"]
-                * qty
-            )
-            loss = (
-                self.data_frame["Stop_Loss"]
-                / self.data_frame["Entry_Price"]
-                * qty
-            )
-            self.update_results(gain, loss, "prod", False)
+            if coin_margined:
+                gain = (
+                    self.data_frame["Entry_Price"]
+                    / self.data_frame["Take_Profit"]
+                    * qty
+                )
+                loss = (
+                    self.data_frame["Entry_Price"]
+                    / self.data_frame["Stop_Loss"]
+                    * qty
+                )
+            else:
+                gain = (
+                    self.data_frame["Take_Profit"]
+                    / self.data_frame["Entry_Price"]
+                    * qty
+                )
+                loss = (
+                    self.data_frame["Stop_Loss"]
+                    / self.data_frame["Entry_Price"]
+                    * qty
+                )
+            method = "prod"
         else:
             gain = self.data_frame["Result"] * qty
             loss = self.data_frame["Result"] * qty
-            self.update_results(gain, loss, "sum", False)
+            method = "sum"
+        self.update_results(gain, loss, method, coin_margined)
         return self.data_frame
