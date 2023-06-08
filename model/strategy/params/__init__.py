@@ -8,4 +8,5 @@ from .strategy_params import (
     IndicatorsParams,
     TrendParams,
     IrbParams,
+    ResultParams,
 )
