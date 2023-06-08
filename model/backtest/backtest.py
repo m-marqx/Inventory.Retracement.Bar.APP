@@ -83,10 +83,10 @@ class Backtest:
         n_workers_per_gpu=4,
     ):
         param_grid = {
-            'ema_params': ParameterGrid(params.ema_params.dict()),
-            'irb_params': ParameterGrid(params.irb_params.dict()),
-            'indicators_params': ParameterGrid(params.indicators_params.dict()),
-            'trend_params': ParameterGrid(params.trend_params.dict()),
+            'ema_params': ParameterGrid(dict(params.ema_params)),
+            'irb_params': ParameterGrid(dict(params.irb_params)),
+            'indicators_params': ParameterGrid(dict(params.indicators_params)),
+            'trend_params': ParameterGrid(dict(params.trend_params)),
         }
 
         if self.hardware == "GPU":
