@@ -242,6 +242,32 @@ class CalculateTradePerformance:
         )
         self.percent = percent
 
+    def calculate_results(self, gain, loss, reverse_results: bool = False):
+        if reverse_results:
+            self.data_frame["Result"] = np.where(
+                self.gain_condition,
+                -gain,
+                self.data_frame["Result"],
+            )
+            self.data_frame["Result"] = np.where(
+                self.loss_condition,
+                -loss,
+                self.data_frame["Result"],
+            )
+            self.data_frame["Result"] = (self.data_frame["Result"] +2)
+
+        else:
+            self.data_frame["Result"] = np.where(
+                self.gain_condition,
+                gain,
+                self.data_frame["Result"],
+            )
+            self.data_frame["Result"] = np.where(
+                self.loss_condition,
+                loss,
+                self.data_frame["Result"],
+            )
+
     def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str):
         self.data_frame["Result"] = np.where(
             self.gain_condition,
