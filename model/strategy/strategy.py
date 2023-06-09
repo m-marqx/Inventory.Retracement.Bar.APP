@@ -4,6 +4,7 @@ from model.strategy.params import (
     IrbParams,
     TrendParams,
     IndicatorsParams,
+    ResultParams,
 )
 
 from model.utils import BaseStrategy, BrokerEmulator
@@ -539,6 +540,25 @@ class BuilderStrategy(BaseStrategy):
             The BuilderStrategy object.
         """
         self.df_filtered = CalculateIrbSignals(self.df_filtered).execute()
+        return self
+
+    def set_result_params(self, params: ResultParams = ResultParams()):
+        """
+        Set the result parameters for an object.
+
+        Parameters:
+        -----------
+        params : ResultParams
+            An instance of the ResultParams that contains various parameters
+            related to the result of a computation. If `params` is not provided,
+            the default value is an instance of ResultParams.
+
+        Returns:
+        --------
+        self
+            The object itself.
+        """
+        self.result_params = params
         return self
 
     def calculateResults(self):
