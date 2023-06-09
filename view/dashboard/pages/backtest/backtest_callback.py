@@ -143,7 +143,7 @@ class RunBacktest:
                     "macd_histogram_trend_value": list(macd_histogram_trend_value_range),
                     "cci_trend_value": list(cci_trend_value_range),
                 },
-                TrendParamsBacktest={
+                trend_params={
                     "ema": [True],
                     "macd": [False],
                     "cci": [False],
