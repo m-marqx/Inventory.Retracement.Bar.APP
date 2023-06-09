@@ -7,7 +7,11 @@ from model.strategy.params import (
     ResultParams,
 )
 
-from model.utils import BaseStrategy, BrokerEmulator
+from model.utils import (
+    BaseStrategy,
+    BrokerEmulator,
+    CalculateTradePerformance,
+)
 
 
 class CalculateTrend(BaseStrategy):
@@ -386,7 +390,7 @@ class CheckIrbSignals(BaseStrategy):
         return self
 
 class CalculateResults(BaseStrategy):
-    def __init__(self, dataframe):
+    def __init__(self, dataframe: pd.DataFrame, params: ResultParams):
         """
         Initialize the CalculateResults object.
 
@@ -394,8 +398,14 @@ class CalculateResults(BaseStrategy):
         -----------
         dataframe : pd.DataFrame
             The input dataframe.
+
+        params : ResultParams
+            An instance of the ResultParams class containing various parameters
+            related to the computation.
+
         """
         super().__init__(dataframe)
+        self.params = params
 
     def execute(self, verify_error=True):
         """
@@ -451,6 +461,20 @@ class CalculateResults(BaseStrategy):
             self.df_filtered["Result"]
             .cumsum()
         )
+
+        capital = self.params.capital
+        percent = self.params.percent
+        gain = self.params.gain
+        loss = self.params.loss
+        method = self.params.method
+        qty = self.params.qty
+        coin_margined = self.params.coin_margined
+
+        ctp = CalculateTradePerformance(self.df_filtered, capital, percent)
+        if method == "fixed":
+            self.df_filtered = ctp.fixed(gain,loss)
+        else:
+            self.df_filtered = ctp.normal(qty, coin_margined)
 
         if verify_error:
             CheckIrbSignals(self.df_filtered).execute()
@@ -570,7 +594,7 @@ class BuilderStrategy(BaseStrategy):
         BuilderStrategy
             The BuilderStrategy object.
         """
-        self.df_filtered = CalculateResults(self.df_filtered).execute()
+        self.df_filtered = CalculateResults(self.df_filtered, self.result_params).execute()
         return self
 
     def execute(self):
