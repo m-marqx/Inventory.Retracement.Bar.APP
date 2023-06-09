@@ -148,6 +148,15 @@ class RunBacktest:
                     "macd": [False],
                     "cci": [False],
                 },
+                result_params={
+                    "capital": [100_000],
+                    "percent": [True],
+                    "gain": [2],
+                    "loss": [-1],
+                    "method": ["Fixed"],
+                    "qty": [1],
+                    "coin_margined": [True],
+                }
             )
             backtest = Backtest(data_frame, hardware_type)
             data_frame = backtest.param_grid_backtest(
