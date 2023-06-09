@@ -160,13 +160,19 @@ class RunBacktest:
             )
             backtest = Backtest(data_frame, hardware_type)
             data_frame = backtest.param_grid_backtest(
+                column="Capital",
                 params=backtest_params,
                 n_jobs=backtest_cpu_cores_number,
                 n_gpu=backtest_gpu_number,
                 n_workers_per_gpu=backtest_workers_number,
             )
 
-            data_frame = DataProcess(data_frame).best_positive_results
+            data_frame = DataProcess(
+                data_frame,
+                backtest_params
+                .result_params
+                .capital
+            ).best_positive_results
 
             graph_layout = GraphLayout(
                 data_frame,

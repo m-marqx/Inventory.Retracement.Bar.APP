@@ -12,6 +12,7 @@ from model.strategy.params import (
     IrbParams,
     IndicatorsParams,
     TrendParams,
+    ResultParams,
 )
 
 from model.strategy.strategy import BuilderStrategy
@@ -36,12 +37,14 @@ class Backtest:
         irb_params: IrbParams,
         indicators: IndicatorsParams,
         trend: TrendParams,
+        result_params: ResultParams,
     ):
         self.parameters_list = [
             f"EMA: {ema_params} <br> "
             f"IRB: {irb_params} <br> "
             f"Indicators: {indicators} <br> "
             f"Filters: {trend}"
+            f"Result: {result_params}"
         ]
 
         self.strategy_df = (
@@ -61,22 +64,24 @@ class Backtest:
             .set_irb_params(irb_params)
             .get_irb_signals()
             .calculate_irb_signals()
+            .set_result_params(result_params)
             .calculateResults()
             .execute()
         )
         return self.strategy_df, self.parameters_list
 
-    def run_backtest(self, ema_params, irb_params, indicators, trend, **kwargs):
+    def run_backtest(self, ema_params, irb_params, indicators, trend, result_params, **kwargs):
         return self.strategy(
             ema_params,
             irb_params,
             indicators,
             trend,
+            result_params,
         )
 
     def param_grid_backtest(
         self,
-        column="Cumulative_Result",
+        column="Capital",
         n_jobs=-1,
         params: BacktestParams = BacktestParams(),
         n_gpu=1,
@@ -87,6 +92,7 @@ class Backtest:
             'irb_params': ParameterGrid(dict(params.irb_params)),
             'indicators_params': ParameterGrid(dict(params.indicators_params)),
             'trend_params': ParameterGrid(dict(params.trend_params)),
+            'result_params': ParameterGrid(dict(params.result_params)),
         }
 
         if self.hardware == "GPU":
@@ -102,6 +108,7 @@ class Backtest:
                 IrbParams(**dict(params[1])),
                 IndicatorsParams(**dict(params[2])),
                 TrendParams(**dict(params[3])),
+                ResultParams(**dict(params[4])),
             ) for params in product(*param_grid.values())
         )
 
