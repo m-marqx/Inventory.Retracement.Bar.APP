@@ -64,6 +64,16 @@ pt_BR = {
     "MAX_MACD_BULLISH_VALUE": "Valor Bullish Máximo do MACD",
     "MIN_CCI_BULLISH_VALUE": "Valor Bullish Mínimo do CCI",
     "MAX_CCI_BULLISH_VALUE": "Valor Bullish Máximo do CCI",
+    # Parâmetros de Resultado
+    "MODIFY_RESULT_PARAMETERS_BUTTON": "Modificar Parâmetros de Resultado",
+    "RESULT_TYPE": "Tipo de Resultado",
+    "FIXED": "Resultados Fixos",
+    "NORMAL": "Resultados Normais",
+    "PERCENTAGE": "Resultados Percentuais",
+    "PROFIT": "Lucro",
+    "LOSS": "Prejuízo",
+    "INITIAL_CAPITAL": "Capital Inicial",
+    "QUANTITY": "Quantidade",
     # Backtest Button
     "RUN_BACKTEST": "Rodar Backtest",
 }

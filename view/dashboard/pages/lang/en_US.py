@@ -64,6 +64,16 @@ en_US = {
     "MAX_MACD_BULLISH_VALUE": "Max MACD Bullish Value",
     "MIN_CCI_BULLISH_VALUE": "Min CCI Bullish Value",
     "MAX_CCI_BULLISH_VALUE": "Max CCI Bullish Value",
+    #Result Parameters
+    "MODIFY_RESULT_PARAMETERS_BUTTON": "Modify Result Parameters",
+    "RESULT_TYPE": "Result Type",
+    "FIXED": "Fixed",
+    "NORMAL": "Normal",
+    "USE_PERCENTAGE_RESULTS": "Use Percentage Results",
+    "PROFIT": "Profit",
+    "LOSS": "Loss",
+    "INITIAL_CAPITAL": "Initial Capital",
+    "QUANTITY": "Quantity",
     # Backtest Button
     "RUN_BACKTEST": "Run Backtest",
 }
