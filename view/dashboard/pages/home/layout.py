@@ -198,6 +198,29 @@ def layout(lang="en_US"):
                                             id="trend_params_collapse",
                                             is_open=False,
                                         ),
+                                        dbc.Button(
+                                            [
+                                                lang["MODIFY_RESULT_PARAMETERS_BUTTON"],
+                                                html.I(
+                                                    className="fa fa-chevron-down ml-2",
+                                                    id="result_params_icon",
+                                                    style={"transformY": "2px"},
+                                                ),
+                                            ],
+                                            id="result_params_button",
+                                            className="d-grid gap-2 col-6 mx-auto w-100",
+                                            outline=True,
+                                            color="secondary",
+                                        ),
+                                        dbc.Collapse(
+                                            dbc.Card(
+                                                dbc.CardBody(
+                                                    general_components.result_components,
+                                                )
+                                            ),
+                                            id="result_params_collapse",
+                                            is_open=False,
+                                        ),
                                     ],
                                     class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container",
                                 ),

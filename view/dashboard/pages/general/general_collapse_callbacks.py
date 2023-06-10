@@ -64,3 +64,18 @@ class GeneralCollapse:
             return False, "fa fa-chevron-down ml-2"
         else:
             return True, "fa fa-chevron-up ml-2"
+
+    @callback(
+        Output("result_params_collapse", "is_open"),
+        Output("result_params_icon", "className"),
+        Input("result_params_button", "n_clicks"),
+        State("result_params_collapse", "is_open"),
+    )
+    def toggle_result_params_collapse(n_clicks, is_open):
+        if not n_clicks:
+            raise dash.exceptions.PreventUpdate
+
+        if is_open:
+            return False, "fa fa-chevron-down ml-2"
+        else:
+            return True, "fa fa-chevron-up ml-2"
