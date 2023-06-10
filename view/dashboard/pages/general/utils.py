@@ -28,5 +28,4 @@ def result_types(lang):
     return [
         {"label": lang["FIXED"], "value": "fixed"},
         {"label": lang["NORMAL"], "value": "normal"},
-        {"label": lang["PERCENTAGE"], "value": "normal"},
     ]
