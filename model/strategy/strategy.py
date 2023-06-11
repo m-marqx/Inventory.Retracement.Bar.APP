@@ -96,12 +96,16 @@ class CalculateTrend(BaseStrategy):
 
     def execute(self):
         """
-        Execute the trend calculation.
+        The function executes a filtering process on a DataFrame and adds a new
+        column indicating whether the data is in an uptrend or not.
 
         Returns:
         --------
-        pd.DataFrame
-            The processed dataframe with a boolean value indicating the trend.
+            pd.DataFrame
+                The function `execute` returns the filtered DataFrame with an
+                additional `uptrend` column that contains boolean values indicating
+                whether the conditions for an uptrend are met or not. If no indicator
+                is set, the `uptrend` column for all rows will be `True`.
         """
         self.conditions["uptrend"] = self.conditions.all(axis=1)
         self.df_filtered["uptrend"] = self.conditions["uptrend"]
