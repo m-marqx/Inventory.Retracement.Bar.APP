@@ -146,17 +146,16 @@ class GeneralComponents:
             ],
         )
 
-
     @property
     def result_type_components(self):
         return dbc.Row(
             [
                 dbc.Col(
                     dbc.Label(self.lang["RESULT_TYPE"]),
-                        width=45,
-                        style={"margin": "10px"},
-                        class_name="center"
-                    ),
+                    width=45,
+                    style={"margin": "10px"},
+                    class_name="center",
+                ),
                 dbc.Col(
                     dbc.RadioItems(
                         result_types(self.lang),
@@ -167,39 +166,46 @@ class GeneralComponents:
                         inline=True,
                         value="fixed"
                     ),
-                    class_name="center"
-                )
+                    class_name="center",
+                ),
             ],
             style={"justify-content": "center"},
         )
+
     @property
     def percentage_component(self):
         return dbc.Row(
             [
                 dbc.Col(
                     dbc.Checklist(
-                        [{"label": self.lang["USE_PERCENTAGE_RESULTS"], "value": "percentage"}],
+                        [
+                            {
+                                "label": self.lang["USE_PERCENTAGE_RESULTS"],
+                                "value": "percentage",
+                            }
+                        ],
                         id="result_percentage",
                         input_class_name="btn-check",
                         label_class_name="btn btn-primary",
                         label_checked_class_name="active",
                         value=[],
                     ),
-                    class_name="center"
+                    class_name="center",
                 )
             ],
             style={"justify-content": "center"},
         )
+
     @property
     def result_param_first_col(self):
         return dbc.Row(
             [
                 dbc.Col(
                     dbc.Label(self.lang["INITIAL_CAPITAL"]),
-                        width=45,
-                        style={"margin-top": "10px"},
-                        class_name="center"
-                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                    class_name="center",
+                ),
                 dbc.Col(
                     dbc.Input(
                         id="initial_capital_value",
@@ -210,10 +216,10 @@ class GeneralComponents:
                 ),
                 dbc.Col(
                     dbc.Label(self.lang["LOSS"]),
-                        width=45,
-                        style={"margin-top": "10px"},
-                        class_name="center"
-                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                    class_name="center",
+                ),
                 dbc.Col(
                     dbc.Input(
                         id="loss_result_value",
@@ -231,9 +237,9 @@ class GeneralComponents:
             [
                 dbc.Col(
                     dbc.Label(self.lang["QUANTITY"]),
-                        width=45,
-                        style={"margin-top": "10px"},
-                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                ),
                 dbc.Col(
                     dbc.Input(
                         id="qty_result_value",
@@ -244,9 +250,9 @@ class GeneralComponents:
                 ),
                 dbc.Col(
                     dbc.Label(self.lang["PROFIT"]),
-                        width=45,
-                        style={"margin-top": "10px"},
-                    ),
+                    width=45,
+                    style={"margin-top": "10px"},
+                ),
                 dbc.Col(
                     dbc.Input(
                         id="gain_result_value",
