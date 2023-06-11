@@ -183,6 +183,7 @@ class GeneralComponents:
                         input_class_name="btn-check",
                         label_class_name="btn btn-primary",
                         label_checked_class_name="active",
+                        value=[],
                     ),
                     class_name="center"
                 )
