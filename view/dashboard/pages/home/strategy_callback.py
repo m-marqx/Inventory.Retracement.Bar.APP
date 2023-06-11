@@ -177,6 +177,6 @@ class RunStrategy:
 
             data_frame = builder(data_frame, builder_params)
             graph_layout = GraphLayout(data_frame, data_symbol, interval, api_type)
-            fig = graph_layout.plot_cumulative_results()
+            fig = graph_layout.plot_single_linechart("Capital")
             text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
             return fig, text_output
