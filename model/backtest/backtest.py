@@ -19,6 +19,11 @@ from model.strategy.strategy import BuilderStrategy
 from model.strategy.indicators import BuilderSource
 from model.backtest.backtest_params import BacktestParams
 
+from view.dashboard.utils import (
+    BuilderParams,
+    builder,
+)
+
 class Backtest:
     def __init__(self, dataframe: pd.DataFrame, hardware_type: str = "GPU"):
         self.dataframe = dataframe.copy()
@@ -33,41 +38,30 @@ class Backtest:
 
     def strategy(
         self,
-        ema_params: EmaParams,
-        irb_params: IrbParams,
-        indicators: IndicatorsParams,
-        trend: TrendParams,
-        result_params: ResultParams,
+        ema_parameters: EmaParams,
+        irb_parameters: IrbParams,
+        indicator_parameters: IndicatorsParams,
+        trend_parameters: TrendParams,
+        result_parameters: ResultParams,
     ):
         self.parameters_list = [
-            f"EMA: {ema_params} <br> "
-            f"IRB: {irb_params} <br> "
-            f"Indicators: {indicators} <br> "
-            f"Filters: {trend}"
-            f"Result: {result_params}"
+            f"EMA: {ema_parameters} <br> "
+            f"IRB: {irb_parameters} <br> "
+            f"Indicators: {indicator_parameters} <br> "
+            f"Filters: {trend_parameters}"
+            f"Result: {result_parameters}"
         ]
 
-        self.strategy_df = (
-            BuilderSource(
-                self.dataframe,
-            )
-            .set_EMA_params(ema_params)
-            .set_ema()
-            .execute()
+        strategy_params = BuilderParams(
+            ema_params=ema_parameters,
+            irb_params=irb_parameters,
+            indicators_params=indicator_parameters,
+            trend_params=trend_parameters,
+            result_params=result_parameters,
         )
-        self.strategy_df = (
-            BuilderStrategy(
-                self.strategy_df,
-            )
-            .set_trend_params(indicators, trend)
-            .get_trend()
-            .set_irb_params(irb_params)
-            .get_irb_signals()
-            .calculate_irb_signals()
-            .set_result_params(result_params)
-            .calculateResults()
-            .execute()
-        )
+
+        self.strategy_df = builder(self.dataframe, strategy_params)
+
         return self.strategy_df, self.parameters_list
 
     def run_backtest(
