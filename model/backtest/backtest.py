@@ -70,7 +70,15 @@ class Backtest:
         )
         return self.strategy_df, self.parameters_list
 
-    def run_backtest(self, ema_params, irb_params, indicators, trend, result_params, **kwargs):
+    def run_backtest(
+        self,
+        ema_params,
+        irb_params,
+        indicators,
+        trend,
+        result_params,
+        **kwargs
+    ):
         return self.strategy(
             ema_params,
             irb_params,
@@ -112,9 +120,9 @@ class Backtest:
             ) for params in product(*param_grid.values())
         )
 
-        df_result = {}
+        results_dict = {}
 
         for params, arr in zip(product(*param_grid.values()), results):
-            df_result[arr[1][-1]] = arr[0][column]
+            results_dict[arr[1][-1]] = arr[0][column]
 
-        return pd.DataFrame(df_result)
+        return pd.DataFrame(results_dict)
