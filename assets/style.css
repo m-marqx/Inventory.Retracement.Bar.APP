@@ -17,6 +17,10 @@
   justify-items: center;
 }
 
+.hidden{
+  display: none !important;
+}
+
 .dropdown-toggle {
   width: 100%;
 }
