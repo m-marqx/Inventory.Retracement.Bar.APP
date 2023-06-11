@@ -7,6 +7,7 @@ from model.strategy.params import (
     TrendParams,
     IrbParams,
     IndicatorsParams,
+    ResultParams,
 )
 
 from model.strategy.indicators import BuilderSource
@@ -27,9 +28,10 @@ class BuilderParams(BaseModel):
     irb_params = IrbParams()
     indicator_params = IndicatorsParams()
     trend_params = TrendParams(ema=True, macd=True, cci=True)
+    result_params = ResultParams()
 
 
-def builder(data_frame, params: BuilderParams()):
+def builder(data_frame, params: BuilderParams = BuilderParams()):
     df_source = BuilderSource(data_frame)
     if params.trend_params.ema:
         df_source = df_source.set_EMA_params(params.ema_params).set_ema()
@@ -46,6 +48,7 @@ def builder(data_frame, params: BuilderParams()):
         .set_irb_params(params.irb_params)
         .get_irb_signals()
         .calculate_irb_signals()
+        .set_result_params(params.result_params)
         .calculateResults()
         .execute()
     )
