@@ -84,6 +84,15 @@ class GraphLayout:
         self.fig_layout(fig, column)
         return fig
 
+    def plot_single_linechart(self, column):
+        fig = px.line(
+            x=self.data_frame.index,
+            y=self.data_frame[column],
+            color_discrete_sequence=[self.primary_color],
+        )
+        self.fig_layout(fig, column)
+        return fig
+
     def plot_close(self):
         column = "close"
         fig = px.line(
