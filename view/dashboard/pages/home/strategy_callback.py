@@ -11,6 +11,7 @@ from model.strategy.params import (
     TrendParams,
     IrbParams,
     IndicatorsParams,
+    ResultParams,
 )
 
 from view.dashboard.utils import (
@@ -49,6 +50,12 @@ class RunStrategy:
         State("indicator_macd_histogram_trend_value", "value"),
         State("indicator_cci_trend_value", "value"),
         State("checklist", "value"),
+        State("result_types", "value"),
+        State("result_percentage", "value"),
+        State("initial_capital_value", "value"),
+        State("qty_result_value", "value"),
+        State("gain_result_value", "value"),
+        State("loss_result_value", "value"),
     )
     def run_strategy(
         run_button,
@@ -73,6 +80,12 @@ class RunStrategy:
         indicator_macd_histogram_trend_value,
         indicator_cci_trend_value,
         checklist,
+        result_types,
+        result_percentage,
+        initial_capital_value,
+        qty_result_value,
+        gain_result_value,
+        loss_result_value,
     ):
         ctx = dash.callback_context
         if not ctx.triggered:
@@ -107,6 +120,7 @@ class RunStrategy:
             ema_bool = False
             macd_bool = False
             cci_bool = False
+            use_percentage = result_percentage == "percentage"
 
             if checklist is not None:
                 for bool_param in checklist:
@@ -150,6 +164,15 @@ class RunStrategy:
                     macd=macd_bool,
                     cci=cci_bool,
                 ),
+                result_params = ResultParams(
+                    capital = initial_capital_value,
+                    percent = use_percentage,
+                    gain = gain_result_value,
+                    loss = loss_result_value,
+                    method = result_types,
+                    qty = qty_result_value,
+                    coin_margined = False,
+                )
             )
 
             data_frame = builder(data_frame, builder_params)
