@@ -7,6 +7,8 @@ from view.dashboard.pages.lang import en_US, pt_BR
 from view.dashboard.pages.general.components import GeneralComponents
 
 from .components import BacktestComponents
+from .results_components import ResultsComponents
+
 
 register_page(
     __name__,
@@ -25,6 +27,7 @@ def layout(lang="en_US"):
 
     backtest_components = BacktestComponents(lang)
     general_components = GeneralComponents(lang)
+    results_components = ResultsComponents(lang)
 
     mem = psutil.virtual_memory()
     available_ram = mem.available
@@ -209,6 +212,29 @@ def layout(lang="en_US"):
                                                     )
                                                 ),
                                                 id="trend_params_collapse",
+                                                is_open=False,
+                                            ),
+                                            dbc.Button(
+                                                [
+                                                    lang["MODIFY_RESULT_PARAMETERS_BUTTON"],
+                                                    html.I(
+                                                        className="fa fa-chevron-down ml-2",
+                                                        id="result_params_icon",
+                                                        style={"transformY": "2px"},
+                                                    ),
+                                                ],
+                                                id="result_params_button",
+                                                className="d-grid gap-2 col-6 mx-auto w-100",
+                                                outline=True,
+                                                color="secondary",
+                                            ),
+                                            dbc.Collapse(
+                                                dbc.Card(
+                                                    dbc.CardBody(
+                                                        results_components.result_components,
+                                                    )
+                                                ),
+                                                id="result_params_collapse",
                                                 is_open=False,
                                             ),
                                             dbc.Button(

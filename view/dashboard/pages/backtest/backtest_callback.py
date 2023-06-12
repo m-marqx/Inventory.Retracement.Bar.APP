@@ -14,7 +14,18 @@ from view.dashboard.utils import (
     get_data,
 )
 
+
 class RunBacktest:
+    @callback(
+        Output("backtest_result_margin_type_col", "class_name"),
+        Input("result_percentage", "value"),
+        State("backtest_result_types", "value"),
+    )
+    def show_margin_type(result_percentage, result_types):
+        if len(result_percentage) == 1 and "Normal" in result_types:
+            return "center"
+        return "hidden"
+
     @callback(
         Output("backtest_results", "figure"),
         Output("backtest_text_output", "children"),
@@ -45,6 +56,13 @@ class RunBacktest:
         State("backtest_cpu_cores_number", "value"),
         State("backtest_gpu_number", "value"),
         State("backtest_workers_number", "value"),
+        State("backtest_result_types", "value"),
+        State("result_percentage", "value"),
+        State("initial_capital_value", "value"),
+        State("qty_result_value", "value"),
+        State("gain_result_value", "value"),
+        State("loss_result_value", "value"),
+        State("result_margin_type", "value"),
     )
     def run_backtest(
         # Get Data
@@ -74,6 +92,14 @@ class RunBacktest:
         backtest_cpu_cores_number,
         backtest_gpu_number,
         backtest_workers_number,
+        # Result Params
+        backtest_result_types,
+        result_percentage,
+        initial_capital_value,
+        qty_result_value,
+        gain_result_value,
+        loss_result_value,
+        result_margin_type,
     ):
         ctx = dash.callback_context
         if not ctx.triggered:
@@ -81,6 +107,7 @@ class RunBacktest:
 
         if "backtest_run_button" in ctx.triggered[0]["prop_id"]:
             symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
+            use_percentage = len(result_percentage) == 1
 
             if api_type in ("coin_margined", "mark_price"):
                 if symbol.endswith("USD"):
@@ -149,13 +176,13 @@ class RunBacktest:
                     "cci": [False],
                 },
                 result_params={
-                    "capital": [100_000],
-                    "percent": [True],
-                    "gain": [2],
-                    "loss": [-1],
-                    "method": ["Fixed"],
-                    "qty": [1],
-                    "coin_margined": [True],
+                    "capital": [initial_capital_value],
+                    "percent": [use_percentage],
+                    "gain": [gain_result_value],
+                    "loss": [loss_result_value],
+                    "method": backtest_result_types,
+                    "qty": [qty_result_value],
+                    "coin_margined": [result_margin_type],
                 }
             )
             backtest = Backtest(data_frame, hardware_type)
