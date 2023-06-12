@@ -197,6 +197,30 @@ class GeneralComponents:
         )
 
     @property
+    def margin_type(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.RadioItems(
+                        [
+                            {"label": "COIN", "value": True},
+                            {"label": "USD", "value": False},
+                        ],
+                        id="result_margin_type",
+                        input_class_name="btn-check",
+                        label_class_name="btn btn-primary",
+                        label_checked_class_name="active",
+                        value=False,
+                        inline=True,
+                    ),
+                    class_name="center",
+                    id="home_result_margin_type_col",
+                )
+            ],
+            style={"justify-content": "center"},
+        )
+
+    @property
     def result_param_first_col(self):
         return dbc.Row(
             [
@@ -298,6 +322,10 @@ class GeneralComponents:
             dbc.Row(self.result_type_components),
             dbc.Row(
                 self.percentage_component,
+                style={"margin-top": "20px"},
+            ),
+            dbc.Row(
+                self.margin_type,
                 style={"margin-top": "20px"},
             ),
         )

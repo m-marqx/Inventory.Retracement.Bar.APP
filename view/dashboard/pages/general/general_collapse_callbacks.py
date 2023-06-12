@@ -3,6 +3,17 @@ from dash import Output, Input, State, callback
 
 class GeneralCollapse:
     @callback(
+        Output("home_result_margin_type_col", "class_name"),
+        Input("result_percentage", "value"),
+        Input("result_types", "value"),
+    )
+    def show_margin_type(result_percentage, result_types):
+        print(result_types)
+        if len(result_percentage) == 1 and result_types == "Normal":
+            return "center"
+        return "hidden"
+
+    @callback(
         Output("strategy_params_collapse", "is_open"),
         Output("strategy_params_icon", "className"),
         Input("strategy_params_button", "n_clicks"),

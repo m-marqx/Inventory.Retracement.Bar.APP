@@ -56,6 +56,7 @@ class RunStrategy:
         State("qty_result_value", "value"),
         State("gain_result_value", "value"),
         State("loss_result_value", "value"),
+        State("result_margin_type", "value"),
     )
     def run_strategy(
         run_button,
@@ -86,6 +87,7 @@ class RunStrategy:
         qty_result_value,
         gain_result_value,
         loss_result_value,
+        result_margin_type,
     ):
         ctx = dash.callback_context
         if not ctx.triggered:
@@ -171,7 +173,7 @@ class RunStrategy:
                     loss = loss_result_value,
                     method = result_types,
                     qty = qty_result_value,
-                    coin_margined = False,
+                    coin_margined = result_margin_type,
                 )
             )
 
