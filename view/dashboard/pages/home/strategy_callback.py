@@ -120,7 +120,7 @@ class RunStrategy:
             ema_bool = False
             macd_bool = False
             cci_bool = False
-            use_percentage = result_percentage == "percentage"
+            use_percentage = len(result_percentage) == 1
 
             if checklist is not None:
                 for bool_param in checklist:

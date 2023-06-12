@@ -181,7 +181,7 @@ class GeneralComponents:
                         [
                             {
                                 "label": self.lang["USE_PERCENTAGE_RESULTS"],
-                                "value": "percentage",
+                                "value": True,
                             }
                         ],
                         id="result_percentage",
