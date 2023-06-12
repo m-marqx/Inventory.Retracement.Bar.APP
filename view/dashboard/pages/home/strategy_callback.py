@@ -117,6 +117,7 @@ class RunStrategy:
             else:
                 data_frame = get_data(data_symbol, interval, api_type)
 
+            data_frame.drop_duplicates(inplace=True)
             SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
             ema_bool = False
