@@ -156,6 +156,7 @@ class SetTrend(BaseStrategy):
         self.trend.execute()
         return self
 
+
 class SetTicksize(BaseStrategy):
     def __init__(self, tick_size=0.1):
         """
@@ -331,15 +332,14 @@ class CalculateIrbSignals(BaseStrategy):
                     self.close_position_arr[index] = True
                     self.signal_arr[index] = -2
 
-
         self.df_filtered["Signal"] = self.signal_arr
         self.df_filtered["Signal"].fillna(0, inplace=True)
 
         self.df_filtered["Position"] = np.where(
             self.df_filtered["Signal"] != self.df_filtered["Signal"].shift(),
             self.df_filtered["Signal"],
-            0
-        ).astype('int8')
+            0,
+        ).astype("int8")
 
         self.df_filtered["Entry_Price"] = self.entry_price_arr
         self.df_filtered["Take_Profit"] = self.take_profit_arr
@@ -348,6 +348,7 @@ class CalculateIrbSignals(BaseStrategy):
         self.df_filtered["Signal_Condition"] = self.signal_condition
 
         return self.df_filtered
+
 
 class CheckIrbSignals(BaseStrategy):
     def __init__(self, dataframe):
@@ -392,6 +393,7 @@ class CheckIrbSignals(BaseStrategy):
 
         self.df_check["Error"] = has_error
         return self
+
 
 class CalculateResults(BaseStrategy):
     def __init__(self, dataframe: pd.DataFrame, params: ResultParams):
@@ -475,8 +477,8 @@ class CalculateResults(BaseStrategy):
         coin_margined = self.params.coin_margined
 
         ctp = CalculateTradePerformance(self.df_filtered, capital, percent)
-        if method == "fixed":
-            self.df_filtered = ctp.fixed(gain,loss)
+        if method == "Fixed":
+            self.df_filtered = ctp.fixed(gain, loss)
         else:
             self.df_filtered = ctp.normal(qty, coin_margined)
 
@@ -484,6 +486,7 @@ class CalculateResults(BaseStrategy):
             CheckIrbSignals(self.df_filtered).execute()
 
         return self.df_filtered
+
 
 class BuilderStrategy(BaseStrategy):
     def __init__(self, dataframe):

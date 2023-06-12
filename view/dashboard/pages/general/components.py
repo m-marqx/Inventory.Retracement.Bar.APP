@@ -164,7 +164,7 @@ class GeneralComponents:
                         label_class_name="btn btn-primary",
                         label_checked_class_name="active",
                         inline=True,
-                        value="fixed"
+                        value="Fixed",
                     ),
                     class_name="center",
                 ),
