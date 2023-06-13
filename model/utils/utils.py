@@ -485,12 +485,43 @@ class SaveDataFrame:
         return print(str_name + " has been saved")
 
 class CalculateTradePerformance:
+
+    '''This is a Python class that calculates trading results based on a
+    given DataFrame, capital, and trading strategy.
+
+    Parameters
+    ----------
+    data_frame : pd.DataFrame
+        A pandas DataFrame containing `Result` columnn.
+    capital : float
+        The initial capital used for trading.
+    percent : bool, optional
+        A boolean parameter that determines whether the results should
+        be calculated as percentages or not. If set to True, the results
+        will be calculated as percentages.
+
+    '''
     def __init__(
         self,
         data_frame: pd.DataFrame,
         capital: float,
         percent: bool = False,
     ):
+        '''This function initializes an object with a DataFrame,
+        capital, and a boolean parameter that determines whether the
+        results are expressed as percentages or not.
+
+        Parameters
+        ----------
+        data_frame : pd.DataFrame
+            a pandas DataFrame containing the `Result` column.
+        capital : float
+            The amount of capital available for trading.
+        percent : bool, optional
+            A boolean parameter that determines whether the result is
+            expressed as a percentage or an absolute value.
+
+        '''
         self.data_frame = data_frame.copy()
         self.gain_condition = self.data_frame["Result"] > 0
         self.loss_condition = self.data_frame["Result"] < 0
@@ -504,7 +535,23 @@ class CalculateTradePerformance:
         )
         self.percent = percent
 
-    def calculate_results(self, gain, loss, reverse_results: bool = False):
+    def calculate_results(self, gain: float, loss: float, reverse_results: bool = False):
+        '''This function calculates results based on gain and loss
+        conditions and can reverse the results if specified.
+
+        Parameters
+        ----------
+        gain : float
+            The amount of gain to be added to the `Result` column of the
+            data frame if the "gain_condition" is True.
+        loss : float
+            The amount of loss to be added to the `Result` column of the
+            data frame if the "gain_condition" is True.
+        reverse_results : bool, optional
+            A boolean parameter that determines whether the results
+            should be reversed or not.
+
+        '''
         if reverse_results:
             self.data_frame["Result"] = np.where(
                 self.gain_condition,
@@ -531,6 +578,32 @@ class CalculateTradePerformance:
             )
 
     def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str, reverse_results: bool):
+        '''This function updates the results of a trading strategy based
+        on gains and losses, using either a sum or product method, and
+        returns the updated results.
+
+        Parameters
+        ----------
+        gain : float | pd.Series
+            A float or a pandas Series representing the gains made in
+            each trade or period.
+        loss : float | pd.Series
+            A float or a pandas Series representing the loss made in
+            each trade or period.
+        method : str
+            The method parameter specifies whether to calculate the
+            cumulative result using the `cumsum` or `cumprod` method.
+        reverse_results : bool
+            A boolean parameter that determines whether the results
+            should be reversed or not. If set to True, the results
+            will be reversed.
+
+        Returns
+        -------
+            The function `update_results` is returning the updated
+            instance of the class object.
+
+        '''
 
         self.calculate_results(gain, loss, reverse_results)
 
@@ -567,6 +640,23 @@ class CalculateTradePerformance:
         return self
 
     def fixed(self, gain: float, loss: float) -> pd.DataFrame:
+        '''This function updates the results of a data frame based on
+        fixed gain and loss values.
+
+        Parameters
+        ----------
+        gain : float
+            The gain parameter is a float value representing the amount
+            of profit in a trade or investment.
+        loss : float
+            The loss parameter is a float value representing the amount
+            of loss in a trade or investment.
+
+        Returns
+        -------
+            a pandas DataFrame.
+
+        '''
         if self.percent:
             gain = gain / 100 + 1
             loss = loss / 100 + 1
@@ -576,6 +666,22 @@ class CalculateTradePerformance:
         return self.data_frame
 
     def normal(self, qty: float, coin_margined: bool) -> pd.DataFrame:
+        '''The function calculates gains and losses based on input
+        parameters and updates the results in a pandas dataframe.
+
+        Parameters
+        ----------
+        qty : float
+            The quantity of the asset being traded.
+        coin_margined : bool
+            A boolean value indicating whether the trade is
+            coin-margined or not.
+
+        Returns
+        -------
+            The function `normal` returns a pandas DataFrame.
+
+        '''
         if self.percent:
             if coin_margined:
                 gain = (
