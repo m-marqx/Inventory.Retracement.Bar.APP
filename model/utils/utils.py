@@ -162,12 +162,62 @@ class BrokerEmulator:
         return self.data_frame["Exit_Price"]
 
 class DataProcess:
+
+    '''The code defines a class with methods to classify and filter a
+    transposed pandas DataFrame.
+
+    Parameters
+    ----------
+    data_frame : pd.DataFrame
+        A pandas DataFrame that will be transposed and used for
+        classification and filtering.
+    min_value : float
+        The minimum value that a row must have in the last column to be
+        included in the "best_positive_results" property.
+
+    '''
     def __init__(self, data_frame: pd.DataFrame, min_value: float = 0.0):
+        '''This is a constructor function that initializes an object
+        with a transposed copy of a pandas DataFrame, the name of the
+        last column, and a minimum value.
+
+        Parameters
+        ----------
+        data_frame : pd.DataFrame
+            A pandas DataFrame that will be transposed and stored as an
+            attribute of the class.
+        min_value : float
+            A float value that represents the minimum value allowed for
+            a certain operation or calculation. It is an optional
+            parameter with a default value of 0.0.
+
+        '''
         self.df_transposed = data_frame.copy().T
         self.last_column_name = self.df_transposed.columns[-1]
         self.min_value = min_value
 
     def classify_dataframe(self, index: bool = False):
+        '''This function classifies a transposed dataframe by ranking
+        its last column and returning a melted version sorted by rank
+        and index.
+
+        Parameters
+        ----------
+        index : bool, optional
+            The "index" parameter is a boolean flag that indicates
+            whether or not to include the original index of the
+            DataFrame in the resulting melted DataFrame. If "index" is
+            set to True, the original index will be included as a column
+            in the melted DataFrame.
+
+        Returns
+        -------
+            a melted and sorted pandas DataFrame with a new column
+            "rank" added to the original transposed DataFrame. The
+            melted DataFrame has three columns: "rank", "index",
+            and "result". The DataFrame is sorted by "rank" and "index".
+
+        '''
         if not index:
             self.df_transposed = self.df_transposed.reset_index(drop=True).copy().T
 
@@ -183,6 +233,20 @@ class DataProcess:
 
     @property
     def best_positive_results(self):
+        '''This function returns a transposed dataframe with rows
+        filtered by a minimum value and sorted by the last column in
+        descending order.
+
+        Returns
+        -------
+            The code is returning a transposed DataFrame containing the
+            rows with positive values greater than the minimum value
+            specified by the user, sorted in descending order based on
+            the last column of the DataFrame. The returned DataFrame is
+            filtered and sorted based on the last column of the original
+            DataFrame.
+
+        '''
         df_transposed_last_column = self.df_transposed.iloc[:, [-1]]
 
         filtered_df = df_transposed_last_column[df_transposed_last_column > self.min_value]
