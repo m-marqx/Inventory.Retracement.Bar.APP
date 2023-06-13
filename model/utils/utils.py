@@ -349,9 +349,29 @@ class Math:
 
 
 class CleanData(BaseStrategy):
-    #! Don't convert the values to float32
-    #! because it significantly reduces the precision of the data.
-    def __init__(self, dataframe):
+    '''The function initializes an object with a copy of a given
+    dataframe and a dictionary of column names, and filters the
+    dataframe based on specified columns.
+
+    Parameters
+    ----------
+    dataframe
+        A pandas DataFrame object that contains financial data such as
+        stock prices.
+
+    '''
+    def __init__(self, dataframe: pd.DataFrame):
+        '''This is a constructor function that initializes an object
+        with a copy of a given dataframe and a dictionary of column
+        names.
+
+        Parameters
+        ----------
+        dataframe
+            The input parameter is a pandas DataFrame object that
+            contains financial data such as stock prices.
+
+        '''
         self.dataframe = dataframe.copy()
         self.columns = {
             "Open": "open",
@@ -361,6 +381,14 @@ class CleanData(BaseStrategy):
         }
 
     def execute(self):
+        '''This function filters a dataframe and returns the filtered
+        dataframe only with the OHLC columns
+
+        Returns
+        -------
+            The filtered dataframe is being returned.
+
+        '''
         try:
             self.df_filtered = self.dataframe[self.columns.values()].copy()
         except KeyError:
