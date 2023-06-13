@@ -261,7 +261,48 @@ class DataProcess:
 
 
 class Math:
-    def calculate_expected_value(self, dataframe):
+    '''The function calculates the expected value of a given trading
+    data frame and returns a pandas data frame containing various
+    calculated metrics related to trading.
+
+    Parameters
+    ----------
+    dataframe
+        a pandas DataFrame containing the trading data, including
+        the result of each trade. The DataFrame
+        should have a column named "Result" that contains the profit or
+        loss of each trade.
+
+    Returns
+    -------
+        The function `calculate_expected_value` returns a pandas
+        DataFrame containing various calculated metrics related to
+        trading, including gain and loss counts, mean gain and loss,
+        total gain and loss, total trades, win rate, loss rate, and
+        expected value (EM).
+
+    '''
+    def calculate_expected_value(self, dataframe: pd.DataFrame):
+        '''This function calculates the expected value of a given
+        dataframe containing trading results.
+
+        Parameters
+        ----------
+        dataframe
+            a pandas DataFrame containing the trading data, including
+            the result of each trade. The DataFrame should have a column
+            named `Result` that contains the profit or loss of each
+            trade.
+
+        Returns
+        -------
+            The function `calculate_expected_value` returns a pandas
+            DataFrame containing various calculated metrics related
+            to trading, including gain and loss counts, mean gain and
+            loss, total gain and loss, total trades, win rate, loss
+            rate, and expected value (EM).
+
+        '''
         data_frame = dataframe.query("Result != 0")[["Result"]].copy()
 
         gain = data_frame["Result"] > 0
@@ -300,7 +341,6 @@ class Math:
         data_frame["Win_Rate"] = win_rate
         data_frame["Loss_Rate"] = loss_rate
 
-        # expected self.mathematical calculation
         em_gain = data_frame["Mean_Gain"] * data_frame["Win_Rate"]
         em_loss = data_frame["Mean_Loss"] * data_frame["Loss_Rate"]
         data_frame["EM"] = em_gain - abs(em_loss)
