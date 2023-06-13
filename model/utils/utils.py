@@ -398,14 +398,53 @@ class CleanData(BaseStrategy):
 
 
 class SaveDataFrame:
-    def __init__(self, dataframe):
+    '''The function initializes an object with a dataframe attribute and
+    saves the dataframe as a CSV file with specified parameters.
+
+    Parameters
+    ----------
+    dataframe : pd.DataFrame
+        The `dataframe` parameter is an input argument to the
+        constructor of a class. It is a variable that holds a pandas
+        DataFrame object, which is a two-dimensional size-mutable,
+        tabular data structure with rows and columns.
+
+    '''
+    def __init__(self, dataframe: pd.DataFrame):
+        '''This function initializes an object with a dataframe
+        attribute and creates a directory if it does not exist.
+
+        Parameters
+        ----------
+        dataframe
+            The `dataframe` parameter is an input argument to the
+            constructor of a class. It is a variable that holds a pandas
+            DataFrame object, which is a two-dimensional size-mutable,
+            tabular data structure with rows and columns.
+
+        '''
         self.dataframe = dataframe
 
         self.data_path = pathlib.Path("model", "data")
         if not self.data_path.is_dir():
             self.data_path.mkdir()
 
-    def to_csv(self, name) -> None:
+    def to_csv(self, name: str) -> None:
+        '''This function saves a pandas dataframe as a CSV file with
+        a given name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the CSV file that will be created. It will be
+            saved with the extension ".csv".
+
+        Returns
+        -------
+            a print statement indicating that the name of the saved
+            CSV file.
+
+        '''
         str_name = f"{name}.csv"
         dataframe_path = self.data_path.joinpath(str_name)
         columns = self.dataframe.columns
@@ -420,7 +459,22 @@ class SaveDataFrame:
 
         return print(str_name + " has been saved")
 
-    def to_parquet(self, name) -> None:
+    def to_parquet(self, name: str) -> None:
+        '''This function saves a Pandas dataframe as a Parquet file with
+        a given name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the Parquet file that will be created. It will
+            be saved with the extension ".parquet".
+
+        Returns
+        -------
+            a print statement indicating that the name of the saved
+            parquet file.
+
+        '''
         str_name = f"{name}.parquet"
         dataframe_path = self.data_path.joinpath(str_name)
         self.dataframe.to_parquet(
