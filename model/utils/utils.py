@@ -14,10 +14,46 @@ class BaseStrategy(ABC):
 
 
 class BrokerEmulator:
+    '''The function initializes an object with a pandas DataFrame and
+    calculates the result of a broker emulator based on the high and low
+    prices of the DataFrame.
+
+    Parameters
+    ----------
+    dataframe : pd.DataFrame
+        The parameter "dataframe" is a pandas DataFrame object that is
+        passed as an argument to the constructor of a class. The
+        constructor initializes an instance variable "self.dataframe"
+        with the value of the passed DataFrame object. This allows the
+        DataFrame to be accessed and manipulated within the class
+        methods.
+    '''
     def __init__(self, dataframe: pd.DataFrame):
+        '''This is a constructor function that initializes an object
+        with a pandas DataFrame.
+
+        Parameters
+        ----------
+        dataframe : pd.DataFrame
+            The parameter "dataframe" is a pandas DataFrame object that
+            is passed as an argument to the
+            constructor of a class. The constructor initializes an
+            instance variable "self.dataframe" with the value of the
+            passed DataFrame object. This allows the DataFrame to be
+            accessed and manipulated within the class methods.
+        '''
         self.dataframe = dataframe
 
     def broker_emulator_result(self):
+        '''This method calculates the result of a broker emulator
+        based on the high and low prices of a given dataframe.
+
+        Returns
+        -------
+            The method `broker_emulator_result` returns the instance
+            of the class that it belongs to (`self`).
+
+        '''
         self.distance_high_to_open = self.dataframe["high"] - self.dataframe["open"]
         self.distance_low_to_open = self.dataframe["open"] - self.dataframe["low"]
         self.broker_emulator = np.where(
@@ -47,6 +83,14 @@ class BrokerEmulator:
         return self
 
     def exit_price(self):
+        '''This function calculates the exit price for a trading
+        strategy based on the take profit and stop loss levels.
+
+        Returns
+        -------
+            a pandas Series object containing the exit prices for each
+            row in the input dataframe.
+        '''
         self.broker_emulator_result()
 
         self.data_frame = self.dataframe.copy()
