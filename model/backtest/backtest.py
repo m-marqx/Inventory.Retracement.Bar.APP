@@ -7,16 +7,12 @@ import pandas as pd
 
 from model.strategy.params import (
     EmaParams,
-    MACDParams,
-    CCIParams,
     IrbParams,
     IndicatorsParams,
     TrendParams,
     ResultParams,
 )
 
-from model.strategy.strategy import BuilderStrategy
-from model.strategy.indicators import BuilderSource
 from model.backtest.backtest_params import BacktestParams
 
 from view.dashboard.utils import (
