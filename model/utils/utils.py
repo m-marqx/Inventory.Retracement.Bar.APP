@@ -1,15 +1,45 @@
-import numpy as np
-import pandas as pd
 from abc import ABC, abstractmethod
 import pathlib
+import numpy as np
+import pandas as pd
 
 
 class BaseStrategy(ABC):
+
+    '''This is a Python class with an abstract method `execute()` that
+    raises a `NotImplementedError`, and an `__init__()` method that
+    takes a pandas DataFrame as an argument and assigns it to an
+    instance variable `df_filtered`.
+
+    Parameters
+    ----------
+    dataframe : pd.DataFrame
+        A pandas DataFrame object that will be used as input for
+        the class.
+
+    '''
     def __init__(self, dataframe: pd.DataFrame):
+        '''This is a constructor function that initializes an instance
+        variable "df_filtered" with a pandas DataFrame passed as an
+        argument.
+
+        Parameters
+        ----------
+        dataframe : pd.DataFrame
+            The parameter "dataframe" is a pandas DataFrame object that
+            is passed as an argument to the constructor of a class. The
+            constructor initializes an instance variable "df_filtered"
+            with the value of the passed DataFrame object.
+
+        '''
         self.df_filtered = dataframe
 
     @abstractmethod
     def execute(self):
+        '''The function "execute" is defined but raises a
+        NotImplementedError.
+
+        '''
         raise NotImplementedError
 
 
