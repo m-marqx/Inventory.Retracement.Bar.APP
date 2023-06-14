@@ -63,6 +63,7 @@ class RunBacktest:
         State("gain_result_value", "value"),
         State("loss_result_value", "value"),
         State("result_margin_type", "value"),
+        State("plot_type", "value"),
     )
     def run_backtest(
         # Get Data
@@ -100,6 +101,7 @@ class RunBacktest:
         gain_result_value,
         loss_result_value,
         result_margin_type,
+        result_type,
     ):
         ctx = dash.callback_context
         if not ctx.triggered:
@@ -183,7 +185,7 @@ class RunBacktest:
                     "method": backtest_result_types,
                     "qty": [qty_result_value],
                     "coin_margined": [result_margin_type],
-                }
+                },
             )
             backtest = Backtest(data_frame, hardware_type)
             data_frame = backtest.param_grid_backtest(
@@ -194,12 +196,11 @@ class RunBacktest:
                 n_workers_per_gpu=backtest_workers_number,
             )
 
-            data_frame = DataProcess(
-                data_frame,
-                backtest_params
-                .result_params
-                .capital
-            ).best_positive_results
+            if result_type:
+                data_frame = DataProcess(
+                    data_frame,
+                    backtest_params.result_params.capital,
+                ).best_positive_results
 
             graph_layout = GraphLayout(
                 data_frame,
