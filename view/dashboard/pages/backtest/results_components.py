@@ -82,6 +82,35 @@ class ResultsComponents:
         )
 
     @property
+    def plot_type(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label(self.lang["PLOT_TYPE"]),
+                    width=45,
+                    style={"margin": "10px"},
+                    class_name="center",
+                ),
+                dbc.Col(
+                    dbc.RadioItems(
+                        [
+                            {"label": self.lang["ALL_LINES"], "value": False},
+                            {"label": self.lang["ONLY_POSITIVES"], "value": True},
+                        ],
+                        id="plot_type",
+                        input_class_name="btn-check",
+                        label_class_name="btn btn-primary",
+                        label_checked_class_name="active",
+                        value=True,
+                        inline=True,
+                    ),
+                    class_name="center",
+                ),
+            ],
+            style={"justify-content": "center"},
+        )
+
+    @property
     def result_param_first_col(self):
         return dbc.Row(
             [
@@ -187,6 +216,10 @@ class ResultsComponents:
             ),
             dbc.Row(
                 self.margin_type,
+                style={"margin-top": "20px"},
+            ),
+            dbc.Row(
+                self.plot_type,
                 style={"margin-top": "20px"},
             ),
         )

@@ -74,6 +74,9 @@ pt_BR = {
     "LOSS": "Prejuízo",
     "INITIAL_CAPITAL": "Capital Inicial",
     "QUANTITY": "Quantidade",
+    "PLOT_TYPE": "Mostrar",
+    "ALL_LINES": "Todas as Linhas",
+    "ONLY_POSITIVES": "Linhas Positivas",
     # Backtest Button
     "RUN_BACKTEST": "Rodar Backtest",
 }

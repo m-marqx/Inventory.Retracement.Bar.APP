@@ -74,6 +74,9 @@ en_US = {
     "LOSS": "Loss",
     "INITIAL_CAPITAL": "Initial Capital",
     "QUANTITY": "Quantity",
+    "PLOT_TYPE": "Plot",
+    "ALL_LINES": "All Lines",
+    "ONLY_POSITIVES": "Positive Lines",
     # Backtest Button
     "RUN_BACKTEST": "Run Backtest",
 }
