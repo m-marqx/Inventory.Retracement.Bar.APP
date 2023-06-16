@@ -272,13 +272,13 @@ class Statistics:
 
     Parameters
     ----------
-    dataframe : pd.DataFrame
+    dataframe : pd.Series
         The input dataframe containing the results of the strategy.
 
     Attributes
     ----------
     dataframe : pd.DataFrame
-        The input dataframe containing the results of the strategy.
+        The input dataframe containing the `Result` column.
 
     Methods
     -------
@@ -296,7 +296,7 @@ class Statistics:
 
         Parameters
         ----------
-        dataframe : pd.DataFrame
+        dataframe : pd.Series
             The input dataframe containing the `Result` column.
 
         """
