@@ -285,6 +285,9 @@ class Statistics:
     calculate_expected_value()
         Calculate the expected value of the strategy.
 
+    estimed_sharpe_ratio(risk_free_rate, time_span)
+        Calculate the Sharpe ratio of the strategy.
+
     """
 
     def __init__(self, dataframe: pd.Series):
@@ -359,6 +362,36 @@ class Statistics:
         self.dataframe["EM"] = em_gain - abs(em_loss)
 
         return self.dataframe
+
+    def estimed_sharpe_ratio(self, risk_free_rate: float = 2.0, time_span:str="A") -> pd.Series:
+        """
+        Calculate the Sharpe ratio of the strategy.
+
+        Parameters
+        ----------
+        risk_free_rate : float, optional
+            The risk free rate of the strategy. The default is 2.0.
+
+        time_span : str, optional
+            The time span for resampling the returns. The default is "A" (annual).
+
+        Returns
+        -------
+        pd.Series
+            A series containing the Sharpe ratio values.
+
+        """
+        results = self.dataframe['Result']
+        returns_annualized = (
+            results
+            .resample(time_span)
+        )
+
+        mean_excess = returns_annualized.mean() - risk_free_rate
+
+        sharpe_ratio = mean_excess / returns_annualized.std()
+
+        return sharpe_ratio
 
 
 class CleanData(BaseStrategy):
