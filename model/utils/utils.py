@@ -282,6 +282,18 @@ class Statistics:
         expected value (EM).
 
     '''
+    def __init__(self, dataframe: pd.Series):
+        """
+        Initialize the Statistics class with a dataframe.
+
+        Parameters
+        ----------
+        dataframe : pd.DataFrame
+            The input dataframe containing the `Result` column.
+
+        """
+        self.dataframe = pd.DataFrame({"Result": dataframe})
+
     def calculate_expected_value(self, dataframe: pd.DataFrame):
         '''This function calculates the expected value of a given
         dataframe containing trading results.
