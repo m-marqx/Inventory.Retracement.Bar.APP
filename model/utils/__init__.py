@@ -1,7 +1,7 @@
 from model.utils.utils import (
     CleanData,
     BaseStrategy,
-    Math,
+    Statistics,
     BrokerEmulator,
     CalculateTradePerformance,
 )

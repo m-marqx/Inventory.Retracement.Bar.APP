@@ -260,7 +260,7 @@ class DataProcess:
         return self.df_transposed.loc[filtered_df_sorted].T
 
 
-class Math:
+class Statistics:
     '''The function calculates the expected value of a given trading
     data frame and returns a pandas data frame containing various
     calculated metrics related to trading.
