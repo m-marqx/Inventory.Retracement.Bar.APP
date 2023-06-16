@@ -294,70 +294,66 @@ class Statistics:
         """
         self.dataframe = pd.DataFrame({"Result": dataframe})
 
-    def calculate_expected_value(self, dataframe: pd.DataFrame):
-        '''This function calculates the expected value of a given
-        dataframe containing trading results.
-
-        Parameters
-        ----------
-        dataframe
-            a pandas DataFrame containing the trading data, including
-            the result of each trade. The DataFrame should have a column
-            named `Result` that contains the profit or loss of each
-            trade.
+    def calculate_expected_value(self):
+        """
+        Calculate the expected value of the strategy.
 
         Returns
         -------
-            The function `calculate_expected_value` returns a pandas
-            DataFrame containing various calculated metrics related
-            to trading, including gain and loss counts, mean gain and
-            loss, total gain and loss, total trades, win rate, loss
-            rate, and expected value (EM).
+        pd.DataFrame
+            A dataframe with calculated statistics, including gain count,
+            loss count, mean gain, mean loss, total gain, total loss,
+            total trade, win rate, loss rate, and expected value (EM).
 
-        '''
-        data_frame = dataframe.query("Result != 0")[["Result"]].copy()
+        """
+        dataframe_have_nan = self.dataframe.isna().any().any()
 
-        gain = data_frame["Result"] > 0
-        loss = data_frame["Result"] < 0
+        if dataframe_have_nan:
+            self.dataframe.dropna(inplace=True)
+        else:
+            self.dataframe = self.dataframe.query("Result != 0")[["Result"]].copy()
 
-        data_frame["Gain_Count"] = np.where(gain, 1, 0)
-        data_frame["Loss_Count"] = np.where(loss, 1, 0)
+        gain = self.dataframe["Result"] > 0
+        loss = self.dataframe["Result"] < 0
 
-        data_frame["Gain_Count"] = data_frame["Gain_Count"].cumsum()
-        data_frame["Loss_Count"] = data_frame["Loss_Count"].cumsum()
+        self.dataframe["Gain_Count"] = np.where(gain, 1, 0)
+        self.dataframe["Loss_Count"] = np.where(loss, 1, 0)
 
-        query_gains = data_frame.query("Result > 0")["Result"]
-        query_loss = data_frame.query("Result < 0")["Result"]
+        self.dataframe["Gain_Count"] = self.dataframe["Gain_Count"].cumsum()
+        self.dataframe["Loss_Count"] = self.dataframe["Loss_Count"].cumsum()
 
-        data_frame["Mean_Gain"] = query_gains.expanding().mean()
-        data_frame["Mean_Loss"] = query_loss.expanding().mean()
+        query_gains = self.dataframe.query("Result > 0")["Result"]
+        query_loss = self.dataframe.query("Result < 0")["Result"]
 
-        data_frame["Mean_Gain"].fillna(method="ffill", inplace=True)
-        data_frame["Mean_Loss"].fillna(method="ffill", inplace=True)
+        self.dataframe["Mean_Gain"] = query_gains.expanding().mean()
+        self.dataframe["Mean_Loss"] = query_loss.expanding().mean()
 
-        data_frame["Total_Gain"] = (
-            np.where(gain, data_frame["Result"], 0)
+        self.dataframe["Mean_Gain"].fillna(method="ffill", inplace=True)
+        self.dataframe["Mean_Loss"].fillna(method="ffill", inplace=True)
+
+        self.dataframe["Total_Gain"] = (
+            np.where(gain, self.dataframe["Result"], 0)
             .cumsum()
         )
 
-        data_frame["Total_Loss"] = (
-            np.where(loss, data_frame["Result"], 0)
+        self.dataframe["Total_Loss"] = (
+            np.where(loss, self.dataframe["Result"], 0)
             .cumsum()
         )
 
-        total_trade = data_frame["Gain_Count"] + data_frame["Loss_Count"]
-        win_rate = data_frame["Gain_Count"] / total_trade
-        loss_rate = data_frame["Loss_Count"] / total_trade
+        total_trade = self.dataframe["Gain_Count"] + self.dataframe["Loss_Count"]
+        win_rate = self.dataframe["Gain_Count"] / total_trade
+        loss_rate = self.dataframe["Loss_Count"] / total_trade
 
-        data_frame["Total_Trade"] = total_trade
-        data_frame["Win_Rate"] = win_rate
-        data_frame["Loss_Rate"] = loss_rate
+        self.dataframe["Total_Trade"] = total_trade
+        self.dataframe["Win_Rate"] = win_rate
+        self.dataframe["Loss_Rate"] = loss_rate
 
-        em_gain = data_frame["Mean_Gain"] * data_frame["Win_Rate"]
-        em_loss = data_frame["Mean_Loss"] * data_frame["Loss_Rate"]
-        data_frame["EM"] = em_gain - abs(em_loss)
+        em_gain = self.dataframe["Mean_Gain"] * self.dataframe["Win_Rate"]
+        em_loss = self.dataframe["Mean_Loss"] * self.dataframe["Loss_Rate"]
+        self.dataframe["EM"] = em_gain - abs(em_loss)
 
-        return data_frame
+        return self.dataframe
 
 
 class CleanData(BaseStrategy):
