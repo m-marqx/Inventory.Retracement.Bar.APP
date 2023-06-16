@@ -290,6 +290,9 @@ class Statistics:
     estimed_sharpe_ratio(risk_free_rate, time_span)
         Calculate the Sharpe ratio of the strategy.
 
+    estimed_sortino_ratio(risk_free_rate, time_span)
+        Calculate the Sortino ratio of the strategy.
+
     """
 
     def __init__(self, dataframe: pd.Series | pd.DataFrame):
@@ -371,7 +374,7 @@ class Statistics:
 
         return self.dataframe
 
-    def estimed_sharpe_ratio(self, risk_free_rate: float = 2.0, time_span:str="A") -> pd.Series:
+    def estimed_sharpe_ratio(self, risk_free_rate: float = 2.0, time_span: str = "A") -> pd.Series:
         """
         Calculate the Sharpe ratio of the strategy.
 
@@ -389,7 +392,7 @@ class Statistics:
             A series containing the Sharpe ratio values.
 
         """
-        results = self.dataframe['Result']
+        results = self.dataframe["Result"]
         returns_annualized = (
             results
             .resample(time_span)
@@ -400,6 +403,42 @@ class Statistics:
         sharpe_ratio = mean_excess / returns_annualized.std()
 
         return sharpe_ratio
+
+    def estimed_sortino_ratio(self, risk_free_rate: float = 2.0, time_span: str = "A") -> pd.Series:
+        """
+        Calculate the Sortino ratio of the strategy.
+
+        Parameters
+        ----------
+        risk_free_rate : float, optional
+            The risk free rate of the strategy. The default is 2.0.
+
+        time_span : str, optional
+            The time span for resampling the returns. The default is "A" (annual).
+
+        Returns
+        -------
+        pd.Series
+            A series containing the Sortino ratio values.
+
+        """
+        results = self.dataframe["Result"]
+        returns_annualized = (
+            results
+            .resample(time_span)
+        )
+
+        negative_results = self.dataframe.query("Result < 0")["Result"]
+        negative_returns_annualized = (
+            negative_results
+            .resample(time_span)
+        )
+
+        mean_excess = returns_annualized.mean() - risk_free_rate
+
+        sortino_ratio = mean_excess / negative_returns_annualized.std()
+
+        return sortino_ratio
 
 
 class CleanData(BaseStrategy):
