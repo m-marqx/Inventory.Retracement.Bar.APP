@@ -272,8 +272,10 @@ class Statistics:
 
     Parameters
     ----------
-    dataframe : pd.Series
-        The input dataframe containing the results of the strategy.
+    dataframe : pd.Series or pd.DataFrame
+        The input dataframe containing the results of the strategy. If `dataframe` is a
+        pd.Series, it should contain a single column of results. If it is a pd.DataFrame,
+        it should have a 'Result' column containing the results.
 
     Attributes
     ----------
@@ -290,17 +292,23 @@ class Statistics:
 
     """
 
-    def __init__(self, dataframe: pd.Series):
+    def __init__(self, dataframe: pd.Series | pd.DataFrame):
         """
         Initialize the Statistics class with a dataframe.
 
         Parameters
         ----------
-        dataframe : pd.Series
-            The input dataframe containing the `Result` column.
+        dataframe : pd.Series or pd.DataFrame
+            The input dataframe containing the results of the strategy.
+            If `dataframe` is a pd.Series, it should contain a single
+            column of results. If it is a pd.DataFrame, it should have a
+            'Result' column containing the results.
 
         """
-        self.dataframe = pd.DataFrame({"Result": dataframe})
+        if isinstance(dataframe, pd.Series):
+            self.dataframe = pd.DataFrame({"Result": dataframe})
+        else:
+            self.dataframe = dataframe['Result'].copy()
 
     def calculate_expected_value(self):
         """
