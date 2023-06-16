@@ -6,7 +6,7 @@ import pandas as pd
 
 class BaseStrategy(ABC):
 
-    '''This is a Python class with an abstract method `execute()` that
+    """This is a Python class with an abstract method `execute()` that
     raises a `NotImplementedError`, and an `__init__()` method that
     takes a pandas DataFrame as an argument and assigns it to an
     instance variable `df_filtered`.
@@ -17,9 +17,10 @@ class BaseStrategy(ABC):
         A pandas DataFrame object that will be used as input for
         the class.
 
-    '''
+    """
+
     def __init__(self, dataframe: pd.DataFrame):
-        '''This is a constructor function that initializes an instance
+        """This is a constructor function that initializes an instance
         variable "df_filtered" with a pandas DataFrame passed as an
         argument.
 
@@ -31,20 +32,20 @@ class BaseStrategy(ABC):
             constructor initializes an instance variable "df_filtered"
             with the value of the passed DataFrame object.
 
-        '''
+        """
         self.df_filtered = dataframe
 
     @abstractmethod
     def execute(self):
-        '''The function "execute" is defined but raises a
+        """The function "execute" is defined but raises a
         NotImplementedError.
 
-        '''
+        """
         raise NotImplementedError
 
 
 class BrokerEmulator:
-    '''The function initializes an object with a pandas DataFrame and
+    """The function initializes an object with a pandas DataFrame and
     calculates the result of a broker emulator based on the high and low
     prices of the DataFrame.
 
@@ -57,9 +58,10 @@ class BrokerEmulator:
         with the value of the passed DataFrame object. This allows the
         DataFrame to be accessed and manipulated within the class
         methods.
-    '''
+    """
+
     def __init__(self, dataframe: pd.DataFrame):
-        '''This is a constructor function that initializes an object
+        """This is a constructor function that initializes an object
         with a pandas DataFrame.
 
         Parameters
@@ -71,11 +73,11 @@ class BrokerEmulator:
             instance variable "self.dataframe" with the value of the
             passed DataFrame object. This allows the DataFrame to be
             accessed and manipulated within the class methods.
-        '''
+        """
         self.dataframe = dataframe
 
     def broker_emulator_result(self):
-        '''This method calculates the result of a broker emulator
+        """This method calculates the result of a broker emulator
         based on the high and low prices of a given dataframe.
 
         Returns
@@ -83,7 +85,7 @@ class BrokerEmulator:
             The method `broker_emulator_result` returns the instance
             of the class that it belongs to (`self`).
 
-        '''
+        """
         self.distance_high_to_open = self.dataframe["high"] - self.dataframe["open"]
         self.distance_low_to_open = self.dataframe["open"] - self.dataframe["low"]
         self.broker_emulator = np.where(
@@ -113,14 +115,14 @@ class BrokerEmulator:
         return self
 
     def exit_price(self):
-        '''This function calculates the exit price for a trading
+        """This function calculates the exit price for a trading
         strategy based on the take profit and stop loss levels.
 
         Returns
         -------
             a pandas Series object containing the exit prices for each
             row in the input dataframe.
-        '''
+        """
         self.broker_emulator_result()
 
         self.data_frame = self.dataframe.copy()
@@ -161,9 +163,10 @@ class BrokerEmulator:
 
         return self.data_frame["Exit_Price"]
 
+
 class DataProcess:
 
-    '''The code defines a class with methods to classify and filter a
+    """The code defines a class with methods to classify and filter a
     transposed pandas DataFrame.
 
     Parameters
@@ -175,9 +178,10 @@ class DataProcess:
         The minimum value that a row must have in the last column to be
         included in the "best_positive_results" property.
 
-    '''
+    """
+
     def __init__(self, data_frame: pd.DataFrame, min_value: float = 0.0):
-        '''This is a constructor function that initializes an object
+        """This is a constructor function that initializes an object
         with a transposed copy of a pandas DataFrame, the name of the
         last column, and a minimum value.
 
@@ -191,13 +195,13 @@ class DataProcess:
             a certain operation or calculation. It is an optional
             parameter with a default value of 0.0.
 
-        '''
+        """
         self.df_transposed = data_frame.copy().T
         self.last_column_name = self.df_transposed.columns[-1]
         self.min_value = min_value
 
     def classify_dataframe(self, index: bool = False):
-        '''This function classifies a transposed dataframe by ranking
+        """This function classifies a transposed dataframe by ranking
         its last column and returning a melted version sorted by rank
         and index.
 
@@ -217,7 +221,7 @@ class DataProcess:
             melted DataFrame has three columns: "rank", "index",
             and "result". The DataFrame is sorted by "rank" and "index".
 
-        '''
+        """
         if not index:
             self.df_transposed = self.df_transposed.reset_index(drop=True).copy().T
 
@@ -233,7 +237,7 @@ class DataProcess:
 
     @property
     def best_positive_results(self):
-        '''This function returns a transposed dataframe with rows
+        """This function returns a transposed dataframe with rows
         filtered by a minimum value and sorted by the last column in
         descending order.
 
@@ -246,10 +250,12 @@ class DataProcess:
             filtered and sorted based on the last column of the original
             DataFrame.
 
-        '''
+        """
         df_transposed_last_column = self.df_transposed.iloc[:, [-1]]
 
-        filtered_df = df_transposed_last_column[df_transposed_last_column > self.min_value]
+        filtered_df = df_transposed_last_column[
+            df_transposed_last_column > self.min_value
+        ]
         filtered_df.dropna(inplace=True)
 
         filtered_df_sorted = filtered_df.sort_values(
@@ -261,27 +267,26 @@ class DataProcess:
 
 
 class Statistics:
-    '''The function calculates the expected value of a given trading
-    data frame and returns a pandas data frame containing various
-    calculated metrics related to trading.
+    """
+    A class for calculating strategy statistics.
 
     Parameters
     ----------
-    dataframe
-        a pandas DataFrame containing the trading data, including
-        the result of each trade. The DataFrame
-        should have a column named "Result" that contains the profit or
-        loss of each trade.
+    dataframe : pd.DataFrame
+        The input dataframe containing the results of the strategy.
 
-    Returns
+    Attributes
+    ----------
+    dataframe : pd.DataFrame
+        The input dataframe containing the results of the strategy.
+
+    Methods
     -------
-        The function `calculate_expected_value` returns a pandas
-        DataFrame containing various calculated metrics related to
-        trading, including gain and loss counts, mean gain and loss,
-        total gain and loss, total trades, win rate, loss rate, and
-        expected value (EM).
+    calculate_expected_value()
+        Calculate the expected value of the strategy.
 
-    '''
+    """
+
     def __init__(self, dataframe: pd.Series):
         """
         Initialize the Statistics class with a dataframe.
@@ -357,7 +362,7 @@ class Statistics:
 
 
 class CleanData(BaseStrategy):
-    '''The function initializes an object with a copy of a given
+    """The function initializes an object with a copy of a given
     dataframe and a dictionary of column names, and filters the
     dataframe based on specified columns.
 
@@ -367,9 +372,10 @@ class CleanData(BaseStrategy):
         A pandas DataFrame object that contains financial data such as
         stock prices.
 
-    '''
+    """
+
     def __init__(self, dataframe: pd.DataFrame):
-        '''This is a constructor function that initializes an object
+        """This is a constructor function that initializes an object
         with a copy of a given dataframe and a dictionary of column
         names.
 
@@ -379,7 +385,7 @@ class CleanData(BaseStrategy):
             The input parameter is a pandas DataFrame object that
             contains financial data such as stock prices.
 
-        '''
+        """
         self.dataframe = dataframe.copy()
         self.columns = {
             "Open": "open",
@@ -389,14 +395,14 @@ class CleanData(BaseStrategy):
         }
 
     def execute(self):
-        '''This function filters a dataframe and returns the filtered
+        """This function filters a dataframe and returns the filtered
         dataframe only with the OHLC columns
 
         Returns
         -------
             The filtered dataframe is being returned.
 
-        '''
+        """
         try:
             self.df_filtered = self.dataframe[self.columns.values()].copy()
         except KeyError:
@@ -406,7 +412,7 @@ class CleanData(BaseStrategy):
 
 
 class SaveDataFrame:
-    '''The function initializes an object with a dataframe attribute and
+    """The function initializes an object with a dataframe attribute and
     saves the dataframe as a CSV file with specified parameters.
 
     Parameters
@@ -417,9 +423,10 @@ class SaveDataFrame:
         DataFrame object, which is a two-dimensional size-mutable,
         tabular data structure with rows and columns.
 
-    '''
+    """
+
     def __init__(self, dataframe: pd.DataFrame):
-        '''This function initializes an object with a dataframe
+        """This function initializes an object with a dataframe
         attribute and creates a directory if it does not exist.
 
         Parameters
@@ -430,7 +437,7 @@ class SaveDataFrame:
             DataFrame object, which is a two-dimensional size-mutable,
             tabular data structure with rows and columns.
 
-        '''
+        """
         self.dataframe = dataframe
 
         self.data_path = pathlib.Path("model", "data")
@@ -438,7 +445,7 @@ class SaveDataFrame:
             self.data_path.mkdir()
 
     def to_csv(self, name: str) -> None:
-        '''This function saves a pandas dataframe as a CSV file with
+        """This function saves a pandas dataframe as a CSV file with
         a given name.
 
         Parameters
@@ -452,7 +459,7 @@ class SaveDataFrame:
             a print statement indicating that the name of the saved
             CSV file.
 
-        '''
+        """
         str_name = f"{name}.csv"
         dataframe_path = self.data_path.joinpath(str_name)
         columns = self.dataframe.columns
@@ -468,7 +475,7 @@ class SaveDataFrame:
         return print(str_name + " has been saved")
 
     def to_parquet(self, name: str) -> None:
-        '''This function saves a Pandas dataframe as a Parquet file with
+        """This function saves a Pandas dataframe as a Parquet file with
         a given name.
 
         Parameters
@@ -482,7 +489,7 @@ class SaveDataFrame:
             a print statement indicating that the name of the saved
             parquet file.
 
-        '''
+        """
         str_name = f"{name}.parquet"
         dataframe_path = self.data_path.joinpath(str_name)
         self.dataframe.to_parquet(
@@ -492,9 +499,10 @@ class SaveDataFrame:
 
         return print(str_name + " has been saved")
 
+
 class CalculateTradePerformance:
 
-    '''This is a Python class that calculates trading results based on a
+    """This is a Python class that calculates trading results based on a
     given DataFrame, capital, and trading strategy.
 
     Parameters
@@ -508,14 +516,15 @@ class CalculateTradePerformance:
         be calculated as percentages or not. If set to True, the results
         will be calculated as percentages.
 
-    '''
+    """
+
     def __init__(
         self,
         data_frame: pd.DataFrame,
         capital: float,
         percent: bool = False,
     ):
-        '''This function initializes an object with a DataFrame,
+        """This function initializes an object with a DataFrame,
         capital, and a boolean parameter that determines whether the
         results are expressed as percentages or not.
 
@@ -529,7 +538,7 @@ class CalculateTradePerformance:
             A boolean parameter that determines whether the result is
             expressed as a percentage or an absolute value.
 
-        '''
+        """
         self.data_frame = data_frame.copy()
         self.gain_condition = self.data_frame["Result"] > 0
         self.loss_condition = self.data_frame["Result"] < 0
@@ -544,7 +553,7 @@ class CalculateTradePerformance:
         self.percent = percent
 
     def calculate_results(self, gain: float, loss: float, reverse_results: bool = False):
-        '''This function calculates results based on gain and loss
+        """This function calculates results based on gain and loss
         conditions and can reverse the results if specified.
 
         Parameters
@@ -559,7 +568,7 @@ class CalculateTradePerformance:
             A boolean parameter that determines whether the results
             should be reversed or not.
 
-        '''
+        """
         if reverse_results:
             self.data_frame["Result"] = np.where(
                 self.gain_condition,
@@ -586,7 +595,7 @@ class CalculateTradePerformance:
             )
 
     def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str, reverse_results: bool):
-        '''This function updates the results of a trading strategy based
+        """This function updates the results of a trading strategy based
         on gains and losses, using either a sum or product method, and
         returns the updated results.
 
@@ -611,7 +620,7 @@ class CalculateTradePerformance:
             The function `update_results` is returning the updated
             instance of the class object.
 
-        '''
+        """
 
         self.calculate_results(gain, loss, reverse_results)
 
@@ -648,7 +657,7 @@ class CalculateTradePerformance:
         return self
 
     def fixed(self, gain: float, loss: float) -> pd.DataFrame:
-        '''This function updates the results of a data frame based on
+        """This function updates the results of a data frame based on
         fixed gain and loss values.
 
         Parameters
@@ -664,7 +673,7 @@ class CalculateTradePerformance:
         -------
             a pandas DataFrame.
 
-        '''
+        """
         if self.percent:
             gain = gain / 100 + 1
             loss = loss / 100 + 1
@@ -674,7 +683,7 @@ class CalculateTradePerformance:
         return self.data_frame
 
     def normal(self, qty: float, coin_margined: bool) -> pd.DataFrame:
-        '''The function calculates gains and losses based on input
+        """The function calculates gains and losses based on input
         parameters and updates the results in a pandas dataframe.
 
         Parameters
@@ -689,7 +698,7 @@ class CalculateTradePerformance:
         -------
             The function `normal` returns a pandas DataFrame.
 
-        '''
+        """
         if self.percent:
             if coin_margined:
                 gain = (
