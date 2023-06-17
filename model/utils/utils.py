@@ -277,6 +277,12 @@ class Statistics:
         pd.Series, it should contain a single column of results. If it is a pd.DataFrame,
         it should have a 'Result' column containing the results.
 
+    time_span : str, optional
+        The time span for resampling the returns. The default is "A" (annual).
+
+    risk_free_rate : float, optional
+        The risk free rate of the strategy. The default is 2.0.
+
     Attributes
     ----------
     dataframe : pd.DataFrame
@@ -295,7 +301,12 @@ class Statistics:
 
     """
 
-    def __init__(self, dataframe: pd.Series | pd.DataFrame):
+    def __init__(
+        self,
+        dataframe: pd.Series | pd.DataFrame,
+        time_span: str = "A",
+        risk_free_rate: float = 2.0
+    ):
         """
         Initialize the Statistics class with a dataframe.
 
@@ -307,11 +318,21 @@ class Statistics:
             column of results. If it is a pd.DataFrame, it should have a
             'Result' column containing the results.
 
+        time_span : str, optional
+            The time span for resampling the returns.
+            The default is "A" (annual).
+
+        risk_free_rate : float, optional
+            The risk free rate of the strategy. The default is 2.0.
+
         """
         if isinstance(dataframe, pd.Series):
             self.dataframe = pd.DataFrame({"Result": dataframe})
         else:
-            self.dataframe = dataframe['Result'].copy()
+            self.dataframe = dataframe["Result"].copy()
+
+        self.time_span = time_span
+        self.risk_free_rate = risk_free_rate
 
     def calculate_expected_value(self):
         """
@@ -374,17 +395,9 @@ class Statistics:
 
         return self.dataframe
 
-    def estimed_sharpe_ratio(self, risk_free_rate: float = 2.0, time_span: str = "A") -> pd.Series:
+    def estimed_sharpe_ratio(self) -> pd.Series:
         """
         Calculate the Sharpe ratio of the strategy.
-
-        Parameters
-        ----------
-        risk_free_rate : float, optional
-            The risk free rate of the strategy. The default is 2.0.
-
-        time_span : str, optional
-            The time span for resampling the returns. The default is "A" (annual).
 
         Returns
         -------
@@ -395,26 +408,18 @@ class Statistics:
         results = self.dataframe["Result"]
         returns_annualized = (
             results
-            .resample(time_span)
+            .resample(self.time_span)
         )
 
-        mean_excess = returns_annualized.mean() - risk_free_rate
+        mean_excess = returns_annualized.mean() - self.risk_free_rate
 
         sharpe_ratio = mean_excess / returns_annualized.std()
 
         return sharpe_ratio
 
-    def estimed_sortino_ratio(self, risk_free_rate: float = 2.0, time_span: str = "A") -> pd.Series:
+    def estimed_sortino_ratio(self) -> pd.Series:
         """
         Calculate the Sortino ratio of the strategy.
-
-        Parameters
-        ----------
-        risk_free_rate : float, optional
-            The risk free rate of the strategy. The default is 2.0.
-
-        time_span : str, optional
-            The time span for resampling the returns. The default is "A" (annual).
 
         Returns
         -------
@@ -425,16 +430,16 @@ class Statistics:
         results = self.dataframe["Result"]
         returns_annualized = (
             results
-            .resample(time_span)
+            .resample(self.time_span)
         )
 
         negative_results = self.dataframe.query("Result < 0")["Result"]
         negative_returns_annualized = (
             negative_results
-            .resample(time_span)
+            .resample(self.time_span)
         )
 
-        mean_excess = returns_annualized.mean() - risk_free_rate
+        mean_excess = returns_annualized.mean() - self.risk_free_rate
 
         sortino_ratio = mean_excess / negative_returns_annualized.std()
 
