@@ -290,6 +290,9 @@ class Statistics:
 
     Methods
     -------
+    calculate_all_statistics()
+        Calculate all strategy statistics.
+
     calculate_expected_value()
         Calculate the expected value of the strategy.
 
@@ -333,6 +336,24 @@ class Statistics:
 
         self.time_span = time_span
         self.risk_free_rate = risk_free_rate
+
+    def calculate_all_statistics(self):
+        """
+        Calculate all strategy statistics.
+
+        Returns
+        -------
+        pd.DataFrame
+            A dataframe with calculated statistics, including expected value,
+            Sharpe ratio, and Sortino ratio.
+
+        """
+        stats_df = pd.DataFrame()
+        stats_df["Expected_Value"] = self.calculate_expected_value()["Expected_Value"]
+        stats_df = stats_df.resample(self.time_span).mean()
+        stats_df["Sharpe_Ratio"] = self.calculate_estimed_sharpe_ratio()
+        stats_df["Sortino_Ratio"] = self.calculate_estimed_sortino_ratio()
+        return stats_df
 
     def calculate_expected_value(self):
         """
