@@ -1,10 +1,9 @@
 import pathlib
 import dash
-from dash import Input, Output, State, callback
+from dash import Input, Output, State, callback, html
 import pandas as pd
 import numpy as np
 from controller.api.klines_api import KlineAPI
-
 
 from model.backtest import Backtest, BacktestParams
 from model.utils.utils import SaveDataFrame, DataProcess
@@ -210,6 +209,9 @@ class RunBacktest:
             )
 
             fig = graph_layout.grouped_lines()
-            text_output = f"Best Result: {data_frame.iloc[-1,0]}"
+            text_output = (
+                f"Best Result: {data_frame.iloc[-1,0]}", html.Br(),
+                f"Number of Trials: {backtest_params.total_combinations}"
+            )
 
         return fig, text_output
