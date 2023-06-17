@@ -293,7 +293,7 @@ class Statistics:
     calculate_expected_value()
         Calculate the expected value of the strategy.
 
-    estimed_sharpe_ratio(risk_free_rate, time_span)
+    calculate_estimed_sharpe_ratio()
         Calculate the Sharpe ratio of the strategy.
 
     estimed_sortino_ratio(risk_free_rate, time_span)
@@ -395,7 +395,7 @@ class Statistics:
 
         return self.dataframe
 
-    def estimed_sharpe_ratio(self) -> pd.Series:
+    def calculate_estimed_sharpe_ratio(self) -> pd.Series:
         """
         Calculate the Sharpe ratio of the strategy.
 
