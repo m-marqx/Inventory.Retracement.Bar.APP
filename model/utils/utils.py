@@ -389,9 +389,9 @@ class Statistics:
         self.dataframe["Win_Rate"] = win_rate
         self.dataframe["Loss_Rate"] = loss_rate
 
-        em_gain = self.dataframe["Mean_Gain"] * self.dataframe["Win_Rate"]
-        em_loss = self.dataframe["Mean_Loss"] * self.dataframe["Loss_Rate"]
-        self.dataframe["EM"] = em_gain - abs(em_loss)
+        ev_gain = self.dataframe["Mean_Gain"] * self.dataframe["Win_Rate"]
+        ev_loss = self.dataframe["Mean_Loss"] * self.dataframe["Loss_Rate"]
+        self.dataframe["Expected_Value"] = ev_gain - abs(ev_loss)
 
         return self.dataframe
 
