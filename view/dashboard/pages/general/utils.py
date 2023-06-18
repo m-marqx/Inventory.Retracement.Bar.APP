@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+from dash import html
 
 intervals = [
     dbc.DropdownMenuItem("1min", id="1m"),
@@ -31,3 +32,106 @@ def result_types(lang):
         {"label": lang["FIXED"], "value": "Fixed"},
         {"label": lang["NORMAL"], "value": "Normal"},
     ]
+
+class MenuCollapse:
+    """
+    A class representing a collapsible menu item.
+
+    Parameters
+    ----------
+    lang : dict
+        A dictionary containing language translations.
+    label : str
+        The label used to retrieve the translated name from the 'lang'
+        dictionary.
+    component : dbc._components.Row
+        The component to be displayed inside the collapsible menu item.
+    id_prefix : str
+        A prefix used to generate unique IDs for the collapse and button
+        components.
+
+    Attributes
+    ----------
+    label_name : str
+        The translated label name.
+    component : dbc._components.Row
+        The component to be displayed inside the collapsible menu item.
+    id_prefix : str
+        A prefix used to generate unique IDs for the collapse and button
+        components.
+
+    Methods
+    -------
+    menu_collapse()
+        Create a collapsible menu item.
+
+        Returns
+        -------
+        tuple
+            A tuple containing the collapse and button components.
+    """
+
+    def __init__(
+        self,
+        lang: dict,
+        label: str,
+        component,
+        id_prefix: str
+    ):
+        """
+        Initialize a MenuCollapse instance.
+
+        Parameters
+        ----------
+        lang : dict
+            A dictionary containing language translations.
+        label : str
+            The label used to retrieve the translated name from the
+            'lang' dictionary.
+        component : dbc._components.Row
+            The component to be displayed inside the collapsible menu
+            item.
+        id_prefix : str
+            A prefix used to generate unique IDs for the collapse and
+            button components.
+        """
+        self.label_name = lang[label]
+        self.component = component
+        self.id_prefix = id_prefix
+
+    @property
+    def components(self):
+        """
+        Create a collapsible menu item.
+
+        Returns
+        -------
+        tuple
+            A tuple containing the collapse and button components.
+        """
+        collapse = dbc.Collapse(
+            dbc.Card(
+                dbc.CardBody(
+                    self.component,
+                )
+            ),
+            id=f"{self.id_prefix}_collapse",
+            is_open=False,
+        )
+
+        button = dbc.Button(
+            [
+                self.label_name,
+                html.I(
+                    className="fa fa-chevron-down ml-2",
+                    id=f"{self.id_prefix}_icon",
+                    style={"transformY": "2px"},
+                ),
+            ],
+            id=f"{self.id_prefix}_button",
+            className="d-grid gap-2 col-6 mx-auto w-100",
+            outline=True,
+            color="secondary",
+        )
+
+        return collapse, button
