@@ -69,7 +69,7 @@ pt_BR = {
     "RESULT_TYPE": "Tipo de Resultado",
     "FIXED": "Resultados Fixos",
     "NORMAL": "Resultados Normais",
-    "PERCENTAGE": "Resultados Percentuais",
+    "USE_PERCENTAGE_RESULTS": "Resultados Percentuais",
     "PROFIT": "Lucro",
     "LOSS": "Prejuízo",
     "INITIAL_CAPITAL": "Capital Inicial",
