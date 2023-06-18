@@ -5,10 +5,10 @@ from dash import html, dcc, register_page
 
 from view.dashboard.pages.lang import en_US, pt_BR
 from view.dashboard.pages.general.components import GeneralComponents
+from view.dashboard.pages.general.utils import MenuCollapse
 
 from .components import BacktestComponents
 from .results_components import ResultsComponents
-
 
 register_page(
     __name__,
@@ -20,14 +20,24 @@ register_page(
 
 
 def layout(lang="en_US"):
-    if lang == "en_US":
-        lang = en_US
-    elif lang == "pt_BR":
+
+    if lang == "pt_BR":
         lang = pt_BR
+    else:
+        lang = en_US
 
     backtest_components = BacktestComponents(lang)
     general_components = GeneralComponents(lang)
     results_components = ResultsComponents(lang)
+
+    result_configs_component = MenuCollapse(
+        lang=lang,
+        label = "MODIFY_RESULT_CONFIGS_BUTTON",
+        component=results_components.result_configs,
+        id_prefix="result_configs",
+    ).components
+    result_configs_collapse = result_configs_component[0]
+    result_configs_button = result_configs_component[1]
 
     mem = psutil.virtual_memory()
     available_ram = mem.available
@@ -230,9 +240,17 @@ def layout(lang="en_US"):
                                             ),
                                             dbc.Collapse(
                                                 dbc.Card(
-                                                    dbc.CardBody(
-                                                        results_components.result_components,
-                                                    )
+                                                    [
+                                                        dbc.CardBody(
+                                                            results_components.result_components,
+                                                        ),
+                                                        dbc.Card(
+                                                            dbc.CardBody([
+                                                            result_configs_button,
+                                                            ]),
+                                                        ),
+                                                        result_configs_collapse,
+                                                    ]
                                                 ),
                                                 id="result_params_collapse",
                                                 is_open=False,

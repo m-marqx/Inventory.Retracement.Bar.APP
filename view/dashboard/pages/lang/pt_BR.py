@@ -77,6 +77,7 @@ pt_BR = {
     "PLOT_TYPE": "Mostrar",
     "ALL_LINES": "Todas as Linhas",
     "ONLY_POSITIVES": "Linhas Positivas",
+    "MODIFY_RESULT_CONFIGS_BUTTON": "Modificar Configurações de Resultado",
     # Backtest Button
     "RUN_BACKTEST": "Rodar Backtest",
 }
