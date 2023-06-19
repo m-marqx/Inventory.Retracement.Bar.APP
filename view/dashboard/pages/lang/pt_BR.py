@@ -4,8 +4,10 @@ pt_BR = {
     "SPOT": "Spot",
     "FUTURES": "Futuros",
     "MARK_PRICE": "Preço de Marcação",
+    "CUSTOM": "Outro",
     "SYMBOL": "Símbolo",
     "TIMEFRAME": "Timeframe",
+    "UPLOAD_DATA": "Inserir Dados",
     # Geral
     "SOURCE": "Fonte",
     "OPEN": "Abertura",

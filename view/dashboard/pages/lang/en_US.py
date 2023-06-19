@@ -4,8 +4,10 @@ en_US = {
     "SPOT": "Spot",
     "FUTURES": "Futures",
     "MARK_PRICE": "Mark Price",
+    "CUSTOM": "Custom",
     "SYMBOL": "Symbol",
     "TIMEFRAME": "Timeframe",
+    "UPLOAD_DATA": "Upload Data",
     # General
     "SOURCE": "Source",
     "OPEN": "Open",
