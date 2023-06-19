@@ -8,7 +8,6 @@ class GeneralCollapse:
         Input("result_types", "value"),
     )
     def show_margin_type(result_percentage, result_types):
-        print(result_types)
         if len(result_percentage) == 1 and result_types == "Normal":
             return "center"
         return "hidden"
