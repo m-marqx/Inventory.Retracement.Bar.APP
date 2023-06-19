@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
+import dash_ag_grid as dag
 
 intervals = [
     dbc.DropdownMenuItem("1min", id="1m"),
@@ -159,3 +160,13 @@ def upload_component(label: str, id_prefix: str, button_class: str):
         ),
     )
 
+def table_component(data_frame: pd.DataFrame, id_prefix: str, class_name: str = "ag-theme-alpine-dark"):
+    return dag.AgGrid(
+        id=f"{id_prefix}-table",
+        rowData=data_frame.to_dict("records"),
+        columnDefs=[{"headerName": col, "field": col} for col in data_frame.columns],
+        defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth":115},
+        columnSize="sizeToFit",
+        dashGridOptions={"pagination": True, "paginationPageSize":10},
+        className=class_name
+    )
