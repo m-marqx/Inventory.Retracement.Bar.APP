@@ -1,5 +1,5 @@
 import dash_bootstrap_components as dbc
-from dash import html
+from dash import html, dcc
 
 intervals = [
     dbc.DropdownMenuItem("1min", id="1m"),
@@ -135,3 +135,27 @@ class MenuCollapse:
         )
 
         return collapse, button
+
+def upload_component(label: str, id_prefix: str, button_class: str):
+    return dbc.Col(
+        dbc.Col(
+            [
+                dbc.Button(
+                    color="primary",
+                    id=f"{id_prefix}-button",
+                    class_name=button_class,
+                    style={"margin-top": "30px"},
+                    children=dbc.Col(
+                        dcc.Upload(
+                            label,
+                            id=f"{id_prefix}-data",
+                            multiple=False,
+                            style={"opacity": "1"},
+                            style_active={"opacity": "0.5"},
+                        ),
+                    ),
+                ),
+            ]
+        ),
+    )
+
