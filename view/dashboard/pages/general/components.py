@@ -6,6 +6,7 @@ from .utils import (
     intervals,
     api_types,
     result_types,
+    upload_component,
 )
 
 menu = dbc.Nav(
@@ -134,6 +135,14 @@ class GeneralComponents:
                     class_name="reset-center-row",
                 ),
             ]
+        )
+
+    @property
+    def custom_get_data_components(self):
+        return upload_component(
+            label=self.lang["UPLOAD_DATA"],
+            id_prefix="custom_get_data",
+            button_class="w-100"
         )
 
     @property
