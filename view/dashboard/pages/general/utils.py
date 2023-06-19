@@ -1,3 +1,7 @@
+import io
+import base64
+import pandas as pd
+
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 import dash_ag_grid as dag
@@ -170,3 +174,18 @@ def table_component(data_frame: pd.DataFrame, id_prefix: str, class_name: str = 
         dashGridOptions={"pagination": True, "paginationPageSize":10},
         className=class_name
     )
+
+def content_parser(contents, filename):
+    _, content_string = contents.split(",")
+    decoded = base64.b64decode(content_string)
+
+    if "csv" in filename:
+        file_name = io.StringIO(decoded.decode("utf-8"))
+        data_frame = pd.read_csv(file_name)
+
+    elif "parquet" in filename:
+        file_name = io.BytesIO(decoded)
+        data_frame = pd.read_parquet(file_name)
+    else:
+        return None
+    return data_frame
