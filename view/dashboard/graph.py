@@ -108,6 +108,7 @@ class GraphLayout:
         )
         return fig
 
+
     def plot_cumulative_results(self):
         column = "Cumulative_Result"
         fig = px.line(
@@ -115,7 +116,10 @@ class GraphLayout:
             y=self.data_frame[column],
             color_discrete_sequence=[self.primary_color],
         )
-        self.fig_layout(fig, column)
+        if self.api == "custom":
+            self.custom_fig_layout(fig, column)
+        else:
+            self.fig_layout(fig, column)
         return fig
 
     def plot_single_linechart(self, column):
@@ -124,7 +128,10 @@ class GraphLayout:
             y=self.data_frame[column],
             color_discrete_sequence=[self.primary_color],
         )
-        self.fig_layout(fig, column)
+        if self.api == "custom":
+            self.custom_fig_layout(fig, column)
+        else:
+            self.fig_layout(fig, column)
         return fig
 
     def plot_close(self):
@@ -134,7 +141,10 @@ class GraphLayout:
             y=self.data_frame[column],
             color_discrete_sequence=[self.primary_color],
         )
-        self.fig_layout(fig, column)
+        if self.api == "custom":
+            self.custom_fig_layout(fig, column)
+        else:
+            self.fig_layout(fig, column)
         return fig
 
     def grouped_lines(self):

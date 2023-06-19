@@ -13,6 +13,8 @@ from view.dashboard.utils import (
     get_data,
 )
 
+from view.dashboard.pages.general.utils import content_parser
+
 
 class RunBacktest:
     @callback(
@@ -33,6 +35,9 @@ class RunBacktest:
         State("api_types", "value"),
         State("symbol", "value"),
         State("interval", "label"),
+        # Custom Data
+        State("custom_get_data-data", "contents"),
+        State("custom_get_data-data", "filename"),
         # Indicators Params
         State("min_backtest_ema_length", "value"),
         State("max_backtest_ema_length", "value"),
@@ -70,6 +75,8 @@ class RunBacktest:
         api_type,
         symbol,
         interval,
+        contents,
+        filename,
         # Indicators Params
         min_backtest_ema_length,
         max_backtest_ema_length,
@@ -123,17 +130,22 @@ class RunBacktest:
             data_file = f"{data_name}.parquet"
             dataframe_path = data_path.joinpath(data_file)
 
-            if dataframe_path.is_file():
+            if dataframe_path.is_file() and api_type != "custom":
                 data_frame = pd.read_parquet(dataframe_path)
                 kline_api = KlineAPI(data_symbol, interval, api_type)
                 data_frame = kline_api.update_data()
 
             else:
-                data_frame = get_data(data_symbol, interval, api_type)
+                if api_type == "custom":
+                    data_frame = content_parser(contents, filename)
+                else:
+                    data_frame = get_data(data_symbol, interval, api_type)
 
             # For some reason, the data in Deploy is aways duplicated.
             data_frame.drop_duplicates(inplace=True)
-            SaveDataFrame(data_frame).to_parquet(f"{data_name}")
+
+            if api_type != "custom":
+                SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
             ema_range = range(min_backtest_ema_length, max_backtest_ema_length + 1)
             lowest_low_range = range(backtest_min_lowestlow, backtest_max_lowestlow + 1)

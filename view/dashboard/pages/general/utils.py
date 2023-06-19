@@ -29,6 +29,7 @@ def api_types(lang):
         {"label": lang["SPOT"], "value": "spot"},
         {"label": lang["FUTURES"], "value": "coin_margined"},
         {"label": lang["MARK_PRICE"], "value": "mark_price"},
+        {"label": lang["CUSTOM"], "value": "custom"},
     ]
 
 

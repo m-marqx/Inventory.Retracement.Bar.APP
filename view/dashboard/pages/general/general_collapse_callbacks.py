@@ -44,6 +44,28 @@ class GeneralCollapse:
         else:
             return True, "fa fa-chevron-up"
 
+    @callback(
+        Output("custom_get_data", "class_name"),
+        Output("binance_symbol", "class_name"),
+        Output("binance_interval", "class_name"),
+        Input("api_types", "value"),
+    )
+    def hide_data_type(api_type):
+        if api_type == "custom":
+            return None, "hidden", "hidden"
+        return "hidden", None, None
+
+    @callback(
+        Output("custom_get_data-data", "children"),
+        Input("api_types", "value"),
+        Input("custom_get_data-data", "filename"),
+        State("custom_get_data-data", "contents"),
+        State("custom_get_data-data", "children"),
+    )
+    def update_custom_data_buttom(api_type, file_name, content, initial_label):
+        if api_type == "custom" and content is not None:
+            return file_name
+        return initial_label
 
     @callback(
         Output("indicator_params_collapse", "is_open"),

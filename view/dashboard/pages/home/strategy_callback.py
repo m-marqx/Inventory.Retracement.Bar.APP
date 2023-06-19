@@ -23,6 +23,8 @@ from view.dashboard.utils import (
 from model.utils.utils import SaveDataFrame
 from controller.api.klines_api import KlineAPI
 from view.dashboard.graph import GraphLayout
+from view.dashboard.pages.general.utils import content_parser
+
 
 class RunStrategy:
     @callback(
@@ -32,6 +34,8 @@ class RunStrategy:
         State("api_types", "value"),
         State("symbol", "value"),
         State("interval", "label"),
+        State("custom_get_data-data", "contents"),
+        State("custom_get_data-data", "filename"),
         State("ema_source_column", "label"),
         State("ema_length", "value"),
         State("macd_source_column", "label"),
@@ -63,6 +67,8 @@ class RunStrategy:
         api_type,
         symbol,
         interval,
+        contents,
+        filename,
         ema_source_column,
         ema_length,
         macd_source_column,
@@ -109,16 +115,20 @@ class RunStrategy:
             data_file = f"{data_name}.parquet"
             dataframe_path = data_path.joinpath(data_file)
 
-            if dataframe_path.is_file():
+            if dataframe_path.is_file() and api_type != "custom":
                 data_frame = pd.read_parquet(dataframe_path)
                 kline_api = KlineAPI(data_symbol, interval, api_type)
                 data_frame = kline_api.update_data()
 
             else:
-                data_frame = get_data(data_symbol, interval, api_type)
+                if api_type == "custom":
+                    data_frame = content_parser(contents, filename)
+                else:
+                    data_frame = get_data(data_symbol, interval, api_type)
 
             data_frame.drop_duplicates(inplace=True)
-            SaveDataFrame(data_frame).to_parquet(f"{data_name}")
+            if api_type != "custom":
+                SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
             ema_bool = False
             macd_bool = False

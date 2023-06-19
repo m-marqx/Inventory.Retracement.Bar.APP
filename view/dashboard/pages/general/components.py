@@ -150,8 +150,9 @@ class GeneralComponents:
         return dbc.Row(
             [
                 self.api_radio_components,
-                dbc.Col(dbc.CardGroup([self.symbol_components])),
-                dbc.Col(dbc.CardGroup([self.interval_components])),
+                dbc.Col(dbc.CardGroup(self.custom_get_data_components), id="custom_get_data"),
+                dbc.Col(dbc.CardGroup(self.symbol_components), id="binance_symbol"),
+                dbc.Col(dbc.CardGroup(self.interval_components), id="binance_interval"),
             ],
         )
 
