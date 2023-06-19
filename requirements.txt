@@ -6,7 +6,7 @@ joblib
 numpy
 pandas
 plotly
-pydantic
+pydantic==1.10.9
 scikit_learn
 python-binance
 pyarrow
