@@ -247,6 +247,9 @@ def layout(lang="en_US"):
                                         ),
                                     ]
                                 ),
+                                dbc.Col(
+                                    id="table_container"
+                                )
                             ],
                             width=3,
                         ),

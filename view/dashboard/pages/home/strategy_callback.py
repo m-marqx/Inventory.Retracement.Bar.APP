@@ -23,13 +23,15 @@ from view.dashboard.utils import (
 from model.utils.utils import SaveDataFrame
 from controller.api.klines_api import KlineAPI
 from view.dashboard.graph import GraphLayout
-from view.dashboard.pages.general.utils import content_parser
+from view.dashboard.pages.general.utils import content_parser, table_component
+from model.utils import Statistics
 
 
 class RunStrategy:
     @callback(
         Output("results", "figure"),
         Output("text_output", "children"),
+        Output("table_container", "children"),
         Input("run_button", "n_clicks"),
         State("api_types", "value"),
         State("symbol", "value"),
@@ -189,7 +191,11 @@ class RunStrategy:
             )
 
             data_frame = builder(data_frame, builder_params)
+            stats_df = Statistics(data_frame["Result"]).calculate_all_statistics()
+            if result_types == "Fixed":
+                stats_df.drop("Sortino_Ratio", axis=1,  inplace=True)
+            table = table_component(stats_df, "results-table")
             graph_layout = GraphLayout(data_frame, data_symbol, interval, api_type)
             fig = graph_layout.plot_single_linechart("Capital")
             text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
-            return fig, text_output
+            return fig, text_output, table
