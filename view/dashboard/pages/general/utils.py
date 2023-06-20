@@ -165,14 +165,25 @@ def upload_component(label: str, id_prefix: str, button_class: str):
         ),
     )
 
-def table_component(data_frame: pd.DataFrame, id_prefix: str, class_name: str = "ag-theme-alpine-dark"):
+def table_component(
+    data_frame: pd.DataFrame,
+    id_prefix: str,
+    class_name: str = "ag-theme-alpine-dark",
+    use_pagination: bool = False
+):
+
+    if use_pagination:
+        pagination_dict = {"pagination": True, "paginationPageSize":10}
+    else:
+        pagination_dict = {"pagination": False}
+
     return dag.AgGrid(
         id=f"{id_prefix}-table",
         rowData=data_frame.to_dict("records"),
         columnDefs=[{"headerName": col, "field": col} for col in data_frame.columns],
         defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth":115},
         columnSize="sizeToFit",
-        dashGridOptions={"pagination": True, "paginationPageSize":10},
+        dashGridOptions=pagination_dict,
         className=class_name
     )
 
