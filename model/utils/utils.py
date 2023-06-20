@@ -353,7 +353,12 @@ class Statistics:
         stats_df = stats_df.resample(self.time_span).mean()
         stats_df["Sharpe_Ratio"] = self.calculate_estimed_sharpe_ratio()
         stats_df["Sortino_Ratio"] = self.calculate_estimed_sortino_ratio()
-        return stats_df
+        if self.time_span == "A":
+            stats_df["Date"] = stats_df.index.year
+        if self.time_span == "M":
+            stats_df["Date"] = stats_df.index.strftime('%m/%Y')
+        if self.time_span in ["A", "M"]:
+            stats_df = stats_df.reindex(columns=["Date"] + list(stats_df.columns[:-1]))
 
     def calculate_expected_value(self):
         """
