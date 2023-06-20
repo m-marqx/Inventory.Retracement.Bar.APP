@@ -337,28 +337,36 @@ class Statistics:
         self.time_span = time_span
         self.risk_free_rate = risk_free_rate
 
-    def calculate_all_statistics(self):
+    def calculate_all_statistics(self, precision: int = 2):
         """
         Calculate all strategy statistics.
+
+        Parameters
+        ----------
+        precision : int, optional
+            The number of decimal places to round the calculated statistics to.
+            Defaults to 2.
 
         Returns
         -------
         pd.DataFrame
             A dataframe with calculated statistics, including expected value,
             Sharpe ratio, and Sortino ratio.
-
         """
         stats_df = pd.DataFrame()
         stats_df["Expected_Value"] = self.calculate_expected_value()["Expected_Value"]
         stats_df = stats_df.resample(self.time_span).mean()
+
         stats_df["Sharpe_Ratio"] = self.calculate_estimed_sharpe_ratio()
         stats_df["Sortino_Ratio"] = self.calculate_estimed_sortino_ratio()
+
         if self.time_span == "A":
             stats_df["Date"] = stats_df.index.year
         if self.time_span == "M":
             stats_df["Date"] = stats_df.index.strftime('%m/%Y')
         if self.time_span in ["A", "M"]:
             stats_df = stats_df.reindex(columns=["Date"] + list(stats_df.columns[:-1]))
+        return round(stats_df, precision)
 
     def calculate_expected_value(self):
         """
