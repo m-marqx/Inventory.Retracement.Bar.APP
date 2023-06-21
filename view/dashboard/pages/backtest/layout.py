@@ -306,6 +306,9 @@ def layout(lang="en_US"):
                                             ),
                                         ]
                                     ),
+                                    dbc.Col(
+                                        id="backtest_table_component",
+                                    )
                                 ],
                                 width=3,
                             ),

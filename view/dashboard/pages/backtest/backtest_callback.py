@@ -3,6 +3,7 @@ import dash
 from dash import Input, Output, State, callback, html
 import pandas as pd
 import numpy as np
+from model.utils import Statistics
 from controller.api.klines_api import KlineAPI
 
 from model.backtest import Backtest, BacktestParams
@@ -13,7 +14,7 @@ from view.dashboard.utils import (
     get_data,
 )
 
-from view.dashboard.pages.general.utils import content_parser
+from view.dashboard.pages.general.utils import content_parser, table_component
 
 
 class RunBacktest:
@@ -30,6 +31,7 @@ class RunBacktest:
     @callback(
         Output("backtest_results", "figure"),
         Output("backtest_text_output", "children"),
+        Output("backtest_table_component", "children"),
         # Get Data
         Input("backtest_run_button", "n_clicks"),
         State("api_types", "value"),
@@ -213,6 +215,19 @@ class RunBacktest:
                     backtest_params.result_params.capital,
                 ).best_positive_results
 
+            highest_result_column = data_frame.idxmax(axis=1).iloc[0]
+            stats_df = data_frame[[highest_result_column]].diff()
+
+            column_name = stats_df.columns[0]
+            stats_df = stats_df[stats_df[column_name] != 0]
+            stats_df = stats_df.iloc[:,0]
+
+            stats_df = Statistics(stats_df).calculate_all_statistics()
+            if "Fixed" in backtest_result_types:
+                stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
+
+            table = table_component(stats_df, "backtest_results-table")
+
             graph_layout = GraphLayout(
                 data_frame,
                 data_symbol,
@@ -226,4 +241,4 @@ class RunBacktest:
                 f"Number of Trials: {backtest_params.total_combinations}"
             )
 
-        return fig, text_output
+        return fig, text_output, table
