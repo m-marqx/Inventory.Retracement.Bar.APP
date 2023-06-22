@@ -112,6 +112,9 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="backtest_min_wick_percentage",
+                            min=0,
+                            max=1,
+                            step=0.01,
                             value=0.01,
                             type="number",
                         ),
@@ -168,6 +171,9 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="backtest_max_wick_percentage",
+                            min=0,
+                            max=1,
+                            step=0.01,
                             value=1,
                             type="number",
                         ),

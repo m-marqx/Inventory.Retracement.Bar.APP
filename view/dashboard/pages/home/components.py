@@ -244,6 +244,9 @@ class MainPageComponents:
                 dbc.Col(
                     dbc.Input(
                         id="irb_wick_percentage",
+                        min=0,
+                        max=1,
+                        step=0.01,
                         value=0.45,
                         type="number",
                     ),
