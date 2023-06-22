@@ -215,18 +215,35 @@ class RunBacktest:
                     backtest_params.result_params.capital,
                 ).best_positive_results
 
-            highest_result_column = data_frame.idxmax(axis=1).iloc[0]
-            stats_df = data_frame[[highest_result_column]].diff()
+            if data_frame.shape[1] <= 50:
+                range_max = data_frame.shape[1]
+            else:
+                range_max = 50
 
-            column_name = stats_df.columns[0]
-            stats_df = stats_df[stats_df[column_name] != 0]
-            stats_df = stats_df.iloc[:,0]
+            stacked_dataframe = []
+            for value in range(0,range_max):
+                column_name = data_frame.columns[value]
+                stats_df = data_frame[[column_name]].diff()
+                stats_df = stats_df[stats_df[column_name] != 0]
+                stats_df = stats_df[column_name]
 
-            stats_df = Statistics(stats_df).calculate_all_statistics()
-            if "Fixed" in backtest_result_types:
-                stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
+                stats_df = Statistics(stats_df).calculate_all_statistics()
+                if "Fixed" in backtest_result_types:
+                    stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
+                stats_df["Rank"] = value + 1
 
-            table = table_component(stats_df, "backtest_results-table")
+                stats_df = stats_df.reindex(
+                    columns=["Rank"]
+                    + list(stats_df.columns[:-1])
+                )
+
+                stats_df.iloc[1:, 0] = None
+
+                stacked_dataframe.append(stats_df)
+
+            stacked_dataframe = pd.concat(stacked_dataframe)
+
+            table = table_component(stacked_dataframe, "backtest_results-table")
 
             graph_layout = GraphLayout(
                 data_frame,
