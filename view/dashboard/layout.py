@@ -9,7 +9,7 @@ theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
 icons = "https://use.fontawesome.com/releases/v5.15.3/css/all.css"
 
-page_folger = pathlib.Path("view", "dashboard", "pages")
+page_folder = pathlib.Path("view", "dashboard", "pages")
 
 app = dash.Dash(
     "Dashboard",
@@ -17,7 +17,7 @@ app = dash.Dash(
     external_stylesheets=[icons, theme, style_sheet],
     title="Inventory Retracement Bar",
     use_pages=True,
-    pages_folder=page_folger,
+    pages_folder=page_folder,
 )
 
 app.layout = dbc.Container(
