@@ -143,7 +143,7 @@ class MenuCollapse:
             is_open=self.is_open,
         )
 
-        return collapse, button
+        return dbc.Col([self.button, collapse])
 
     def collapse_with_inside_collapse(self, inside_component):
         """

@@ -1,14 +1,9 @@
-import dash_bootstrap_components as dbc
 import psutil
-
 from dash import html, dcc, register_page
+import dash_bootstrap_components as dbc
 
 from view.dashboard.pages.lang import en_US, pt_BR
-from view.dashboard.pages.general.components import GeneralComponents
-from view.dashboard.pages.general.utils import MenuCollapse
-
-from .components import BacktestComponents
-from .results_components import ResultsComponents
+from .CollapseMenus import BacktestMenuCollapse
 
 register_page(
     __name__,
@@ -20,24 +15,19 @@ register_page(
 
 
 def layout(lang="en_US"):
-
     if lang == "pt_BR":
         lang = pt_BR
     else:
         lang = en_US
 
-    backtest_components = BacktestComponents(lang)
-    general_components = GeneralComponents(lang)
-    results_components = ResultsComponents(lang)
+    backtest_menu_collapse = BacktestMenuCollapse(lang)
 
-    result_configs_component = MenuCollapse(
-        lang=lang,
-        label = "MODIFY_RESULT_CONFIGS_BUTTON",
-        component=results_components.result_configs,
-        id_prefix="result_configs",
-    ).components
-    result_configs_collapse = result_configs_component[0]
-    result_configs_button = result_configs_component[1]
+    get_data_component = backtest_menu_collapse.get_data_component
+    parameters_component = backtest_menu_collapse.parameters_component
+    strategy_component = backtest_menu_collapse.strategy_component
+    trend_component = backtest_menu_collapse.trend_component
+    result_parameters_component = backtest_menu_collapse.result_parameters_component
+    hardware_component = backtest_menu_collapse.hardware_component
 
     mem = psutil.virtual_memory()
     available_ram = mem.available
@@ -91,195 +81,12 @@ def layout(lang="en_US"):
                                 [
                                     dbc.Col(
                                         [
-                                            dbc.Button(
-                                                [
-                                                    lang["GET_DATA_BUTTON"],
-                                                    html.I(
-                                                        className="fa fa-chevron-up ml-2",
-                                                        id="get_data_icon",
-                                                    ),
-                                                ],
-                                                id="get_data_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    dbc.CardBody(
-                                                        general_components.get_data_components,
-                                                        style={
-                                                            "display": "flex",
-                                                            "flex-direction": "row",
-                                                        },
-                                                    ),
-                                                ),
-                                                id="get_data_collapse",
-                                                is_open=True,
-                                            ),
-                                            dbc.Button(
-                                                [
-                                                    lang[
-                                                        "MODIFY_INDICATORS_PARAMETERS_BUTTON"
-                                                    ],
-                                                    html.I(
-                                                        className="fa fa-chevron-down ml-2",
-                                                        id="indicator_params_icon",
-                                                    ),
-                                                ],
-                                                id="indicator_params_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    dbc.CardBody(
-                                                        [
-                                                            dbc.Row(
-                                                                [
-                                                                    dbc.Col(
-                                                                        backtest_components.indicators_parameters_col1,
-                                                                        width=6,
-                                                                    ),
-                                                                    dbc.Col(
-                                                                        backtest_components.indicators_parameters_col2,
-                                                                        width=6,
-                                                                    ),
-                                                                ]
-                                                            )
-                                                        ],
-                                                    ),
-                                                ),
-                                                id="indicator_params_collapse",
-                                                is_open=False,
-                                            ),
-                                            dbc.Button(
-                                                [
-                                                    lang[
-                                                        "MODIFY_STRATEGY_PARAMETERS_BUTTON"
-                                                    ],
-                                                    html.I(
-                                                        className="fa fa-chevron-down ml-2",
-                                                        id="strategy_params_icon",
-                                                    ),
-                                                ],
-                                                id="strategy_params_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    dbc.CardBody(
-                                                        [
-                                                            dbc.Row(
-                                                                [
-                                                                    dbc.Col(
-                                                                        backtest_components.irb_parameters_col1,
-                                                                        style={
-                                                                            "display": "flex",
-                                                                            "flex-direction": "column",
-                                                                        },
-                                                                        width=6,
-                                                                    ),
-                                                                    dbc.Col(
-                                                                        backtest_components.irb_parameters_col2,
-                                                                        style={
-                                                                            "display": "flex",
-                                                                            "flex-direction": "column",
-                                                                        },
-                                                                        width=6,
-                                                                    ),
-                                                                ]
-                                                            ),
-                                                        ],
-                                                    )
-                                                ),
-                                                id="strategy_params_collapse",
-                                                is_open=False,
-                                            ),
-                                            dbc.Button(
-                                                [
-                                                    lang[
-                                                        "MODIFY_TREND_PARAMETERS_BUTTON"
-                                                    ],
-                                                    html.I(
-                                                        className="fa fa-chevron-down ml-2",
-                                                        id="trend_params_icon",
-                                                        style={"transformY": "2px"},
-                                                    ),
-                                                ],
-                                                id="trend_params_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    dbc.CardBody(
-                                                        backtest_components.filter_components,
-                                                    )
-                                                ),
-                                                id="trend_params_collapse",
-                                                is_open=False,
-                                            ),
-                                            dbc.Button(
-                                                [
-                                                    lang["MODIFY_RESULT_PARAMETERS_BUTTON"],
-                                                    html.I(
-                                                        className="fa fa-chevron-down ml-2",
-                                                        id="result_params_icon",
-                                                        style={"transformY": "2px"},
-                                                    ),
-                                                ],
-                                                id="result_params_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    [
-                                                        dbc.CardBody(
-                                                            results_components.result_components,
-                                                        ),
-                                                        dbc.Card(
-                                                            dbc.CardBody([
-                                                            result_configs_button,
-                                                            ]),
-                                                        ),
-                                                        result_configs_collapse,
-                                                    ]
-                                                ),
-                                                id="result_params_collapse",
-                                                is_open=False,
-                                            ),
-                                            dbc.Button(
-                                                [
-                                                    lang[
-                                                        "MODIFY_HARDWARE_PARAMETERS_BUTTON"
-                                                    ],
-                                                    html.I(
-                                                        className="fa fa-chevron-down ml-2",
-                                                        id="hardware_params_icon",
-                                                        style={"transformY": "2px"},
-                                                    ),
-                                                ],
-                                                id="hardware_params_button",
-                                                className="d-grid gap-2 col-6 mx-auto w-100",
-                                                outline=True,
-                                                color="secondary",
-                                            ),
-                                            dbc.Collapse(
-                                                dbc.Card(
-                                                    dbc.CardBody(
-                                                        backtest_components.hardware_components,
-                                                    )
-                                                ),
-                                                id="hardware_params_collapse",
-                                                is_open=False,
-                                            ),
+                                            get_data_component,
+                                            parameters_component,
+                                            strategy_component,
+                                            trend_component,
+                                            result_parameters_component,
+                                            hardware_component,
                                         ],
                                         class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container",
                                     ),
@@ -308,7 +115,7 @@ def layout(lang="en_US"):
                                     ),
                                     dbc.Col(
                                         id="backtest_table_component",
-                                    )
+                                    ),
                                 ],
                                 width=3,
                             ),
