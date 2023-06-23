@@ -82,7 +82,8 @@ class MenuCollapse:
         lang: dict,
         label: str,
         component,
-        id_prefix: str
+        id_prefix: str,
+        is_open: bool = False,
     ):
         """
         Initialize a MenuCollapse instance.
@@ -101,9 +102,11 @@ class MenuCollapse:
             A prefix used to generate unique IDs for the collapse and
             button components.
         """
+
         self.label_name = lang[label]
         self.component = component
         self.id_prefix = id_prefix
+        self.is_open = is_open
 
     @property
     def components(self):
@@ -122,7 +125,7 @@ class MenuCollapse:
                 )
             ),
             id=f"{self.id_prefix}_collapse",
-            is_open=False,
+            is_open=self.is_open,
         )
 
         button = dbc.Button(
