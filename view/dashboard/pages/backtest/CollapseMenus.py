@@ -73,3 +73,13 @@ class BacktestMenuCollapse:
             component=irb_parameters,
             id_prefix="strategy_params",
         ).component
+
+    @property
+    def trend_component(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_TREND_PARAMETERS_BUTTON",
+            component=dbc.Col(self.backtest_components.filter_components),
+            id_prefix="trend_params",
+        ).component
+
