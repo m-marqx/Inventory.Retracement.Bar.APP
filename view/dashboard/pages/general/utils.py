@@ -124,7 +124,7 @@ class MenuCollapse:
         )
 
     @property
-    def components(self):
+    def simple_collapse(self):
         """
         Create a collapsible menu item.
 

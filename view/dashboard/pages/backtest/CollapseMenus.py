@@ -20,7 +20,7 @@ class BacktestMenuCollapse:
             component=self.general_components.get_data_components,
             id_prefix="get_data",
             is_open=True,
-        ).component
+        ).simple_collapse
 
     @property
     def parameters_component(self):
@@ -42,7 +42,7 @@ class BacktestMenuCollapse:
             label="MODIFY_INDICATORS_PARAMETERS_BUTTON",
             component=indicators_parameters_component,
             id_prefix="indicator_params",
-        ).component
+        ).simple_collapse
 
     @property
     def strategy_component(self):
@@ -72,7 +72,7 @@ class BacktestMenuCollapse:
             label="MODIFY_STRATEGY_PARAMETERS_BUTTON",
             component=irb_parameters,
             id_prefix="strategy_params",
-        ).component
+        ).simple_collapse
 
     @property
     def trend_component(self):
@@ -81,7 +81,7 @@ class BacktestMenuCollapse:
             label="MODIFY_TREND_PARAMETERS_BUTTON",
             component=dbc.Col(self.backtest_components.filter_components),
             id_prefix="trend_params",
-        ).component
+        ).simple_collapse
 
     @property
     def result_parameters_component(self):
@@ -90,7 +90,7 @@ class BacktestMenuCollapse:
                 label="MODIFY_RESULT_CONFIGS_BUTTON",
                 component=self.results_components.result_configs,
                 id_prefix="result_configs",
-            ).component
+            ).simple_collapse
 
         return MenuCollapse(
             lang=self.lang,
@@ -106,4 +106,4 @@ class BacktestMenuCollapse:
             label="MODIFY_HARDWARE_PARAMETERS_BUTTON",
             component=self.backtest_components.hardware_components,
             id_prefix="hardware_params",
-        ).component
+        ).simple_collapse
