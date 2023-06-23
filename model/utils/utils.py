@@ -848,3 +848,61 @@ class CalculateTradePerformance:
             method = "sum"
         self.update_results(gain, loss, method, coin_margined)
         return self.data_frame
+
+class String_Parameters:
+    """
+    A class for manipulating string parameters in a data frame.
+
+    Parameters
+    ----------
+    data_frame : pd.DataFrame
+        The data frame containing the string parameters.
+
+    Attributes
+    ----------
+    data_frame : pd.DataFrame
+        The data frame containing the string parameters.
+    column_list : list
+        A list of column names in the data frame.
+
+    Methods
+    -------
+    detect_params(param_list)
+        Detect parameters in a given list.
+    """
+
+    def __init__(self, data_frame):
+        """
+        Initialize a String_Parameters instance.
+
+        Parameters
+        ----------
+        data_frame : pd.DataFrame
+            The data frame containing the string parameters.
+        """
+        self.data_frame = data_frame
+        self.column_list = list(data_frame.columns)
+
+    def detect_params(self, param_list):
+        """
+        Detect parameters in a given list.
+
+        Parameters
+        ----------
+        param_list : list
+            A list of parameters.
+
+        Returns
+        -------
+        list
+            A list of detected parameters.
+        """
+        parameters_list = param_list
+        params_splitted = []
+        params_detected = []
+        for parameter in parameters_list:
+            new_param = parameter.split("=")
+            params_splitted.append(new_param)
+        for param in params_splitted:
+            params_detected.append([param][0][0])
+        return params_detected
