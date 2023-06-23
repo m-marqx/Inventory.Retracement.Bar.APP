@@ -180,7 +180,7 @@ def upload_component(label: str, id_prefix: str, button_class: str):
             [
                 dbc.Button(
                     color="primary",
-                    id=f"{id_prefix}-button",
+                    id=f"{id_prefix}_button",
                     class_name=button_class,
                     style={"margin-top": "30px"},
                     children=dbc.Col(
