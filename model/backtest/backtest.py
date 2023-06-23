@@ -44,8 +44,8 @@ class Backtest:
             f"EMA: {ema_parameters} <br> "
             f"IRB: {irb_parameters} <br> "
             f"Indicators: {indicator_parameters} <br> "
-            f"Filters: {trend_parameters}"
-            f"Result: {result_parameters}"
+            f"Filters: {trend_parameters} <br> "
+            f"Result: {result_parameters} <br> "
         ]
 
         strategy_params = BuilderParams(
