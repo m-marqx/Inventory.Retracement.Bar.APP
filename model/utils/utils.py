@@ -871,6 +871,8 @@ class String_Parameters:
         Detect parameters in a given list.
     split_params()
         Split the string parameters in the data frame.
+    to_string(row)
+        Convert a row to a string representation.
     """
 
     def __init__(self, data_frame):
@@ -977,3 +979,20 @@ class String_Parameters:
         ).drop(["EMA:", "IRB:", "Indicators:", "Filters:", "Result:"], axis=1)
 
         return param_df
+
+    def to_string(self, row):
+        """
+        Convert a row to a string representation.
+
+        Parameters
+        ----------
+        row : pd.Series
+            A row in the data frame.
+
+        Returns
+        -------
+        str
+            A string representation of the row.
+        """
+        return row.to_string(na_rep="", index=False).replace("\n", "")
+
