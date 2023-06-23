@@ -145,6 +145,35 @@ class MenuCollapse:
 
         return collapse, button
 
+    def collapse_with_inside_collapse(self, inside_component):
+        """
+        Create a collapsible menu item.
+
+        Returns
+        -------
+        dbc.Col
+            A column component containing the collapse and button
+            components.
+        """
+        collapse = dbc.Collapse(
+            dbc.Card(
+                [
+                    dbc.CardBody(
+                        self.component,
+                    ),
+                    dbc.Card(
+                        dbc.CardBody(
+                            inside_component,
+                        ),
+                    ),
+                ]
+            ),
+            id=f"{self.id_prefix}_collapse",
+            is_open=self.is_open,
+        )
+
+        return dbc.Col([self.button, collapse])
+
 def upload_component(label: str, id_prefix: str, button_class: str):
     return dbc.Col(
         dbc.Col(
