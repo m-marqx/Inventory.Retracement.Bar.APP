@@ -869,6 +869,8 @@ class String_Parameters:
     -------
     detect_params(param_list)
         Detect parameters in a given list.
+    split_params()
+        Split the string parameters in the data frame.
     """
 
     def __init__(self, data_frame):
@@ -906,3 +908,72 @@ class String_Parameters:
         for param in params_splitted:
             params_detected.append([param][0][0])
         return params_detected
+
+    def split_params(self):
+        """
+        Split the string parameters in the data frame.
+
+        Returns
+        -------
+        pd.DataFrame
+            A data frame with the split string parameters.
+        """
+        column_list_temp = self.column_list
+        parameter = []
+        param_list_remove = []
+        splited_list = []
+        temp = []
+
+        for i in range(0, len(self.column_list)):
+            params = column_list_temp[i].split("<br>")
+            param_list = []
+            for param in params:
+                param = param.split("<br>")
+                param_list.append(param)
+            for params_split in param_list:
+                for param in params_split:
+                    param = param.split(" ")
+                    parameter.extend(param)
+
+        for param in parameter:
+            if param != "":
+                param_list_remove.extend([param])
+        for item in param_list_remove:
+            if item == "EMA:":
+                if temp:
+                    splited_list.append(temp)
+                    temp = []
+            temp.append(item)
+            if item == "coin_margined=False" or item == "coin_margined=True":
+                splited_list.append(temp)
+                temp = []
+
+        param_df = pd.DataFrame(splited_list)
+
+        for column in param_df.columns:
+            param_df[column] = np.where(
+                param_df[column] == param_df[column].shift(),
+                np.NaN,
+                param_df[column]
+            )
+
+        params_detected = self.detect_params(list(param_df.iloc[0, :]))
+
+        for column in param_df.columns:
+            param_df[column][0] = np.where(
+                param_df[column].shift().isna()[2],
+                "replace",
+                param_df[column][0]
+            )
+
+            param_df[column] = np.where(
+                param_df[column] == "replace",
+                np.nan,
+                param_df[column]
+            )
+
+        param_df = param_df.rename(
+            columns=dict(enumerate(params_detected))
+        ).drop(["EMA:", "IRB:", "Indicators:", "Filters:", "Result:"], axis=1)
+
+        return param_df
