@@ -873,6 +873,8 @@ class String_Parameters:
         Split the string parameters in the data frame.
     to_string(row)
         Convert a row to a string representation.
+    get_unique_params
+        Get the unique string parameters from the data frame as a string.
     """
 
     def __init__(self, data_frame):
@@ -996,3 +998,16 @@ class String_Parameters:
         """
         return row.to_string(na_rep="", index=False).replace("\n", "")
 
+    @property
+    def get_unique_params(self):
+        """
+        Get the unique string parameters from the data frame as a string.
+
+        Returns
+        -------
+        pd.Series
+            A series containing the unique string parameters as strings.
+        """
+        params_data_frame = self.split_params()
+        string_data_frame = params_data_frame.apply(self.to_string, axis=1)
+        return string_data_frame
