@@ -108,6 +108,21 @@ class MenuCollapse:
         self.id_prefix = id_prefix
         self.is_open = is_open
 
+        self.button = dbc.Button(
+            [
+                self.label_name,
+                html.I(
+                    className="fa fa-chevron-down ml-2",
+                    id=f"{self.id_prefix}_icon",
+                    style={"transformY": "2px"},
+                ),
+            ],
+            id=f"{id_prefix}_button",
+            className="d-grid gap-2 col-6 mx-auto w-100",
+            outline=True,
+            color="secondary",
+        )
+
     @property
     def components(self):
         """
@@ -126,21 +141,6 @@ class MenuCollapse:
             ),
             id=f"{self.id_prefix}_collapse",
             is_open=self.is_open,
-        )
-
-        button = dbc.Button(
-            [
-                self.label_name,
-                html.I(
-                    className="fa fa-chevron-down ml-2",
-                    id=f"{self.id_prefix}_icon",
-                    style={"transformY": "2px"},
-                ),
-            ],
-            id=f"{self.id_prefix}_button",
-            className="d-grid gap-2 col-6 mx-auto w-100",
-            outline=True,
-            color="secondary",
         )
 
         return collapse, button
