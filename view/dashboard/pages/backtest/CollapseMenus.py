@@ -43,3 +43,33 @@ class BacktestMenuCollapse:
             component=indicators_parameters_component,
             id_prefix="indicator_params",
         ).component
+
+    @property
+    def strategy_component(self):
+        irb_parameters = dbc.Row(
+            [
+                dbc.Col(
+                    self.backtest_components.irb_parameters_col1,
+                    style={
+                        "display": "flex",
+                        "flex-direction": "column",
+                    },
+                    width=6,
+                ),
+                dbc.Col(
+                    self.backtest_components.irb_parameters_col2,
+                    style={
+                        "display": "flex",
+                        "flex-direction": "column",
+                    },
+                    width=6,
+                ),
+            ]
+        )
+
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_STRATEGY_PARAMETERS_BUTTON",
+            component=irb_parameters,
+            id_prefix="strategy_params",
+        ).component
