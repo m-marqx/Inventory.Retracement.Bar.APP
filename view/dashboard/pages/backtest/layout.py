@@ -3,7 +3,7 @@ from dash import html, dcc, register_page
 import dash_bootstrap_components as dbc
 
 from view.dashboard.pages.lang import en_US, pt_BR
-from .CollapseMenus import BacktestMenuCollapse
+from .collapse_menus import BacktestMenuCollapse
 
 register_page(
     __name__,
