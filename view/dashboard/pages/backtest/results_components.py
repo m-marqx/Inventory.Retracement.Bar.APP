@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 
-from view.dashboard.pages.general.components import result_types
+from view.dashboard.pages.general.utils import result_types
 
 
 class ResultsComponents:

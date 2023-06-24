@@ -215,7 +215,7 @@ def layout(lang="en_US"):
                                         dbc.Collapse(
                                             dbc.Card(
                                                 dbc.CardBody(
-                                                    general_components.result_components,
+                                                    main_page_components.result_components,
                                                 )
                                             ),
                                             id="result_params_collapse",
