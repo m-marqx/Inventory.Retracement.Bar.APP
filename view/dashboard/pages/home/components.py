@@ -605,13 +605,20 @@ class MainPageComponents:
                     ),
                 ]
             ),
-            dbc.Row(self.result_type_components),
-            dbc.Row(
-                self.percentage_component,
-                style={"margin-top": "20px"},
-            ),
-            dbc.Row(
-                self.margin_type,
-                style={"margin-top": "20px"},
-            ),
+        )
+
+    @property
+    def result_configs(self):
+        return dbc.Row(
+            [
+                dbc.Row(self.result_type_components),
+                dbc.Row(
+                    self.percentage_component,
+                    style={"margin-top": "20px"},
+                ),
+                dbc.Row(
+                    self.margin_type,
+                    style={"margin-top": "20px"},
+                ),
+            ]
         )
