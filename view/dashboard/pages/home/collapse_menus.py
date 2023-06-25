@@ -3,6 +3,7 @@ from view.dashboard.pages.general.utils import MenuCollapse
 from view.dashboard.pages.general.components import GeneralComponents
 from .components import MainPageComponents
 
+
 class MainPageMenuCollapse:
     def __init__(self, lang):
         self.lang = lang
@@ -84,10 +85,10 @@ class MainPageMenuCollapse:
     def result_parameters_component(self):
         result_configs_component = MenuCollapse(
             lang=self.lang,
-                label="MODIFY_RESULT_CONFIGS_BUTTON",
-                component=self.main_page_components.result_configs,
-                id_prefix="result_configs",
-            ).simple_collapse
+            label="MODIFY_RESULT_CONFIGS_BUTTON",
+            component=self.main_page_components.result_type,
+            id_prefix="result_configs",
+        ).simple_collapse
 
         return MenuCollapse(
             lang=self.lang,

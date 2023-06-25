@@ -210,8 +210,9 @@ class ResultsComponents:
                 ]
             ),
         )
+
     @property
-    def result_configs(self):
+    def result_type(self):
         return dbc.Row(
             [
                 dbc.Row(self.result_type_components),

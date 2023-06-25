@@ -272,7 +272,7 @@ class MainPageComponents:
                     self.lang["ACTIVATE_INDICATOR"],
                     width=45,
                     style={"margin-top": "10px"},
-                    class_name="center"
+                    class_name="center",
                 ),
                 class_name="center",
             ),
@@ -286,7 +286,7 @@ class MainPageComponents:
                     self.lang["CROSSOVER_PRICE_SOURCE"],
                     width=45,
                     style={"margin-top": "10px"},
-                    class_name="center"
+                    class_name="center",
                 ),
                 class_name="center",
             ),
@@ -300,7 +300,7 @@ class MainPageComponents:
                     self.lang["MACD_BULLISH_VALUE"],
                     width=45,
                     style={"margin-top": "10px"},
-                    class_name="center"
+                    class_name="center",
                 ),
                 class_name="center",
             ),
@@ -314,7 +314,7 @@ class MainPageComponents:
                     self.lang["CCI_BULLISH_VALUE"],
                     width=45,
                     style={"margin-top": "10px"},
-                    class_name="center"
+                    class_name="center",
                 ),
                 class_name="center",
             ),
@@ -337,7 +337,7 @@ class MainPageComponents:
                         ),
                     ),
                 ],
-                class_name="center"
+                class_name="center",
             ),
         )
 
@@ -372,7 +372,7 @@ class MainPageComponents:
                         ),
                     ),
                 ],
-                class_name="center"
+                class_name="center",
             ),
         )
 
@@ -389,10 +389,9 @@ class MainPageComponents:
                         ),
                     ),
                 ],
-                class_name="center"
+                class_name="center",
             ),
         )
-
 
     @property
     def filter_components(self):
@@ -411,7 +410,7 @@ class MainPageComponents:
                         self.trend_indicators_input2,
                         style={"justify-content": "normal"},
                         width=6,
-                        ),
+                    ),
                 ],
                 class_name="center-row",
             ),
@@ -430,7 +429,6 @@ class MainPageComponents:
                 class_name="center-row",
             ),
         )
-
 
     @property
     def result_type_components(self):
@@ -608,7 +606,7 @@ class MainPageComponents:
         )
 
     @property
-    def result_configs(self):
+    def result_type(self):
         return dbc.Row(
             [
                 dbc.Row(self.result_type_components),
