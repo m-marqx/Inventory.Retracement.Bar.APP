@@ -79,3 +79,12 @@ class MainPageMenuCollapse:
             component=dbc.Col(self.main_page_components.filter_components),
             id_prefix="trend_params",
         ).simple_collapse
+
+    @property
+    def result_parameters_component(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_RESULT_PARAMETERS_BUTTON",
+            component=self.main_page_components.result_components,
+            id_prefix="result_params",
+        ).simple_collapse
