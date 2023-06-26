@@ -89,3 +89,19 @@ class LayoutMenuCollapse:
             id_prefix="trend_params",
         ).simple_collapse
 
+    @property
+    def result_parameters_component(self):
+        result_configs_component = MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_RESULT_CONFIGS_BUTTON",
+            component=self.page_component_result.result_type,
+            id_prefix="result_configs",
+        ).simple_collapse
+
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_RESULT_PARAMETERS_BUTTON",
+            component=self.page_component_result.result_components,
+            id_prefix="result_params",
+        ).collapse_with_inside_collapse(result_configs_component)
+
