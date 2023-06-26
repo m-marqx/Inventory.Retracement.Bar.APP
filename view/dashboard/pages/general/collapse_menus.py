@@ -80,3 +80,12 @@ class LayoutMenuCollapse:
             id_prefix="strategy_params",
         ).simple_collapse
 
+    @property
+    def trend_component(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_TREND_PARAMETERS_BUTTON",
+            component=dbc.Col(self.page_component_base.filter_components),
+            id_prefix="trend_params",
+        ).simple_collapse
+
