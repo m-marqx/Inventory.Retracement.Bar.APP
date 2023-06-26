@@ -105,3 +105,11 @@ class LayoutMenuCollapse:
             id_prefix="result_params",
         ).collapse_with_inside_collapse(result_configs_component)
 
+    @property
+    def hardware_component(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_HARDWARE_PARAMETERS_BUTTON",
+            component=self.backtest_components.hardware_components,
+            id_prefix="hardware_params",
+        ).simple_collapse
