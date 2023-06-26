@@ -458,7 +458,7 @@ class MainPageComponents:
 
     @property
     def percentage_component(self):
-        return dbc.Row(
+        return dbc.Col(
             [
                 dbc.Col(
                     dbc.Checklist(
@@ -482,7 +482,7 @@ class MainPageComponents:
 
     @property
     def margin_type(self):
-        return dbc.Row(
+        return dbc.Col(
             [
                 dbc.Col(
                     dbc.RadioItems(
@@ -498,7 +498,6 @@ class MainPageComponents:
                         inline=True,
                     ),
                     class_name="center",
-                    id="home_result_margin_type_col",
                 )
             ],
             style={"justify-content": "center"},
@@ -609,7 +608,7 @@ class MainPageComponents:
     def result_type(self):
         return dbc.Row(
             [
-                dbc.Row(self.result_type_components),
+                dbc.Col(self.result_type_components),
                 dbc.Row(
                     self.percentage_component,
                     style={"margin-top": "20px"},
@@ -617,6 +616,7 @@ class MainPageComponents:
                 dbc.Row(
                     self.margin_type,
                     style={"margin-top": "20px"},
+                    id="home_result_margin_type_col",
                 ),
             ]
         )
