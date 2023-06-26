@@ -3,7 +3,7 @@ from dash import html, dcc, register_page
 import dash_bootstrap_components as dbc
 
 from view.dashboard.pages.lang import en_US, pt_BR
-from .collapse_menus import BacktestMenuCollapse
+from view.dashboard.pages.general.collapse_menus import LayoutMenuCollapse
 
 register_page(
     __name__,
@@ -20,7 +20,7 @@ def layout(lang="en_US"):
     else:
         lang = en_US
 
-    backtest_menu_collapse = BacktestMenuCollapse(lang)
+    backtest_menu_collapse = LayoutMenuCollapse(lang, "Backtest")
 
     get_data_component = backtest_menu_collapse.get_data_component
     parameters_component = backtest_menu_collapse.parameters_component
