@@ -19,7 +19,7 @@ from view.dashboard.pages.general.utils import content_parser, table_component
 
 class RunBacktest:
     @callback(
-        Output("backtest_result_margin_type_col", "class_name"),
+        Output("backtest_result_margin_type_row", "class_name"),
         Input("result_percentage", "value"),
         State("backtest_result_types", "value"),
     )

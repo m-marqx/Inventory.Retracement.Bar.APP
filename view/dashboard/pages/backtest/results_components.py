@@ -35,7 +35,7 @@ class ResultsComponents:
 
     @property
     def percentage_component(self):
-        return dbc.Row(
+        return dbc.Col(
             [
                 dbc.Col(
                     dbc.Checklist(
@@ -54,12 +54,12 @@ class ResultsComponents:
                     class_name="center",
                 )
             ],
-            style={"justify-content": "center"},
+            # style={"justify-content": "center"},
         )
 
     @property
     def margin_type(self):
-        return dbc.Row(
+        return dbc.Col(
             [
                 dbc.Col(
                     dbc.RadioItems(
@@ -74,16 +74,13 @@ class ResultsComponents:
                         value=False,
                         inline=True,
                     ),
-                    class_name="hidden",
-                    id="backtest_result_margin_type_col",
-                )
+                ),
             ],
-            style={"justify-content": "center"},
         )
 
     @property
     def plot_type(self):
-        return dbc.Row(
+        return dbc.Col(
             [
                 dbc.Col(
                     dbc.Label(self.lang["PLOT_TYPE"]),
@@ -215,7 +212,7 @@ class ResultsComponents:
     def result_type(self):
         return dbc.Row(
             [
-                dbc.Row(self.result_type_components),
+                dbc.Col(self.result_type_components),
                 dbc.Row(
                     self.percentage_component,
                     style={"margin-top": "20px"},
@@ -223,8 +220,10 @@ class ResultsComponents:
                 dbc.Row(
                     self.margin_type,
                     style={"margin-top": "20px"},
+                    class_name="hidden",
+                    id="backtest_result_margin_type_row",
                 ),
-                dbc.Row(
+                dbc.Col(
                     self.plot_type,
                     style={"margin-top": "20px"},
                 ),
