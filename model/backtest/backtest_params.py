@@ -4,6 +4,18 @@ from typing import List
 
 
 class EmaParamsBacktest(BaseModel):
+    """
+    Parameters for the EMA strategy in backtesting.
+
+    Parameters
+    ----------
+    length : List[int], optional
+        The list of lengths for EMA calculation
+        (default is range(1, 101)).
+    source_column : List[str], optional
+        The list of source columns for EMA calculation
+        (default is ["open", "high", "low", "close"]).
+    """
     length: List[int] = range(1, 101)
     source_column: List[str] = ["open", "high", "low", "close"]
 
