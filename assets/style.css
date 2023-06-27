@@ -17,7 +17,7 @@
   justify-items: center;
 }
 
-.hidden{
+.hidden {
   display: none !important;
 }
 
@@ -352,6 +352,57 @@
 
 .dropdown-menu {
   background: rgba(83, 109, 19, 0.85) !important;
+}
+
+.VirtualizedSelectOption,
+.Select-menu-outer {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background: #536d13d9 !important;
+  border: 0px solid rgba(0, 0, 0, 0) !important;
+}
+
+.VirtualizedSelectFocusedOption {
+  color: #ffffff !important;
+  background: #c9e75da6 !important;
+}
+
+.Select-control {
+  background: #536d13d9 !important;
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, 0) !important;
+  color: rgba(255, 255, 255, 0.85);
+  display: table;
+  border-spacing: 0;
+  border-collapse: separate;
+  height: 36px;
+  overflow: hidden;
+}
+
+.Select--multi .Select-value {
+  background-color: #c9e75d27;
+  border-radius: 2px;
+  border: 1px solid #c9e75da6;
+  color: #c9e75d;
+  display: inline-block;
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin-left: 5px;
+  margin-top: 5px;
+  vertical-align: top;
+}
+
+.Select--multi .Select-value-icon,
+.Select--multi .Select-value-icon:hover {
+  border-right: 1px solid #c9e75d;
+  color: #c9e75d !important;
+}
+
+.Select-placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.has-value.Select--single > .Select-control .Select-value .Select-value-label {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 .dropdown-item {
