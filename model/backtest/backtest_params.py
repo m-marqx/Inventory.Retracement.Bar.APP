@@ -88,6 +88,28 @@ class TrendParamsBacktest(BaseModel):
 
 
 class ResultParamsBacktest(BaseModel):
+    """
+    Parameters for the result strategy in backtesting.
+
+    Parameters
+    ----------
+    capital : List[float], optional
+        The list of initial capital values (default is [100000]).
+    percent : List[bool], optional
+        The list of boolean values indicating whether to use percentage
+        values (default is [True]).
+    gain : List[float], optional
+        The list of gain values (default is [2]).
+    loss : List[float], optional
+        The list of loss values (default is [-1]).
+    method : List[str], optional
+        The list of method values (default is ["Fixed"]).
+    qty : List[float], optional
+        The list of quantity values (default is [1]).
+    coin_margined : List[bool], optional
+        The list of boolean values indicating whether the coin is
+        margined (default is [True]).
+    """
     capital: List[float] = [100_000]
     percent: List[bool] = [True]
     gain: List[float] = [2]
@@ -95,6 +117,7 @@ class ResultParamsBacktest(BaseModel):
     method: List[str] = ["Fixed"]
     qty: List[float] = [1]
     coin_margined: List[bool] = [True]
+
 
 class BacktestParams(BaseModel):
     ema_params: EmaParamsBacktest = EmaParamsBacktest()
