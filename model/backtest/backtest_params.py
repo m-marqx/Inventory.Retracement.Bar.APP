@@ -67,9 +67,25 @@ class IndicatorsParamsBacktest(BaseModel):
 
 
 class TrendParamsBacktest(BaseModel):
+    """
+    Parameters for the trend strategy in backtesting.
+
+    Parameters
+    ----------
+    ema : List[bool], optional
+        The list of boolean values indicating whether to use EMA in
+        trend strategy (default is [True]).
+    macd : List[bool], optional
+        The list of boolean values indicating whether to use MACD in
+        trend strategy (default is [False]).
+    cci : List[bool], optional
+        The list of boolean values indicating whether to use CCI in
+        trend strategy (default is [False]).
+    """
     ema: List[bool] = [True]
     macd: List[bool] = [False]
     cci: List[bool] = [False]
+
 
 class ResultParamsBacktest(BaseModel):
     capital: List[float] = [100_000]
