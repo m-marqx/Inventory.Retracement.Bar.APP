@@ -46,6 +46,21 @@ class IrbParamsBacktest(BaseModel):
 
 
 class IndicatorsParamsBacktest(BaseModel):
+    """
+    Parameters for the indicator strategy in backtesting.
+
+    Parameters
+    ----------
+    ema_column : List[str], optional
+        The list of source columns for EMA calculation in indicator
+        strategy (default is ["open", "high", "low", "close"]).
+    macd_histogram_trend_value : List[int], optional
+        The list of MACD histogram trend values in indicator strategy
+        (default is range(0, 1)).
+    cci_trend_value : List[int], optional
+        The list of CCI trend values in indicator strategy
+        (default is range(0, 1)).
+    """
     ema_column: List[str] = ["open", "high", "low", "close"]
     macd_histogram_trend_value: List[int] = range(0, 1)
     cci_trend_value: List[int] = range(0, 1)
