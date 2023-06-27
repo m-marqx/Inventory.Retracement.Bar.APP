@@ -120,6 +120,32 @@ class ResultParamsBacktest(BaseModel):
 
 
 class BacktestParams(BaseModel):
+    """
+    Parameters for backtesting.
+
+    Parameters
+    ----------
+    ema_params : EmaParamsBacktest, optional
+        The parameters for the EMA strategy in backtesting
+        (default is EmaParamsBacktest()).
+    irb_params : IrbParamsBacktest, optional
+        The parameters for the IRB strategy in backtesting
+        (default is IrbParamsBacktest()).
+    indicators_params : IndicatorsParamsBacktest, optional
+        The parameters for the indicator strategy in backtesting
+        (default is IndicatorsParamsBacktest()).
+    trend_params : TrendParamsBacktest, optional
+        The parameters for the trend strategy in backtesting
+        (default is TrendParamsBacktest()).
+    result_params : ResultParamsBacktest, optional
+        The parameters for the result strategy in backtesting
+        (default is ResultParamsBacktest()).
+
+    Attributes
+    ----------
+    total_combinations : int
+        The total number of combinations of all parameter values.
+    """
     ema_params: EmaParamsBacktest = EmaParamsBacktest()
     irb_params: IrbParamsBacktest = IrbParamsBacktest()
     indicators_params: IndicatorsParamsBacktest = IndicatorsParamsBacktest()
@@ -128,6 +154,15 @@ class BacktestParams(BaseModel):
 
     @property
     def total_combinations(self):
+        """
+        Calculate the total number of combinations of all parameter
+        values.
+
+        Returns
+        -------
+        int
+            The total number of combinations.
+        """
         num_combinations = (
             len(self.ema_params.length)
             * len(self.ema_params.source_column)
