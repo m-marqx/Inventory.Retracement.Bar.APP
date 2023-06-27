@@ -21,6 +21,24 @@ class EmaParamsBacktest(BaseModel):
 
 
 class IrbParamsBacktest(BaseModel):
+    """
+    Parameters for the IRB strategy in backtesting.
+
+    Parameters
+    ----------
+    lowestlow : List[int], optional
+        The list of lowest low values for IRB calculation
+        (default is range(1, 2)).
+    payoff : List[int], optional
+        The list of payoff values for IRB calculation
+        (default is range(2, 3)).
+    ticksize : List[float], optional
+        The list of tick size values for IRB calculation
+        (default is np.arange(0.1, 0.2)).
+    wick_percentage : List[float], optional
+        The list of wick percentage values for IRB calculation
+        (default is np.round(np.arange(0.01, 1.01, 0.01), 2)).
+    """
     lowestlow: List[int] = range(1, 2)
     payoff: List[int] = range(2, 3)
     ticksize: List[float] = np.arange(0.1, 0.2)
