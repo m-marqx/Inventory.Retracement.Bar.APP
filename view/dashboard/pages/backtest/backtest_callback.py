@@ -68,6 +68,7 @@ class RunBacktest:
         State("qty_result_value", "value"),
         State("gain_result_value", "value"),
         State("loss_result_value", "value"),
+        State("risk_free_rate", "value"),
         State("result_margin_type", "value"),
         State("plot_type", "value"),
     )
@@ -108,6 +109,7 @@ class RunBacktest:
         qty_result_value,
         gain_result_value,
         loss_result_value,
+        risk_free_rate,
         result_margin_type,
         result_type,
     ):
@@ -227,7 +229,7 @@ class RunBacktest:
                 stats_df = stats_df[stats_df[column_name] != 0]
                 stats_df = stats_df[column_name]
 
-                stats_df = Statistics(stats_df).calculate_all_statistics()
+                stats_df = Statistics(stats_df, risk_free_rate=risk_free_rate).calculate_all_statistics()
                 if "Fixed" in backtest_result_types:
                     stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
                 stats_df["Rank"] = value + 1
