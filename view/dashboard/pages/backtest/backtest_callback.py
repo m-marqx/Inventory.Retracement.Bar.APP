@@ -226,10 +226,13 @@ class RunBacktest:
             for value in range(0,range_max):
                 column_name = data_frame.columns[value]
                 stats_df = data_frame[[column_name]].diff()
-                stats_df = stats_df[stats_df[column_name] != 0]
-                stats_df = stats_df[column_name]
+                stats_df = stats_df[stats_df[column_name] != 0][column_name]
 
-                stats_df = Statistics(stats_df, risk_free_rate=risk_free_rate).calculate_all_statistics()
+                stats_df = Statistics(
+                    stats_df,
+                    risk_free_rate=risk_free_rate
+                ).calculate_all_statistics()
+
                 if "Fixed" in backtest_result_types:
                     stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
                 stats_df["Rank"] = value + 1
