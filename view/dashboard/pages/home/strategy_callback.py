@@ -4,6 +4,10 @@ import pandas as pd
 import dash
 from dash import Input, Output, State, callback
 
+from controller.api.klines_api import KlineAPI
+
+from model.utils import Statistics
+from model.utils.utils import SaveDataFrame
 from model.strategy.params import (
     EmaParams,
     MACDParams,
@@ -14,17 +18,14 @@ from model.strategy.params import (
     ResultParams,
 )
 
+from view.dashboard.graph import GraphLayout
 from view.dashboard.utils import (
     BuilderParams,
     get_data,
     builder,
 )
 
-from model.utils.utils import SaveDataFrame
-from controller.api.klines_api import KlineAPI
-from view.dashboard.graph import GraphLayout
 from view.dashboard.pages.general.utils import content_parser, table_component
-from model.utils import Statistics
 
 
 class RunStrategy:
@@ -193,11 +194,17 @@ class RunStrategy:
             )
 
             data_frame = builder(data_frame, builder_params)
-            stats_df = Statistics(data_frame["Result"]).calculate_all_statistics()
-            stats_df = (
-                Statistics(data_frame["Result"], risk_free_rate=risk_free_rate)
-                .calculate_all_statistics()
+            stats_dataframe = (
+                data_frame[["Capital"]]
+                .diff()
+                .query("Capital != 0")
+                ["Capital"]
             )
+
+            stats_df = Statistics(
+                dataframe=stats_dataframe,
+                risk_free_rate=risk_free_rate
+            ).calculate_all_statistics()
 
             if result_types == "Fixed":
                 stats_df.drop("Sortino_Ratio", axis=1,  inplace=True)
