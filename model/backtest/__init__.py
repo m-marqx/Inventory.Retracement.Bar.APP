@@ -4,5 +4,6 @@ from .backtest_params import (
     IrbParamsBacktest,
     IndicatorsParamsBacktest,
     TrendParamsBacktest,
+    ResultParamsBacktest,
     BacktestParams
 )
