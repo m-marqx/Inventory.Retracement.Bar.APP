@@ -4,10 +4,18 @@ from dash import Input, Output, State, callback, html
 import pandas as pd
 import numpy as np
 from model.utils import Statistics
-from controller.api.klines_api import KlineAPI
-
-from model.backtest import Backtest, BacktestParams
 from model.utils.utils import SaveDataFrame, DataProcess
+from model.backtest import (
+    Backtest,
+    EmaParamsBacktest,
+    IrbParamsBacktest,
+    IndicatorsParamsBacktest,
+    TrendParamsBacktest,
+    ResultParamsBacktest,
+    BacktestParams
+)
+
+from controller.api.klines_api import KlineAPI
 
 from view.dashboard.graph import GraphLayout
 from view.dashboard.utils import (
@@ -172,35 +180,34 @@ class RunBacktest:
             )
 
             backtest_params = BacktestParams(
-                ema_params={
-                    "length": list(ema_range),
-                    "source_column": ["open", "high", "low", "close"],
-                },
-                irb_params={
-                    "lowestlow": list(lowest_low_range),
-                    "payoff": list(payoff_range),
-                    "ticksize": [0.1],
-                    "wick_percentage": np.round(wick_percentage_range, 2).tolist(),
-                },
-                indicators_params={
-                    "ema_column": ["open", "high", "low", "close"],
-                    "macd_histogram_trend_value": list(macd_histogram_trend_value_range),
-                    "cci_trend_value": list(cci_trend_value_range),
-                },
-                trend_params={
-                    "ema": [True],
-                    "macd": [False],
-                    "cci": [False],
-                },
-                result_params={
-                    "capital": [initial_capital_value],
-                    "percent": [use_percentage],
-                    "gain": [gain_result_value],
-                    "loss": [loss_result_value],
-                    "method": backtest_result_types,
-                    "qty": [qty_result_value],
-                    "coin_margined": [result_margin_type],
-                },
+                ema_params=EmaParamsBacktest(
+                    source_column=["open", "high", "low", "close"],
+                    length=list(ema_range),
+                ),
+                irb_params=IrbParamsBacktest(
+                    lowestlow=list(lowest_low_range),
+                    payoff=list(payoff_range),
+                    ticksize=[0.1],
+                    wick_percentage=list(np.round(wick_percentage_range, 2)),
+                ),
+                indicators_params=IndicatorsParamsBacktest(
+                    ema_column=["open", "high", "low", "close"],
+                    macd_histogram_trend_value=list(macd_histogram_trend_value_range),
+                    cci_trend_value=list(cci_trend_value_range),
+                ),
+                trend_params=TrendParamsBacktest(
+                    ema=[True],
+                    macd=[False],
+                    cci=[False],
+                ),
+                result_params=ResultParamsBacktest(
+                    capital=[initial_capital_value],
+                    percent=[use_percentage],
+                    gain=[gain_result_value],
+                    loss=[loss_result_value],
+                    method=backtest_result_types,
+                    coin_margined=[result_margin_type],
+                ),
             )
             backtest = Backtest(data_frame, hardware_type)
             data_frame = backtest.param_grid_backtest(
