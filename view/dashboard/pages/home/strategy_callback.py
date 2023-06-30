@@ -62,6 +62,7 @@ class RunStrategy:
         State("qty_result_value", "value"),
         State("gain_result_value", "value"),
         State("loss_result_value", "value"),
+        State("risk_free_rate", "value"),
         State("result_margin_type", "value"),
     )
     def run_strategy(
@@ -95,6 +96,7 @@ class RunStrategy:
         qty_result_value,
         gain_result_value,
         loss_result_value,
+        risk_free_rate,
         result_margin_type,
     ):
         ctx = dash.callback_context
@@ -192,10 +194,22 @@ class RunStrategy:
 
             data_frame = builder(data_frame, builder_params)
             stats_df = Statistics(data_frame["Result"]).calculate_all_statistics()
+            stats_df = (
+                Statistics(data_frame["Result"], risk_free_rate=risk_free_rate)
+                .calculate_all_statistics()
+            )
+
             if result_types == "Fixed":
                 stats_df.drop("Sortino_Ratio", axis=1,  inplace=True)
             table = table_component(stats_df, "results-table")
-            graph_layout = GraphLayout(data_frame, data_symbol, interval, api_type)
+
+            graph_layout = GraphLayout(
+                data_frame,
+                data_symbol,
+                interval,
+                api_type
+            )
+
             fig = graph_layout.plot_single_linechart("Capital")
             text_output = f"Final Result = {data_frame.iloc[-1,-1]:.2f}"
             return fig, text_output, table

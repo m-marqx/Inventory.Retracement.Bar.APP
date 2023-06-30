@@ -74,6 +74,7 @@ en_US = {
     "USE_PERCENTAGE_RESULTS": "Use Percentage Results",
     "PROFIT": "Profit",
     "LOSS": "Loss",
+    "RISK_FREE_RATE": "Risk Free Rate",
     "INITIAL_CAPITAL": "Initial Capital",
     "QUANTITY": "Quantity",
     "PLOT_TYPE": "Plot",

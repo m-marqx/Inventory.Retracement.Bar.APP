@@ -74,6 +74,7 @@ pt_BR = {
     "USE_PERCENTAGE_RESULTS": "Resultados Percentuais",
     "PROFIT": "Lucro",
     "LOSS": "Prejuízo",
+    "RISK_FREE_RATE": "Taxa Livre de Risco",
     "INITIAL_CAPITAL": "Capital Inicial",
     "QUANTITY": "Quantidade",
     "PLOT_TYPE": "Mostrar",

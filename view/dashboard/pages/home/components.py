@@ -535,6 +535,22 @@ class MainPageComponents:
                     ),
                     width=45,
                 ),
+                dbc.Col(
+                    dbc.Label(self.lang["RISK_FREE_RATE"]),
+                    width=45,
+                    style={"margin-top": "10px"},
+                    class_name="center",
+                ),
+                dbc.Col(
+                    dbc.Input(
+                        id="risk_free_rate",
+                        value=2.0,
+                        type="number",
+                        step=0.1,
+                        min=0.0,
+                    ),
+                    width=45,
+                ),
             ]
         )
 
