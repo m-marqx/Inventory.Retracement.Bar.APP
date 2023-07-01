@@ -309,3 +309,32 @@ class StatsmodelsLinearRegression:
         print("MAE: ", round(MAE_test_sm, 2))
         print("RMSE: ", round(RMSE_test_sm, 2))
 
+    @property
+    def get_fig_residuals_x_fitted(self):
+        """
+        Generate a scatter plot of residuals vs. fitted values.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            The scatter plot figure.
+        """
+        fig = px.scatter(
+            x=self.lr_sm.resid,
+            y=self.y_pred_train_sm,
+            labels={"x": "Residuals", "y": "Fitted Values"},
+        )
+        fig.update_traces(
+            marker=dict(color="blue", symbol="x"),
+            mode="markers",
+            name="Residuals x Fitted Values",
+        )
+        fig.update_layout(
+            title="Residuals x Fitted Values",
+            xaxis_title="Residuals",
+            yaxis_title="Fitted Values",
+            width=800,
+            height=500,
+        )
+        return fig
+
