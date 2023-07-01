@@ -338,3 +338,27 @@ class StatsmodelsLinearRegression:
         )
         return fig
 
+    def get_fig_residuals(self, interactive=False):
+        """
+        Generate a residuals probability plot or a partial regression plot.
+
+        Parameters
+        ----------
+        interactive : bool, optional
+            Flag indicating whether to generate an interactive plot (default is False).
+
+        Returns
+        -------
+        plotly.graph_objects.Figure or matplotlib.figure.Figure
+            The residuals plot figure.
+        """
+        fig, ax = plt.subplots(figsize=(6, 6))
+        fig = sp.stats.probplot(self.lr_sm.resid, plot=ax, fit=True)
+
+        fig = plt.figure(figsize=(12, 12))
+
+        if interactive:
+            fig_plotly = tls.mpl_to_plotly(fig)
+
+            return fig_plotly
+        return sm.graphics.plot_partregress_grid(self.lr_sm, fig=fig)
