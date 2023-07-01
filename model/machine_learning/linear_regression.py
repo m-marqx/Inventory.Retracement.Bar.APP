@@ -126,3 +126,21 @@ class SklearnLinearRegression:
         )
 
         print(f"Test MAE: {round(MAE_test, 2)}")
+
+    @property
+    def coeficients(self):
+        """
+        Get the coefficients of the linear regression model.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A dataframe with the coefficients and corresponding feature names.
+        """
+        self.lr.coef_
+
+        coef = pd.DataFrame(self.lr.coef_, self.columns)
+        coef.columns = ["Coeficientes"]
+
+        return coef
+
