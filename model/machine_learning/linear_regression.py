@@ -172,3 +172,117 @@ class SklearnLinearRegression:
         return fig
 
 
+class StatsmodelsLinearRegression:
+    """
+    Linear regression model implemented using statsmodels.
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+        The input dataframe.
+    features : list of str
+        The list of feature column names.
+    target : str
+        The target column name.
+
+    Attributes
+    ----------
+    data_frame : pandas.DataFrame
+        The input dataframe.
+    columns : list of str
+        The list of feature column names.
+    data_frame_feats : pandas.DataFrame
+        The dataframe with only the feature columns.
+    data_frame_target : pandas.Series
+        The series with the target column values.
+    x_train : pandas.DataFrame
+        The training set features.
+    x_test : pandas.DataFrame
+        The test set features.
+    y_train : pandas.Series
+        The training set target.
+    y_test : pandas.Series
+        The test set target.
+    x_train_np : numpy.ndarray
+        The training set features as a numpy array.
+    y_train_np : numpy.ndarray
+        The training set target as a numpy array.
+    x_test_np : numpy.ndarray
+        The test set features as a numpy array.
+    x_train_const : numpy.ndarray
+        The training set features with added constant term.
+    x_test_const : numpy.ndarray
+        The test set features with added constant term.
+    lr_sm : statsmodels.regression.linear_model.OLS
+        The ordinary least squares linear regression model.
+    y_pred_train_sm : numpy.ndarray
+        The predicted target values for the training set.
+    y_pred_test_sm : numpy.ndarray
+        The predicted target values for the test set.
+    """
+    def __init__(self, dataframe, features: list[str], target: str):
+        """
+        Initialize the StatsmodelsLinearRegression class.
+
+        Parameters
+        ----------
+        dataframe : pandas.DataFrame
+            The input dataframe.
+        features : list of str
+            The list of feature column names.
+        target : str
+            The target column name.
+
+        """
+        self.data_frame = dataframe.copy()
+
+        if "Take_Profit" in features:
+            self.data_frame["Take_Profit"].fillna(99999, inplace=True)
+
+        if "Stop_Loss" in features:
+            self.data_frame["Stop_Loss"].fillna(-99999, inplace=True)
+
+        self.data_frame.fillna(0, inplace=True)
+
+        self.columns = features
+        self.data_frame_feats = self.data_frame[self.columns]
+        self.data_frame_target = self.data_frame[target]
+
+        x = self.data_frame_feats
+        y = self.data_frame_target
+
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
+            x, y, test_size=0.5
+        )
+
+        self.x_train_np = np.asarray(self.x_train)
+        self.y_train_np = np.asarray(self.y_train)
+        self.x_test_np = np.asarray(self.x_test)
+
+        self.x_train_np = np.nan_to_num(self.x_train_np)
+        self.y_train_np = np.nan_to_num(self.y_train_np)
+        self.x_test_np = np.nan_to_num(self.x_test_np)
+
+        self.x_train_const = sm.add_constant(self.x_train_np)
+        self.x_test_const = sm.add_constant(self.x_test_np)
+
+        self.x_train_const = self.x_train_const.astype(np.float64)
+        self.y_train_np = self.y_train_np.astype(np.float64)
+
+        self.lr_sm = sm.OLS(self.y_train_np, self.x_train_const).fit()
+
+        self.y_pred_train_sm = self.lr_sm.predict(self.x_train_const)
+        self.y_pred_test_sm = self.lr_sm.predict(self.x_test_const)
+
+    @property
+    def summary(self):
+        """
+        Get the summary of the linear regression model.
+
+        Returns
+        -------
+        statsmodels.iolib.summary.Summary
+            The summary object containing model statistics.
+        """
+        return self.lr_sm.summary()
+
