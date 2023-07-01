@@ -286,3 +286,26 @@ class StatsmodelsLinearRegression:
         """
         return self.lr_sm.summary()
 
+    @property
+    def results_eval(self):
+        """
+        Evaluate the results of the linear regression model.
+
+        Prints the evaluation metrics for both the training and test sets.
+        """
+        MAE_train_sm = smtools.eval_measures.meanabs(self.y_train, self.y_pred_train_sm)
+        R2_train_sm = self.lr_sm.rsquared
+        RMSE_train_sm = smtools.eval_measures.rmse(self.y_train, self.y_pred_train_sm)
+
+        print("----- Train Evaluation -----")
+        print("MAE: ", round(MAE_train_sm, 2))
+        print("R2: ", round(R2_train_sm, 2))
+        print("RMSE: ", round(RMSE_train_sm, 2))
+
+        MAE_test_sm = smtools.eval_measures.meanabs(self.y_test, self.y_pred_test_sm)
+        RMSE_test_sm = smtools.eval_measures.rmse(self.y_test, self.y_pred_test_sm)
+
+        print("\n----- Test Evaluation -----")
+        print("MAE: ", round(MAE_test_sm, 2))
+        print("RMSE: ", round(RMSE_test_sm, 2))
+
