@@ -144,3 +144,31 @@ class SklearnLinearRegression:
 
         return coef
 
+    @property
+    def get_fig_results(self):
+        """
+        Generate a scatter plot of the predicted vs. actual target values.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            The scatter plot figure.
+        """
+        fig = px.scatter(
+            x=self.y_test,
+            y=self.y_pred_test,
+            labels={"x": f"{self.target} real", "y": f"{self.target} expected"},
+        )
+        fig.update_traces(
+            marker=dict(color="blue", symbol="x"),
+            mode="markers",
+            name="Real x Expected",
+        )
+        fig.update_layout(
+            title=f"{self.target} - Linear Regression",
+            xaxis_title=f"{self.target} previsto",
+            yaxis_title=f"{self.target} Real",
+        )
+        return fig
+
+
