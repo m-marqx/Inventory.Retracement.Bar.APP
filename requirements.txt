@@ -14,3 +14,4 @@ psutil
 torch
 gpuparallel
 dash_ag_grid
+statsmodels

@@ -5,7 +5,7 @@ joblib
 numpy
 pandas
 plotly
-pydantic
+pydantic==1.10.9
 scikit_learn
 python-binance
 pyarrow
@@ -13,3 +13,4 @@ psutil
 torch
 gpuparallel
 dash_ag_grid
+statsmodels
