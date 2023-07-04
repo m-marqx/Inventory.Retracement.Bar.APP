@@ -145,3 +145,10 @@ class DecisionTreeClassifier:
         )
 
         return dtc_data_frame
+
+    def plot_returns(self, data, title, x_title, y_title):
+        return px.line(data).update_layout(
+            title=title,
+            xaxis_title=x_title,
+            yaxis_title=y_title,
+        )
