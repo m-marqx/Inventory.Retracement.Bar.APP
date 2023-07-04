@@ -849,7 +849,8 @@ class CalculateTradePerformance:
         self.update_results(gain, loss, method, coin_margined)
         return self.data_frame
 
-class String_Parameters:
+
+class StringParameters:
     """
     A class for manipulating string parameters in a data frame.
 
@@ -879,7 +880,7 @@ class String_Parameters:
 
     def __init__(self, data_frame):
         """
-        Initialize a String_Parameters instance.
+        Initialize a StringParameters instance.
 
         Parameters
         ----------
