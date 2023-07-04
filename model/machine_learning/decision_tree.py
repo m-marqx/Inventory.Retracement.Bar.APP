@@ -61,3 +61,20 @@ class DecisionTreeClassifier:
         )
 
         return self
+
+    def split_data(self, features_columns: list[str], target_column: list[str]):
+        start_train = 0
+        end_train = int(self.data_frame.shape[0] / 2)
+
+        start_test = end_train
+        end_test = self.data_frame.shape[0]
+
+        df1_train1 = self.data_frame[start_train:end_train]
+        self.data_frame = self.data_frame[start_test:end_test]
+
+        x_train1 = df1_train1[features_columns]
+        y_train1 = df1_train1[target_column]
+
+        x_test1 = self.data_frame[features_columns]
+        y_test1 = self.data_frame[target_column]
+        return x_train1, x_test1, y_train1, y_test1
