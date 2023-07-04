@@ -152,3 +152,18 @@ class DecisionTreeClassifier:
             xaxis_title=x_title,
             yaxis_title=y_title,
         )
+
+    def custom_decision_tree_classifier(
+        self,
+        decision_tree_classifier: tree.DecisionTreeClassifier,
+        features_columns,
+        target_column,
+    ):
+        x_train1, x_test1, y_train1, _ = self.split_data(
+            features_columns, target_column
+        )
+
+        decision_tree_classifier.fit(x_train1, y_train1)
+        y_pred_test1 = decision_tree_classifier.predict(x_test1)
+
+        return y_pred_test1, decision_tree_classifier
