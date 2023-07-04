@@ -90,3 +90,12 @@ class DecisionTreeClassifier:
         y_pred_test1 = decision_tree_classifier.predict(x_test1)
 
         return y_test1, y_pred_test1, decision_tree_classifier
+
+    def results_report(self, y_test1, y_pred_test1):
+        accuracy = round(metrics.accuracy_score(y_test1, y_pred_test1), 3) * 100
+
+        print(f"{confusion_matrix(y_test1, y_pred_test1)} \n")
+        print("--------------------------------------------------------------")
+        print(f"\n {classification_report(y_test1, y_pred_test1)}")
+        print(f"Accuracy:{accuracy}")
+
