@@ -14,3 +14,7 @@ torch
 gpuparallel
 dash_ag_grid
 statsmodels
+pydotplus
+graphviz
+six
+IPython
