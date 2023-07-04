@@ -301,7 +301,7 @@ class DecisionTreeClassifier:
         -------
         pandas.DataFrame
             The dataframe with additional columns 'Ret_Pips' and
-            'Ret_Pips_Acumulado'.
+            'Ret_Pips_Total'.
         """
         dtc_data_frame = pd.DataFrame({"Predicted": y_pred_test})
 
@@ -319,7 +319,7 @@ class DecisionTreeClassifier:
 
         dtc_data_frame["Ret_Pips"] = dtc_data_frame["Ret_Pips"].astype(float)
 
-        dtc_data_frame["Ret_Pips_Acumulado"] = (
+        dtc_data_frame["Ret_Pips_Total"] = (
             dtc_data_frame["Ret_Pips"]
             .cumsum()
         )
