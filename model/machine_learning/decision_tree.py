@@ -121,3 +121,27 @@ class DecisionTreeClassifier:
         graph: Any
 
         return Image(graph.create_png())
+
+    def get_results(self, y_pred_test):
+        dtc_data_frame = pd.DataFrame({"Predicted": y_pred_test})
+
+        dtc_data_frame["Ret_Pips"] = np.where(
+            dtc_data_frame["Predicted"] == "Bullish",
+            self.data_frame["Pips"],
+            "0",
+        )
+
+        dtc_data_frame["Ret_Pips"] = np.where(
+            dtc_data_frame["Predicted"] == "Bearish",
+            -1 * self.data_frame["Pips"],
+            dtc_data_frame["Ret_Pips"],
+        )
+
+        dtc_data_frame["Ret_Pips"] = dtc_data_frame["Ret_Pips"].astype(float)
+
+        dtc_data_frame["Ret_Pips_Acumulado"] = (
+            dtc_data_frame["Ret_Pips"]
+            .cumsum()
+        )
+
+        return dtc_data_frame
