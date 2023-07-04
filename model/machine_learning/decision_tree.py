@@ -40,3 +40,5 @@ class DecisionTreeClassifier:
         )
         return self.data_frame
 
+    def get_proportion(self, column):
+        return self.data_frame[column].value_counts(normalize=True) * 100
