@@ -1,11 +1,13 @@
 import time
 from binance.client import Client
 import pandas as pd
+import numpy as np
 from .utils import KlineUtils, KlineTimes
 import pathlib
 
 
 class KlineAPI:
+
     def __init__(self, symbol, interval, api="coin_margined"):
         """
         Initialize the KlineAPI object.
@@ -26,10 +28,20 @@ class KlineAPI:
         self.utils = KlineTimes(self.symbol, self.interval)
         self.klines = None
         self.api = api.lower()
-        self.api_list = ["coin_margined", "mark_price", "spot"]
-        if self.api not in self.api_list:
+        self.futures_options = ["coin_margined" or "mark_price"]
+        self.all_options = ["spot"] + self.futures_options
+        self.is_futures = any(
+            api_selected in self.futures_options
+            for api_selected in [self.api]
+        )
+
+        if not any(
+            api_selected in self.all_options
+            for api_selected in [self.api]
+        ):
             raise ValueError(
-                "Klines function should be either 'coin_margined', 'mark_price' or 'spot'"
+                "Klines function should be either "
+                "'coin_margined', 'mark_price' or 'spot'"
             )
 
     def get_exchange_symbol_info(self):
@@ -117,12 +129,19 @@ class KlineAPI:
         else:  # spot
             api_get_klines = self.client.get_klines
 
+        request_limit = 1500
+
+        if self.api == "spot":
+            request_limit = 1000
+
+        max_limit = self.utils.calculate_max_multiplier(request_limit)
+
         request = api_get_klines(
             symbol=self.symbol,
             interval=self.interval,
             startTime=startTime,
             endTime=endTime,
-            limit=1500,
+            limit=max_limit,
         )
         return request
 
@@ -143,26 +162,34 @@ class KlineAPI:
         KlineAPI
             The KlineAPI object.
         """
-        if (
-            self.api == "coin_margined" or self.api == "mark_price"
-        ) and start_time < 1597118400000:
-            start_time = 1597118400000
+        max_candle_limit = 1000
 
-        klines_list = []
-        end_times = self.utils.get_end_times(start_time)
+        if self.is_futures:
+            start_time = max(start_time, 1597118400000)
+            max_candle_limit = 1500
 
-        START = time.time()
+        end_times = self.utils.get_end_times(start_time, max_candle_limit)
 
-        for index in range(0, len(end_times) - 1):
+        first_call = self.request_klines(
+            int(end_times[0]),
+            int(end_times[1]),
+        )
+
+        klines_list = first_call
+        print("\nQty  : " + str(len(klines_list)))
+
+        START = time.perf_counter()
+
+        for index in range(1, len(end_times) - 1):
             klines_list.extend(
                 self.request_klines(
-                    int(end_times[index]),
+                    int(end_times[index] + 1),
                     int(end_times[index + 1]),
                 )
             )
             print("\nQty  : " + str(len(klines_list)))
 
-        print(time.time() - START)
+        print(time.perf_counter() - START)
         self.klines = klines_list
         return self
 

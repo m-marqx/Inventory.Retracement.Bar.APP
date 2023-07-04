@@ -81,7 +81,10 @@ class KlineTimes:
         self.symbol = symbol
         self.interval = interval
 
-    def calculate_max_multiplier(self):
+    def calculate_max_multiplier(
+        self,
+        max_candle_limit: int = 1500,
+    ):
         """
         Calculate the maximum multiplier based on the interval.
 
@@ -92,7 +95,7 @@ class KlineTimes:
         """
         if self.interval != "1M":
             interval_hours = interval_to_milliseconds(self.interval) / 1000 / 60 / 60
-            max_multiplier_limit = 1500
+            max_multiplier_limit = max_candle_limit
             max_days_limit = 200
 
             total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
@@ -109,6 +112,7 @@ class KlineTimes:
     def get_end_times(
         self,
         start_time=1597118400000,
+        max_candle_limit=1500,
     ):
         """
         Get the end times for retrieving Kline data.
@@ -125,7 +129,10 @@ class KlineTimes:
         """
         time_delta = time.time() * 1000 - start_time
         time_delta_ratio = time_delta / interval_to_milliseconds(self.interval)
-        request_qty = time_delta_ratio / self.calculate_max_multiplier()
+        request_qty = (
+            time_delta_ratio
+            / self.calculate_max_multiplier(max_candle_limit)
+        )
 
         end_times = (
             np.arange(ceil(request_qty)) * (time_delta / request_qty) + start_time
