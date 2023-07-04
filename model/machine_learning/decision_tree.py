@@ -167,3 +167,25 @@ class DecisionTreeClassifier:
         y_pred_test1 = decision_tree_classifier.predict(x_test1)
 
         return y_pred_test1, decision_tree_classifier
+
+    def generate_aleatory_results(self, column_name: str):
+        self.data_frame[column_name] = np.random.randint(
+            0, 2, size=len(self.data_frame.shape[0])
+        )
+
+        self.data_frame[column_name] = np.where(
+            self.data_frame[column_name] == 1, self.data_frame["Pips"], "0"
+        )
+
+        self.data_frame[column_name] = np.where(
+            self.data_frame[column_name] == 0,
+            -1 * self.data_frame["Pips"],
+            self.data_frame[column_name],
+        )
+
+        self.data_frame[column_name] = (
+            self.data_frame[column_name]
+            .cumsum()
+        )
+
+        return self
