@@ -99,3 +99,25 @@ class DecisionTreeClassifier:
         print(f"\n {classification_report(y_test1, y_pred_test1)}")
         print(f"Accuracy:{accuracy}")
 
+    def create_tree_png(
+        self,
+        clf: tree.DecisionTreeClassifier,
+        feature_names: list["str"],
+        class_names: list["str"],
+    ):
+        dot_data = StringIO()
+
+        export_graphviz(
+            clf,
+            out_file=dot_data,
+            filled=True,
+            rounded=True,
+            special_characters=True,
+            feature_names=feature_names,
+            class_names=class_names,
+        )
+
+        graph = graphviz.graph_from_dot_data(dot_data.getvalue())
+        graph: Any
+
+        return Image(graph.create_png())
