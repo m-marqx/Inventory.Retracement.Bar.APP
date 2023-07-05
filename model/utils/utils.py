@@ -1086,3 +1086,73 @@ class DynamicTimeWarping:
 
         return distance, path
 
+    @property
+    def get_ratio(self) -> pd.Series:
+        """
+        Calculate the DTW ratio between the input sequences.
+
+        Returns
+        -------
+        pandas.Series
+            The DTW ratio series.
+
+        Raises
+        ------
+        TypeError
+            If input_x or input_y are not pandas Series.
+
+        """
+        if (
+            isinstance(self.input_x, np.ndarray)
+            or isinstance(self.input_y, np.ndarray)
+        ):
+            raise TypeError("input_x and input_y must be pandas series")
+
+        column_x = self.input_x.name
+        column_y = self.input_y.name
+        _, path = self.get_dtw
+
+        dtw_df = pd.DataFrame([self.input_x, self.input_y]).T
+
+        count_x_column = (
+            dtw_df[[f"{column_x}", f"{column_y}"]]
+            .describe()
+            .iloc[0]
+            .iloc[0]
+        )
+
+        count_y_column = (
+            dtw_df[[f"{column_x}", f"{column_y}"]]
+            .describe()
+            .iloc[0]
+            .iloc[1]
+        )
+
+        dtw_df[f"{column_x}_dtw"] = np.nan
+        dtw_df[f"{column_y}_dtw"] = np.nan
+
+        count_subtract = abs(int(count_x_column - count_y_column))
+
+        if count_x_column < count_y_column:
+            dtw_df[f"{column_x}"] = (
+                dtw_df[f"{column_x}"]
+                .shift(-count_subtract)
+            )
+
+        else:
+            dtw_df[f"{column_y}"] = (
+                dtw_df[f"{column_y}"]
+                .shift(-count_subtract)
+            )
+
+        for index_x, index_y in zip(path[0], path[1]):
+            index_x  = int(index_x)
+            index_y = int(index_y)
+
+            dtw_df.iloc[index_x, 2] = dtw_df.iloc[index_x, 0]
+            dtw_df.iloc[index_y, 3] = dtw_df.iloc[index_y, 1]
+
+        dtw_df[f"{column_x}_dtw"].ffill(inplace=True)
+        dtw_df[f"{column_y}_dtw"].ffill(inplace=True)
+
+        return dtw_df[f"{column_x}_dtw"] / dtw_df[f"{column_y}_dtw"] - 1
