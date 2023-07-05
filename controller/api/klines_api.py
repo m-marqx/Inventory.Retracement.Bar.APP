@@ -1,9 +1,8 @@
 import time
-from binance.client import Client
-import pandas as pd
-import numpy as np
-from .utils import KlineUtils, KlineTimes
 import pathlib
+import pandas as pd
+from binance.client import Client
+from .utils import KlineUtils, KlineTimes
 
 
 class KlineAPI:
