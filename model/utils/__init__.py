@@ -4,4 +4,6 @@ from model.utils.utils import (
     Statistics,
     BrokerEmulator,
     CalculateTradePerformance,
+    StringParameters,
+    DynamicTimeWarping,
 )
