@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import pathlib
 import numpy as np
 import pandas as pd
+import fastdtw
 
 
 class BaseStrategy(ABC):
@@ -1012,3 +1013,76 @@ class StringParameters:
         params_data_frame = self.split_params()
         string_data_frame = params_data_frame.apply(self.to_string, axis=1)
         return string_data_frame
+
+class DynamicTimeWarping:
+    """Class for computing Dynamic Time Warping (DTW).
+
+    This class provides methods to calculate the DTW distance and ratio
+    between two input sequences.
+
+    Parameters
+    ----------
+    input_x : numpy.ndarray or pandas.Series
+        The first input sequence.
+    input_y : numpy.ndarray or pandas.Series
+        The second input sequence.
+
+    Attributes
+    ----------
+    input_x : numpy.ndarray or pandas.Series
+        The first input sequence.
+    input_y : numpy.ndarray or pandas.Series
+        The second input sequence.
+
+    Methods
+    -------
+    get_dtw()
+        Calculate the DTW distance and path between the input sequences.
+    get_ratio()
+        Calculate the DTW ratio between the input sequences.
+
+    """
+
+    def __init__(
+        self,
+        input_x: np.ndarray | pd.Series,
+        input_y: np.ndarray | pd.Series
+    ):
+        """
+        Initialize the DynamicTimeWarping class with the input sequences.
+
+        Parameters
+        ----------
+        input_x : numpy.ndarray or pandas.Series
+            The first input sequence.
+        input_y : numpy.ndarray or pandas.Series
+            The second input sequence.
+
+        """
+        self.input_x = input_x
+        self.input_y = input_y
+
+    @property
+    def get_dtw(self) -> tuple:
+        """
+        Calculate the DTW distance and path between the input sequences.
+
+        Returns
+        -------
+        tuple
+            A tuple containing the DTW distance and the DTW path.
+
+        """
+        distance, path = fastdtw.fastdtw(self.input_x, self.input_y, dist=None)
+
+        path_x = np.array([])
+        path_y = np.array([])
+
+        for value in path:
+            path_x = np.append(path_x, value[0])
+            path_y = np.append(path_y, value[1])
+
+        path = (path_x, path_y)
+
+        return distance, path
+
