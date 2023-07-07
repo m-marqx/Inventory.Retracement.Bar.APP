@@ -274,12 +274,14 @@ class Statistics:
     Parameters
     ----------
     dataframe : pd.Series or pd.DataFrame
-        The input dataframe containing the results of the strategy. If `dataframe` is a
-        pd.Series, it should contain a single column of results. If it is a pd.DataFrame,
-        it should have a 'Result' column containing the results.
+        The input dataframe containing the results of the strategy. If
+        `dataframe` is a pd.Series, it should contain a single column
+        of results. If it is a pd.DataFrame, it should have a 'Result'
+        column containing the results.
 
     time_span : str, optional
-        The time span for resampling the returns. The default is "A" (annual).
+        The time span for resampling the returns. The default is "A"
+        (annual).
 
     risk_free_rate : float, optional
         The risk free rate of the strategy. The default is 2.0.
@@ -335,6 +337,8 @@ class Statistics:
         else:
             self.dataframe = dataframe["Result"].copy()
 
+        self.dataframe.query("Result != 0")[["Result"]].dropna(inplace=True)
+
         self.time_span = time_span
         self.risk_free_rate = risk_free_rate
 
@@ -345,14 +349,14 @@ class Statistics:
         Parameters
         ----------
         precision : int, optional
-            The number of decimal places to round the calculated statistics to.
-            Defaults to 2.
+            The number of decimal places to round the calculated
+            statistics to. Defaults to 2.
 
         Returns
         -------
         pd.DataFrame
-            A dataframe with calculated statistics, including expected value,
-            Sharpe ratio, and Sortino ratio.
+            A dataframe with calculated statistics, including expected
+            value, Sharpe ratio, and Sortino ratio.
         """
         stats_df = pd.DataFrame()
         stats_df["Expected_Value"] = self.calculate_expected_value()["Expected_Value"]
@@ -381,13 +385,6 @@ class Statistics:
             total trade, win rate, loss rate, and expected value (EM).
 
         """
-        dataframe_have_nan = self.dataframe.isna().any().any()
-
-        if dataframe_have_nan:
-            self.dataframe.dropna(inplace=True)
-        else:
-            self.dataframe = self.dataframe.query("Result != 0")[["Result"]].copy()
-
         gain = self.dataframe["Result"] > 0
         loss = self.dataframe["Result"] < 0
 

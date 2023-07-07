@@ -206,8 +206,6 @@ class RunStrategy:
                 risk_free_rate=risk_free_rate
             ).calculate_all_statistics()
 
-            if result_types == "Fixed":
-                stats_df.drop("Sortino_Ratio", axis=1,  inplace=True)
             table = table_component(stats_df, "results-table")
 
             graph_layout = GraphLayout(

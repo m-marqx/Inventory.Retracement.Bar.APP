@@ -240,8 +240,6 @@ class RunBacktest:
                     risk_free_rate=risk_free_rate
                 ).calculate_all_statistics()
 
-                if "Fixed" in backtest_result_types:
-                    stats_df.drop("Sortino_Ratio", axis=1, inplace=True)
                 stats_df["Rank"] = value + 1
 
                 stats_df = stats_df.reindex(
