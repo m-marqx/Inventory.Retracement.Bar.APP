@@ -3,7 +3,7 @@ import pandas as pd
 def reorder_columns(
     self,
     reference_column: str,
-    column_to_move: str | list[str],
+    column_to_move: str | list[str] | pd.Index,
 ) -> pd.DataFrame:
     """Reorder columns in a DataFrame.
 
@@ -16,6 +16,8 @@ def reorder_columns(
         The input DataFrame.
     reference_column : str
         The name of the reference column.
+    column_to_move : str, list of str, or pandas.Index
+        The name(s) or index of the column(s) to be moved.
 
     Returns
     -------
