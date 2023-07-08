@@ -334,8 +334,15 @@ class Statistics:
         """
         if isinstance(dataframe, pd.Series):
             self.dataframe = pd.DataFrame({"Result": dataframe})
-        else:
+        elif "Result" in dataframe.columns:
             self.dataframe = dataframe["Result"].copy()
+        else:
+            raise ValueError(
+                """
+                Invalid dataframe. The dataframe should be a
+                pd.Series or a pd.DataFrame with a 'Result' column.
+                """
+            )
 
         self.dataframe.query("Result != 0")[["Result"]].dropna(inplace=True)
 
