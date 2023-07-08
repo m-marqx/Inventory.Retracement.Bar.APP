@@ -159,3 +159,4 @@ ___*
 *.csv
 *.parquet
 *.json
+*.ipynb
