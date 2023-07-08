@@ -1,4 +1,4 @@
-from model.utils.utils import (
+from .utils import (
     CleanData,
     BaseStrategy,
     Statistics,
@@ -7,3 +7,5 @@ from model.utils.utils import (
     StringParameters,
     DynamicTimeWarping,
 )
+
+from .custom_pandas_methods import reorder_columns
