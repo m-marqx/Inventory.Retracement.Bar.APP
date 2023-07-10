@@ -10,7 +10,7 @@ class LabelCallbacks:
         Input("ema_close", "n_clicks"),
         State("ema_source_column", "label"),
     )
-    def update_label(open_clicks, high_clicks, low_clicks, close_clicks, ema_source):
+    def update_ema_label(open_clicks, high_clicks, low_clicks, close_clicks, ema_source):
         ctx = dash.callback_context
         if not ctx.triggered:
             return ema_source
@@ -34,7 +34,7 @@ class LabelCallbacks:
         Input("macd_close", "n_clicks"),
         State("macd_source_column", "label"),
     )
-    def update_label(open_clicks, high_clicks, low_clicks, close_clicks, macd_source):
+    def update_macd_label(open_clicks, high_clicks, low_clicks, close_clicks, macd_source):
         ctx = dash.callback_context
         if not ctx.triggered:
             return macd_source
@@ -57,7 +57,7 @@ class LabelCallbacks:
         Input("cci_close", "n_clicks"),
         State("cci_source_column", "label"),
     )
-    def update_label(open_clicks, high_clicks, low_clicks, close_clicks, cci_source):
+    def update_cci_label(open_clicks, high_clicks, low_clicks, close_clicks, cci_source):
         ctx = dash.callback_context
         if not ctx.triggered:
             return cci_source
@@ -80,7 +80,7 @@ class LabelCallbacks:
         Input("source_close", "n_clicks"),
         State("source_crossover_column", "label"),
     )
-    def update_label(open_clicks, high_clicks, low_clicks, close_clicks, source_crossover):
+    def update_crossover_label(open_clicks, high_clicks, low_clicks, close_clicks, source_crossover):
         ctx = dash.callback_context
         if not ctx.triggered:
             return source_crossover
@@ -101,7 +101,7 @@ class LabelCallbacks:
         Input("ema", "n_clicks"),
         State("cci_ma_type", "label"),
     )
-    def update_label(sma_click, ema_click, cci_ma_type):
+    def update_cci_ma_type_label(sma_click, ema_click, cci_ma_type):
         ctx = dash.callback_context
         if not ctx.triggered:
             return cci_ma_type
@@ -130,7 +130,7 @@ class LabelCallbacks:
         Input("1M", "n_clicks"),
         State("interval", "label"),
     )
-    def update_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1, interval_label):
+    def update_interval_label(m1, m5, m15, m30, h1, h2, h4, h6, h8, h12, d1, d3, w1, M1, interval_label):
         ctx = dash.callback_context
         if not ctx.triggered:
             return interval_label
