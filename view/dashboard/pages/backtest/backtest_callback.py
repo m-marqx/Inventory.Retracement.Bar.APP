@@ -232,7 +232,7 @@ class RunBacktest:
             stacked_dataframe = []
             for value in range(0,range_max):
                 column_name = data_frame.columns[value]
-                stats_df = data_frame[[column_name]].diff()
+                stats_df = data_frame[[column_name]].pct_change()
                 stats_df = stats_df[stats_df[column_name] != 0][column_name]
 
                 stats_df = Statistics(

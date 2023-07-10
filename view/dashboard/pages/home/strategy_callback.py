@@ -194,9 +194,10 @@ class RunStrategy:
             )
 
             data_frame = builder(data_frame, builder_params)
+
             stats_dataframe = (
                 data_frame[["Capital"]]
-                .diff()
+                .pct_change()
                 .query("Capital != 0")
                 ["Capital"]
             )
