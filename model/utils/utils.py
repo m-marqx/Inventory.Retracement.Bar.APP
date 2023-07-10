@@ -344,7 +344,11 @@ class Statistics:
                 """
             )
 
-        self.dataframe.query("Result != 0")[["Result"]].dropna(inplace=True)
+        self.dataframe["Result"] = (
+            self.dataframe[["Result"]]
+            .query("Result != 0")
+            .dropna()
+        )
 
         self.time_span = time_span
         self.risk_free_rate = risk_free_rate
