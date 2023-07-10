@@ -88,7 +88,7 @@ class GeneralCollapse:
         Input("trend_params_button", "n_clicks"),
         State("trend_params_collapse", "is_open"),
     )
-    def toggle_strategy_params_collapse(n_clicks, is_open):
+    def toggle_trend_params_collapse(n_clicks, is_open):
         if not n_clicks:
             raise dash.exceptions.PreventUpdate
 
