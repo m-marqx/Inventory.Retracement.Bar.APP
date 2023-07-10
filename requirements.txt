@@ -19,3 +19,4 @@ pydotplus
 graphviz
 six
 IPython
+fastdtw
