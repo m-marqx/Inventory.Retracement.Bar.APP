@@ -1,3 +1,4 @@
+from model.indicators import CCI, MACD, MovingAverage
 from model.utils import CleanData, BaseStrategy
 from model.strategy.params import (
     EmaParams,
@@ -31,7 +32,6 @@ class CalculateEma(BaseStrategy):
         pd.DataFrame
             The dataframe with EMA values.
         """
-        from model.indicators.moving_average import MovingAverage
 
         ma = MovingAverage()
         self.ema = ma.ema(self.source, self.length)
@@ -98,8 +98,6 @@ class CalculateCCI(BaseStrategy):
         pd.DataFrame
             The dataframe with CCI values.
         """
-        from model.indicators.CCI import CCI
-
         self.CCI = CCI(self.source, self.params.length)
 
         if self.params.ma_type == "sma":

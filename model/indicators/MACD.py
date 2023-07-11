@@ -1,5 +1,5 @@
 import pandas as pd
-from model import MovingAverage
+from model.indicators import MovingAverage
 
 ma = MovingAverage()
 
