@@ -335,7 +335,7 @@ class Statistics:
         if isinstance(dataframe, pd.Series):
             self.dataframe = pd.DataFrame({"Result": dataframe})
         elif "Result" in dataframe.columns:
-            self.dataframe = dataframe["Result"].copy()
+            self.dataframe = dataframe[["Result"]].copy()
         else:
             raise ValueError(
                 """
