@@ -5,66 +5,71 @@ ma = MovingAverage()
 
 
 class MACD:
-    def __init__(self, source: pd.Series, fast_length: int, slow_length: int, signal_length: int):
-        """
-        Initialize the MACD object.
+    """Moving Average Convergence Divergence (MACD) indicator.
 
-        Parameters:
-        -----------
-        source : pd.Series
-            The input time series data.
-        fast_length : int
-            The number of periods for the fast EMA.
-        slow_length : int
-            The number of periods for the slow EMA.
-        signal_length : int
-            The number of periods for the signal EMA.
-        """
+    Calculates the MACD histogram based on the provided source data and parameters.
+
+    Parameters
+    ----------
+    source : pandas.Series
+        The source data.
+    fast_length : int
+        The length of the fast moving average.
+    slow_length : int
+        The length of the slow moving average.
+    signal_length : int
+        The length of the signal line moving average.
+    method : str, optional
+        The method used for calculating moving averages. Defaults to "ema".
+        Supported methods are "sma" (Simple Moving Average) and "ema"
+        (Exponential Moving Average).
+
+    Attributes
+    ----------
+    fast_ma : pandas.Series
+        The fast moving average.
+    slow_ma : pandas.Series
+        The slow moving average.
+
+    """
+    def __init__(
+        self,
+        source: pd.Series,
+        fast_length: int,
+        slow_length: int,
+        signal_length: int,
+        method: str = "ema",
+    ):
         self.source = source
         self.fast_length = fast_length
         self.slow_length = slow_length
         self.signal_length = signal_length
+        if method == "sma":
+            self.__set_sma()
+        if method == "ema":
+            self.__set_ema()
 
-    def set_ema(self):
-        """
-        Set the Exponential Moving Average (EMA) for the MACD calculation.
-
-        Returns:
-        --------
-        MACD
-            The MACD object.
-        """
+    def __set_ema(self):
+        """Calculate the fast and slow exponential moving averages."""
         self.fast_ma = ma.ema(self.source, self.fast_length)
         self.slow_ma = ma.ema(self.source, self.slow_length)
 
-        return self
-
-    def set_sma(self):
-        """
-        Set the Simple Moving Average (SMA) for the MACD calculation.
-
-        Returns:
-        --------
-        MACD
-            The MACD object.
-        """
+    def __set_sma(self):
+        """Calculate the fast and slow simple moving averages."""
         self.fast_ma = ma.sma(self.source, self.fast_length)
         self.slow_ma = ma.sma(self.source, self.slow_length)
 
-        return self
+    @property
+    def get_histogram(self) -> pd.DataFrame:
+        """Calculate the MACD histogram.
 
-    def MACD(self) -> pd.DataFrame:
+        Returns
+        -------
+        pandas.DataFrame
+            The MACD histogram.
+
         """
-        Calculate MACD using the specified method.
-
-        Returns:
-        --------
-        pd.DataFrame
-            The calculated MACD data as a DataFrame.
-        """
-        self.MACD = self.fast_ma - self.slow_ma
-        self.data_frame = pd.DataFrame({"MACD": self.MACD}).dropna(axis=0)
-        self.data_frame["MACD_Signal"] = ma.ema(self.data_frame["MACD"], self.signal_length)
-        self.data_frame["Histogram"] = self.data_frame["MACD"] - self.data_frame["MACD_Signal"]
-
-        return self.data_frame
+        macd = self.fast_ma - self.slow_ma
+        macd_signal = ma.ema(macd, self.signal_length)
+        histogram = macd - macd_signal
+        return histogram

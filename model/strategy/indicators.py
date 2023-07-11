@@ -66,9 +66,13 @@ class CalculateMACD(BaseStrategy):
         pd.DataFrame
             The dataframe with MACD histogram values.
         """
-        from model.indicators.MACD import MACD
+        self.histogram = MACD(
+            self.source,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+        ).get_histogram
 
-        self.histogram = MACD(self.source, self.fast_length, self.slow_length, self.signal_length).set_ema().MACD()["Histogram"]
         self.df_filtered["MACD_Histogram"] = self.histogram
         return self.df_filtered
 
