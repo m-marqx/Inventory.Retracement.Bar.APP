@@ -173,10 +173,12 @@
   border-radius: 20px;
   transition: background 0.15s ease-in-out;
 }
+
 .form-check-label.btn.btn-primary:hover {
   background: #8bbb1126;
   transition: background 0.15s ease-in-out;
 }
+
 .form-check-label.btn.btn-primary.active {
   background: #8bbb11;
   transition: background 0.15s ease-in-out;
@@ -267,6 +269,7 @@
   transition: background 0.15s ease-in-out;
   height: var(--default-height);
 }
+
 .form-control::-webkit-outer-spin-button,
 .form-control::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -430,6 +433,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   50% {
     transform: rotate(180deg);
     border-top-color: #c9e75d;
@@ -437,6 +441,7 @@
     border-right-color: transparent;
     border-left-color: transparent;
   }
+
   100% {
     transform: rotate(360deg);
   }
