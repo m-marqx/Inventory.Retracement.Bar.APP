@@ -198,8 +198,8 @@ class RunStrategy:
             data_frame = builder(data_frame, builder_params)
 
             stats_dataframe = (
-                data_frame[["Capital"]]
-                .pct_change()
+                ((data_frame[["Capital"]] - 100_000) / 100_000)
+                .diff()
                 .query("Capital != 0")
                 ["Capital"]
             )
@@ -213,7 +213,9 @@ class RunStrategy:
                 risk_free_rate=risk_free_adjusted,
                 is_percent=True,
             ).calculate_all_statistics()
-            print(stats_df)
+
+            if result_types == "Fixed" and not result_percentage:
+                stats_df = stats_df.drop("Sortino_Ratio", axis=1)
 
             table = table_component(stats_df, "results-table")
 
