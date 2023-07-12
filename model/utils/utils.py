@@ -413,6 +413,9 @@ class Statistics:
             total trade, win rate, loss rate, and expected value (EM).
 
         """
+        if self.is_percent:
+            self.dataframe = self.dataframe * 100
+
         gain = self.dataframe["Result"] > 0
         loss = self.dataframe["Result"] < 0
 
