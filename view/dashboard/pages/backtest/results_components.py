@@ -148,7 +148,7 @@ class ResultsComponents:
                 dbc.Col(
                     dbc.Input(
                         id="risk_free_rate",
-                        value=2.0,
+                        value=0.0,
                         type="number",
                         step=0.1,
                         min=0.0,
