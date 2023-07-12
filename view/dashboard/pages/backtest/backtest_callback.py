@@ -3,6 +3,9 @@ import dash
 from dash import Input, Output, State, callback, html
 import pandas as pd
 import numpy as np
+
+from binance.helpers import interval_to_milliseconds
+
 from model.utils import Statistics
 from model.utils.utils import SaveDataFrame, DataProcess
 from model.backtest import (
@@ -218,6 +221,10 @@ class RunBacktest:
                 n_workers_per_gpu=backtest_workers_number,
             )
 
+            interval_to_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
+            interval_to_year = 24 / interval_to_hours * 365
+            risk_free_adjusted = risk_free_rate / interval_to_year
+
             if result_type:
                 data_frame = DataProcess(
                     data_frame,
@@ -237,7 +244,8 @@ class RunBacktest:
 
                 stats_df = Statistics(
                     stats_df,
-                    risk_free_rate=risk_free_rate
+                    risk_free_rate=risk_free_adjusted,
+                    is_percent=True,
                 ).calculate_all_statistics()
 
                 stats_df["Rank"] = value + 1

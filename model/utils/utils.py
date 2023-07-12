@@ -268,8 +268,7 @@ class DataProcess:
 
 
 class Statistics:
-    """
-    A class for calculating strategy statistics.
+    """A class for calculating strategy statistics.
 
     Parameters
     ----------
@@ -284,7 +283,11 @@ class Statistics:
         (annual).
 
     risk_free_rate : float, optional
-        The risk free rate of the strategy. The default is 2.0.
+        The risk free rate of the strategy. The default is 0.
+
+    is_percent : bool, optional
+        Whether the results are in percentage form. If True, the calculated
+        statistics will be multiplied by 100. Default is False.
 
     Attributes
     ----------
@@ -293,45 +296,59 @@ class Statistics:
 
     Methods
     -------
-    calculate_all_statistics()
+    calculate_all_statistics(precision: int = 2) -> pd.DataFrame
         Calculate all strategy statistics.
 
-    calculate_expected_value()
+    calculate_expected_value() -> pd.DataFrame
         Calculate the expected value of the strategy.
 
-    calculate_estimed_sharpe_ratio()
+    calculate_estimated_sharpe_ratio() -> pd.Series
         Calculate the Sharpe ratio of the strategy.
 
-    calculate_estimed_sortino_ratio()
+    calculate_estimated_sortino_ratio() -> pd.Series
         Calculate the Sortino ratio of the strategy.
 
     """
-
     def __init__(
+
         self,
         dataframe: pd.Series | pd.DataFrame,
         time_span: str = "A",
-        risk_free_rate: float = 2.0
+        risk_free_rate: float = 0,
+        is_percent: bool  = False,
     ):
-        """
-        Initialize the Statistics class with a dataframe.
+        """Calculates performance metrics based on the provided data.
 
         Parameters
         ----------
-        dataframe : pd.Series or pd.DataFrame
-            The input dataframe containing the results of the strategy.
-            If `dataframe` is a pd.Series, it should contain a single
-            column of results. If it is a pd.DataFrame, it should have a
-            'Result' column containing the results.
-
+        dataframe : pandas.Series or pandas.DataFrame
+            The input data. If a Series is provided, it is converted to
+            a DataFrame with a "Result" column. If a DataFrame is
+            provided, it should contain a "Result" column.
         time_span : str, optional
-            The time span for resampling the returns.
-            The default is "A" (annual).
-
+            The time span of the data. Defaults to "A" (annual).
         risk_free_rate : float, optional
-            The risk free rate of the strategy. The default is 2.0.
+            The risk-free rate to be used in performance calculations.
+            Defaults to 0 (no risk-free rate).
+        is_percent : bool, optional
+            Indicates whether the data is in percentage format.
+            Defaults to False.
+
+        Raises
+        ------
+        ValueError
+            If an invalid dataframe is provided.
+
+        Notes
+        -----
+        The risk-free rate should be consistent with the timeframe used
+        in the dataframe. If the timeframe is annual and the risk-free
+        rate is 2%, the risk_free_rate value should be set as
+        `0.00007936507`  (0.02 / 252) if the asset has 252 trading days.
 
         """
+        self.is_percent = is_percent
+
         if isinstance(dataframe, pd.Series):
             self.dataframe = pd.DataFrame({"Result": dataframe})
         elif "Result" in dataframe.columns:

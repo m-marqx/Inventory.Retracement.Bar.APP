@@ -4,6 +4,8 @@ import pandas as pd
 import dash
 from dash import Input, Output, State, callback
 
+from binance.helpers import interval_to_milliseconds
+
 from controller.api.klines_api import KlineAPI
 
 from model.utils import Statistics
@@ -202,10 +204,16 @@ class RunStrategy:
                 ["Capital"]
             )
 
+            interval_to_hours = interval_to_milliseconds(interval) / 1000 / 60 / 60
+            interval_to_year = 24 / interval_to_hours * 365
+            risk_free_adjusted = risk_free_rate / interval_to_year
+
             stats_df = Statistics(
                 dataframe=stats_dataframe,
-                risk_free_rate=risk_free_rate
+                risk_free_rate=risk_free_adjusted,
+                is_percent=True,
             ).calculate_all_statistics()
+            print(stats_df)
 
             table = table_component(stats_df, "results-table")
 
