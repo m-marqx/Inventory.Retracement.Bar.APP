@@ -213,8 +213,8 @@ def table_component(
         id=f"{id_prefix}-table",
         rowData=data_frame.to_dict("records"),
         columnDefs=[{"headerName": col, "field": col} for col in data_frame.columns],
-        defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth":115},
-        columnSize="sizeToFit",
+        defaultColDef={"resizable": True, "sortable": True, "filter": True},
+        columnSize="responsiveSizeToFit",
         dashGridOptions=pagination_dict,
         className=class_name
     )
