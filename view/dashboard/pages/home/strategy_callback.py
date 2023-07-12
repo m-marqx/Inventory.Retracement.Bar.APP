@@ -109,6 +109,11 @@ class RunStrategy:
         if "run_button" in ctx.triggered[0]["prop_id"]:
             symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
 
+            if result_percentage is None or result_percentage == []:
+                result_percentage = False
+            else:
+                result_percentage = result_percentage[0]
+
             if api_type in ("coin_margined", "mark_price"):
                 if symbol.endswith("USD"):
                     data_symbol = f"{symbol}_PERP"
@@ -140,7 +145,6 @@ class RunStrategy:
             ema_bool = False
             macd_bool = False
             cci_bool = False
-            use_percentage = len(result_percentage) == 1
 
             if checklist is not None:
                 for bool_param in checklist:
@@ -186,7 +190,7 @@ class RunStrategy:
                 ),
                 result_params = ResultParams(
                     capital = initial_capital_value,
-                    percent = use_percentage,
+                    percent = result_percentage,
                     gain = gain_result_value,
                     loss = loss_result_value,
                     method = result_types,

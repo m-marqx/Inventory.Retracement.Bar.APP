@@ -130,7 +130,11 @@ class RunBacktest:
 
         if "backtest_run_button" in ctx.triggered[0]["prop_id"]:
             symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
-            use_percentage = len(result_percentage) == 1
+
+            if result_percentage is None or result_percentage == []:
+                result_percentage = False
+            else:
+                result_percentage = result_percentage[0]
 
             if api_type in ("coin_margined", "mark_price"):
                 if symbol.endswith("USD"):
@@ -205,7 +209,7 @@ class RunBacktest:
                 ),
                 result_params=ResultParamsBacktest(
                     capital=[initial_capital_value],
-                    percent=[use_percentage],
+                    percent=[result_percentage],
                     gain=[gain_result_value],
                     loss=[loss_result_value],
                     method=backtest_result_types,
