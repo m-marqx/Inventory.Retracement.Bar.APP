@@ -1,16 +1,38 @@
 import dash_bootstrap_components as dbc
 
-from view.dashboard.pages.general.utils import result_types
-from .utils import DropdownMenuItems
-
 
 class MainPageComponents:
+    """A class representing the components of a main page in a Dash
+    application.
+
+    Parameters
+    ----------
+    lang : dict
+        A dictionary containing language translations.
+
+    Attributes
+    ----------
+    lang : dict
+        A dictionary containing language translations.
+    dropdown_menu_item : DropdownMenuItems
+        An instance of the DropdownMenuItems class.
+
+    """
+
     def __init__(self, lang):
         self.lang = lang
         self.dropdown_menu_item = DropdownMenuItems(lang)
 
     @property
     def indicators_first_col(self):
+        """Components for the first column of indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the first column of indicators.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -95,6 +117,14 @@ class MainPageComponents:
 
     @property
     def indicators_second_col(self):
+        """Components for the second column of indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the second column of indicators.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -179,14 +209,41 @@ class MainPageComponents:
 
     @property
     def indicators_parameters_col1(self):
+        """Components for the first column of indicator parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the first column of indicator
+            parameters.
+
+        """
         return dbc.CardGroup([self.indicators_first_col])
 
     @property
     def indicators_parameters_col2(self):
+        """Components for the second column of indicator parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the second column of
+            indicator parameters.
+
+        """
         return dbc.CardGroup([self.indicators_second_col])
 
     @property
     def irb_components_first_col(self):
+        """Components for the first column of IRB parameters.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the first column of IRB
+            parameters.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -220,6 +277,15 @@ class MainPageComponents:
 
     @property
     def irb_components_second_col(self):
+        """Components for the second column of IRB parameters.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the second column of IRB
+            parameters.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -258,143 +324,226 @@ class MainPageComponents:
 
     @property
     def irb_parameters_col1(self):
+        """Components for the first column of IRB parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the first column of IRB
+            parameters.
+
+        """
         return dbc.CardGroup(self.irb_components_first_col)
 
     @property
     def irb_parameters_col2(self):
+        """Components for the second column of IRB parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the second column of IRB
+            parameters.
+
+        """
         return dbc.CardGroup(self.irb_components_second_col)
 
     @property
     def trend_indicators_label1(self):
-        return (
-            dbc.Row(
-                dbc.Label(
-                    self.lang["ACTIVATE_INDICATOR"],
-                    width=45,
-                    style={"margin-top": "10px"},
-                    class_name="center",
-                ),
+        """Component for the first label of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the first label of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            dbc.Label(
+                self.lang["ACTIVATE_INDICATOR"],
+                width=45,
+                style={"margin-top": "10px"},
                 class_name="center",
             ),
+            class_name="center",
         )
 
     @property
     def trend_indicators_label2(self):
-        return (
-            dbc.Row(
-                dbc.Label(
-                    self.lang["CROSSOVER_PRICE_SOURCE"],
-                    width=45,
-                    style={"margin-top": "10px"},
-                    class_name="center",
-                ),
+        """Component for the second label of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the second label of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            dbc.Label(
+                self.lang["CROSSOVER_PRICE_SOURCE"],
+                width=45,
+                style={"margin-top": "10px"},
                 class_name="center",
             ),
+            class_name="center",
         )
 
     @property
     def trend_indicators_label3(self):
-        return (
-            dbc.Row(
-                dbc.Label(
-                    self.lang["MACD_BULLISH_VALUE"],
-                    width=45,
-                    style={"margin-top": "10px"},
-                    class_name="center",
-                ),
+        """Component for the third label of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the third label of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            dbc.Label(
+                self.lang["MACD_BULLISH_VALUE"],
+                width=45,
+                style={"margin-top": "10px"},
                 class_name="center",
             ),
+            class_name="center",
         )
 
     @property
     def trend_indicators_label4(self):
-        return (
-            dbc.Row(
-                dbc.Label(
-                    self.lang["CCI_BULLISH_VALUE"],
-                    width=45,
-                    style={"margin-top": "10px"},
-                    class_name="center",
-                ),
+        """Component for the fourth label of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the fourth label of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            dbc.Label(
+                self.lang["CCI_BULLISH_VALUE"],
+                width=45,
+                style={"margin-top": "10px"},
                 class_name="center",
             ),
+            class_name="center",
         )
 
     @property
     def trend_indicators_input1(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.Col(
-                        dbc.Checklist(
-                            self.dropdown_menu_item.indicators_filter,
-                            id="checklist",
-                            class_name="vertical-items-container",
-                            input_class_name="btn-check",
-                            label_class_name="btn btn-primary",
-                            label_checked_class_name="active",
-                            inline=True,
-                        ),
+        """Component for the first input of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the first input of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Checklist(
+                        self.dropdown_menu_item.indicators_filter,
+                        id="checklist",
+                        class_name="vertical-items-container",
+                        input_class_name="btn-check",
+                        label_class_name="btn btn-primary",
+                        label_checked_class_name="active",
+                        inline=True,
                     ),
-                ],
-                class_name="center",
-            ),
+                ),
+            ],
+            class_name="center",
         )
 
     @property
     def trend_indicators_input2(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.Col(
-                        dbc.DropdownMenu(
-                            self.dropdown_menu_item.source_ohlc_items,
-                            label=self.lang["SOURCE"],
-                            id="source_crossover_column",
-                        ),
+        """Component for the second input of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the second input of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.DropdownMenu(
+                        self.dropdown_menu_item.source_ohlc_items,
+                        label=self.lang["SOURCE"],
+                        id="source_crossover_column",
                     ),
-                ],
-                class_name="center",
-                style={"justify-content": "normal"},
-            ),
+                ),
+            ],
+            class_name="center",
+            style={"justify-content": "normal"},
         )
 
     @property
     def trend_indicators_input3(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.Col(
-                        dbc.Input(
-                            id="indicator_macd_histogram_trend_value",
-                            value=0,
-                            type="number",
-                        ),
+        """Component for the third input of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the third input of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Input(
+                        id="indicator_macd_histogram_trend_value",
+                        value=0,
+                        type="number",
                     ),
-                ],
-                class_name="center",
-            ),
+                ),
+            ],
+            class_name="center",
         )
 
     @property
     def trend_indicators_input4(self):
-        return (
-            dbc.Row(
-                [
-                    dbc.Col(
-                        dbc.Input(
-                            id="indicator_cci_trend_value",
-                            value=0,
-                            type="number",
-                        ),
+        """Component for the fourth input of trend indicators.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the fourth input of trend
+            indicators.
+
+        """
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Input(
+                        id="indicator_cci_trend_value",
+                        value=0,
+                        type="number",
                     ),
-                ],
-                class_name="center",
-            ),
+                ),
+            ],
+            class_name="center",
         )
 
     @property
     def filter_components(self):
+        """Components for the trend indicator filters.
+
+        Returns
+        -------
+        tuple
+            A tuple containing the components for the trend indicator
+            filters.
+
+        """
         return (
             dbc.Row(
                 [
@@ -432,6 +581,14 @@ class MainPageComponents:
 
     @property
     def result_type_components(self):
+        """Components for the result type selection.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the result type components.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -458,6 +615,14 @@ class MainPageComponents:
 
     @property
     def percentage_component(self):
+        """Component for the percentage result checkbox.
+
+        Returns
+        -------
+        dbc.Col
+            A Col component containing the percentage result checkbox.
+
+        """
         return dbc.Col(
             [
                 dbc.Col(
@@ -482,6 +647,14 @@ class MainPageComponents:
 
     @property
     def margin_type(self):
+        """Component for the margin type selection.
+
+        Returns
+        -------
+        dbc.Col
+            A Col component containing the margin type selection.
+
+        """
         return dbc.Col(
             [
                 dbc.Col(
@@ -505,6 +678,15 @@ class MainPageComponents:
 
     @property
     def result_param_first_col(self):
+        """Components for the first column of result parameters.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the first column of result
+            parameters.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -556,6 +738,15 @@ class MainPageComponents:
 
     @property
     def result_param_second_col(self):
+        """Components for the second column of result parameters.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the second column of result
+            parameters.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(
@@ -589,14 +780,40 @@ class MainPageComponents:
 
     @property
     def result_parameters_col1(self):
+        """Components for the first column of result parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the first column of result
+            parameters.
+
+        """
         return dbc.CardGroup([self.result_param_first_col])
 
     @property
     def result_parameters_col2(self):
+        """Components for the second column of result parameters.
+
+        Returns
+        -------
+        dbc.CardGroup
+            A CardGroup component containing the second column of result
+            parameters.
+
+        """
         return dbc.CardGroup([self.result_param_second_col])
 
     @property
     def result_components(self):
+        """Components for the result parameters.
+
+        Returns
+        -------
+        tuple
+            A tuple containing the components for the result parameters.
+
+        """
         return (
             dbc.Row(
                 [
@@ -622,6 +839,14 @@ class MainPageComponents:
 
     @property
     def result_type(self):
+        """Components for the result type selection.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the result type components.
+
+        """
         return dbc.Row(
             [
                 dbc.Col(self.result_type_components),
