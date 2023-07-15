@@ -4,7 +4,8 @@ from dash import Input, Output, State, callback, html
 import pandas as pd
 import numpy as np
 
-from binance.helpers import interval_to_milliseconds
+from model.utils import interval_to_milliseconds
+
 
 from model.utils import Statistics
 from model.utils.utils import SaveDataFrame, DataProcess
@@ -15,7 +16,7 @@ from model.backtest import (
     IndicatorsParamsBacktest,
     TrendParamsBacktest,
     ResultParamsBacktest,
-    BacktestParams
+    BacktestParams,
 )
 
 from controller.api.klines_api import KlineAPI
@@ -241,9 +242,9 @@ class RunBacktest:
                 range_max = 50
 
             stacked_dataframe = []
-            for value in range(0,range_max):
+            for value in range(0, range_max):
                 column_name = data_frame.columns[value]
-                stats_df = ((data_frame[["Capital"]] - 100_000) / 100_000)
+                stats_df = (data_frame[["Capital"]] - 100_000) / 100_000
                 stats_df = data_frame[[column_name]].diff()
                 stats_df = stats_df[stats_df[column_name] != 0][column_name]
 
@@ -280,8 +281,9 @@ class RunBacktest:
 
             fig = graph_layout.grouped_lines()
             text_output = (
-                f"Best Result: {data_frame.iloc[-1,0]}", html.Br(),
-                f"Number of Trials: {backtest_params.total_combinations}"
+                f"Best Result: {data_frame.iloc[-1,0]}",
+                html.Br(),
+                f"Number of Trials: {backtest_params.total_combinations}",
             )
 
         return fig, text_output, table

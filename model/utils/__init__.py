@@ -6,6 +6,7 @@ from .utils import (
     CalculateTradePerformance,
     StringParameters,
     DynamicTimeWarping,
+    interval_to_milliseconds,
 )
 
 from .custom_pandas_methods import reorder_columns

@@ -4,7 +4,8 @@ import pandas as pd
 import dash
 from dash import Input, Output, State, callback
 
-from binance.helpers import interval_to_milliseconds
+from model.utils import interval_to_milliseconds
+
 
 from controller.api.klines_api import KlineAPI
 
@@ -188,15 +189,15 @@ class RunStrategy:
                     macd=macd_bool,
                     cci=cci_bool,
                 ),
-                result_params = ResultParams(
-                    capital = initial_capital_value,
-                    percent = result_percentage,
-                    gain = gain_result_value,
-                    loss = loss_result_value,
-                    method = result_types,
-                    qty = qty_result_value,
-                    coin_margined = result_margin_type,
-                )
+                result_params=ResultParams(
+                    capital=initial_capital_value,
+                    percent=result_percentage,
+                    gain=gain_result_value,
+                    loss=loss_result_value,
+                    method=result_types,
+                    qty=qty_result_value,
+                    coin_margined=result_margin_type,
+                ),
             )
 
             data_frame = builder(data_frame, builder_params)
@@ -227,7 +228,7 @@ class RunStrategy:
                 data_frame,
                 data_symbol,
                 interval,
-                api_type
+                api_type,
             )
 
             fig = graph_layout.plot_single_linechart("Capital")

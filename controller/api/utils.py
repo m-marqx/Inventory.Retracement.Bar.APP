@@ -2,8 +2,7 @@ import numpy as np
 import time
 import pandas as pd
 from math import ceil
-from binance.helpers import interval_to_milliseconds
-
+from model.utils import interval_to_milliseconds
 
 class KlineUtils:
     def __init__(self, klines_list):
