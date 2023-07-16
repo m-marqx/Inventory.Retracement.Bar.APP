@@ -172,3 +172,22 @@ class ResampleOHLC(pd.DataFrame):
             })
             return resampled.dropna()
         raise ValueError("No OHLC columns found")
+
+def resample_ohlc_wrapper(self, period):
+    """
+    Wrapper function for creating a ResampleOHLC object.
+
+    Parameters
+    ----------
+    period : str or DateOffset
+        The resampling period for the OHLC data.
+
+    Returns
+    -------
+    ResampleOHLC
+        The ResampleOHLC object.
+
+    """
+    return ResampleOHLC(period, data=self)
+
+pd.DataFrame.resample_ohlc = resample_ohlc_wrapper
