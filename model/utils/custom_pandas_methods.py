@@ -142,3 +142,33 @@ class ResampleOHLC(pd.DataFrame):
             return resampled.dropna()
         raise ValueError("No OHLC columns found")
 
+    def OHLC(self):
+        """
+        Resamples the data and returns the OHLC values
+        (alternative column names).
+
+        Returns
+        -------
+        pd.DataFrame
+            The resampled data with OHLC values.
+
+        Raises
+        ------
+        ValueError
+            If no OHLC columns are found in the data.
+
+        """
+        OHLC = all(
+            column in self.columns
+            for column in ["Open", "High", "Low", "Close"]
+        )
+
+        if OHLC:
+            resampled = self.resample(self.period).agg({
+                'Open': 'first',
+                'High': 'max',
+                'Low': 'min',
+                'Close': 'last'
+            })
+            return resampled.dropna()
+        raise ValueError("No OHLC columns found")
