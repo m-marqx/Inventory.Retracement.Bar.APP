@@ -1,4 +1,6 @@
 import dash_bootstrap_components as dbc
+from view.dashboard.pages.general.utils import result_types
+from .utils import DropdownMenuItems
 
 
 class MainPageComponents:
