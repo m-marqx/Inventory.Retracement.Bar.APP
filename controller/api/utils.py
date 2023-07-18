@@ -168,3 +168,50 @@ class KlineTimes:
         end_times = np.append(end_times, time.time() * 1000)
 
         return end_times
+
+    @property
+    def get_max_interval(self):
+        """
+        Returns the maximum interval of the interval.
+
+        Returns
+        -------
+        int
+            The maximum interval of the interval.
+
+        Raises
+        ------
+        ValueError
+            If no divisible value is found or if a float value is entered.
+
+        """
+        if self.interval[-1] == "m":
+            interval_range = self.default_intervals[1:5]
+        elif self.interval[-1] == "h":
+            interval_range = self.default_intervals[5:11]
+        elif self.interval[-1] == "1d":
+            interval_range = self.default_intervals[11:13]
+        elif self.interval[-1] == "1w":
+            interval_range = self.default_intervals[13:14]
+        elif self.interval[-1] == "1M":
+            interval_range = self.default_intervals[14:15]
+        else:
+            interval_range = [0]
+
+        int_interval_list = [x[:-1] for x in interval_range]
+        int_interval_list = [int(x) for x in int_interval_list]
+        int_interval = int(self.interval[:-1])
+
+        max_divisor = None
+
+        for value in reversed(int_interval_list):
+            if int_interval % value == 0:
+                max_divisor = value
+                break
+
+        if max_divisor is None:
+            raise ValueError(
+                "No divisible value found. Perhaps you entered a float value?"
+            )
+        max_interval = str(max_divisor) + self.interval[-1]
+        return max_interval
