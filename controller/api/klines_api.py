@@ -103,17 +103,17 @@ class KlineAPI:
 
     def request_klines(
         self,
-        startTime,
-        endTime,
+        start_time,
+        end_time,
     ):
         """
         Request Kline data for the specified time range.
 
         Parameters:
         -----------
-        startTime : int
+        start_time : int
             The start time for the data range in milliseconds.
-        endTime : int
+        end_time : int
             The end time for the data range in milliseconds.
 
         Returns:
@@ -138,8 +138,8 @@ class KlineAPI:
         request = api_get_klines(
             symbol=self.symbol,
             interval=self.interval,
-            startTime=startTime,
-            endTime=endTime,
+            startTime=start_time,
+            endTime=end_time,
             limit=max_limit,
         )
         return request
