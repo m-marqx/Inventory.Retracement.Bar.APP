@@ -80,6 +80,35 @@ class KlineTimes:
         self.symbol = symbol
         self.interval = interval
 
+    @property
+    def default_intervals(self):
+        """
+        Returns the list of default intervals.
+
+        Returns
+        -------
+        list of str
+            The list of default intervals.
+
+        """
+        return [
+            "1s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+        ]
+
     def calculate_max_multiplier(
         self,
         max_candle_limit: int = 1500,
