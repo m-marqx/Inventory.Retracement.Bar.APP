@@ -66,6 +66,35 @@ class KlineUtils:
 
 
 class KlineTimes:
+    """
+    Class for working with Kline times.
+
+    Parameters
+    ----------
+    symbol : str
+        The symbol of the asset.
+    interval : str
+        The interval of the Kline data.
+
+    Attributes
+    ----------
+    symbol : str
+        The symbol of the asset.
+    interval : str
+        The interval of the Kline data.
+
+    Methods
+    -------
+    default_intervals()
+        Returns the list of default intervals.
+    calculate_max_multiplier(max_candle_limit: int = 1500)
+        Calculate the maximum multiplier based on the interval.
+    get_end_times(start_time=1597118400000, max_candle_limit=1500)
+        Get the end times for retrieving Kline data.
+    interval_max_divisor()
+        Returns the maximum divisor of the interval.
+
+    """
     def __init__(self, symbol, interval):
         """
         Initialize the KlineTimes object
@@ -122,11 +151,22 @@ class KlineTimes:
             The maximum multiplier.
         """
         if self.interval != "1M":
-            interval_hours = interval_to_milliseconds(self.interval) / 1000 / 60 / 60
+
+            interval_hours = (
+                interval_to_milliseconds(self.interval)
+                / 1000
+                / 60
+                / 60
+            )
+
             max_multiplier_limit = max_candle_limit
             max_days_limit = 200
 
-            total_time_hours = interval_hours * np.arange(max_multiplier_limit, 0, -1)
+            total_time_hours = (
+                interval_hours
+                * np.arange(max_multiplier_limit, 0, -1)
+            )
+
             time_total_days = total_time_hours / 24
 
             max_multiplier = max_multiplier_limit - np.argmax(
@@ -148,7 +188,8 @@ class KlineTimes:
         Parameters:
         -----------
         start_time : int, optional
-            The start time for retrieving Kline data in milliseconds. (default: 1597118400000)
+            The start time for retrieving Kline data in milliseconds.
+            (default: 1597118400000)
 
         Returns:
         --------
@@ -163,7 +204,9 @@ class KlineTimes:
         )
 
         end_times = (
-            np.arange(ceil(request_qty)) * (time_delta / request_qty) + start_time
+            np.arange(ceil(request_qty))
+            * (time_delta / request_qty)
+            + start_time
         )
         end_times = np.append(end_times, time.time() * 1000)
 
