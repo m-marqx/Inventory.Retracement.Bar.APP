@@ -1,5 +1,6 @@
 import dash
 from dash import Output, Input, State, callback
+import dash_bootstrap_components as dbc
 
 class GeneralCollapse:
     @callback(
@@ -11,6 +12,14 @@ class GeneralCollapse:
         if len(result_percentage) == 1 and result_types == "Normal":
             return "center"
         return "hidden"
+
+    @callback(
+        Output("custom-interval", "class_name"),
+        Input("interval", "value"),
+    )
+    def show_input(interval):
+        if interval != "Custom":
+            return "hidden"
 
     @callback(
         Output("strategy_params_collapse", "is_open"),

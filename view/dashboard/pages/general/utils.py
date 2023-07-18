@@ -6,22 +6,24 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 import dash_ag_grid as dag
 
-intervals = [
-    dbc.DropdownMenuItem("1min", id="1m"),
-    dbc.DropdownMenuItem("5min", id="5m"),
-    dbc.DropdownMenuItem("15min", id="15m"),
-    dbc.DropdownMenuItem("30min", id="30m"),
-    dbc.DropdownMenuItem("1h", id="1h"),
-    dbc.DropdownMenuItem("2h", id="2h"),
-    dbc.DropdownMenuItem("4h", id="4h"),
-    dbc.DropdownMenuItem("6h", id="6h"),
-    dbc.DropdownMenuItem("8h", id="8h"),
-    dbc.DropdownMenuItem("12h", id="12h"),
-    dbc.DropdownMenuItem("1d", id="1d"),
-    dbc.DropdownMenuItem("3d", id="3d"),
-    dbc.DropdownMenuItem("1w", id="1w"),
-    dbc.DropdownMenuItem("1M", id="1M"),
-]
+def intervals(lang):
+    return [
+        {"label": "1min", "value": "1m"},
+        {"label": "5min", "value": "5m"},
+        {"label": "15min", "value": "15m"},
+        {"label": "30min", "value": "30m"},
+        {"label": "1h", "value": "1h"},
+        {"label": "2h", "value": "2h"},
+        {"label": "4h", "value": "4h"},
+        {"label": "6h", "value": "6h"},
+        {"label": "8h", "value": "8h"},
+        {"label": "12h", "value": "12h"},
+        {"label": "1d", "value": "1d"},
+        {"label": "3d", "value": "3d"},
+        {"label": "1w", "value": "1w"},
+        {"label": "1M", "value": "1M"},
+        {"label": lang["CUSTOM"], "value": "Custom"},
+    ]
 
 
 def api_types(lang):
@@ -48,7 +50,7 @@ class MenuCollapse:
     lang : dict
         A dictionary containing language translations.
     label : str
-        The label used to retrieve the translated name from the 'lang'
+        The label used to retrieve the translated name from the "lang"
         dictionary.
     component : dbc._components.Row
         The component to be displayed inside the collapsible menu item.
@@ -94,7 +96,7 @@ class MenuCollapse:
             A dictionary containing language translations.
         label : str
             The label used to retrieve the translated name from the
-            'lang' dictionary.
+            "lang" dictionary.
         component : dbc._components.Row
             The component to be displayed inside the collapsible menu
             item.

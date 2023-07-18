@@ -103,11 +103,21 @@ class GeneralComponents:
                     style={"margin-top": "10px"},
                 ),
                 dbc.Col(
-                    dbc.DropdownMenu(
-                        children=intervals,
-                        label=self.lang["TIMEFRAME"],
-                        id="interval",
-                    ),
+                    [
+                        dcc.Dropdown(
+                            options=intervals(self.lang),
+                            placeholder=self.lang["TIMEFRAME"],
+                            id="interval",
+                            className="classic_dropdown",
+                        ),
+                        dbc.Input(
+                            class_name="hidden",
+                            type="text",
+                            id="custom-interval",
+                            style={"margin-top": "5px"},
+                        )
+                    ],
+                    id="interval_col",
                     width=45,
                 ),
             ]
