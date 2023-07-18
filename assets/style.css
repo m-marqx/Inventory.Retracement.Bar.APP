@@ -345,18 +345,6 @@
   font-size: 24px;
 }
 
-.dropdown-toggle {
-  background: #536d13 !important;
-}
-
-.dropdown-toggle:hover {
-  background: #6f9412 !important;
-}
-
-.dropdown-menu {
-  background: rgba(83, 109, 19, 0.85) !important;
-}
-
 .VirtualizedSelectOption,
 .Select-menu-outer {
   color: rgba(255, 255, 255, 0.85) !important;
@@ -406,6 +394,18 @@
 
 .has-value.Select--single > .Select-control .Select-value .Select-value-label {
   color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dropdown-toggle {
+  background: #536d13 !important;
+}
+
+.dropdown-toggle:hover {
+  background: #6f9412 !important;
+}
+
+.dropdown-menu {
+  background: rgba(83, 109, 19, 0.85) !important;
 }
 
 .dropdown-item {
