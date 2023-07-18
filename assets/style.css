@@ -345,31 +345,59 @@
   font-size: 24px;
 }
 
-.VirtualizedSelectOption,
-.Select-menu-outer {
+.VirtualizedSelectOption {
   color: rgba(255, 255, 255, 0.85) !important;
   background: #536d13d9 !important;
   border: 0px solid rgba(0, 0, 0, 0) !important;
 }
 
+.Select-menu-outer, .ReactVirtualized__Grid, .ReactVirtualized__List, .VirtualSelectGrid {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background: #536d13 !important;
+  border: 0px solid rgba(0, 0, 0, 0) !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+.ReactVirtualized__Grid::-webkit-scrollbar, .ReactVirtualized__List::-webkit-scrollbar {
+  display:none !important;
+}
+
 .VirtualizedSelectFocusedOption {
   color: #ffffff !important;
   background: #c9e75da6 !important;
-}
-
-.Select-control {
-  background: #536d13d9 !important;
-  border-radius: 7px;
-  border: 1px solid rgba(0, 0, 0, 0) !important;
-  color: rgba(255, 255, 255, 0.85);
-  display: table;
-  border-spacing: 0;
-  border-collapse: separate;
-  height: 36px;
   overflow: hidden;
 }
 
-.Select--multi .Select-value {
+.Select-control {
+  background: #536d13 !important;
+  color: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-spacing: 0;
+  border-radius: 10px;
+  box-shadow: none;
+  padding: 1rem 1.5rem;
+  font-weight: 400;
+  position: relative;
+  height: var(--default-height);
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.Select-multi-value-wrapper, .Select-value, .Select-value-label {
+  font-weight: 400;
+  position: relative !important;
+  width: 100% !important;
+  display: grid !important;
+  align-items: center !important;
+  justify-items: center !important;
+  line-height: 2.5 !important;
+  height: 0px !important;
+  overflow: visible !important;
+}
+
+.Select--multi.Select-value {
   background-color: #c9e75d27;
   border-radius: 2px;
   border: 1px solid #c9e75da6;
@@ -388,12 +416,21 @@
   color: #c9e75d !important;
 }
 
-.Select-placeholder {
-  color: rgba(255, 255, 255, 0.65);
+.Select-placeholder, .Select-input {
+  position: relative;
+  height: 0px !important;
+  overflow: visible !important;
+  width: 100% !important;
+  display: grid !important;
+  align-content: center !important;
+  justify-content: center !important;
 }
 
 .has-value.Select--single > .Select-control .Select-value .Select-value-label {
   color: rgba(255, 255, 255, 0.85) !important;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 }
 
 .dropdown-toggle {
