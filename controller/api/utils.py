@@ -5,6 +5,25 @@ from math import ceil
 from model.utils import interval_to_milliseconds
 
 class KlineUtils:
+    """
+    A class for handling Kline data.
+
+    Parameters
+    ----------
+    klines_list : list
+        The list of Kline data.
+
+    Attributes
+    ----------
+    klines_list : list
+        The list of Kline data.
+
+    Methods
+    -------
+    klines_df()
+        Convert the Kline data to a DataFrame.
+
+    """
     def __init__(self, klines_list):
         """
         Initialize the KlineUtils object.
