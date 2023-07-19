@@ -222,7 +222,20 @@ class KlineAPI:
         return refresh_dataframe
 
     def update_klines(self, dataframe):
+        """
+        Update the Kline data by appending new data to the existing
+        DataFrame.
 
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The existing Kline data DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The updated Kline data DataFrame.
+        """
         last_time = (
             (dataframe.index[-1] - pd.Timestamp("1970-01-01"))
             // pd.Timedelta('1ms')
