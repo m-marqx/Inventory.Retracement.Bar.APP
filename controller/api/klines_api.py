@@ -2,6 +2,7 @@ import time
 import pathlib
 import pandas as pd
 from binance.client import Client
+import model.utils.custom_pandas_methods
 from .utils import KlineUtils, KlineTimes
 
 
@@ -16,19 +17,26 @@ class KlineAPI:
         symbol : str
             The symbol for which to retrieve Kline data.
         interval : str
-            The time interval for the Kline data (e.g., '1m', '5m', '1h', etc.).
+            The time interval for the Kline data
+            (e.g., '1m', '5m', '1h', etc.).
         api : str, optional
-            The API type to use for retrieving the data. Valid options are 'coin_margined',
-            'mark_price', or 'spot'. (default: 'coin_margined')
+            The API type to use for retrieving the data.
+            Valid options are 'coin_margined', 'mark_price',
+            or 'spot'.
+            (default: 'coin_margined')
         """
-        self.client = Client()
         self.symbol = symbol
         self.interval = interval
-        self.utils = KlineTimes(self.symbol, self.interval)
-        self.klines = None
         self.api = api.lower()
+
+        self.client = Client()
+        self.klines = None
         self.futures_options = ["coin_margined" or "mark_price"]
         self.all_options = ["spot"] + self.futures_options
+
+        self.max_interval = KlineTimes(self.symbol, interval).get_max_interval
+        self.utils = KlineTimes(self.symbol, self.max_interval)
+
         self.is_futures = any(
             api_selected in self.futures_options
             for api_selected in [self.api]
@@ -42,6 +50,8 @@ class KlineAPI:
                 "Klines function should be either "
                 "'coin_margined', 'mark_price' or 'spot'"
             )
+
+        self.custom_interval = interval not in self.utils.default_intervals
 
     def get_exchange_symbol_info(self):
         """
@@ -137,7 +147,7 @@ class KlineAPI:
 
         request = api_get_klines(
             symbol=self.symbol,
-            interval=self.interval,
+            interval=self.max_interval,
             startTime=start_time,
             endTime=end_time,
             limit=max_limit,
@@ -202,7 +212,7 @@ class KlineAPI:
             The updated Kline data as a DataFrame.
         """
         data_path = pathlib.Path("model", "data")
-        data_name = f"{self.symbol}_{self.interval}_{self.api}.parquet"
+        data_name = f"{self.symbol}_{self.max_interval}_{self.api}.parquet"
         dataframe_path = data_path.joinpath(data_name)
         data_frame = pd.read_parquet(dataframe_path)
         last_time = data_frame["open_time_ms"][-1]
@@ -221,9 +231,11 @@ class KlineAPI:
         pd.DataFrame
             The Kline data as a DataFrame.
         """
-        klines_df = KlineUtils(self.klines).klines_df()
-        self.klines = klines_df.copy()
-        return self.klines
+        klines_df = KlineUtils(self.klines_list).klines_df
+
+        if self.custom_interval:
+            klines_df.resample_ohlc(self.interval).ohlc()
+        return klines_df
 
     def to_OHLC_DataFrame(self):
         """
@@ -239,5 +251,6 @@ class KlineAPI:
         open_time_column = klines_df.columns[-1]
         klines_df = klines_df[ohlc_columns + [open_time_column]]
 
-        self.klines = klines_df.copy()
-        return self.klines
+        if self.custom_interval:
+            klines_df = klines_df.resample_ohlc(self.interval).ohlc()
+        return klines_df
