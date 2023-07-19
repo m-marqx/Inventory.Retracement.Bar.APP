@@ -30,7 +30,7 @@ class KlineAPI:
         self.api = api.lower()
 
         self.client = Client()
-        self.klines = None
+        self.klines_list = None
         self.futures_options = ["coin_margined" or "mark_price"]
         self.all_options = ["spot"] + self.futures_options
 
@@ -199,7 +199,7 @@ class KlineAPI:
             print("\nQty  : " + str(len(klines_list)))
 
         print(time.perf_counter() - START)
-        self.klines = klines_list
+        self.klines_list = klines_list
         return self
 
     def update_data(self):
@@ -219,8 +219,8 @@ class KlineAPI:
         new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
         old_dataframe = data_frame.iloc[:-1, :]
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
-        self.klines = refresh_dataframe.copy()
-        return self.klines
+        self.klines_list = refresh_dataframe.copy()
+        return self.klines_list
 
     def to_DataFrame(self):
         """
@@ -246,7 +246,7 @@ class KlineAPI:
         pd.DataFrame
             The Kline data as an OHLC DataFrame.
         """
-        klines_df = KlineUtils(self.klines).klines_df()
+        klines_df = KlineUtils(self.klines_list).klines_df()
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]
         klines_df = klines_df[ohlc_columns + [open_time_column]]
