@@ -221,6 +221,18 @@ class KlineAPI:
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
         return refresh_dataframe
 
+    def update_klines(self, dataframe):
+
+        last_time = (
+            (dataframe.index[-1] - pd.Timestamp("1970-01-01"))
+            // pd.Timedelta('1ms')
+        )
+
+        new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
+        old_dataframe = dataframe.iloc[:-1, :]
+        refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
+        return refresh_dataframe
+
     def to_DataFrame(self):
         """
         Convert the Kline data to a DataFrame.
