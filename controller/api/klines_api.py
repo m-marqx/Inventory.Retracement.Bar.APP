@@ -7,7 +7,68 @@ from .utils import KlineUtils, KlineTimes
 
 
 class KlineAPI:
+    """
+    A class for retrieving and managing Kline data from an API.
 
+    Parameters:
+    -----------
+    symbol : str
+        The symbol for which to retrieve Kline data.
+    interval : str
+        The time interval for the Kline data
+        (e.g., '1m', '5m', '1h', etc.).
+    api : str, optional
+        The API type to use for retrieving the data.
+        Valid options are 'coin_margined', 'mark_price',
+        or 'spot'.
+        (default: 'coin_margined')
+
+    Attributes:
+    -----------
+    symbol : str
+        The symbol for which the Kline data is retrieved.
+    interval : str
+        The time interval of the Kline data.
+    api : str
+        The API type used for retrieving the data.
+    client : Client
+        The API client object.
+    klines_list : list
+        The list of Kline data.
+    futures_options : list
+        The list of API options for futures data.
+    all_options : list
+        The list of all API options.
+    max_interval : int
+        The maximum interval in milliseconds.
+    utils : KlineTimes
+        The KlineTimes object for utility functions.
+    is_futures : bool
+        Flag indicating if the API is for futures data.
+    custom_interval : bool
+        Flag indicating if the interval is custom.
+
+    Methods:
+    --------
+    get_exchange_symbol_info()
+        Get the exchange symbol information for the specified symbol.
+    get_ticker_info()
+        Get the ticker information for the specified symbol.
+    get_tick_size()
+        Get the tick size for the specified symbol.
+    request_klines(start_time, end_time)
+        Request Kline data for the specified time range.
+    get_Klines(start_time)
+        Get Kline data for the specified start time.
+    update_data()
+        Update the Kline data.
+    update_klines(dataframe)
+        Update the Kline data by appending new data to the existing DataFrame.
+    to_DataFrame()
+        Convert the Kline data to a DataFrame.
+    to_OHLC_DataFrame()
+        Convert the Kline data to an OHLC DataFrame.
+    """
     def __init__(self, symbol, interval, api="coin_margined"):
         """
         Initialize the KlineAPI object.
