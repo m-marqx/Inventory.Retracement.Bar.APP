@@ -35,6 +35,7 @@ class KlineUtils:
         """
         self.klines_list = klines_list
 
+    @property
     def klines_df(self) -> pd.DataFrame:
         """
         Convert the Kline data to a DataFrame.

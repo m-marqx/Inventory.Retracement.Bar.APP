@@ -245,7 +245,7 @@ class KlineAPI:
         pd.DataFrame
             The Kline data as an OHLC DataFrame.
         """
-        klines_df = KlineUtils(self.klines_list).klines_df()
+        klines_df = KlineUtils(self.klines_list).klines_df
         ohlc_columns = klines_df.columns[0:4].to_list()
         open_time_column = klines_df.columns[-1]
         klines_df = klines_df[ohlc_columns + [open_time_column]]
