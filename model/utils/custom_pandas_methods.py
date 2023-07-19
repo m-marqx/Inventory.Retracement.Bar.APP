@@ -133,7 +133,7 @@ class ResampleOHLC(pd.DataFrame):
         )
 
         if ohlc:
-            resampled = self.resample(self.period).agg({
+            resampled = self.resample(self.period, origin="start").agg({
                 'open': 'first',
                 'high': 'max',
                 'low': 'min',
@@ -164,7 +164,7 @@ class ResampleOHLC(pd.DataFrame):
         )
 
         if OHLC:
-            resampled = self.resample(self.period).agg({
+            resampled = self.resample(self.period, origin="start").agg({
                 'Open': 'first',
                 'High': 'max',
                 'Low': 'min',
