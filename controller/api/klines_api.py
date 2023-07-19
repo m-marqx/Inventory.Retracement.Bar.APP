@@ -219,8 +219,7 @@ class KlineAPI:
         new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
         old_dataframe = data_frame.iloc[:-1, :]
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
-        self.klines_list = refresh_dataframe.copy()
-        return self.klines_list
+        return refresh_dataframe
 
     def to_DataFrame(self):
         """
