@@ -48,7 +48,7 @@ class RunBacktest:
         Input("backtest_run_button", "n_clicks"),
         State("api_types", "value"),
         State("symbol", "value"),
-        State("interval", "label"),
+        State("interval", "value"),
         # Custom Data
         State("custom_get_data-data", "contents"),
         State("custom_get_data-data", "filename"),

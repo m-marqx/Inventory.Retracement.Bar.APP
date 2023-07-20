@@ -39,7 +39,7 @@ class RunStrategy:
         Input("run_button", "n_clicks"),
         State("api_types", "value"),
         State("symbol", "value"),
-        State("interval", "label"),
+        State("interval", "value"),
         State("custom_get_data-data", "contents"),
         State("custom_get_data-data", "filename"),
         State("ema_source_column", "label"),
