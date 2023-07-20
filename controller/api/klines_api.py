@@ -303,12 +303,19 @@ class KlineAPI:
         ).klines_df[['open', 'high', 'low', 'close', 'open_time_ms']]
 
         old_dataframe = dataframe.iloc[:-1, :]
-        refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
+        updated_dataframe = pd.concat([old_dataframe, new_dataframe])
 
         if self.custom_interval:
-            refresh_dataframe = refresh_dataframe.resample_ohlc(self.interval).ohlc()
 
-        return refresh_dataframe
+            resampled_dataframe = (
+                updated_dataframe
+                .resample_ohlc(self.interval)
+                .ohlc()
+            )
+
+            return updated_dataframe, resampled_dataframe
+
+        return updated_dataframe, None
 
     def to_DataFrame(self):
         """
