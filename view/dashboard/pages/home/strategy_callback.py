@@ -4,11 +4,9 @@ import pandas as pd
 import dash
 from dash import Input, Output, State, callback
 
+from controller.api import KlineAPI, KlineTimes
+
 from model.utils import interval_to_milliseconds
-
-
-from controller.api.klines_api import KlineAPI
-
 from model.utils import Statistics
 from model.utils.utils import SaveDataFrame
 from model.strategy.params import (
@@ -21,6 +19,7 @@ from model.strategy.params import (
     ResultParams,
 )
 
+from view.dashboard.pages.general.utils import content_parser, table_component
 from view.dashboard.graph import GraphLayout
 from view.dashboard.utils import (
     BuilderParams,
@@ -28,7 +27,6 @@ from view.dashboard.utils import (
     builder,
 )
 
-from view.dashboard.pages.general.utils import content_parser, table_component
 
 
 class RunStrategy:
@@ -40,6 +38,7 @@ class RunStrategy:
         State("api_types", "value"),
         State("symbol", "value"),
         State("interval", "value"),
+        State("custom-interval", "value"),
         State("custom_get_data-data", "contents"),
         State("custom_get_data-data", "filename"),
         State("ema_source_column", "label"),
@@ -74,6 +73,7 @@ class RunStrategy:
         api_type,
         symbol,
         interval,
+        custom_interval,
         contents,
         filename,
         ema_source_column,
@@ -108,7 +108,16 @@ class RunStrategy:
             raise dash.exceptions.PreventUpdate
 
         if "run_button" in ctx.triggered[0]["prop_id"]:
-            symbol = symbol.upper()  # Avoid errors when the symbol is in lowercase
+
+            # Avoid errors when the symbol is in lowercase
+            symbol = symbol.upper()
+
+            if interval == "Custom"  and api_type != "custom":
+                interval = custom_interval
+                data_interval = KlineTimes(symbol, interval).get_max_interval
+            else:
+                data_interval = interval
+
 
             if result_percentage is None or result_percentage == []:
                 result_percentage = False
@@ -124,24 +133,36 @@ class RunStrategy:
                 data_symbol = symbol
 
             data_path = pathlib.Path("model", "data")
-            data_name = f"{data_symbol}_{interval}_{api_type}"
+            data_name = f"{data_symbol}_{data_interval}_{api_type}"
             data_file = f"{data_name}.parquet"
             dataframe_path = data_path.joinpath(data_file)
 
             if dataframe_path.is_file() and api_type != "custom":
                 data_frame = pd.read_parquet(dataframe_path)
                 kline_api = KlineAPI(data_symbol, interval, api_type)
-                data_frame = kline_api.update_data()
+                data_frames = kline_api.update_data()
+                updated_dataframe = data_frames[0]
+
+                if kline_api.custom_interval:
+                    data_frame = data_frames[1]
+                else:
+                    data_frame = updated_dataframe
+
+                data_frame = data_frame.drop_duplicates()
+                SaveDataFrame(updated_dataframe).to_parquet(f"{data_name}")
 
             else:
                 if api_type == "custom":
                     data_frame = content_parser(contents, filename)
+                    if data_frame:
+                        data_frame = data_frame.drop_duplicates()
                 else:
-                    data_frame = get_data(data_symbol, interval, api_type)
+                    data_frame = (
+                        get_data(data_symbol, data_interval, api_type)
+                        .drop_duplicates()
+                    )
 
-            data_frame.drop_duplicates(inplace=True)
-            if api_type != "custom":
-                SaveDataFrame(data_frame).to_parquet(f"{data_name}")
+                    SaveDataFrame(data_frame).to_parquet(f"{data_name}")
 
             ema_bool = False
             macd_bool = False
