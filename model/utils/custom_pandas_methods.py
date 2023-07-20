@@ -112,7 +112,7 @@ class ResampleOHLC(pd.DataFrame):
         super().__init__(*args, **kwargs)
         self.period = period
 
-    def ohlc(self):
+    def ohlc(self, drop_na=True):
         """
         Resamples the data and returns the OHLC values.
 
@@ -139,10 +139,12 @@ class ResampleOHLC(pd.DataFrame):
                 'low': 'min',
                 'close': 'last'
             })
-            return resampled.dropna()
+            if drop_na:
+                return resampled.dropna()
+            return resampled
         raise ValueError("No OHLC columns found")
 
-    def OHLC(self):
+    def OHLC(self, drop_na=True):
         """
         Resamples the data and returns the OHLC values
         (alternative column names).
@@ -170,7 +172,9 @@ class ResampleOHLC(pd.DataFrame):
                 'Low': 'min',
                 'Close': 'last'
             })
-            return resampled.dropna()
+            if drop_na:
+                return resampled.dropna()
+            return resampled
         raise ValueError("No OHLC columns found")
 
 def resample_ohlc_wrapper(self, period):
