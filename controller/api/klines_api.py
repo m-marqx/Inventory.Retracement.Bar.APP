@@ -276,11 +276,7 @@ class KlineAPI:
         data_name = f"{self.symbol}_{self.max_interval}_{self.api}.parquet"
         dataframe_path = data_path.joinpath(data_name)
         data_frame = pd.read_parquet(dataframe_path)
-        last_time = data_frame["open_time_ms"][-1]
-        new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
-        old_dataframe = data_frame.iloc[:-1, :]
-        refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
-        return refresh_dataframe
+        return self.update_klines(data_frame)
 
     def update_klines(self, dataframe):
         """
@@ -302,9 +298,16 @@ class KlineAPI:
             // pd.Timedelta('1ms')
         )
 
-        new_dataframe = self.get_Klines(last_time).to_OHLC_DataFrame()
+        new_dataframe = KlineUtils(
+            self.get_Klines(last_time).klines_list
+        ).klines_df[['open', 'high', 'low', 'close', 'open_time_ms']]
+
         old_dataframe = dataframe.iloc[:-1, :]
         refresh_dataframe = pd.concat([old_dataframe, new_dataframe])
+
+        if self.custom_interval:
+            refresh_dataframe = refresh_dataframe.resample_ohlc(self.interval).ohlc()
+
         return refresh_dataframe
 
     def to_DataFrame(self):
