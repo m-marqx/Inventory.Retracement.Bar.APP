@@ -127,21 +127,24 @@ class ResampleOHLC(pd.DataFrame):
             If no OHLC columns are found in the data.
 
         """
+        ohlc_columns = ["open", "high", "low", "close"]
+
         ohlc = all(
             column in self.columns
-            for column in ["open", "high", "low", "close"]
+            for column in ohlc_columns
         )
 
         if ohlc:
-            resampled = self.resample(self.period, origin="start").agg({
-                'open': 'first',
-                'high': 'max',
-                'low': 'min',
-                'close': 'last'
-            })
+            self[ohlc_columns] = self.resample(
+                self.period, origin="start").agg({
+                    'open': 'first',
+                    'high': 'max',
+                    'low': 'min',
+                    'close': 'last',
+                })
             if drop_na:
-                return resampled.dropna()
-            return resampled
+                return self.dropna()
+            return self
         raise ValueError("No OHLC columns found")
 
     def OHLC(self, drop_na=True):
@@ -160,21 +163,24 @@ class ResampleOHLC(pd.DataFrame):
             If no OHLC columns are found in the data.
 
         """
+        OHLC_columns = ["Open", "High", "Low", "Close"]
+
         OHLC = all(
             column in self.columns
-            for column in ["Open", "High", "Low", "Close"]
+            for column in OHLC_columns
         )
 
         if OHLC:
-            resampled = self.resample(self.period, origin="start").agg({
-                'Open': 'first',
-                'High': 'max',
-                'Low': 'min',
-                'Close': 'last'
-            })
+            self[OHLC_columns] = self.resample(
+                self.period, origin="start").agg({
+                    'Open': 'first',
+                    'High': 'max',
+                    'Low': 'min',
+                    'Close': 'last'
+                })
             if drop_na:
-                return resampled.dropna()
-            return resampled
+                return self.dropna()
+            return self
         raise ValueError("No OHLC columns found")
 
 def resample_ohlc_wrapper(self, period):
@@ -192,6 +198,6 @@ def resample_ohlc_wrapper(self, period):
         The ResampleOHLC object.
 
     """
-    return ResampleOHLC(period, data=self)
+    return ResampleOHLC(period, data=self.copy())
 
 pd.DataFrame.resample_ohlc = resample_ohlc_wrapper
