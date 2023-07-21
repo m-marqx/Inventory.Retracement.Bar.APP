@@ -345,7 +345,6 @@ class CalculateIrbSignals(BaseStrategy):
         self.df_filtered["Take_Profit"] = self.take_profit_arr
         self.df_filtered["Stop_Loss"] = self.stop_loss_arr
         self.df_filtered["Close_Position"] = self.close_position_arr
-        self.df_filtered["Signal_Condition"] = self.signal_condition
 
         return self.df_filtered
 
