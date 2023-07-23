@@ -210,7 +210,8 @@ def corr_interactive_plot(
 
     heatmap.update_layout(
         title=f"Feature-correlation ({method})",
-        title_font={"size":18},
+        title_font={"size":24},
+        title_x=0.5,
         autosize=True,
         width=figsize[0] * dpi,
         height=(figsize[1] + 1) * dpi,
