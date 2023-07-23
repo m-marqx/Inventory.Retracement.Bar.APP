@@ -20,47 +20,47 @@ def corr_plot_interactive(
     annot: bool = True,
     **kwargs,
 ) -> go.Figure:
-    """Two-dimensional visualization of the correlation between feature-columns \
+    """Two-dimensional visualization of the correlation between feature-columns
         using Plotly's Heatmap.
 
-    This function generates a heatmap representation of the correlation between \
-    feature-columns in the provided 2D dataset. It uses the Plotly library to create \
+    This function generates a heatmap representation of the correlation between
+    feature-columns in the provided 2D dataset. It uses the Plotly library to create
     interactive and visually appealing visualizations.
 
     Parameters
     ----------
     data : pd.DataFrame
-        2D dataset that can be coerced into a Pandas DataFrame. If a Pandas DataFrame \
+        2D dataset that can be coerced into a Pandas DataFrame. If a Pandas DataFrame
         is provided, the index/column information is used to label the plots.
     split : Optional[str], optional
-        Type of split to be performed {None, "pos", "neg", "high", "low"}, by default \
+        Type of split to be performed {None, "pos", "neg", "high", "low"}, by default
         None
             * None: visualize all correlations between the feature-columns.
-            * pos: visualize all positive correlations between the feature-columns \
+            * pos: visualize all positive correlations between the feature-columns
                 above the threshold.
-            * neg: visualize all negative correlations between the feature-columns \
+            * neg: visualize all negative correlations between the feature-columns
                 below the threshold.
-            * high: visualize all correlations between the feature-columns for \
+            * high: visualize all correlations between the feature-columns for
                 which abs(corr) > threshold is True.
-            * low: visualize all correlations between the feature-columns for which \
+            * low: visualize all correlations between the feature-columns for which
                 abs(corr) < threshold is True.
     threshold : float, optional
         Value between 0 and 1 to set the correlation threshold, by default 0.
         If split is set to "high" or "low", the default threshold is 0.3.
     target : Optional[pd.Series | str], optional
-        Specify the target for correlation. For example, a label column to generate \
+        Specify the target for correlation. For example, a label column to generate
         only the correlations between each feature and the label, by default None.
     method : Literal['pearson', 'spearman', 'kendall'], optional
         Method used for correlation computation, by default "pearson".
-            * "pearson": measures linear relationships and requires normally \
+            * "pearson": measures linear relationships and requires normally
                 distributed and homoscedastic data.
-            * "spearman": ranked/ordinal correlation, measures monotonic \
+            * "spearman": ranked/ordinal correlation, measures monotonic
                 relationships.
-            * "kendall": ranked/ordinal correlation, measures monotonic \
-                relationships. Computationally more expensive but more robust in \
+            * "kendall": ranked/ordinal correlation, measures monotonic
+                relationships. Computationally more expensive but more robust in
                 smaller datasets than "spearman".
     cmap : str, optional
-        The mapping from data values to the color space, matplotlib colormap name or \
+        The mapping from data values to the color space, matplotlib colormap name or
         object, or list of colors, by default "BrBG".
     figsize : tuple[float, float], optional
         Used to control the figure size, by default (12, 10).
@@ -82,7 +82,7 @@ def corr_plot_interactive(
     Returns
     -------
     heatmap : plotly.graph_objs._figure.Figure
-        A Plotly Figure object representing the heatmap visualization of feature \
+        A Plotly Figure object representing the heatmap visualization of feature
         correlations.
     """
     # Validate Inputs
@@ -106,10 +106,12 @@ def corr_plot_interactive(
         mask = np.triu(np.ones_like(corr, dtype=bool))
         np.fill_diagonal(corr.to_numpy(), np.nan)
         corr = corr.where(mask == 1)
+    else:
+        corr = corr.iloc[::-1,:]
 
     vmax = np.round(np.nanmax(corr) - 0.05, 2)
     vmin = np.round(np.nanmin(corr) + 0.05, 2)
-    vtext = corr.round(2).fillna("").values
+    vtext = corr.round(2).fillna("")
 
     # Specify kwargs for the heatmap
     kwargs = {
@@ -120,8 +122,8 @@ def corr_plot_interactive(
         "texttemplate": "%{text}",
         "textfont": {"size": 12},
         "x": corr.columns,
-        "y": corr.columns,
-        "z": corr.values,
+        "y": corr.index,
+        "z": corr,
         **kwargs,
     }
 
