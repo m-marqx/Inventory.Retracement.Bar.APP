@@ -9,7 +9,7 @@ from klib.utils import _validate_input_bool, _validate_input_range
 
 from screeninfo import get_monitors
 
-def corr_plot_interactive(
+def corr_interactive_plot(
     data: pd.DataFrame,
     split: Optional[Literal["pos", "neg", "high", "low"]] = None,
     threshold: float = 0,
