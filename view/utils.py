@@ -1,4 +1,3 @@
-from typing import Optional
 from typing_extensions import Literal
 
 import pandas as pd
@@ -11,9 +10,9 @@ from screeninfo import get_monitors
 
 def corr_interactive_plot(
     data: pd.DataFrame,
-    split: Optional[Literal["pos", "neg", "high", "low"]] = None,
+        split: Literal["pos", "neg", "high", "low"] | None = None,
     threshold: float = 0,
-    target: Optional[pd.Series | str] = None,
+    target: pd.Series | str | None = None,
     method: Literal["pearson", "spearman", "kendall"] = "pearson",
     cmap: str = "BrBG",
     figsize: tuple[float, float] = (12, 10),
