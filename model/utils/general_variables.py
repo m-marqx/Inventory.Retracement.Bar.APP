@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import model.utils.custom_pandas_methods
 
 class ExternalVariables:
     """
@@ -173,13 +173,13 @@ class ExternalVariables:
             labels=False,
         )
 
-        self.dataframe.drop(
-            ["mass", "tangent", "momentum"],
-            axis=1,
-            inplace=True,
+        self.dataframe["tangent"] = pd.qcut(
+            self.dataframe["tangent"],
+            periods,
+            labels=False,
         )
 
         self.dataframe = self.dataframe.reorder_columns(
-            self.feat_last_column, self.dataframe.columns[-8:]
+            self.feat_last_column, self.dataframe.columns[-11:]
         )
         return self.dataframe
