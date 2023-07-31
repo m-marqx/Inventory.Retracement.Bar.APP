@@ -18,3 +18,11 @@ class TreeParams(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
+
+class TrainTestSplits(BaseModel):
+    x_train: np.ndarray | pd.Series | pd.DataFrame | None = None
+    x_test: np.ndarray | pd.Series | pd.DataFrame | None = None
+    y_train: np.ndarray | pd.Series | pd.DataFrame | None = None
+    y_test: np.ndarray | pd.Series | pd.DataFrame | None = None
+    class Config:
+        arbitrary_types_allowed = True
