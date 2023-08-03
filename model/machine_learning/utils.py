@@ -108,3 +108,42 @@ class DataPreprocessor:
             )
 
         return data_frame
+
+    def get_splits(
+        self,
+        target: list | str,
+    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        """
+        Split the DataFrame into training and testing sets.
+
+        Parameters:
+        -----------
+        target : list or str
+            The target column name(s) to use for generating the training
+            and testing sets.
+
+        Returns
+        -------
+        tuple of pd.DataFrame
+            The tuple containing training data, training target,
+            testing data, and testing target.
+        """
+        end_train_index = int(self.dataframe.shape[0] / 2)
+
+        x_train = self.dataframe.iloc[:end_train_index]
+        y_train = pd.DataFrame()
+        x_test = self.dataframe.iloc[end_train_index:]
+        y_test = pd.DataFrame()
+
+        df_train = x_train.loc[:, self.features]
+        df_test = x_test.loc[:, self.features]
+
+        for value in enumerate(target):
+            y_train[f"target_{value[0]}"] = x_train[value[1]]
+            print(y_train.shape)
+
+        for value in enumerate(target):
+            y_test[f"target_{value[0]}"] = x_test[value[1]]
+            print(y_test.shape)
+
+        return df_train, y_train, df_test, y_test
