@@ -147,3 +147,39 @@ class DataPreprocessor:
             print(y_test.shape)
 
         return df_train, y_train, df_test, y_test
+
+    def tree_view(
+        self,
+        target: pd.Series,
+        fitted_tree: RandomForestClassifier,
+    ) -> None:
+        """
+        Visualize the decision tree using Graphviz.
+
+        Parameters:
+        -----------
+        target : pd.Series
+            The target column to be used in the decision tree
+            visualization.
+        fitted_tree : RandomForestClassifier
+            The fitted RandomForestClassifier model containing
+            the decision tree.
+
+        Returns
+        -------
+        None
+            The tree visualization is displayed and saved as a PNG
+            image.
+        """
+        tree = fitted_tree.estimators_[0]
+        dot_data = export_graphviz(
+            tree,
+            out_file=None,
+            feature_names=self.features,
+            class_names=target.astype("str"),
+            filled=True,
+            rounded=True,
+            special_characters=True,
+        )
+
+        graphviz.Source(dot_data, format="png").view()
