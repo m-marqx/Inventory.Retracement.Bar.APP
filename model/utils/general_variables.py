@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import model.utils.custom_pandas_methods
 
+
 class ExternalVariables:
     """
     A class for calculating physics variables based on external data.
@@ -28,7 +29,12 @@ class ExternalVariables:
 
     """
 
-    def __init__(self, dataframe: pd.DataFrame, return_column: str = "Result", feat_last_column: str = "Signal"):
+    def __init__(
+        self,
+        dataframe: pd.DataFrame,
+        return_column: str = "Result",
+        feat_last_column: str = "Signal",
+    ) -> None:
         """
         Initialize the ExternalVariables class.
 
@@ -45,7 +51,7 @@ class ExternalVariables:
         self.return_column = return_column
         self.feat_last_column = feat_last_column
 
-    def physics_variables(self, periods: int):
+    def physics_variables(self, periods: int) -> pd.DataFrame:
         """
         Calculates various physics variables based on the input data.
 
