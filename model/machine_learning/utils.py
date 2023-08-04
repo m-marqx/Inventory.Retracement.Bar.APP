@@ -249,3 +249,42 @@ class RandomForestSearcher:
             results_dict[target_parallel].extend(results)
 
         return results_dict
+
+    def run_grid_search(
+        self,
+        n_jobs = -1,
+        verbose = 1,
+    ) -> pd.DataFrame:
+
+        param_grid = {
+            "n_estimators": self.tree_params["n_estimators"],
+            "max_depth": self.tree_params["max_depths"],
+            "min_samples_leafs": self.tree_params["min_samples_leafs"],
+            "min_samples_splits": self.tree_params["min_samples_splits"],
+        }
+
+        grid = ParameterGrid(param_grid)
+
+        results = Parallel(n_jobs, verbose=verbose)(
+            delayed(self.analyze_result)(params)
+            for params in grid
+        )
+
+        parameters_columns = [
+            "target",
+            "n_estimators",
+            "max_depths",
+            "min_samples_leafs",
+            "min_samples_splits",
+            "acc_train",
+            "acc_test",
+            "y_pred",
+        ]
+
+        parameters_df = pd.DataFrame(results).melt()[["value"]].explode("value")
+
+        results_df = pd.DataFrame()
+        for column in enumerate(parameters_columns):
+            results_df[column[1]] = parameters_df.iloc[column[0]::8]
+
+        return results_df
