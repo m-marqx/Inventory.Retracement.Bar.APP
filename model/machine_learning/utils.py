@@ -1,8 +1,13 @@
 import numpy as np
 import pandas as pd
+from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
+from sklearn.model_selection import ParameterGrid
+from joblib import Parallel, delayed
 import graphviz
+
+from tree_params import TreeParams, TrainTestSplits
 
 class DataPreprocessor:
     """
@@ -183,3 +188,12 @@ class DataPreprocessor:
         )
 
         graphviz.Source(dot_data, format="png").view()
+
+class RandomForestSearcher:
+    def __init__(
+        self,
+        tree_params: TreeParams,
+        splits:TrainTestSplits,
+    ) -> None:
+        self.tree_params = dict(tree_params)
+        self.splits = dict(splits)
