@@ -190,11 +190,54 @@ class DataPreprocessor:
         graphviz.Source(dot_data, format="png").view()
 
 class RandomForestSearcher:
+    """
+    Class for performing grid search using RandomForestClassifier.
+
+    Parameters:
+    -----------
+    tree_params : TreeParams
+        An object containing tree-related hyperparameters
+        for RandomForestClassifier.
+    splits : TrainTestSplits
+        An object containing training and testing data splits.
+
+    Attributes:
+    -----------
+    tree_params : dict
+        Dictionary containing tree-related hyperparameters.
+    splits : dict
+        Dictionary containing training and testing data splits.
+
+    Methods:
+    --------
+    analyze_result(params: dict | TrainTestSplits) -> list
+        Fit and evaluate RandomForestClassifier with specified
+        hyperparameters.
+
+    run_grid_search(n_jobs=-1, verbose=1) -> pd.DataFrame
+        Perform grid search and return results in a DataFrame.
+    """
+
     def __init__(
         self,
         tree_params: TreeParams,
-        splits:TrainTestSplits,
+        splits: TrainTestSplits,
     ) -> None:
+        """
+        Initialize the RandomForestSearcher object.
+
+        Parameters:
+        -----------
+        tree_params : TreeParams
+            An object containing tree-related hyperparameters for
+            RandomForestClassifier.
+        splits : TrainTestSplits
+            An object containing training and testing data splits.
+
+        Returns:
+        --------
+        None
+        """
         self.tree_params = dict(tree_params)
         self.splits = dict(splits)
 
@@ -202,6 +245,21 @@ class RandomForestSearcher:
         self,
         params: dict | TrainTestSplits,
     ) -> list:
+        """
+        Fit and evaluate RandomForestClassifier with specified
+        hyperparameters.
+
+        Parameters:
+        -----------
+        params : dict or TrainTestSplits
+            Dictionary containing hyperparameters for
+            RandomForestClassifier.
+
+        Returns:
+        --------
+        list
+            A list of evaluation results for each target column.
+        """
         params = dict(params)
 
         random_forest = RandomForestClassifier(
@@ -209,7 +267,6 @@ class RandomForestSearcher:
             max_depth=params["max_depth"],
             min_samples_leaf=params["min_samples_leafs"],
             min_samples_split=params["min_samples_splits"],
-
             criterion=self.tree_params["criterion"],
             max_features=self.tree_params["max_features"],
             n_jobs=1,
@@ -227,7 +284,6 @@ class RandomForestSearcher:
             )
 
             train_pred_parallel = random_forest.predict(self.splits["x_train"])
-
             acc_train_parallel = metrics.accuracy_score(
                 self.splits["y_train"][target_parallel], train_pred_parallel
             )
@@ -252,10 +308,24 @@ class RandomForestSearcher:
 
     def run_grid_search(
         self,
-        n_jobs = -1,
-        verbose = 1,
+        n_jobs=-1,
+        verbose=1,
     ) -> pd.DataFrame:
+        """
+        Perform grid search and return results in a DataFrame.
 
+        Parameters:
+        -----------
+        n_jobs : int, optional
+            Number of parallel jobs to run, by default -1.
+        verbose : int, optional
+            Verbosity level, by default 1.
+
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame containing the grid search results.
+        """
         param_grid = {
             "n_estimators": self.tree_params["n_estimators"],
             "max_depth": self.tree_params["max_depths"],
