@@ -197,3 +197,55 @@ class RandomForestSearcher:
     ) -> None:
         self.tree_params = dict(tree_params)
         self.splits = dict(splits)
+
+    def analyze_result(
+        self,
+        params: dict | TrainTestSplits,
+    ) -> list:
+        params = dict(params)
+
+        random_forest = RandomForestClassifier(
+            n_estimators=params["n_estimators"],
+            max_depth=params["max_depth"],
+            min_samples_leaf=params["min_samples_leafs"],
+            min_samples_split=params["min_samples_splits"],
+
+            criterion=self.tree_params["criterion"],
+            max_features=self.tree_params["max_features"],
+            n_jobs=1,
+            bootstrap=self.tree_params["bootstrap"],
+            oob_score=self.tree_params["oob_score"],
+            random_state=self.tree_params["random_state"],
+        )
+
+        target_columns = self.splits["y_train"].columns
+        results_dict = {column: [] for column in target_columns}
+
+        for target_parallel in target_columns:
+            random_forest.fit(
+                self.splits["x_train"], self.splits["y_train"][target_parallel]
+            )
+
+            train_pred_parallel = random_forest.predict(self.splits["x_train"])
+
+            acc_train_parallel = metrics.accuracy_score(
+                self.splits["y_train"][target_parallel], train_pred_parallel
+            )
+
+            y_pred_parallel = random_forest.predict(self.splits["x_test"])
+            acc_test_parallel = metrics.accuracy_score(
+                self.splits["y_test"][target_parallel], y_pred_parallel
+            )
+            results = [
+                target_parallel,
+                params["n_estimators"],
+                params["max_depth"],
+                params["min_samples_leafs"],
+                params["min_samples_splits"],
+                acc_train_parallel,
+                acc_test_parallel,
+                y_pred_parallel.tolist(),
+            ]
+            results_dict[target_parallel].extend(results)
+
+        return results_dict
