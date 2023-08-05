@@ -366,3 +366,43 @@ class RandomForestSearcher:
             results_df[column[1]] = parameters_df.iloc[column[0]::8]
 
         return results_df
+
+
+class DataHandler:
+    """
+    Class for handling data preprocessing tasks.
+
+    Parameters:
+    -----------
+    dataframe : pd.DataFrame or pd.Series
+        The input DataFrame or Series to be processed.
+
+    Attributes:
+    -----------
+    data_frame : pd.DataFrame
+        The processed DataFrame.
+
+    Methods:
+    --------
+    drop_zero_predictions(column: str) -> pd.Series
+        Drop rows where the specified column has all zero values.
+
+    get_splits(target: list | str, features: str | list[str]) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
+        Split the DataFrame into training and testing sets.
+
+    """
+
+    def __init__(self, dataframe: pd.DataFrame | pd.Series) -> None:
+        """
+        Initialize the DataHandler object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame or pd.Series
+            The input DataFrame or Series to be processed.
+
+        Returns:
+        --------
+        None
+        """
+        self.data_frame = dataframe.copy()
