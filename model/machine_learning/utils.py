@@ -103,13 +103,21 @@ class DataPreprocessor:
 
         data_frame["return"] = data_frame[column].pct_change(periods)
         data_frame["target"] = data_frame["return"].shift(-periods)
+        data_frame["target_bin"] = np.where(data_frame["target"] > 0, 1, -1)
 
         for value in enumerate(cutoff):
             cutoff_value = data_frame["target"].std() * value[1]
-            data_frame[f"Target_Bin{value[0]}"] = np.where(
+            cutoff_range = np.logical_or(
                 data_frame["target"] > cutoff_value,
-                1,
-                np.where(data_frame["target"] < -cutoff_value, -1, 0),
+                data_frame["target"] < -cutoff_value,
+            )
+
+            data_frame[f"Target_Bin{value[0]}"] = data_frame["target_bin"]
+
+            data_frame[f"Target_Bin{value[0]}"] = np.where(
+                cutoff_range,
+                data_frame[f"Target_Bin{value[0]}"],
+                0,
             )
 
         return data_frame
