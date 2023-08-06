@@ -348,8 +348,13 @@ class DataHandler:
     drop_zero_predictions(column: str) -> pd.Series
         Drop rows where the specified column has all zero values.
 
-    get_splits(target: list | str, features: str | list[str]) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
+    get_splits(target: list | str, features: str | list[str])
+    -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
         Split the DataFrame into training and testing sets.
+
+    get_best_results(target_column: str) -> pd.DataFrame
+        Get the rows in the DataFrame with the best accuracy for each
+        unique value in the target_column.
 
     """
 
@@ -440,3 +445,34 @@ class DataHandler:
             print(y_test.shape)
 
         return df_train, y_train, df_test, y_test
+
+    def get_best_results(
+        self,
+        target_column: str,
+    ) -> pd.DataFrame:
+        """
+        Get the rows in the DataFrame with the best accuracy for each
+        unique value in the target_column.
+
+        Parameters:
+        -----------
+        target_column : str
+            The column name in the DataFrame containing target values.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The rows with the best accuracy for each unique value in the
+            target_column.
+        """
+        max_acc_targets = [
+            (
+                self.data_frame
+                .query(f"{target_column} == @target")["acc_test"]
+                .astype("float64")
+                .idxmax(axis=0)
+            )
+            for target in self.data_frame[target_column].unique()
+        ]
+
+        return self.data_frame.loc[max_acc_targets]
