@@ -279,6 +279,8 @@ class RandomForestSearcher:
         self,
         n_jobs=-1,
         verbose=1,
+        drop_zeros=True,
+        best_results=False,
     ) -> pd.DataFrame:
         """
         Perform grid search and return results in a DataFrame.
@@ -325,6 +327,12 @@ class RandomForestSearcher:
         results_df = pd.DataFrame()
         for column in enumerate(parameters_columns):
             results_df[column[1]] = parameters_df.iloc[column[0]::8]
+
+        if drop_zeros:
+            results_df = DataHandler(results_df).drop_zero_predictions("y_pred")
+
+        if best_results:
+            results_df = DataHandler(results_df).get_best_results("target")
 
         return results_df
 
