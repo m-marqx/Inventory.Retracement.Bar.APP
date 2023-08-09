@@ -252,11 +252,11 @@ class KlineTimes:
             interval_range = self.default_intervals[1:5]
         elif self.interval[-1] == "h":
             interval_range = self.default_intervals[5:11]
-        elif self.interval[-1] == "1d":
+        elif self.interval[-1] == "d":
             interval_range = self.default_intervals[11:13]
-        elif self.interval[-1] == "1w":
+        elif self.interval[-1] == "w":
             interval_range = self.default_intervals[13:14]
-        elif self.interval[-1] == "1M":
+        elif self.interval[-1] == "M":
             interval_range = self.default_intervals[14:15]
         else:
             interval_range = [0]
