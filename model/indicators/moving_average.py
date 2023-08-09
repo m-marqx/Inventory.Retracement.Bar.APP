@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 
 class MovingAverage:
     """
@@ -106,3 +106,48 @@ class MovingAverage:
         )
         sema = emas_df["sema"]
         return sema.dropna(axis=0)
+
+    def rma(self, source: pd.Series, length: int) -> pd.Series:
+        """
+        Calculate the Relative Moving Average (RMA)
+        of the input time series data.
+
+        Parameters:
+        -----------
+        source : pandas.Series
+            The time series data to calculate the RMA for.
+        length : int
+            The number of periods to include in the RMA calculation.
+
+        Returns:
+        --------
+        pandas.Series
+            The calculated RMA time series data.
+        """
+        alpha = 1.0 / length
+        source_numpy = source.to_numpy(copy=True)
+        source_mean = source.rolling(length).mean()
+        previous_source = source.shift().to_numpy(copy=True)
+        rma = np.array([])
+
+        for source_value, previous_source_value in zip(
+            source_numpy[length:],
+            previous_source[length:]
+        ):
+
+            rma = np.append(
+                rma,
+                alpha * source_value + (1 - alpha) * previous_source_value
+            )
+
+        return pd.DataFrame(
+            {
+                "rma": pd.concat(
+                    [
+                        pd.Series(source_mean[:length].to_numpy()),
+                        pd.Series(rma)
+                    ],
+                    axis=0,
+                ).reset_index(drop=True)
+            }
+        ).set_index(source.index)["rma"]
