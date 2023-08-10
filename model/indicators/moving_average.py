@@ -134,5 +134,4 @@ class MovingAverage:
             pd.concat([sma, rest])
             .ewm(alpha=1 / length, adjust=False)
             .mean()
-        ).shift(-1)
-
+        )
