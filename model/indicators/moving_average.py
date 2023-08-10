@@ -123,31 +123,16 @@ class MovingAverage:
         --------
         pandas.Series
             The calculated RMA time series data.
+
+        Note:
+        -----
+            The first values are different from the TradingView RMA
         """
-        alpha = 1.0 / length
-        source_numpy = source.to_numpy(copy=True)
-        source_mean = source.rolling(length).mean()
-        previous_source = source.shift().to_numpy(copy=True)
-        rma = np.array([])
+        sma = source.rolling(window=length, min_periods=length).mean()[:length]
+        rest = source[length:]
+        return (
+            pd.concat([sma, rest])
+            .ewm(alpha=1 / length, adjust=False)
+            .mean()
+        ).shift(-1)
 
-        for source_value, previous_source_value in zip(
-            source_numpy[length:],
-            previous_source[length:]
-        ):
-
-            rma = np.append(
-                rma,
-                alpha * source_value + (1 - alpha) * previous_source_value
-            )
-
-        return pd.DataFrame(
-            {
-                "rma": pd.concat(
-                    [
-                        pd.Series(source_mean[:length].to_numpy()),
-                        pd.Series(rma)
-                    ],
-                    axis=0,
-                ).reset_index(drop=True)
-            }
-        ).set_index(source.index)["rma"]
