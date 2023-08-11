@@ -1,7 +1,8 @@
-import numpy as np
-import time
-import pandas as pd
 from math import ceil
+import time
+import numpy as np
+import pandas as pd
+
 from model.utils import interval_to_milliseconds
 
 class KlineUtils:
