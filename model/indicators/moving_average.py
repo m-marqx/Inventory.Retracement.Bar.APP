@@ -163,7 +163,7 @@ class MovingAverage:
         both pandas and python versions will yield the same precision
         in initial values.
         """
-        alpha = 1/length
+        alpha = 1 / length
         source_pd = self._pd_rma(source, length)[:length]
         source_values = source[length:].to_numpy().tolist()
 
@@ -189,7 +189,8 @@ class MovingAverage:
         method: Literal["numpy", "pandas"] = "numpy"
     ) -> np.ndarray | pd.Series:
         """
-        Calculate the Relative Moving Average (RMA) of the input time series data.
+        Calculate the Relative Moving Average (RMA) of the input time series
+        data.
 
         Parameters:
         -----------
