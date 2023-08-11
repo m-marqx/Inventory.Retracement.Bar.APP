@@ -137,3 +137,21 @@ class MovingAverage:
             .ewm(alpha=1 / length, **kwargs)
             .mean()
         )
+
+    def _np_rma(self, source: pd.Series, length: int) -> np.ndarray:
+        #the numpy version is the only version that have
+        # precision in first values in other indicators like RSI
+        # but when is the simply rma version pandas e numpy have same
+        # precision in first values
+        alpha = 1/length
+        source_np = self.rma(source, length)[:length]
+        source_values = source[length:].to_numpy()
+
+        rma = source_np.dropna().iloc[0]
+        np_array = np.array([rma])
+
+        for source_value in source_values:
+            rma = alpha * source_value + ((1 - alpha) * rma)
+            np_array = np.append(np_array, rma)
+        return np_array
+
