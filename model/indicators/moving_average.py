@@ -145,10 +145,14 @@ class MovingAverage:
             .mean()
         ).rename("RMA")
 
-    def _py_rma(self, source: pd.Series, length: int) -> pd.Series:
+    def _rma_python(
+        self,
+        source: pd.Series,
+        length: int
+    ) -> pd.Series:
         """
-        Calculate the Relative Moving Average (RMA) of the input time
-        series data using pure python.
+        Calculate the Relative Moving Average (RMA) of the input time series
+        data using pure python.
 
         Parameters:
         -----------
@@ -214,7 +218,7 @@ class MovingAverage:
         """
         match method:
             case "numpy":
-                return self._py_rma(source, length)
+                return self._rma_python(source, length)
             case "pandas":
                 return self._rma_pandas(source, length)
             case _:
