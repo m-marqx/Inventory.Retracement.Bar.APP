@@ -108,9 +108,15 @@ class MovingAverage:
         sema = emas_df["sema"]
         return sema.dropna(axis=0)
 
-    def _pd_rma(self, source: pd.Series, length: int, **kwargs) -> pd.Series:
+    def _rma_pandas(
+        self,
+        source: pd.Series,
+        length: int,
+        **kwargs
+    ) -> pd.Series:
         """
-        Calculate the Relative Moving Average (RMA) of the input time series data.
+        Calculate the Relative Moving Average (RMA) of the input time series
+        data.
 
         Parameters:
         -----------
@@ -164,7 +170,7 @@ class MovingAverage:
         in initial values.
         """
         alpha = 1 / length
-        source_pd = self._pd_rma(source, length)[:length]
+        source_pd = self._rma_pandas(source, length)[:length]
         source_values = source[length:].to_numpy().tolist()
 
         rma = float(source_pd.dropna().iloc[0])
@@ -210,6 +216,6 @@ class MovingAverage:
             case "numpy":
                 return self._py_rma(source, length)
             case "pandas":
-                return self._pd_rma(source, length)
+                return self._rma_pandas(source, length)
             case _:
                 raise TypeError("method must be 'numpy' or 'pandas'")
