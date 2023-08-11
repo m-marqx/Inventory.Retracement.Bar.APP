@@ -206,8 +206,10 @@ class MovingAverage:
         np.ndarray or pandas.Series
             The calculated RMA time series data.
         """
-        if method == "numpy":
-            return self._py_rma(source, length)
-        if method == "pandas":
-            return self._pd_rma(source, length)
-        raise TypeError("method must be 'numpy' or 'pandas'")
+        match method:
+            case "numpy":
+                return self._py_rma(source, length)
+            case "pandas":
+                return self._pd_rma(source, length)
+            case _:
+                raise TypeError("method must be 'numpy' or 'pandas'")
