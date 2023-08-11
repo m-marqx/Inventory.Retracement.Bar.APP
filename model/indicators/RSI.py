@@ -21,9 +21,11 @@ def RSI(source: pd.Series, periods: int=14) -> pd.Series:
     pd.Series
         The calculated RSI values for the input data.
     """
-    change = source.diff()
-    upward_diff = pd.Series(np.maximum(change - change.shift(1), 0.0))
-    downward_diff = pd.Series(np.maximum(change.shift(1) - change, 0.0))
+    upward_diff = pd.Series(np.maximum(source - source.shift(1), 0.0)).dropna()
+
+    downward_diff = pd.Series(
+        np.maximum(source.shift(1) - source, 0.0)
+    ).dropna()
 
     relative_strength = (
         ma.rma(upward_diff, periods)
@@ -31,4 +33,4 @@ def RSI(source: pd.Series, periods: int=14) -> pd.Series:
     )
 
     rsi = 100 - (100 / (1 + relative_strength))
-    return rsi
+    return rsi.rename("RSI")
