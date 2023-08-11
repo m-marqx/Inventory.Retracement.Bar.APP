@@ -139,7 +139,7 @@ class MovingAverage:
             .mean()
         )
 
-    def _np_rma(self, source: pd.Series, length: int) -> pd.Series:
+    def _py_rma(self, source: pd.Series, length: int) -> pd.Series:
         """
         Calculate the Relative Moving Average (RMA) of the input time
         series data using pure python.
@@ -206,7 +206,7 @@ class MovingAverage:
             The calculated RMA time series data.
         """
         if method == "numpy":
-            return self._np_rma(source, length)
+            return self._py_rma(source, length)
         if method == "pandas":
             return self._pd_rma(source, length)
         raise TypeError("method must be 'numpy' or 'pandas'")
