@@ -1,3 +1,4 @@
+from typing import Literal
 import pandas as pd
 import numpy as np
 
@@ -107,7 +108,7 @@ class MovingAverage:
         sema = emas_df["sema"]
         return sema.dropna(axis=0)
 
-    def rma(self, source: pd.Series, length: int, **kwargs) -> pd.Series:
+    def _pd_rma(self, source: pd.Series, length: int, **kwargs) -> pd.Series:
         """
         Calculate the Relative Moving Average (RMA) of the input time series data.
 
@@ -155,3 +156,14 @@ class MovingAverage:
             np_array = np.append(np_array, rma)
         return np_array
 
+    def rma(
+        self,
+        source: pd.Series,
+        length: int,
+        method: Literal["numpy", "pandas"] = "numpy"
+    ) -> np.ndarray | pd.Series:
+        if method == "numpy":
+            return self._np_rma(source, length)
+        if method == "pandas":
+            return self._pd_rma(source, length)
+        raise TypeError("method must be 'numpy' or 'pandas'")
