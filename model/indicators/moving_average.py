@@ -139,10 +139,10 @@ class MovingAverage:
             .mean()
         )
 
-    def _np_rma(self, source: pd.Series, length: int) -> np.ndarray:
+    def _np_rma(self, source: pd.Series, length: int) -> pd.Series:
         """
         Calculate the Relative Moving Average (RMA) of the input time
-        series data using NumPy.
+        series data using pure python.
 
         Parameters:
         -----------
@@ -153,27 +153,34 @@ class MovingAverage:
 
         Returns:
         --------
-        np.ndarray
+        pd.Series
             The calculated RMA time series data.
 
         Note:
         -----
-        The numpy version is the only one with precision in the
-        initial RSI values. However, with the simple RMA version,
-        both pandas and numpy yield the same precision in initial
-        values.
+        The pure python version is the only one with precision in the
+        initial RMA values. However, with the simple RMA version,
+        both pandas and python versions will yield the same precision
+        in initial values.
         """
         alpha = 1/length
-        source_np = self.rma(source, length)[:length]
-        source_values = source[length:].to_numpy()
+        source_pd = self._pd_rma(source, length)[:length]
+        source_values = source[length:].to_numpy().tolist()
 
-        rma = source_np.dropna().iloc[0]
-        np_array = np.array([rma])
+        rma = float(source_pd.dropna().iloc[0])
+        rma_list = [rma]
 
         for source_value in source_values:
             rma = alpha * source_value + ((1 - alpha) * rma)
-            np_array = np.append(np_array, rma)
-        return np_array
+            rma_list.append(rma)
+
+        rma_series = pd.Series(
+            rma_list,
+            name="RMA",
+            index=source[length - 1:].index
+        )
+
+        return rma_series
 
     def rma(
         self,
