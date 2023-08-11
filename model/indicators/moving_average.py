@@ -107,10 +107,9 @@ class MovingAverage:
         sema = emas_df["sema"]
         return sema.dropna(axis=0)
 
-    def rma(self, source: pd.Series, length: int) -> pd.Series:
+    def rma(self, source: pd.Series, length: int, **kwargs) -> pd.Series:
         """
-        Calculate the Relative Moving Average (RMA)
-        of the input time series data.
+        Calculate the Relative Moving Average (RMA) of the input time series data.
 
         Parameters:
         -----------
@@ -118,6 +117,9 @@ class MovingAverage:
             The time series data to calculate the RMA for.
         length : int
             The number of periods to include in the RMA calculation.
+        **kwargs : additional keyword arguments
+            Additional keyword arguments to pass to the pandas EWM (Exponential
+            Weighted Moving Average) function.
 
         Returns:
         --------
@@ -126,12 +128,12 @@ class MovingAverage:
 
         Note:
         -----
-            The first values are different from the TradingView RMA
+        The first values are different from the TradingView RMA.
         """
         sma = source.rolling(window=length, min_periods=length).mean()[:length]
         rest = source[length:]
         return (
             pd.concat([sma, rest])
-            .ewm(alpha=1 / length, adjust=False)
+            .ewm(alpha=1 / length, **kwargs)
             .mean()
         )
