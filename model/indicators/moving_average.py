@@ -140,10 +140,29 @@ class MovingAverage:
         )
 
     def _np_rma(self, source: pd.Series, length: int) -> np.ndarray:
-        #the numpy version is the only version that have
-        # precision in first values in other indicators like RSI
-        # but when is the simply rma version pandas e numpy have same
-        # precision in first values
+        """
+        Calculate the Relative Moving Average (RMA) of the input time
+        series data using NumPy.
+
+        Parameters:
+        -----------
+        source : pandas.Series
+            The time series data to calculate the RMA for.
+        length : int
+            The number of periods to include in the RMA calculation.
+
+        Returns:
+        --------
+        np.ndarray
+            The calculated RMA time series data.
+
+        Note:
+        -----
+        The numpy version is the only one with precision in the
+        initial RSI values. However, with the simple RMA version,
+        both pandas and numpy yield the same precision in initial
+        values.
+        """
         alpha = 1/length
         source_np = self.rma(source, length)[:length]
         source_values = source[length:].to_numpy()
