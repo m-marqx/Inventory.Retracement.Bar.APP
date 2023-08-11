@@ -137,7 +137,7 @@ class MovingAverage:
             pd.concat([sma, rest])
             .ewm(alpha=1 / length, **kwargs)
             .mean()
-        )
+        ).rename("RMA")
 
     def _py_rma(self, source: pd.Series, length: int) -> pd.Series:
         """
