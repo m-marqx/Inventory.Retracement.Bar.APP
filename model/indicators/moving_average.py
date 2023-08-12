@@ -181,7 +181,7 @@ class MovingAverage:
         rma_list = [rma]
 
         for source_value in source_values:
-            rma = alpha * source_value + ((1 - alpha) * rma)
+            rma = alpha * source_value + (1 - alpha) * rma
             rma_list.append(rma)
 
         rma_series = pd.Series(
