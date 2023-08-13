@@ -6,9 +6,13 @@ import numpy as np
 
 from controller.api import KlineAPI, KlineTimes
 
-from model.utils import interval_to_milliseconds
-from model.utils import Statistics
-from model.utils.utils import SaveDataFrame, DataProcess
+from model.utils import (
+    interval_to_milliseconds,
+    Statistics,
+    SaveDataFrame,
+    DataProcess,
+)
+
 from model.backtest import (
     Backtest,
     EmaParamsBacktest,
