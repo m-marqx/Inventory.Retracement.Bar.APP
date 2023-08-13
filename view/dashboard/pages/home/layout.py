@@ -2,7 +2,7 @@ from dash import dcc, html, register_page
 import dash_bootstrap_components as dbc
 from view.dashboard.pages.lang import en_US, pt_BR
 
-from view.dashboard.pages.general.collapse_menus import LayoutMenuCollapse
+from view.dashboard.pages import LayoutMenuCollapse
 
 
 theme = dbc.themes.MORPH
@@ -105,9 +105,7 @@ def layout(lang="en_US"):
                                         ),
                                     ]
                                 ),
-                                dbc.Col(
-                                    id="table_container"
-                                )
+                                dbc.Col(id="table_container"),
                             ],
                             width=3,
                         ),

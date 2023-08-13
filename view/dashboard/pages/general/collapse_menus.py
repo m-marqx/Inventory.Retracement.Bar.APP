@@ -1,9 +1,11 @@
 import dash_bootstrap_components as dbc
-from view.dashboard.pages.general.utils import MenuCollapse
-from view.dashboard.pages.general.components import GeneralComponents
-from view.dashboard.pages.home.components import MainPageComponents
-from view.dashboard.pages.backtest.components import BacktestComponents
-from view.dashboard.pages.backtest.results_components import ResultsComponents
+from view.dashboard.pages import (
+    MenuCollapse,
+    GeneralComponents,
+    MainPageComponents,
+    BacktestComponents,
+    ResultsComponents,
+)
 
 
 class LayoutMenuCollapse:
