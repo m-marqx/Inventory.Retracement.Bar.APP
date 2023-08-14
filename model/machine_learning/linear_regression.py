@@ -52,7 +52,13 @@ class SklearnLinearRegression:
     y_pred_test : numpy.ndarray
         The predicted target values for the test set.
     """
-    def __init__(self, dataframe, features: list[str], target: str):
+    def __init__(
+        self,
+        dataframe,
+        features: list[str],
+        target: str,
+        test_size: float = 0.5
+    ):
         """
         Initialize the SklearnLinearRegression class.
 
@@ -102,7 +108,7 @@ class SklearnLinearRegression:
         y = self.data_frame_target
 
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
-            x, y, test_size=0.5
+            x, y, test_size=test_size
         )
 
         self.lr = LinearRegression()
