@@ -254,7 +254,13 @@ class StatsmodelsLinearRegression:
     y_pred_test_sm : numpy.ndarray
         The predicted target values for the test set.
     """
-    def __init__(self, dataframe, features: list[str], target: str):
+    def __init__(
+        self,
+        dataframe,
+        features: list[str],
+        target: str,
+        test_size: float = 0.5
+    ):
         """
         Initialize the StatsmodelsLinearRegression class.
 
@@ -286,7 +292,7 @@ class StatsmodelsLinearRegression:
         y = self.data_frame_target
 
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(
-            x, y, test_size=0.5
+            x, y, test_size=test_size
         )
 
         self.x_train_np = np.asarray(self.x_train)
