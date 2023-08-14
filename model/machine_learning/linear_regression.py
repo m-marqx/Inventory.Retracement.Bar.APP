@@ -118,7 +118,7 @@ class SklearnLinearRegression:
         self.y_pred_test = self.lr.predict(self.x_test)
 
     @property
-    def results_evaul(self):
+    def results_eval(self):
         """
         Evaluate the results of the linear regression model.
 
