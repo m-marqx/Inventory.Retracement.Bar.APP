@@ -126,7 +126,10 @@ class SklearnLinearRegression:
         """
         MAE_train = metrics.mean_absolute_error(self.y_train, self.y_pred_train)
         R2_train = metrics.r2_score(self.y_train, self.y_pred_train)
-        RMSE_train = sqrt(metrics.mean_squared_error(self.y_train, self.y_pred_train))
+        RMSE_train = sqrt(
+            metrics
+            .mean_squared_error(self.y_train, self.y_pred_train)
+        )
 
         print("----- Train Evaluation -----")
         print(f"MAE: {round(MAE_train, 2)}")
@@ -135,7 +138,11 @@ class SklearnLinearRegression:
 
         MAE_test = metrics.mean_absolute_error(self.y_test, self.y_pred_test)
         R2_test = metrics.r2_score(self.y_test, self.y_pred_test)
-        RMSE_test = sqrt(metrics.mean_squared_error(self.y_test, self.y_pred_test))
+        RMSE_test = sqrt(
+            metrics
+            .mean_squared_error(self.y_test, self.y_pred_test)
+        )
+
         MAE_base_ratio = (
             metrics.mean_absolute_error(self.y_test, self.y_pred_test)
             / self.y_test.mean()
