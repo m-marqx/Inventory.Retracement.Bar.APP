@@ -68,10 +68,31 @@ class SklearnLinearRegression:
         """
         self.target = target
         self.data_frame = dataframe
-        self.data_frame["Entry_Price"].fillna(0, inplace=True)
-        self.data_frame["ema"].fillna(0, inplace=True)
-        self.data_frame["Take_Profit"].fillna(99999, inplace=True)
-        self.data_frame["Stop_Loss"].fillna(-99999, inplace=True)
+
+        strategy_prices = ["Entry_Price", "Take_Profit", "Stop_Loss"]
+
+        check_strategy_prices = all(
+            column in self.data_frame.columns
+            for column in strategy_prices
+        )
+
+        if check_strategy_prices:
+            self.data_frame["ema"] = self.data_frame["ema"].fillna(0)
+
+            self.data_frame["Entry_Price"] = (
+                self.data_frame["Entry_Price"]
+                .fillna(0)
+            )
+
+            self.data_frame["Take_Profit"] = (
+                self.data_frame["Take_Profit"]
+                .fillna(99999)
+            )
+
+            self.data_frame["Stop_Loss"] = (
+                self.data_frame["Stop_Loss"]
+                .fillna(-99999)
+            )
 
         self.columns = features
         self.data_frame_feats = self.data_frame[self.columns]
