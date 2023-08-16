@@ -132,3 +132,20 @@ class LogisticModel:
             accuracy = accuracy_score(self.y_test, y_pred)
             return y_pred, accuracy
         raise ValueError("method must be either 'statsmodels' or 'sklearn'")
+
+    def sk_auc_stats(self):
+        """
+        Calculate AUC and Gini coefficient using sklearn.
+
+        Returns:
+        --------
+        tuple
+            A tuple containing False Positive Rate (FPR), True Positive
+            Rate (TPR), ROC AUC, and Gini coefficient.
+        """
+        y_pred_probs = self.sk_model.predict_proba(self.X_test)[:, 1]
+        fpr, tpr, _  = roc_curve(self.y_test, y_pred_probs)
+        roc_auc = auc(fpr, tpr)
+        gini = 2 * roc_auc - 1
+        return fpr, tpr, roc_auc, gini
+
