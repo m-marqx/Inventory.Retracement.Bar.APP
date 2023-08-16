@@ -101,3 +101,34 @@ class LogisticModel:
 
         self.sk_model = LogisticRegression().fit(self.X_train, self.y_train)
 
+    def model_predict(
+        self,
+        method: Literal["statsmodels", "sklearn"],
+        threshold
+    ) -> tuple:
+        """
+        Predict using the trained logistic regression model.
+
+        Parameters:
+        -----------
+        method : {"statsmodels", "sklearn"}
+            The method to use for prediction.
+        threshold : float
+            The threshold to apply for classification.
+
+        Returns:
+        --------
+        tuple
+            A tuple containing predicted classes and accuracy.
+        """
+        if method == "statsmodels":
+            y_pred = self.sm_model.predict(self.X_test)
+            y_pred_classes = np.where(y_pred > threshold, 1, 0)
+            accuracy = np.mean(y_pred_classes == self.y_test)
+            return y_pred_classes, accuracy
+
+        if method == "sklearn":
+            y_pred = self.sk_model.predict(self.X_test)
+            accuracy = accuracy_score(self.y_test, y_pred)
+            return y_pred, accuracy
+        raise ValueError("method must be either 'statsmodels' or 'sklearn'")
