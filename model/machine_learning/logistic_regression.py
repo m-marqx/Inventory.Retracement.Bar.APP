@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_curve, auc
 import plotly.express as px
 
+
 class LogisticModel:
     """
     Perform logistic regression analysis using both statsmodels and
@@ -171,4 +172,25 @@ class LogisticModel:
         px.line
             A Plotly line plot representing the FPR vs. TPR curve.
         """
-        return px.line(y=[tpr , fpr], x=fpr)
+        fig = px.line(
+            x=fpr,
+            y=tpr,
+            title=f"ROC Curve (AUC={auc(fpr, tpr):.4f})",
+            labels=dict(x="False Positive Rate", y="True Positive Rate"),
+            width=700,
+            height=500,
+        )
+
+        fig.add_shape(
+            type="line",
+            line=dict(dash="dash"),
+            x0=0,
+            x1=1,
+            y0=0,
+            y1=1,
+            opacity=0.65,
+        )
+
+        fig.update_yaxes(scaleanchor="x", scaleratio=1)
+        fig.update_xaxes(constrain="domain")
+        return fig
