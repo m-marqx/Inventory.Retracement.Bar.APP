@@ -149,3 +149,25 @@ class LogisticModel:
         gini = 2 * roc_auc - 1
         return fpr, tpr, roc_auc, gini
 
+    def fpr_tpr_curve(
+        self,
+        fpr: np.ndarray | pd.Series,
+        tpr: np.ndarray | pd.Series
+    ) -> px.line:
+        """
+        Generate a False Positive Rate (FPR) vs. True Positive Rate
+        (TPR) curve.
+
+        Parameters:
+        -----------
+        fpr : np.ndarray or pd.Series
+            The False Positive Rate values.
+        tpr : np.ndarray or pd.Series
+            The True Positive Rate values.
+
+        Returns:
+        --------
+        px.line
+            A Plotly line plot representing the FPR vs. TPR curve.
+        """
+        return px.line(y=[tpr , fpr], x=fpr)
