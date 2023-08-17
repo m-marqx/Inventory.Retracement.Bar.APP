@@ -62,7 +62,7 @@ class LogisticModel:
         Generate a Plotly Express line chart for FPR vs. TPR curve.
     """
 
-    def __init__(self, features, target, test_size, **kwargs):
+    def __init__(self, features, target, test_size, shuffle = False, **kwargs):
         """
         Initialize the CalculateLogisticRegression object.
 
@@ -90,6 +90,7 @@ class LogisticModel:
                 self.features,
                 self.target,
                 test_size=test_size,
+                shuffle=shuffle,
                 **kwargs
             )
         )
