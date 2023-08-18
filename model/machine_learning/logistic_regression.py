@@ -195,3 +195,60 @@ class LogisticModel:
         fig.update_yaxes(scaleanchor="x", scaleratio=1)
         fig.update_xaxes(constrain="domain")
         return fig
+
+    def get_results(
+        self,
+        returns: np.ndarray | pd.Series,
+        predict_proba: None | np.ndarray,
+        test_buy_conds: np.ndarray[bool],
+        test_sell_conds: np.ndarray[bool],
+        **kwargs,
+    ) -> px.line:
+        """
+        Generate a Plotly Express line chart showing the cumulative
+        total returns based on the strategy.
+
+        Parameters:
+        -----------
+        returns : np.ndarray or pd.Series
+            The array or Series of historical returns.
+        predict_proba : None or np.ndarray, optional
+            The predicted probabilities of the positive class, if
+            available. If None, predictions will be made using the
+            scikit-learn model.
+        test_buy_conds : np.ndarray of bool
+            Boolean conditions indicating buy signals.
+        test_sell_conds : np.ndarray of bool
+            Boolean conditions indicating sell signals.
+        **kwargs : optional
+            Additional keyword arguments to customize the appearance
+            of the plot.
+
+        Returns:
+        --------
+        plotly.graph_objs._figure.Figure
+            The Plotly Express line chart displaying the cumulative
+            total returns over time.
+        """
+        if predict_proba:
+            y_pred_probs = np.copy(predict_proba)
+        else:
+            y_pred_probs = self.sk_model.predict_proba(self.X_test)[:, 1]
+
+        return_df = pd.DataFrame({"y_pred_probs" : y_pred_probs})
+        return_df["Position"] = np.where(
+            test_buy_conds,
+            1,
+            np.where(test_sell_conds, -1, 0)
+        )
+
+        return_df["Return"] = returns
+        return_df["Return"] = return_df["Return"] / 100
+
+        return_df["Total_Return"] = (
+            return_df["Return"]
+            * return_df["Position"]
+            + 1
+        ).cumprod()
+
+        return px.line(return_df, y="Total_Return").update_layout(**kwargs)
