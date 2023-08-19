@@ -7,44 +7,44 @@ from model.utils import interval_to_milliseconds
 
 class KlineUtils:
     """
-    A class for handling Kline data.
+    Utility class for processing klines data.
 
-    Parameters
-    ----------
-    klines_list : list
-        The list of Kline data.
+    Parameters:
+    -----------
+    klines_list : list of lists
+        List of kline data, where each kline is represented as a list of values.
 
-    Attributes
-    ----------
-    klines_list : list
-        The list of Kline data.
+    Attributes:
+    -----------
+    klines_list : list of lists
+        List of kline data.
 
-    Methods
-    -------
-    klines_df()
-        Convert the Kline data to a DataFrame.
+    Methods:
+    --------
+    klines_df() -> pd.DataFrame
+        Convert the list of klines into a pandas DataFrame.
 
     """
-    def __init__(self, klines_list):
+    def __init__(self, klines_list: list[list]):
         """
         Initialize the KlineUtils object.
 
         Parameters:
         -----------
-        klines_list : list
-            The list of Kline data.
+        klines_list : list of lists
+            List of kline data, where each kline is represented as a list of values.
         """
         self.klines_list = klines_list
 
     @property
     def klines_df(self) -> pd.DataFrame:
         """
-        Convert the Kline data to a DataFrame.
+        Convert the list of klines into a pandas DataFrame.
 
         Returns:
         --------
         pd.DataFrame
-            The Kline data as a DataFrame.
+            A DataFrame containing the kline data with appropriate data types.
         """
         timestamp = ["open_time", "close_time"]
 
