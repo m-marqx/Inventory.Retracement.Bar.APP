@@ -27,7 +27,6 @@ class Plot:
         )
 
         self.fig = None
-        self.fig2 = None
 
     def winrate(self):
         if "Win_Rate" not in self.data_frame.columns:
@@ -270,8 +269,8 @@ class Plot:
             )
         )
 
-        self.fig2 = go.Figure()
-        self.fig2.add_trace(
+        fig2 = go.Figure()
+        fig2.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["Cumulative_Result"],
@@ -289,8 +288,8 @@ class Plot:
         )
         self.fig.update_xaxes(rangeslider_visible=False)
 
-        self.fig.add_trace(self.fig2.data[0], row=1, col=1)
-        for trace in self.fig2.data[1:]:
+        self.fig.add_trace(fig2.data[0], row=1, col=1)
+        for trace in fig2.data[1:]:
             self.fig.add_trace(trace, row=1, col=1)
 
         self.fig.add_trace(fig1.data[0], row=2, col=1)
