@@ -44,7 +44,6 @@ class Plot:
         return self
 
     def chart(self):
-        # Criar um gráfico de candlesticks com Plotly Express
         self.fig = go.Figure(
             data=[
                 go.Candlestick(
@@ -57,7 +56,6 @@ class Plot:
             ]
         )
 
-        # Adicionar linhas para ema, Entry_Price, Take_Profit e Stop_Loss
         self.fig.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
@@ -101,7 +99,6 @@ class Plot:
             )
         )
 
-        # adicionando o range slider
         self.fig.update_layout(
             title_text="Hoffman Inventory Retracement Bar",
             template="plotly_dark",
@@ -147,7 +144,6 @@ class Plot:
             ),
         )
 
-        # adicionando botões de zoom personalizados
         self.fig.update_layout(
             updatemenus=[
                 dict(
@@ -195,12 +191,10 @@ class Plot:
             ]
         )
 
-        # Exibir o gráfico
         return self
 
-    # %%
+
     def trading_results(self):
-        # Criar um gráfico de candlesticks com Plotly Express
         self.fig1 = go.Figure(
             data=[
                 go.Candlestick(
@@ -213,7 +207,6 @@ class Plot:
             ]
         )
 
-        # Adicionar linhas para ema, Entry_Price, Take_Profit e Stop_Loss
         self.fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
@@ -257,7 +250,6 @@ class Plot:
             )
         )
 
-        # Criar um segundo gráfico com a coluna "resultado" e "cumulative_result"
         self.fig2 = go.Figure()
         self.fig2.add_trace(
             go.Scatter(
@@ -268,27 +260,27 @@ class Plot:
             )
         )
 
-        # Criar uma figura combinando os dois gráficos
+
         self.fig = make_subplots(
             rows=2,
             cols=1,
             shared_xaxes=True,
             vertical_spacing=0.02,
             row_heights=[0.2, 0.8],
-        )  # especifica a altura da primeira e segunda linha
+        )
         self.fig.update_xaxes(rangeslider_visible=False)
 
-        # # Adicionar o subplot na segunda linha e primeira coluna
+
         self.fig.add_trace(self.fig2.data[0], row=1, col=1)
         for trace in self.fig2.data[1:]:
             self.fig.add_trace(trace, row=1, col=1)
 
-        # Adicionar o gráfico de candlesticks na primeira linha e primeira coluna
+
         self.fig.add_trace(self.fig1.data[0], row=2, col=1)
         for trace in self.fig1.data[1:]:
             self.fig.add_trace(trace, row=2, col=1)
 
-        # Atualizar o layout da figura
+
         self.fig.update_layout(
             title={
                 "text": "Hoffman Inventory Retracement Bar",
@@ -301,10 +293,9 @@ class Plot:
             ),
             legend_title="Trade Signals",
             showlegend=True,
-            xaxis_rangeslider_visible=False,  # remove o range slider
+            xaxis_rangeslider_visible=False,
         )
 
-        # Exibir o gráfico
         return self
 
     def fig_to_html(self, title: str, open_file: bool = False):
