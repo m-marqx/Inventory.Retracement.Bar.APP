@@ -313,9 +313,9 @@ class Plot:
 
         return self
 
-    def fig_to_html(self, title: str, open_file: bool = False):
+    def fig_to_html(self, title: str, open_file: bool = False) -> None:
         if not os.path.exists("data/html"):
             os.makedirs("data/html")
         file_path = os.path.join("data/html", title + ".html")
         pio.write_html(self.fig, file=file_path, auto_open=open_file)
-        return self
+        print(f"Plot figure saved in: {file_path}")
