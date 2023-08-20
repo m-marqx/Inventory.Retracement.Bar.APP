@@ -215,7 +215,7 @@ class Plot:
         return self
 
     def trading_results(self):
-        self.fig1 = go.Figure(
+        fig1 = go.Figure(
             data=[
                 go.Candlestick(
                     x=self.data_frame["Date"],
@@ -227,7 +227,7 @@ class Plot:
             ]
         )
 
-        self.fig1.add_trace(
+        fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["ema"],
@@ -235,7 +235,7 @@ class Plot:
                 line=dict(color="white"),
             )
         )
-        self.fig1.add_trace(
+        fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["Entry_Price"],
@@ -243,7 +243,7 @@ class Plot:
                 line=dict(color="yellow"),
             )
         )
-        self.fig1.add_trace(
+        fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["Take_Profit"],
@@ -251,7 +251,7 @@ class Plot:
                 line=dict(color="lime"),
             )
         )
-        self.fig1.add_trace(
+        fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["Stop_Loss"],
@@ -260,7 +260,7 @@ class Plot:
             )
         )
 
-        self.fig1.add_trace(
+        fig1.add_trace(
             go.Scatter(
                 x=self.data_frame["Date"],
                 y=self.data_frame["Exit_Price"],
@@ -293,9 +293,8 @@ class Plot:
         for trace in self.fig2.data[1:]:
             self.fig.add_trace(trace, row=1, col=1)
 
-
-        self.fig.add_trace(self.fig1.data[0], row=2, col=1)
-        for trace in self.fig1.data[1:]:
+        self.fig.add_trace(fig1.data[0], row=2, col=1)
+        for trace in fig1.data[1:]:
             self.fig.add_trace(trace, row=2, col=1)
 
         self.fig.update_layout(
