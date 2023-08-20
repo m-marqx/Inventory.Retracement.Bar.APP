@@ -8,7 +8,46 @@ from model.utils import BrokerEmulator
 
 
 class Plot:
+    """
+    Utility class for creating various types of plots from trading data.
+
+    Parameters:
+    -----------
+    dataframe : pd.DataFrame
+        The DataFrame containing trading data.
+
+    Attributes:
+    -----------
+    data_frame : pd.DataFrame
+        The DataFrame containing trading data.
+    fig : plotly.graph_objs.Figure
+        The Plotly figure object used for creating plots.
+
+    Methods:
+    --------
+    winrate() -> Plot
+        Create and display a histogram of winning rates from
+        trading results.
+    results() -> Plot
+        Create and display a histogram of trading results.
+    chart() -> Plot
+        Create and display a candlestick chart with additional
+        trade-related indicators.
+    trading_results() -> Plot
+        Create and display a subplot containing cumulative results and a
+        candlestick chart.
+    fig_to_html(title: str, open_file: bool = False) -> None
+        Save the figure as an HTML file.
+    """
     def __init__(self, dataframe):
+        """
+        Initialize the Plot object.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            The DataFrame containing trading data.
+        """
         self.data_frame = dataframe.copy()
         if "open_time" in self.data_frame.columns:
             if "open_time" == self.data_frame.index.dtype == "<M8[ns]":
@@ -29,6 +68,15 @@ class Plot:
         self.fig = None
 
     def winrate(self):
+        """
+        Create and display a histogram of winning rates from trading
+        results.
+
+        Returns:
+        --------
+        Plot
+            The Plot object for method chaining.
+        """
         if "Win_Rate" not in self.data_frame.columns:
             self.data_frame["Win_Rate"] = (
                 (self.data_frame["Result"] > 0).cumsum()
@@ -44,12 +92,29 @@ class Plot:
         return self
 
     def results(self):
+        """
+        Create and display a histogram of trading results.
+
+        Returns:
+        --------
+        Plot
+            The Plot object for method chaining.
+        """
         self.fig = px.histogram(
             self.data_frame.query("`Close_Position` == True")["Result"]
         )
         return self
 
     def chart(self):
+        """
+        Create and display a candlestick chart with additional
+        trade-related indicators.
+
+        Returns:
+        --------
+        Plot
+            The Plot object for method chaining.
+        """
         self.fig = go.Figure(
             data=[
                 go.Candlestick(
@@ -214,6 +279,14 @@ class Plot:
         return self
 
     def trading_results(self):
+        """
+        Create and display a subplot containing cumulative results and a candlestick chart.
+
+        Returns:
+        --------
+        Plot
+            The Plot object for method chaining.
+        """
         fig1 = go.Figure(
             data=[
                 go.Candlestick(
@@ -314,6 +387,17 @@ class Plot:
         return self
 
     def fig_to_html(self, title: str, open_file: bool = False) -> None:
+        """
+        Save the figure as an HTML file.
+
+        Parameters:
+        -----------
+        title : str
+            The title of the HTML file.
+        open_file : bool, optional
+            Whether to automatically open the saved HTML file,
+            by default False.
+        """
         if not os.path.exists("data/html"):
             os.makedirs("data/html")
         file_path = os.path.join("data/html", title + ".html")
