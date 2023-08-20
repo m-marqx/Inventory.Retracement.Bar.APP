@@ -6,6 +6,7 @@ import plotly.io as pio
 import pandas as pd
 from model.utils import BrokerEmulator
 
+
 class Plot:
     def __init__(self, dataframe):
         self.data_frame = dataframe.copy()
@@ -13,28 +14,34 @@ class Plot:
             if "open_time" == self.data_frame.index.dtype == "<M8[ns]":
                 self.data_frame["Date"] = self.data_frame.index
             else:
-                self.data_frame["Date"] = pd.to_datetime(self.data_frame["open_time"], unit="ms")
+                self.data_frame["Date"] = pd.to_datetime(
+                    self.data_frame["open_time"], unit="ms"
+                )
 
         elif "Date" not in self.data_frame.columns:
             self.data_frame["Date"] = self.data_frame.index
 
-        self.data_frame["Exit_Price"] = BrokerEmulator(self.data_frame).exit_price()
+        self.data_frame["Exit_Price"] = (
+            BrokerEmulator(self.data_frame)
+            .exit_price()
+        )
+
         self.fig = None
         self.fig2 = None
 
     def winrate(self):
         if "Win_Rate" not in self.data_frame.columns:
-            self.data_frame["Win_Rate"] = ((self.data_frame["Result"] > 0).cumsum()) / (
-                (self.data_frame["Result"] < 0).cumsum()
+            self.data_frame["Win_Rate"] = (
+                (self.data_frame["Result"] > 0).cumsum()
+                / (self.data_frame["Result"] < 0).cumsum()
             )
 
         self.fig = px.histogram(
-            (
-                self.data_frame.query("(`Win_Rate` > 0) and (`Close_Position` == True)")
+            self.data_frame.query(
+                "(`Win_Rate` > 0) and (`Close_Position` == True)"
             ).iloc[:, -1],
             histnorm="probability",
         )
-        self.fig
         return self
 
     def results(self):
@@ -113,7 +120,10 @@ class Plot:
                     buttons=list(
                         [
                             dict(
-                                count=1, label="1 dia", step="day", stepmode="backward"
+                                count=1,
+                                label="1 dia",
+                                step="day",
+                                stepmode="backward",
                             ),
                             dict(
                                 count=7,
@@ -134,7 +144,10 @@ class Plot:
                                 stepmode="backward",
                             ),
                             dict(
-                                count=1, label="1 ano", step="year", stepmode="backward"
+                                count=1,
+                                label="1 ano",
+                                step="year",
+                                stepmode="backward",
                             ),
                             dict(step="all"),
                         ]
@@ -157,11 +170,15 @@ class Plot:
                                 {
                                     "xaxis.range": [None, None],
                                     "yaxis.range": [None, None],
-                                    "xaxis.range[0]": self.fig["layout"]["xaxis"]["range"][0]
+                                    "xaxis.range[0]": (
+                                        self.fig["layout"]["xaxis"]["range"][0]
+                                    )
                                     * 0.5
                                     if self.fig["layout"]["xaxis"]["range"]
                                     else None,
-                                    "xaxis.range[1]": self.fig["layout"]["xaxis"]["range"][1]
+                                    "xaxis.range[1]": (
+                                        self.fig["layout"]["xaxis"]["range"][1]
+                                    )
                                     * 0.5
                                     if self.fig["layout"]["xaxis"]["range"]
                                     else None,
@@ -175,11 +192,15 @@ class Plot:
                                 {
                                     "xaxis.range": [None, None],
                                     "yaxis.range": [None, None],
-                                    "xaxis.range[0]": self.fig["layout"]["xaxis"]["range"][0]
-                                    * 2
+                                    "xaxis.range[0]": (
+                                        self.fig["layout"]["xaxis"]["range"][0]
+                                        * 2
+                                    )
                                     if self.fig["layout"]["xaxis"]["range"]
                                     else None,
-                                    "xaxis.range[1]": self.fig["layout"]["xaxis"]["range"][1]
+                                    "xaxis.range[1]": (
+                                        self.fig["layout"]["xaxis"]["range"][1]
+                                    )
                                     * 2
                                     if self.fig["layout"]["xaxis"]["range"]
                                     else None,
@@ -192,7 +213,6 @@ class Plot:
         )
 
         return self
-
 
     def trading_results(self):
         self.fig1 = go.Figure(
@@ -260,7 +280,6 @@ class Plot:
             )
         )
 
-
         self.fig = make_subplots(
             rows=2,
             cols=1,
@@ -270,7 +289,6 @@ class Plot:
         )
         self.fig.update_xaxes(rangeslider_visible=False)
 
-
         self.fig.add_trace(self.fig2.data[0], row=1, col=1)
         for trace in self.fig2.data[1:]:
             self.fig.add_trace(trace, row=1, col=1)
@@ -279,7 +297,6 @@ class Plot:
         self.fig.add_trace(self.fig1.data[0], row=2, col=1)
         for trace in self.fig1.data[1:]:
             self.fig.add_trace(trace, row=2, col=1)
-
 
         self.fig.update_layout(
             title={
