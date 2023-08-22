@@ -203,6 +203,7 @@ class LogisticModel:
         test_buy_conds: np.ndarray[bool],
         test_sell_conds: np.ndarray[bool],
         trading_fee: float = 0.03,
+        log_result: bool = True,
         **kwargs,
     ) -> px.line:
         """
@@ -248,20 +249,35 @@ class LogisticModel:
         return_df["Return"] = returns
         return_df["Return"] = return_df["Return"] / 100
 
-        return_df["Result"] = (
-            return_df["Return"]
-            * return_df["Position"]
-            + 1
-        )
+        if log_result:
+            return_df["Result"] = (
+                return_df["Return"]
+                * return_df["Position"]
+                + 1
+            )
 
-        return_df["Liquid_Result"] = np.where(
-            return_df["Position"] != 0,
-            return_df["Return"] * return_df["Position"] - trading_cost + 1,
-            1
-        )
+            return_df["Liquid_Result"] = np.where(
+                return_df["Position"] != 0,
+                return_df["Return"] * return_df["Position"] - trading_cost + 1,
+                1
+            )
 
-        return_df["Total_Return"] = return_df["Result"].cumprod()
-        return_df["Liquid_Return"] = return_df["Liquid_Result"].cumprod()
+            return_df["Total_Return"] = return_df["Result"].cumprod()
+            return_df["Liquid_Return"] = return_df["Liquid_Result"].cumprod()
+
+        else:
+            return_df["Result"] = np.where(
+                return_df["Position"] != 0,
+                np.log(return_df["Return"] * return_df["Position"] + 1) + 1,
+                1,
+            )
+
+            return_df["Liquid_Result"] = np.log(
+                return_df["Return"] * return_df["Position"] - trading_cost + 1
+            ) + 1
+
+            return_df["Total_Return"] = return_df["Result"].cumprod()
+            return_df["Liquid_Return"] = return_df["Liquid_Result"].cumprod()
 
         return px.line(
             return_df,
