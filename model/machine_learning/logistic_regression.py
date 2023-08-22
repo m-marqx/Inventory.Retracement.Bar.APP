@@ -202,6 +202,7 @@ class LogisticModel:
         predict_proba: None | np.ndarray,
         test_buy_conds: np.ndarray[bool],
         test_sell_conds: np.ndarray[bool],
+        trading_fee: float = 0.03,
         **kwargs,
     ) -> px.line:
         """
@@ -235,6 +236,8 @@ class LogisticModel:
         else:
             y_pred_probs = self.sk_model.predict_proba(self.X_test)[:, 1]
 
+        trading_cost = trading_fee * 2
+
         return_df = pd.DataFrame({"y_pred_probs" : y_pred_probs})
         return_df["Position"] = np.where(
             test_buy_conds,
@@ -245,10 +248,22 @@ class LogisticModel:
         return_df["Return"] = returns
         return_df["Return"] = return_df["Return"] / 100
 
-        return_df["Total_Return"] = (
+        return_df["Result"] = (
             return_df["Return"]
             * return_df["Position"]
             + 1
-        ).cumprod()
+        )
 
-        return px.line(return_df, y="Total_Return").update_layout(**kwargs)
+        return_df["Liquid_Result"] = np.where(
+            return_df["Position"] != 0,
+            return_df["Return"] * return_df["Position"] - trading_cost + 1,
+            1
+        )
+
+        return_df["Total_Return"] = return_df["Result"].cumprod()
+        return_df["Liquid_Return"] = return_df["Liquid_Result"].cumprod()
+
+        return px.line(
+            return_df,
+            y=["Total_Return", "Liquid_Return"]
+        ).update_layout(**kwargs)
