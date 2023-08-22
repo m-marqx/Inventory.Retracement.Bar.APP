@@ -176,6 +176,7 @@ class MenuCollapse:
 
         return dbc.Col([self.button, collapse])
 
+def upload_component(label: str, id_prefix: str, button_class: str) -> dbc.Col:
     """
     Generate a Dash Bootstrap Component column containing an upload
     button.
