@@ -223,8 +223,26 @@ def table_component(
     id_prefix: str,
     class_name: str = "ag-theme-alpine-dark",
     use_pagination: bool = False
-):
+    """
+    Generate an Ag-Grid table component for displaying a DataFrame.
 
+    Parameters:
+    -----------
+    data_frame : pd.DataFrame
+        The DataFrame to be displayed in the table.
+    id_prefix : str
+        Prefix to be added to the IDs of the table components.
+    class_name : str, optional
+        The class name for styling the table,
+        by default "ag-theme-alpine-dark".
+    use_pagination : bool, optional
+        Whether to enable pagination in the table, by default False.
+
+    Returns:
+    --------
+    dag.AgGrid
+        An Ag-Grid table component for displaying the DataFrame.
+    """
     if use_pagination:
         pagination_dict = {"pagination": True, "paginationPageSize":10}
     else:
