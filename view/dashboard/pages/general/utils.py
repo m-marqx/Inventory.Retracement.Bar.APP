@@ -262,6 +262,7 @@ def table_component(
         className=class_name
     )
 
+def content_parser(contents, filename) -> pd.DataFrame | None:
     """
     Parse the content of an uploaded file based on its filename.
 
