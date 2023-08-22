@@ -223,6 +223,7 @@ def table_component(
     id_prefix: str,
     class_name: str = "ag-theme-alpine-dark",
     use_pagination: bool = False
+) -> dag.AgGrid:
     """
     Generate an Ag-Grid table component for displaying a DataFrame.
 
