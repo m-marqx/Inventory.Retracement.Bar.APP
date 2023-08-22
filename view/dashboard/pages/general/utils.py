@@ -262,7 +262,21 @@ def table_component(
         className=class_name
     )
 
-def content_parser(contents, filename):
+    """
+    Parse the content of an uploaded file based on its filename.
+
+    Parameters:
+    -----------
+    contents : str
+        The content of the uploaded file.
+    filename : str
+        The name of the uploaded file.
+
+    Returns:
+    --------
+    pd.DataFrame | None
+        The parsed DataFrame if the file format is supported, else None.
+    """
     _, content_string = contents.split(",")
     decoded = base64.b64decode(content_string)
 
