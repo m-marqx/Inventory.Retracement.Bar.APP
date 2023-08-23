@@ -804,8 +804,13 @@ class CalculateTradePerformance:
                 self.data_frame["Cumulative_Result"] - 1
             ) * 100
 
-        self.data_frame["Cumulative_Result"].fillna(0, inplace=True)
-        self.data_frame["Capital"].fillna(self.capital, inplace=True)
+        self.data_frame["Cumulative_Result"] = (
+            self.data_frame["Cumulative_Result"].fillna(0)
+        )
+
+        self.data_frame["Capital"] = (
+            self.data_frame["Capital"].fillna(self.capital)
+        )
 
         return self
 
