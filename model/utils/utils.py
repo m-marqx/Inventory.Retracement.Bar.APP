@@ -750,33 +750,29 @@ class CalculateTradePerformance:
         method: Literal["sum", "prod"],
         reverse_results: bool
     ):
-        """This function updates the results of a trading strategy based
-        on gains and losses, using either a sum or product method, and
-        returns the updated results.
-
-        Parameters
-        ----------
-        gain : float | pd.Series
-            A float or a pandas Series representing the gains made in
-            each trade or period.
-        loss : float | pd.Series
-            A float or a pandas Series representing the loss made in
-            each trade or period.
-        method : str
-            The method parameter specifies whether to calculate the
-            cumulative result using the `cumsum` or `cumprod` method.
-        reverse_results : bool
-            A boolean parameter that determines whether the results
-            should be reversed or not. If set to True, the results
-            will be reversed.
-
-        Returns
-        -------
-            The function `update_results` is returning the updated
-            instance of the class object.
-
         """
+        Update the trading results by calculating cumulative results and
+        capital.
 
+        Parameters:
+        -----------
+        gain : float or pd.Series
+            The gain values for each trade or a single value.
+        loss : float or pd.Series
+            The loss values for each trade or a single value.
+        method : Literal["sum", "prod"]
+            The method for calculating cumulative results:
+            - "sum": Cumulative sum of results.
+            - "prod": Cumulative product of results.
+        reverse_results : bool
+            Whether to reverse the order of results
+            (e.g., for short positions).
+
+        Returns:
+        --------
+        self
+            The updated Plot object with cumulative results and capital.
+        """
         self.calculate_results(gain, loss, reverse_results)
 
         if method == "sum":
