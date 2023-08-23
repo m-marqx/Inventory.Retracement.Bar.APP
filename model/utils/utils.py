@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Literal
 import pathlib
 import numpy as np
 import pandas as pd
@@ -742,7 +743,13 @@ class CalculateTradePerformance:
                 self.data_frame["Result"],
             )
 
-    def update_results(self, gain: float | pd.Series, loss: float | pd.Series, method: str, reverse_results: bool):
+    def update_results(
+        self,
+        gain: float | pd.Series,
+        loss: float | pd.Series,
+        method: Literal["sum", "prod"],
+        reverse_results: bool
+    ):
         """This function updates the results of a trading strategy based
         on gains and losses, using either a sum or product method, and
         returns the updated results.
@@ -792,6 +799,8 @@ class CalculateTradePerformance:
                 self.data_frame["Cumulative_Result"]
                 * self.data_frame["Capital"]
             )
+        else:
+            raise ValueError("Invalid Method argument")
 
         if self.percent:
             self.data_frame["Result"] = (self.data_frame["Result"] - 1) * 100
