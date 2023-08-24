@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 import dash_ag_grid as dag
 
-def intervals(lang):
+def intervals(lang: dict) -> list[dict]:
     """
     Get a list of time intervals for candlestick data.
 
