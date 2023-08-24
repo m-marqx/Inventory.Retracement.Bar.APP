@@ -41,6 +41,20 @@ def intervals(lang):
 
 
 def api_types(lang):
+    """
+    Get a list of API types.
+
+    Parameters:
+    -----------
+    lang : dict
+        A dictionary containing localized labels.
+
+    Returns:
+    --------
+    list of dict
+        A list of dictionaries, each containing a label and value for
+        different API types.
+    """
     return [
         {"label": lang["SPOT"], "value": "spot"},
         {"label": lang["FUTURES"], "value": "coin_margined"},
