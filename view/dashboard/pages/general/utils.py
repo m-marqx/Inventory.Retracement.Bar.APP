@@ -7,6 +7,20 @@ from dash import html, dcc
 import dash_ag_grid as dag
 
 def intervals(lang):
+    """
+    Get a list of time intervals for candlestick data.
+
+    Parameters:
+    -----------
+    lang : dict
+        A dictionary containing localized labels.
+
+    Returns:
+    --------
+    list of dict
+        A list of dictionaries, each containing a label and value for
+        different time intervals.
+    """
     return [
         {"label": "1min", "value": "1m"},
         {"label": "5min", "value": "5m"},
