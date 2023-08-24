@@ -64,6 +64,20 @@ def api_types(lang):
 
 
 def result_types(lang):
+    """
+    Get a list of result types for trading analysis.
+
+    Parameters:
+    -----------
+    lang : dict
+        A dictionary containing localized labels.
+
+    Returns:
+    --------
+    list of dict
+        A list of dictionaries, each containing a label and value for
+        different result types.
+    """
     return [
         {"label": lang["FIXED"], "value": "Fixed"},
         {"label": lang["NORMAL"], "value": "Normal"},
