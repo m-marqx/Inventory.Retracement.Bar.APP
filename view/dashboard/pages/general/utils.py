@@ -40,7 +40,7 @@ def intervals(lang):
     ]
 
 
-def api_types(lang):
+def api_types(lang: dict) -> list[dict]:
     """
     Get a list of API types.
 
