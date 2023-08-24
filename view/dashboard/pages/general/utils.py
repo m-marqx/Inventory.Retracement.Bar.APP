@@ -63,7 +63,7 @@ def api_types(lang):
     ]
 
 
-def result_types(lang):
+def result_types(lang: dict) -> list[dict]:
     """
     Get a list of result types for trading analysis.
 
