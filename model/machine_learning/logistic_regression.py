@@ -237,7 +237,7 @@ class LogisticModel:
         else:
             y_pred_probs = self.sk_model.predict_proba(self.X_test)[:, 1]
 
-        trading_cost = trading_fee * 2
+        trading_cost = (trading_fee * 2) / 100
 
         return_df = pd.DataFrame({"y_pred_probs" : y_pred_probs})
         return_df["Position"] = np.where(
