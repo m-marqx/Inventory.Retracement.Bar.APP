@@ -222,9 +222,15 @@ class LogisticModel:
             Boolean conditions indicating buy signals.
         test_sell_conds : np.ndarray of bool
             Boolean conditions indicating sell signals.
-        **kwargs : optional
-            Additional keyword arguments to customize the appearance
-            of the plot.
+        trading_fee : float, optional
+            The trading fee percentage applied to each transaction,
+            defaults to 0.03 (3%).
+        log_result : bool, optional
+            Determines whether to calculate results in logarithmic
+            space, defaults to True.
+        **kwargs : additional keyword arguments
+            Additional keyword arguments to be passed to the
+            `update_layout` method.
 
         Returns:
         --------
