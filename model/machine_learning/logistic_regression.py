@@ -229,8 +229,8 @@ class LogisticModel:
             Determines whether to calculate results in logarithmic
             space, defaults to True.
         **kwargs : additional keyword arguments
-            Additional keyword arguments to be passed to the
-            `update_layout` method.
+            Additional keyword arguments to be passed to Plotly Express
+            `line` method.
 
         Returns:
         --------
@@ -287,5 +287,6 @@ class LogisticModel:
 
         return px.line(
             return_df,
-            y=["Total_Return", "Liquid_Return"]
-        ).update_layout(**kwargs)
+            y=["Total_Return", "Liquid_Return"],
+            **kwargs,
+        )
