@@ -1,7 +1,8 @@
 ## Objetivo 🎯
-Com o objetivo de permitir um alto grau de customização para o usuário a página possui 5 menus: 
-`Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros da Têndencia`, `Modificar Parâmetros de Resultado`, cada menu com uma responsabilidade
-especifica.
+A homepage possui 2 objetivos:
+
+1. Ser uma interface em que o usuário customiza e visualiza de forma simples o resultado da estratégia IRB
+2. Permitir um alto grau de customização para o usuário a página possui 5 menus: `Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros da Têndencia`, `Modificar Parâmetros de Resultado`, cada menu com uma responsabilidade especifica.
  
  ## Dados 📊
 
