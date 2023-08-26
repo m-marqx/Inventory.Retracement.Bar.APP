@@ -78,8 +78,8 @@ pt_BR = {
     "INITIAL_CAPITAL": "Capital Inicial",
     "QUANTITY": "Quantidade",
     "PLOT_TYPE": "Mostrar Resultados",
-    "ALL_LINES": "Todas as Linhas",
-    "ONLY_POSITIVES": "Linhas Positivas",
+    "ALL_LINES": "Todos",
+    "ONLY_POSITIVES": "Apenas Positivos",
     "MODIFY_RESULT_CONFIGS_BUTTON": "Modificar Configurações de Resultado",
     # Backtest Button
     "RUN_BACKTEST": "Rodar Backtest",

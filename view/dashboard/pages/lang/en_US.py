@@ -78,8 +78,8 @@ en_US = {
     "INITIAL_CAPITAL": "Initial Capital",
     "QUANTITY": "Quantity",
     "PLOT_TYPE": "Plot Results",
-    "ALL_LINES": "All Lines",
-    "ONLY_POSITIVES": "Positive Lines",
+    "ALL_LINES": "All",
+    "ONLY_POSITIVES": "Only Positives",
     "MODIFY_RESULT_CONFIGS_BUTTON" : "Modify Result Settings",
     # Backtest Button
     "RUN_BACKTEST": "Run Backtest",
