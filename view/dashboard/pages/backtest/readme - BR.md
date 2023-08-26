@@ -7,7 +7,7 @@ Essa página tem como objetivo principal ser uma interface de simples customiza�
 
 Esses dois pontos ajudam a identificar qual é a faixa ideal de valores para ter bons resultados (teóricos) com a estratégia IRB.
 
-Semelhante a Homepage essa página tem também como objetivo possuir um alto grau de customização e por conta disso possui todos os menus da homepage sendo eles: `Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros da Têndencia`, `Modificar Parâmetros de Resultado`, e com a adicição do menu `Modificar Parâmetros de Hardware`.
+Semelhante a Homepage essa página tem também como objetivo possuir um alto grau de customização e por conta disso possui quase todos os menus da homepage sendo eles: `Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros de Resultado`, e com a adição do menu `Modificar Parâmetros de Hardware`.
 
 ## Dados 📊
 
