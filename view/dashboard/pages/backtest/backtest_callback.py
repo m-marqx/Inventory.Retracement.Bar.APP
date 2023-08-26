@@ -265,7 +265,6 @@ class RunBacktest:
             stacked_dataframe = []
             for value in range(0, range_max):
                 column_name = data_frame.columns[value]
-                stats_df = (data_frame[["Capital"]] - 100_000) / 100_000
                 stats_df = data_frame[[column_name]].diff()
                 stats_df = stats_df[stats_df[column_name] != 0][column_name]
 
