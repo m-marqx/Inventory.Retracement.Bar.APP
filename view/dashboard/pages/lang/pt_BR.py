@@ -69,8 +69,8 @@ pt_BR = {
     # Parâmetros de Resultado
     "MODIFY_RESULT_PARAMETERS_BUTTON": "Modificar Parâmetros de Resultado",
     "RESULT_TYPE": "Tipo de Resultado",
-    "FIXED": "Resultados Fixos",
-    "NORMAL": "Resultados Normais",
+    "FIXED": "Fixo",
+    "NORMAL": "Normal",
     "USE_PERCENTAGE_RESULTS": "Resultados Percentuais",
     "PROFIT": "Lucro",
     "LOSS": "Prejuízo",
