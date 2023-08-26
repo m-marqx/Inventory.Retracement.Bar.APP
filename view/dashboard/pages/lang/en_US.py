@@ -80,7 +80,7 @@ en_US = {
     "PLOT_TYPE": "Plot",
     "ALL_LINES": "All Lines",
     "ONLY_POSITIVES": "Positive Lines",
-    "MODIFY_RESULT_CONFIGS_BUTTON" : "Modify Result Configuration",
+    "MODIFY_RESULT_CONFIGS_BUTTON" : "Modify Result Settings",
     # Backtest Button
     "RUN_BACKTEST": "Run Backtest",
 }
