@@ -1,6 +1,8 @@
 ## Objective 🎯
-With the aim of allowing a high degree of customization for the user, the page features 5 menus:
-`Get Data`, `Modify Indicator Parameters`, `Modify Strategy Parameters`, `Modify Trend Parameters`, `Modify Result Parameters`, each menu with a specific responsibility.
+The homepage has 2 objectives:
+
+1. To be an interface where the user can easily customize and visualize the results of the IRB strategy.
+2. To allow a high degree of customization for the user, the page features 5 menus: `Get Data`, `Modify Indicator Parameters`, `Modify Strategy Parameters`, `Modify Trend Parameters`, `Modify Result Parameters`, each menu with a specific responsibility.
 
 ## Data 📊
 
