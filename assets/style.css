@@ -293,6 +293,12 @@
   background: var(--gray-11) !important;
 }
 
+.btn-check:disabled+.btn, .btn-check[disabled]+.btn {
+    pointer-events: none;
+    filter: none;
+    color: rgba(255, 255, 255, 0.25) !important;
+}
+
 .navbar {
   height: 32px !important;
 }
