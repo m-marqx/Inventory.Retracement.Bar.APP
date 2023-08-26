@@ -77,7 +77,7 @@ pt_BR = {
     "RISK_FREE_RATE": "Taxa Livre de Risco",
     "INITIAL_CAPITAL": "Capital Inicial",
     "QUANTITY": "Quantidade",
-    "PLOT_TYPE": "Mostrar",
+    "PLOT_TYPE": "Mostrar Resultados",
     "ALL_LINES": "Todas as Linhas",
     "ONLY_POSITIVES": "Linhas Positivas",
     "MODIFY_RESULT_CONFIGS_BUTTON": "Modificar Configurações de Resultado",

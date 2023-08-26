@@ -77,7 +77,7 @@ en_US = {
     "RISK_FREE_RATE": "Risk Free Rate",
     "INITIAL_CAPITAL": "Initial Capital",
     "QUANTITY": "Quantity",
-    "PLOT_TYPE": "Plot",
+    "PLOT_TYPE": "Plot Results",
     "ALL_LINES": "All Lines",
     "ONLY_POSITIVES": "Positive Lines",
     "MODIFY_RESULT_CONFIGS_BUTTON" : "Modify Result Settings",
