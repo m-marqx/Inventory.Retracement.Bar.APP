@@ -198,6 +198,11 @@ class RunBacktest:
                 0.01,
             )
 
+            backtest_min_indicator_macd_histogram_trend_value = 0
+            backtest_max_indicator_macd_histogram_trend_value = 0
+            backtest_min_indicator_cci_trend_value = 0
+            backtest_max_indicator_cci_trend_value = 0
+
             macd_histogram_trend_value_range = range(
                 backtest_min_indicator_macd_histogram_trend_value,
                 backtest_max_indicator_macd_histogram_trend_value + 1,
@@ -221,7 +226,7 @@ class RunBacktest:
                 ),
                 indicators_params=IndicatorsParamsBacktest(
                     ema_column=["open", "high", "low", "close"],
-                    macd_histogram_trend_value=list(macd_histogram_trend_value_range),
+                    macd_histogram_trend_value=[list(macd_histogram_trend_value_range)],
                     cci_trend_value=list(cci_trend_value_range),
                 ),
                 trend_params=TrendParamsBacktest(
