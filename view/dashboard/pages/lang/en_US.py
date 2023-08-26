@@ -40,9 +40,9 @@ en_US = {
     "ACTIVATE_INDICATOR": "Activate Indicator",
     # Modify Hardware Parameters
     "MODIFY_HARDWARE_PARAMETERS_BUTTON": "Modify Hardware Parameters",
-    "GPU_NUMBER": "GPU Number",
+    "GPU_NUMBER": "GPU Quantity",
     "CPU_CORES_NUMBER": "CPU Cores Number",
-    "GPU_WORKERS_NUMBERS": "GPU Workers Numbers",
+    "GPU_WORKERS_NUMBERS": "GPU Workers",
     "HARDWARE_TYPE": "Hardware Type",
     # Main Button
     "RUN_STRATEGY": "Run Strategy",
