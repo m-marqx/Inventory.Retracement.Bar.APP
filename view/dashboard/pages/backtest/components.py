@@ -312,7 +312,11 @@ class BacktestComponents:
                             dbc.RadioItems(
                                 [
                                     {"label": "CPU", "value": "CPU"},
-                                    {"label": "GPU", "value": "GPU"},
+                                    {
+                                        "label": "GPU",
+                                        "value": "GPU",
+                                        "disabled": self.disable_gpu_input
+                                    },
                                 ],
                                 id="hardware_types",
                                 class_name="btn-group",
