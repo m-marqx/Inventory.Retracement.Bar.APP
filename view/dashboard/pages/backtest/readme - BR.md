@@ -15,7 +15,7 @@ O menu `Obter dados` Tem como objetivo permitir o usuário a escolher em qual ti
  
 `Spot (Mercado à vista), Futuros, Preço de Marcação (Mark Price)`: ele deverá selecionar o Timeframe e o Símbolo que deseja obter os dados
 
-![](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/da075f14-0b79-49eb-8e9c-4d105d97766b)
+![image](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/b936bb2e-f9ef-4bb5-960c-520a073a2eca)
 
 `Outro`: Caso o usuário já tenha os dados ele poderá selecionar a opção `Outro` que permite arquivos no formato `parquet` e `csv`.
 
