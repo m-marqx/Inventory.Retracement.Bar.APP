@@ -484,3 +484,67 @@ class DataHandler:
         ]
 
         return self.data_frame.loc[max_acc_targets]
+
+    def drop_outlier(
+        self,
+        target_column: str,
+        iqr_scale: float = 1.5,
+        upper_quantile: float = 0.75,
+        down_quantile: float = 0.25
+    ) -> pd.Series:
+        """
+        Remove outliers from a specific column using the Interquartile
+        Range (IQR) method.
+
+        Parameters:
+        -----------
+        target_column : str
+            The name of the column from which outliers will be removed.
+        iqr_scale : float, optional
+            A scale factor to adjust the range of the IQR.
+            (default: 1.5)
+        upper_quantile : float, optional
+            The quantile value for the upper bound of the IQR range.
+            (default: 0.75 (75th percentile))
+        down_quantile : float, optional
+            The quantile value for the lower bound of the IQR range.
+            (default: 0.25 (25th percentile))
+
+        Returns:
+        --------
+        pd.Series
+            A new Series with outliers replaced by the nearest valid
+            values within the IQR range.
+        """
+        outlier_array = self.data_frame[target_column].copy()
+
+        iqr_range = (
+            outlier_array.quantile(upper_quantile)
+            - outlier_array.quantile(down_quantile)
+        ) * iqr_scale
+
+        upper_bound = (
+            outlier_array
+            .quantile(upper_quantile)
+            + iqr_range
+        )
+
+        lower_bound = (
+            outlier_array
+            .quantile(down_quantile)
+            - iqr_range
+        )
+
+        outlier_array = np.where(
+            outlier_array > upper_bound,
+            upper_bound,
+            outlier_array
+        )
+
+        outlier_array = np.where(
+            outlier_array < lower_bound,
+            lower_bound,
+            outlier_array
+        )
+
+        return pd.Series(outlier_array)
