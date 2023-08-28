@@ -22,7 +22,6 @@ The `Get Data` menu's objective is to allow the user to choose the type of marke
 
 ![Custom](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/5dc6236b-1c54-46d6-a3f9-851e62645121)
 
-
 ## Indicators 💹
 
 In the `Modify Indicator Parameters` menu, only the EMA indicator is available for testing. A Grid Search will be conducted with all possible values of the `Minimum EMA Length` to the `Maximum EMA Length`.

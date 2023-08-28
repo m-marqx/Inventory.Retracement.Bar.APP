@@ -7,7 +7,7 @@ Essa página tem como objetivo principal ser uma interface de simples customiza�
 
 Esses dois pontos ajudam a identificar qual é a faixa ideal de valores para ter bons resultados (teóricos) com a estratégia IRB.
 
-Semelhante a Homepage essa página tem também como objetivo possuir um alto grau de customização e por conta disso possui todos os menus da homepage sendo eles: `Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros da Têndencia`, `Modificar Parâmetros de Resultado`, e com a adicição do menu `Modificar Parâmetros de Hardware`.
+Semelhante a Homepage essa página tem também como objetivo possuir um alto grau de customização e por conta disso possui quase todos os menus da homepage sendo eles: `Obter dados`, `Modificar Parâmetros de indicadores`, `Modificar Parâmetros da estratégia`, `Modificar Parâmetros de Resultado`, e com a adição do menu `Modificar Parâmetros de Hardware`.
 
 ## Dados 📊
 
@@ -15,7 +15,7 @@ O menu `Obter dados` Tem como objetivo permitir o usuário a escolher em qual ti
  
 `Spot (Mercado à vista), Futuros, Preço de Marcação (Mark Price)`: ele deverá selecionar o Timeframe e o Símbolo que deseja obter os dados
 
-![](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/da075f14-0b79-49eb-8e9c-4d105d97766b)
+![image](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/b936bb2e-f9ef-4bb5-960c-520a073a2eca)
 
 `Outro`: Caso o usuário já tenha os dados ele poderá selecionar a opção `Outro` que permite arquivos no formato `parquet` e `csv`.
 
