@@ -487,36 +487,45 @@ class DataHandler:
 
     def drop_outlier(
         self,
-        target_column: str,
+        target_column: str = None,
         iqr_scale: float = 1.5,
         upper_quantile: float = 0.75,
         down_quantile: float = 0.25
     ) -> pd.Series:
         """
-        Remove outliers from a specific column using the Interquartile
-        Range (IQR) method.
+        Remove outliers from a given target column using the IQR
+        (Interquartile Range) method.
 
         Parameters:
         -----------
-        target_column : str
-            The name of the column from which outliers will be removed.
+        target_column : str, optional
+            The name of the target column containing the data to be processed.
+            If None, the instance's data_frame will be used as the target.
         iqr_scale : float, optional
-            A scale factor to adjust the range of the IQR.
+            The scaling factor to determine the outlier range based on the IQR.
             (default: 1.5)
         upper_quantile : float, optional
-            The quantile value for the upper bound of the IQR range.
+            The upper quantile value for calculating the IQR.
             (default: 0.75 (75th percentile))
         down_quantile : float, optional
-            The quantile value for the lower bound of the IQR range.
+            The lower quantile value for calculating the IQR.
             (default: 0.25 (25th percentile))
 
         Returns:
         --------
         pd.Series
-            A new Series with outliers replaced by the nearest valid
-            values within the IQR range.
+            A Series with outliers removed based on the specified
+            criteria.
         """
-        outlier_array = self.data_frame[target_column].copy()
+        if target_column is None:
+            if isinstance(self.data_frame, pd.Series):
+                outlier_array = self.data_frame.copy()
+            else:
+                raise ValueError(
+                    "target_column must be provided for DataFrame input."
+                )
+        else:
+            outlier_array = self.data_frame[target_column].copy()
 
         iqr_range = (
             outlier_array.quantile(upper_quantile)
