@@ -9,6 +9,7 @@ import graphviz
 
 from tree_params import TreeParams, TrainTestSplits
 
+
 class DataPreprocessor:
     """
     A class for preprocessing and splitting data for binary
@@ -157,6 +158,7 @@ class DataPreprocessor:
         )
 
         graphviz.Source(dot_data, format="png").view()
+
 
 class RandomForestSearcher:
     """
@@ -326,7 +328,7 @@ class RandomForestSearcher:
 
         results_df = pd.DataFrame()
         for column in enumerate(parameters_columns):
-            results_df[column[1]] = parameters_df.iloc[column[0]::8]
+            results_df[column[1]] = parameters_df.iloc[column[0] :: 8]
 
         if drop_zeros:
             results_df = DataHandler(results_df).drop_zero_predictions("y_pred")
@@ -399,6 +401,7 @@ class DataHandler:
             The Series with rows dropped where the specified column
             has all zero values.
         """
+
         def _is_all_zero(list_values: list) -> bool:
             return all(value == 0 for value in list_values)
 
@@ -490,7 +493,7 @@ class DataHandler:
         column: str = None,
         iqr_scale: float = 1.5,
         upper_quantile: float = 0.75,
-        down_quantile: float = 0.25
+        down_quantile: float = 0.25,
     ) -> pd.Series:
         """
         Remove outliers from a given target column using the IQR
@@ -532,17 +535,9 @@ class DataHandler:
             - outlier_array.quantile(down_quantile)
         ) * iqr_scale
 
-        upper_bound = (
-            outlier_array
-            .quantile(upper_quantile)
-            + iqr_range
-        )
+        upper_bound = outlier_array.quantile(upper_quantile) + iqr_range
 
-        lower_bound = (
-            outlier_array
-            .quantile(down_quantile)
-            - iqr_range
-        )
+        lower_bound = outlier_array.quantile(down_quantile) - iqr_range
 
         outlier_array = np.where(
             outlier_array > upper_bound,
