@@ -487,7 +487,7 @@ class DataHandler:
 
     def drop_outlier(
         self,
-        target_column: str = None,
+        column: str = None,
         iqr_scale: float = 1.5,
         upper_quantile: float = 0.75,
         down_quantile: float = 0.25
@@ -498,7 +498,7 @@ class DataHandler:
 
         Parameters:
         -----------
-        target_column : str, optional
+        column : str, optional
             The name of the target column containing the data to be processed.
             If None, the instance's data_frame will be used as the target.
         iqr_scale : float, optional
@@ -517,15 +517,15 @@ class DataHandler:
             A Series with outliers removed based on the specified
             criteria.
         """
-        if target_column is None:
+        if column is None:
             if isinstance(self.data_frame, pd.Series):
                 outlier_array = self.data_frame.copy()
             else:
                 raise ValueError(
-                    "target_column must be provided for DataFrame input."
+                    "column must be provided for DataFrame input."
                 )
         else:
-            outlier_array = self.data_frame[target_column].copy()
+            outlier_array = self.data_frame[column].copy()
 
         iqr_range = (
             outlier_array.quantile(upper_quantile)
