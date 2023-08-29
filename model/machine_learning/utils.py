@@ -556,4 +556,4 @@ class DataHandler:
             outlier_array
         )
 
-        return pd.Series(outlier_array)
+        return pd.Series(outlier_array, index=self.data_frame.index)
