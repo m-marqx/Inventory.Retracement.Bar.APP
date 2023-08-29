@@ -485,7 +485,7 @@ class DataHandler:
 
         return self.data_frame.loc[max_acc_targets]
 
-    def drop_outlier(
+    def fill_outlier(
         self,
         column: str = None,
         iqr_scale: float = 1.5,
