@@ -488,6 +488,63 @@ class DataHandler:
 
         return self.data_frame.loc[max_acc_targets]
 
+    def model_return_stats(self, result_column: str = None) -> tuple:
+        """
+        Calculate various statistics related to model returns.
+
+        Parameters:
+        -----------
+        result_column : str, optional
+            The name of the column containing the results (returns) for
+            analysis.
+            If None, the instance's data_frame will be used as the
+            result column.
+
+        Returns:
+        --------
+        tuple
+            A tuple containing the following statistics:
+            - expected_return : float
+                The expected return based on the provided result column.
+            - win_rate : float
+                The win rate (percentage of positive outcomes) of the
+                model.
+            - positive_mean : float
+                The mean return of positive outcomes from the model.
+            - negative_mean : float
+                The mean return of negative outcomes from the model.
+        """
+        if result_column is None:
+            if isinstance(self.data_frame, pd.Series):
+                positive = self.data_frame[self.data_frame > 0]
+                negative = self.data_frame[self.data_frame < 0]
+                positive_mean = positive.mean()
+                negative_mean = negative.mean()
+            else:
+                raise ValueError(
+                    "result_column must be provided for DataFrame input."
+                )
+
+        else:
+            positive = self.data_frame.query(f"{result_column} > 0")
+            negative = self.data_frame.query(f"{result_column} < 0")
+            positive_mean = positive[f"{result_column}"].mean()
+            negative_mean = negative[f"{result_column}"].mean()
+
+        win_rate = (
+            positive.shape[0]
+            / (positive.shape[0] + negative.shape[0])
+        )
+
+        expected_return = (
+            positive_mean
+            * win_rate
+            - negative_mean
+            * (win_rate - 1)
+        )
+
+        return expected_return, win_rate, positive_mean, negative_mean
+
     def fill_outlier(
         self,
         column: str = None,
