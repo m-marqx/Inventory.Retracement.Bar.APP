@@ -280,7 +280,8 @@ class Plot:
 
     def trading_results(self):
         """
-        Create and display a subplot containing cumulative results and a candlestick chart.
+        Create and display a subplot containing cumulative results and
+        a candlestick chart.
 
         Returns:
         --------
