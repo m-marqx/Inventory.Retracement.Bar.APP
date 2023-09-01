@@ -1,3 +1,4 @@
+from typing import Literal
 import pandas as pd
 from model.indicators import MovingAverage
 
@@ -38,7 +39,7 @@ class MACD:
         fast_length: int,
         slow_length: int,
         signal_length: int,
-        method: str = "ema",
+        method: Literal["ema", "sma"] = "ema",
     ):
         self.source = source
         self.fast_length = fast_length
@@ -48,6 +49,8 @@ class MACD:
             self.__set_sma()
         if method == "ema":
             self.__set_ema()
+        else:
+            raise ValueError(f"'{method}' is not a valid method.")
 
     def __set_ema(self):
         """Calculate the fast and slow exponential moving averages."""
