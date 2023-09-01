@@ -40,7 +40,7 @@ class MACD:
         slow_length: int,
         signal_length: int,
         method: Literal["ema", "sma"] = "ema",
-    ):
+    ) -> None:
         """
         Initialize the Moving Average Convergence Divergence (MACD)
         indicator.
@@ -77,11 +77,11 @@ class MACD:
         else:
             raise ValueError(f"'{method}' is not a valid method.")
 
-    def __set_ema(self):
+    def __set_ema(self) -> None:
         self.fast_ma = ma.ema(self.source, self.fast_length)
         self.slow_ma = ma.ema(self.source, self.slow_length)
 
-    def __set_sma(self):
+    def __set_sma(self) -> None:
         self.fast_ma = ma.sma(self.source, self.fast_length)
         self.slow_ma = ma.sma(self.source, self.slow_length)
 
