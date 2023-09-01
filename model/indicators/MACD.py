@@ -6,31 +6,49 @@ ma = MovingAverage()
 
 
 class MACD:
-    """Moving Average Convergence Divergence (MACD) indicator.
+    """
+    Calculate the Moving Average Convergence Divergence (MACD) indicator.
 
-    Calculates the MACD histogram based on the provided source data and parameters.
-
-    Parameters
-    ----------
-    source : pandas.Series
-        The source data.
+    Parameters:
+    -----------
+    source : pd.Series
+        The input time series data for calculating MACD.
     fast_length : int
-        The length of the fast moving average.
+        The number of periods for the fast moving average.
     slow_length : int
-        The length of the slow moving average.
+        The number of periods for the slow moving average.
     signal_length : int
-        The length of the signal line moving average.
-    method : str, optional
-        The method used for calculating moving averages. Defaults to "ema".
-        Supported methods are "sma" (Simple Moving Average) and "ema"
-        (Exponential Moving Average).
+        The number of periods for the signal line moving average.
+    method : Literal["ema", "sma"], optional
+        The method to use for calculating moving averages, either
+        "ema" for Exponential Moving Average or "sma" for Simple
+        Moving Average.
+        (default: "ema")
 
-    Attributes
-    ----------
-    fast_ma : pandas.Series
-        The fast moving average.
-    slow_ma : pandas.Series
-        The slow moving average.
+    Raises:
+    -------
+    ValueError
+        If an invalid method is provided.
+
+    Attributes:
+    -----------
+    source : pd.Series
+        The input time series data for calculating MACD.
+    fast_length : int
+        The number of periods for the fast moving average.
+    slow_length : int
+        The number of periods for the slow moving average.
+    signal_length : int
+        The number of periods for the signal line moving average.
+    fast_ma : pd.Series
+        The fast moving average values.
+    slow_ma : pd.Series
+        The slow moving average values.
+
+    Methods:
+    --------
+    get_histogram(self) -> pd.DataFrame:
+        Calculate the MACD histogram.
 
     """
     def __init__(
