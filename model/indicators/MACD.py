@@ -69,7 +69,7 @@ class MACD:
             The MACD histogram.
 
         """
-        macd = self.fast_ma - self.slow_ma
+        macd = (self.fast_ma - self.slow_ma).dropna()
         macd_signal = ma.ema(macd, self.signal_length)
         histogram = macd - macd_signal
         return histogram
