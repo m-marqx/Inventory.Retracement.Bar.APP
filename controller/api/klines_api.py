@@ -225,7 +225,8 @@ class KlineAPI:
         Parameters:
         -----------
         start_time : int, optional
-            The start time for retrieving Kline data in milliseconds. (default: 1502942400000)
+            The start time for retrieving Kline data in milliseconds.
+            (default: 1502942400000)
 
         Returns:
         --------
