@@ -130,3 +130,31 @@ class DMI:
 
         adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
         return adx, plus, minus
+
+    def di_delta(
+        self,
+        adx_smoothing,
+        di_length
+    ) -> tuple[pd.Series, pd.Series]:
+        """
+        Calculate the difference between the Positive Directional
+        Movement (+DI) and Negative Directional Movement (-DI),
+        and the ratio of +DI to -DI.
+
+        Parameters:
+        -----------
+        adx_smoothing : int
+            The smoothing period for calculating the Average Directional
+            Index (ADX).
+        di_length : int
+            The length of the directional movement indicator (DI)
+            period.
+
+        Returns:
+        --------
+        tuple[pd.Series, pd.Series]
+            A tuple containing the difference between +DI and -DI and
+            the ratio of +DI to -DI.
+        """
+        _, plus, minus = self.adx(adx_smoothing, di_length)
+        return plus - minus, plus / minus
