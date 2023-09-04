@@ -235,7 +235,7 @@ class KlineAPI:
         max_candle_limit = 1000
 
         if self.is_futures:
-            start_time = max(start_time, 1597118400000)
+            start_time = max(start_time, 1597028400000)
             max_candle_limit = 1500
 
         end_times = self.utils.get_end_times(start_time, max_candle_limit)
