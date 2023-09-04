@@ -63,7 +63,8 @@ class KlineAPI:
     update_data()
         Update the Kline data.
     update_klines(dataframe)
-        Update the Kline data by appending new data to the existing DataFrame.
+        Update the Kline data by appending new data to the existing
+        DataFrame.
     to_DataFrame()
         Convert the Kline data to a DataFrame.
     to_OHLC_DataFrame()
