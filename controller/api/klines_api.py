@@ -70,7 +70,7 @@ class KlineAPI:
     to_OHLC_DataFrame()
         Convert the Kline data to an OHLC DataFrame.
     """
-    def __init__(self, symbol, interval, api="coin_margined"):
+    def __init__(self, symbol, interval, api="coin_margined") -> None:
         """
         Initialize the KlineAPI object.
 
@@ -115,7 +115,7 @@ class KlineAPI:
 
         self.custom_interval = interval not in self.utils.default_intervals
 
-    def get_exchange_symbol_info(self):
+    def get_exchange_symbol_info(self) -> pd.DataFrame:
         """
         Get the exchange symbol information for the specified symbol.
 
@@ -135,7 +135,7 @@ class KlineAPI:
         symbol_info = info_df.query(f"symbol == '{self.symbol}'")
         return symbol_info
 
-    def get_ticker_info(self):
+    def get_ticker_info(self) -> pd.DataFrame:
         """
         Get the ticker information for the specified symbol.
 
@@ -160,7 +160,7 @@ class KlineAPI:
         df_filtered = df_filtered.astype("float64")
         return df_filtered
 
-    def get_tick_size(self):
+    def get_tick_size(self) -> float:
         """
         Get the tick size for the specified symbol.
 
@@ -177,7 +177,7 @@ class KlineAPI:
         self,
         start_time,
         end_time,
-    ):
+    ) -> list:
         """
         Request Kline data for the specified time range.
 
@@ -265,7 +265,9 @@ class KlineAPI:
         self.klines_list = klines_list
         return self
 
-    def update_data(self):
+    def update_data(
+        self
+    ) -> tuple[pd.DataFrame, pd.DataFrame] | tuple[pd.DataFrame, None]:
         """
         Update the Kline data.
 
@@ -280,7 +282,10 @@ class KlineAPI:
         data_frame = pd.read_parquet(dataframe_path)
         return self.update_klines(data_frame)
 
-    def update_klines(self, dataframe):
+    def update_klines(
+        self,
+        dataframe
+    ) -> tuple[pd.DataFrame, pd.DataFrame] | tuple[pd.DataFrame, None]:
         """
         Update the Kline data by appending new data to the existing
         DataFrame.
@@ -319,7 +324,7 @@ class KlineAPI:
 
         return updated_dataframe, None
 
-    def to_DataFrame(self):
+    def to_DataFrame(self) -> pd.DataFrame:
         """
         Convert the Kline data to a DataFrame.
 
@@ -334,7 +339,7 @@ class KlineAPI:
             klines_df.resample_ohlc(self.interval).ohlc()
         return klines_df
 
-    def to_OHLC_DataFrame(self):
+    def to_OHLC_DataFrame(self) -> pd.DataFrame:
         """
         Convert the Kline data to an OHLC DataFrame.
 
