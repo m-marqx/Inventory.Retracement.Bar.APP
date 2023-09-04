@@ -3,7 +3,7 @@ import pathlib
 import pandas as pd
 from binance.client import Client
 import model.utils.custom_pandas_methods
-from .utils import KlineUtils, KlineTimes
+from controller.api.utils import KlineUtils, KlineTimes
 
 
 class KlineAPI:
