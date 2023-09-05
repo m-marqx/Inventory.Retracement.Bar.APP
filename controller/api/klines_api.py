@@ -100,20 +100,13 @@ class KlineAPI:
         self.client = Client()
         self.klines_list = None
         self.futures_options = ["coin_margined", "mark_price", "futures"]
+        self.is_futures = self.api in self.futures_options
         self.all_options = ["spot"] + self.futures_options
 
         self.max_interval = KlineTimes(self.symbol, interval).get_max_interval
         self.utils = KlineTimes(self.symbol, self.max_interval)
 
-        self.is_futures = any(
-            api_selected in self.futures_options
-            for api_selected in [self.api]
-        )
-
-        if not any(
-            api_selected in self.all_options
-            for api_selected in [self.api]
-        ):
+        if self.api not in self.all_options:
             raise ValueError(
                 "Klines function should be either "
                 "'coin_margined', 'mark_price', futures or 'spot'."
