@@ -1,5 +1,6 @@
 import time
 import pathlib
+from typing import Literal
 import pandas as pd
 from binance.client import Client
 import model.utils.custom_pandas_methods
@@ -70,7 +71,12 @@ class KlineAPI:
     to_OHLC_DataFrame()
         Convert the Kline data to an OHLC DataFrame.
     """
-    def __init__(self, symbol, interval, api="coin_margined") -> None:
+    def __init__(
+        self,
+        symbol=str,
+        interval=str,
+        api=Literal["coin_margined", "mark_price", "futures", "spot"]
+    ) -> None:
         """
         Initialize the KlineAPI object.
 
