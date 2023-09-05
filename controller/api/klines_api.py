@@ -18,10 +18,11 @@ class KlineAPI:
     interval : str
         The time interval for the Kline data
         (e.g., '1m', '5m', '1h', etc.).
-    api : str, optional
+    api : Literal["coin_margined", "mark_price", "futures", "spot"],
+    optional
         The API type to use for retrieving the data.
         Valid options are 'coin_margined', 'mark_price',
-        or 'spot'.
+        'futures' or 'spot'.
         (default: 'coin_margined')
 
     Attributes:
@@ -87,10 +88,11 @@ class KlineAPI:
         interval : str
             The time interval for the Kline data
             (e.g., '1m', '5m', '1h', etc.).
-        api : str, optional
+        api : Literal["coin_margined", "mark_price", "futures", "spot"],
+        optional
             The API type to use for retrieving the data.
             Valid options are 'coin_margined', 'mark_price',
-            or 'spot'.
+            'futures' or 'spot'.
             (default: 'coin_margined')
         """
         self.symbol = symbol
