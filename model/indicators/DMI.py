@@ -133,8 +133,8 @@ class DMI:
 
     def di_delta(
         self,
-        adx_smoothing,
-        di_length
+        adx_smoothing=14,
+        di_length=14,
     ) -> tuple[pd.Series, pd.Series]:
         """
         Calculate the difference between the Positive Directional
@@ -143,12 +143,12 @@ class DMI:
 
         Parameters:
         -----------
-        adx_smoothing : int
-            The smoothing period for calculating the Average Directional
-            Index (ADX).
-        di_length : int
-            The length of the directional movement indicator (DI)
-            period.
+        adx_smoothing : int, optional
+            The smoothing period for calculating the ADX.
+            (default: 14)
+        di_length : int, optional
+            The length of the directional movement indicator (DI) period.
+            (default: 14)
 
         Returns:
         --------
