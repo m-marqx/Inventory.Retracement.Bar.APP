@@ -22,7 +22,7 @@ class DMI:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        source: str,
+        source: str = None,
         high: str = None,
         low: str = None,
     ) -> None:
@@ -52,7 +52,13 @@ class DMI:
         if not isinstance(source, str):
             raise ValueError("source param must be a string")
 
-        self.source = dataframe[source]
+        if source is None:
+            if "Close" in dataframe.columns:
+                self.source = dataframe["Close"]
+            elif "close" in dataframe.columns:
+                self.source = dataframe["close"]
+        else:
+            self.source = dataframe[source]
 
         if high is None:
             if "High" in dataframe.columns:
