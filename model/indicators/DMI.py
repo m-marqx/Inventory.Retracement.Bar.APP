@@ -49,6 +49,12 @@ class DMI:
         length : int, optional
             The length of the stochastic period. Default is 14.
         """
+        if not isinstance(dataframe, pd.DataFrame):
+            raise ValueError("dataframe param must be a DataFrame")
+
+        if not isinstance(source, str):
+            raise ValueError("source param must be a string")
+
         self.source = dataframe[source]
 
         if high is None:
