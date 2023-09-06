@@ -25,7 +25,6 @@ class DMI:
         source: str,
         high: str = None,
         low: str = None,
-        length: int = 14
     ) -> None:
         """
         Initialize the DMI object with the given data and
@@ -46,8 +45,6 @@ class DMI:
             The column name in the DataFrame representing the low
             data. If not provided,
             it will be inferred from common column names.
-        length : int, optional
-            The length of the stochastic period. Default is 14.
         """
         if not isinstance(dataframe, pd.DataFrame):
             raise ValueError("dataframe param must be a DataFrame")
@@ -72,8 +69,6 @@ class DMI:
                 self.low = dataframe["low"]
         else:
             self.low = dataframe[low]
-
-        self.length = length
 
     def true_range(self) -> pd.Series:
         """
