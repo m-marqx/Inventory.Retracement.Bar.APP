@@ -231,7 +231,7 @@ class KlineAPI:
 
     def get_Klines(
         self,
-        start_time=1502942400000,
+        start_time=1502852400000,
     ):
         """
         Get Kline data for the specified start time.
@@ -240,7 +240,7 @@ class KlineAPI:
         -----------
         start_time : int, optional
             The start time for retrieving Kline data in milliseconds.
-            (default: 1502942400000)
+            (default: 1502852400000)
 
         Returns:
         --------
