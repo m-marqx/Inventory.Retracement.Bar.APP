@@ -151,3 +151,38 @@ class CcxtAPI:
         self.data_frame = self.data_frame.set_index("date")
         return self
 
+    def date_check(self) -> pd.DataFrame:
+        """
+        Check for irregularities in the K-line data timestamps and
+        return a DataFrame with discrepancies.
+
+        Returns:
+        --------
+        pd.DataFrame
+            Returns a pandas DataFrame with discrepancies in
+            timestamps.
+        """
+        ohlcv_columns = ["open", "high", "low", "close", "volume"]
+
+        time_interval = pd.Timedelta(self.interval)
+
+        date_check_df = self.data_frame.copy()
+        date_check_df["actual_date"] = date_check_df.index
+        date_check_df["previous_date"] = date_check_df["actual_date"].shift()
+
+        date_check_df = date_check_df[
+            ohlcv_columns
+            + ["actual_date", "previous_date"]
+        ]
+
+        date_check_df["timedelta"] = (
+            date_check_df["actual_date"]
+            - date_check_df["previous_date"]
+        )
+        date_check_df = date_check_df.iloc[1:]
+
+        date_check_df = date_check_df[
+            date_check_df["timedelta"] != time_interval
+        ]
+
+        return date_check_df
