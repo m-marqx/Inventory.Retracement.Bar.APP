@@ -83,3 +83,47 @@ class CcxtAPI:
         self.data_frame = None
         self.klines_list = None
 
+    def get_all_klines(self):
+        """
+        Fetch all K-line data for the specified symbol and interval.
+
+        Returns:
+        --------
+        CcxtAPI
+            Returns the CcxtAPI object with the fetched K-line data.
+        """
+        max_multiplier = int(self.utils.calculate_max_multiplier())
+        first_call = self.exchange.fetch_ohlcv(
+            self.symbol,
+            self.interval,
+            since=self.first_candle_time,
+            limit=max_multiplier
+        )
+
+        if first_call:
+            first_unix_time = first_call[0][0]
+            end_times = self.utils.get_end_times(
+                first_unix_time,
+                max_multiplier
+            )
+        else:
+            end_times = self.utils.get_end_times(1325296800000, max_multiplier)
+
+        klines_list = []
+
+        START = time.perf_counter()
+
+        for index in range(0, len(end_times) - 1):
+            klines_list.extend(
+                self.exchange.fetch_ohlcv(
+                    symbol=self.symbol,
+                    timeframe=self.interval,
+                    since=int(end_times[index]),
+                    limit=max_multiplier,
+                )
+            )
+            print("\nQty  : " + str(len(klines_list)))
+        print(f"Elapsed time: {time.perf_counter() - START}")
+        self.klines_list = klines_list
+        return self
+
