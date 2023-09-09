@@ -1,6 +1,7 @@
 import time
 import pandas as pd
 import ccxt
+from model.utils import interval_to_milliseconds
 from .utils import KlineTimes
 
 class CcxtAPI:
@@ -145,25 +146,39 @@ class CcxtAPI:
 
         if first_call:
             first_unix_time = first_call[0][0]
-            end_times = self.utils.get_end_times(
-                first_unix_time,
-                self.max_multiplier
-            )
         else:
-            end_times = self.utils.get_end_times(self.first_candle_time, self.max_multiplier)
+            first_unix_time = self.search_first_candle_time()
 
-        klines_list = []
+        klines = []
 
         START = time.perf_counter()
 
-        for index in range(0, len(end_times) - 1):
-            klines_list.extend(
+        print("Starting loop")
+        while True:
+            time_value = klines[-1][0] + 1 if klines else first_unix_time
+
+            klines = (
                 self.exchange.fetch_ohlcv(
                     symbol=self.symbol,
                     timeframe=self.interval,
-                    since=int(end_times[index]),
+                    since=time_value,
                 )
             )
+
+            if 'temp_end_klines' in locals():
+                if temp_end_klines == klines[-1][0]:
+                    raise ValueError("End time not found")
+            else:
+                temp_end_klines = klines[-1][0]
+
+            last_candle_interval = (
+                time.time() * 1000 - interval_to_milliseconds("1d")
+            )
+
+            if klines[-1][0] >= last_candle_interval:
+                break
+
+            klines_list.extend(klines)
             print("\nQty  : " + str(len(klines_list)))
 
         print(f"\nElapsed time: {time.perf_counter() - START}")
