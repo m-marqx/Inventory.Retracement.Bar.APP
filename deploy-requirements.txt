@@ -21,3 +21,4 @@ IPython
 fastdtw
 screeninfo
 klib
+ccxt
