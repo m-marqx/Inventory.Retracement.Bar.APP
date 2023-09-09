@@ -127,3 +127,27 @@ class CcxtAPI:
         self.klines_list = klines_list
         return self
 
+    def to_OHLCV(self) -> pd.DataFrame:
+        """
+        Convert the fetched K-line data into a pandas DataFrame in
+        OHLCV format.
+
+        Returns:
+        --------
+        pd.DataFrame
+            Returns a pandas DataFrame containing OHLCV data.
+        """
+        ohlcv_columns = ["open", "high", "low", "close", "volume"]
+
+        self.data_frame = pd.DataFrame(
+            self.klines_list,
+            columns=["date"] + ohlcv_columns
+        )
+
+        self.data_frame["date"] = self.data_frame["date"].astype(
+            "datetime64[ms]"
+        )
+
+        self.data_frame = self.data_frame.set_index("date")
+        return self
+
