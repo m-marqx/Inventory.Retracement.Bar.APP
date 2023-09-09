@@ -84,6 +84,47 @@ class CcxtAPI:
         self.data_frame = None
         self.klines_list = None
 
+    def search_first_candle_time(self):
+        """
+        Search for the Unix timestamp of the first candle in the
+        historical K-line data.
+
+        This method iteratively fetches K-line data in reverse
+        chronological order and stops when it finds the first candle.
+        It can be used to determine the starting point for fetching
+        historical data.
+
+        Returns:
+        --------
+        int or None
+            The Unix timestamp of the first candle found, or None
+            if not found.
+        """
+        end_times = self.utils.get_end_times(
+            self.first_candle_time,
+            self.max_multiplier
+        )
+
+        for index in range(0, len(end_times) - 1):
+            klines = self.exchange.fetch_ohlcv(
+                symbol=self.symbol,
+                timeframe=self.interval,
+                since=int(end_times[index]),
+                limit=self.max_multiplier,
+            )
+            print(
+                f"""Finding first candle time
+                [{((index / (len(end_times) - 1)) * 100):.2f}%]"""
+            )
+
+            if len(klines) > 0:
+                print("Finding first candle time [100%]")
+                first_unix_time = klines[0][0]
+                print(f"First candle time found: {first_unix_time}")
+                break
+
+        return first_unix_time
+
     def get_all_klines(self):
         """
         Fetch all K-line data for the specified symbol and interval.
