@@ -85,6 +85,14 @@ class CcxtAPI:
         self.data_frame = None
         self.klines_list = None
 
+    def _fetch_klines(self, since, limit: int=None) -> list:
+        return self.exchange.fetch_ohlcv(
+            symbol=self.symbol,
+            timeframe=self.interval,
+            since=since,
+            limit=limit,
+        )
+
     def search_first_candle_time(self):
         """
         Search for the Unix timestamp of the first candle in the
