@@ -174,12 +174,13 @@ class CcxtAPI:
             last_candle_interval = (
                 time.time() * 1000 - interval_to_milliseconds("1d")
             )
+            klines_list.extend(klines)
 
-            if klines[-1][0] >= last_candle_interval:
+            print("\nQty  : " + str(len(klines_list)))
+
+            if klines_list[-1][0] >= last_candle_interval:
                 break
 
-            klines_list.extend(klines)
-            print("\nQty  : " + str(len(klines_list)))
 
         print(f"\nElapsed time: {time.perf_counter() - START}")
         self.klines_list = klines_list
