@@ -115,12 +115,11 @@ class CcxtAPI:
         )
 
         for index in range(0, len(end_times) - 1):
-            klines = self.exchange.fetch_ohlcv(
-                symbol=self.symbol,
-                timeframe=self.interval,
+            klines = self._fetch_klines(
                 since=int(end_times[index]),
                 limit=self.max_multiplier,
             )
+
             print(
                 f"""Finding first candle time
                 [{((index / (len(end_times) - 1)) * 100):.2f}%]"""
@@ -145,12 +144,7 @@ class CcxtAPI:
         """
         klines_list = []
 
-        first_call = self.exchange.fetch_ohlcv(
-            self.symbol,
-            self.interval,
-            since=self.first_candle_time,
-            limit=self.max_multiplier
-        )
+        first_call = self._fetch_klines(self.first_candle_time)
 
         if first_call:
             first_unix_time = first_call[0][0]
@@ -162,16 +156,10 @@ class CcxtAPI:
         START = time.perf_counter()
 
         print("Starting loop")
+
         while True:
             time_value = klines[-1][0] + 1 if klines else first_unix_time
-
-            klines = (
-                self.exchange.fetch_ohlcv(
-                    symbol=self.symbol,
-                    timeframe=self.interval,
-                    since=time_value,
-                )
-            )
+            klines = self._fetch_klines(time_value)
 
             if 'temp_end_klines' in locals():
                 if temp_end_klines == klines[-1][0]:
