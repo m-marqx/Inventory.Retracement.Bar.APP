@@ -1,4 +1,5 @@
 import time
+from typing import Literal
 import pandas as pd
 import ccxt
 from model.utils import interval_to_milliseconds
@@ -205,6 +206,77 @@ class CcxtAPI:
 
         self.data_frame = self.data_frame.set_index("date")
         return self
+
+    def aggregate_klines(
+        self,
+        exchanges: list[ccxt.Exchange] = None,
+        symbols: list[str] = None,
+        output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
+        method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
+    ) -> pd.DataFrame | dict | tuple:
+        """
+        Aggregate the fetched K-line data into a pandas DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            Returns a pandas DataFrame containing K-line data.
+        """
+        if exchanges is None:
+            exchanges = [ccxt.binance(), ccxt.bitstamp()]
+        if symbols is None:
+            symbols = ["BTC/USDT", "BTC/USD"]
+
+        if method not in ["mean", "median", "hilo-mean", "hilo-median"]:
+            raise ValueError("Invalid method argument")
+        if output_format not in ["DataFrame", "Kline", "Both"]:
+            raise ValueError("Invalid output format argument")
+
+        aggregated_klines = {}
+
+        for value in zip(exchanges, symbols):
+            self.exchange = value[0]
+            self.symbol = value[1]
+            aggregated_klines[self.exchange.name] = (
+                self.get_all_klines()
+                .to_OHLCV()
+                .data_frame
+            )
+
+        aggregated_df = (
+            pd.concat(aggregated_klines.values(), axis=0)
+            .groupby('date')
+        )
+
+        if method == "mean":
+            aggregated_df = aggregated_df.mean()
+        elif method == "median":
+            aggregated_df = aggregated_df.median()
+        elif method == "hilo-mean":
+            aggregated_df = aggregated_df.agg(
+                {
+                    'open': 'mean',
+                    'high': 'max',
+                    'low': 'min',
+                    'close': 'mean',
+                }
+            )
+        elif method == "hilo-median":
+            aggregated_df = aggregated_df.agg(
+                {
+                    'open': 'median',
+                    'high': 'max',
+                    'low': 'min',
+                    'close': 'median',
+                }
+            )
+
+        if output_format == "DataFrame":
+            return aggregated_df
+        if output_format == "Kline":
+            return aggregated_klines
+        if output_format == "Both":
+            return aggregated_df, aggregated_klines
 
     def date_check(self) -> pd.DataFrame:
         """
