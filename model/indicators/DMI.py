@@ -22,10 +22,9 @@ class DMI:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        source: str,
+        source: str = None,
         high: str = None,
         low: str = None,
-        length: int = 14
     ) -> None:
         """
         Initialize the DMI object with the given data and
@@ -46,10 +45,20 @@ class DMI:
             The column name in the DataFrame representing the low
             data. If not provided,
             it will be inferred from common column names.
-        length : int, optional
-            The length of the stochastic period. Default is 14.
         """
-        self.source = dataframe[source]
+        if not isinstance(dataframe, pd.DataFrame):
+            raise ValueError("dataframe param must be a DataFrame")
+
+        if not isinstance(source, str):
+            raise ValueError("source param must be a string")
+
+        if source is None:
+            if "Close" in dataframe.columns:
+                self.source = dataframe["Close"]
+            elif "close" in dataframe.columns:
+                self.source = dataframe["close"]
+        else:
+            self.source = dataframe[source]
 
         if high is None:
             if "High" in dataframe.columns:
@@ -66,8 +75,6 @@ class DMI:
                 self.low = dataframe["low"]
         else:
             self.low = dataframe[low]
-
-        self.length = length
 
     def true_range(self) -> pd.Series:
         """
@@ -130,3 +137,31 @@ class DMI:
 
         adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
         return adx, plus, minus
+
+    def di_delta(
+        self,
+        adx_smoothing=14,
+        di_length=14,
+    ) -> tuple[pd.Series, pd.Series]:
+        """
+        Calculate the difference between the Positive Directional
+        Movement (+DI) and Negative Directional Movement (-DI),
+        and the ratio of +DI to -DI.
+
+        Parameters:
+        -----------
+        adx_smoothing : int, optional
+            The smoothing period for calculating the ADX.
+            (default: 14)
+        di_length : int, optional
+            The length of the directional movement indicator (DI) period.
+            (default: 14)
+
+        Returns:
+        --------
+        tuple[pd.Series, pd.Series]
+            A tuple containing the difference between +DI and -DI and
+            the ratio of +DI to -DI.
+        """
+        _, plus, minus = self.adx(adx_smoothing, di_length)
+        return plus - minus, plus / minus

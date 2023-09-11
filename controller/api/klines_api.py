@@ -1,9 +1,10 @@
 import time
 import pathlib
+from typing import Literal
 import pandas as pd
 from binance.client import Client
 import model.utils.custom_pandas_methods
-from .utils import KlineUtils, KlineTimes
+from controller.api.utils import KlineUtils, KlineTimes
 
 
 class KlineAPI:
@@ -17,10 +18,11 @@ class KlineAPI:
     interval : str
         The time interval for the Kline data
         (e.g., '1m', '5m', '1h', etc.).
-    api : str, optional
+    api : Literal["coin_margined", "mark_price", "futures", "spot"],
+    optional
         The API type to use for retrieving the data.
         Valid options are 'coin_margined', 'mark_price',
-        or 'spot'.
+        'futures' or 'spot'.
         (default: 'coin_margined')
 
     Attributes:
@@ -63,13 +65,19 @@ class KlineAPI:
     update_data()
         Update the Kline data.
     update_klines(dataframe)
-        Update the Kline data by appending new data to the existing DataFrame.
+        Update the Kline data by appending new data to the existing
+        DataFrame.
     to_DataFrame()
         Convert the Kline data to a DataFrame.
     to_OHLC_DataFrame()
         Convert the Kline data to an OHLC DataFrame.
     """
-    def __init__(self, symbol, interval, api="coin_margined"):
+    def __init__(
+        self,
+        symbol=str,
+        interval=str,
+        api=Literal["coin_margined", "mark_price", "futures", "spot"]
+    ) -> None:
         """
         Initialize the KlineAPI object.
 
@@ -80,10 +88,11 @@ class KlineAPI:
         interval : str
             The time interval for the Kline data
             (e.g., '1m', '5m', '1h', etc.).
-        api : str, optional
+        api : Literal["coin_margined", "mark_price", "futures", "spot"],
+        optional
             The API type to use for retrieving the data.
             Valid options are 'coin_margined', 'mark_price',
-            or 'spot'.
+            'futures' or 'spot'.
             (default: 'coin_margined')
         """
         self.symbol = symbol
@@ -92,29 +101,22 @@ class KlineAPI:
 
         self.client = Client()
         self.klines_list = None
-        self.futures_options = ["coin_margined" or "mark_price"]
+        self.futures_options = ["coin_margined", "mark_price", "futures"]
+        self.is_futures = self.api in self.futures_options
         self.all_options = ["spot"] + self.futures_options
 
         self.max_interval = KlineTimes(self.symbol, interval).get_max_interval
         self.utils = KlineTimes(self.symbol, self.max_interval)
 
-        self.is_futures = any(
-            api_selected in self.futures_options
-            for api_selected in [self.api]
-        )
-
-        if not any(
-            api_selected in self.all_options
-            for api_selected in [self.api]
-        ):
+        if self.api not in self.all_options:
             raise ValueError(
                 "Klines function should be either "
-                "'coin_margined', 'mark_price' or 'spot'"
+                "'coin_margined', 'mark_price', futures or 'spot'."
             )
 
         self.custom_interval = interval not in self.utils.default_intervals
 
-    def get_exchange_symbol_info(self):
+    def get_exchange_symbol_info(self) -> pd.DataFrame:
         """
         Get the exchange symbol information for the specified symbol.
 
@@ -125,16 +127,21 @@ class KlineAPI:
         """
         if self.api == "mark_price":
             raise ValueError("Mark Price doesn't have an exchange symbol info")
-        if self.api == "coin_margined":
-            info = self.client.futures_coin_exchange_info()
-        else:
+
+        if self.api == "spot":
             info = self.client.get_exchange_info()
+        elif self.api == "coin_margined":
+            info = self.client.futures_coin_exchange_info()
+        elif self.api == "futures":
+            info = self.client.futures_exchange_info()
+        else:
+            raise ValueError("Invalid api value")
 
         info_df = pd.DataFrame(info["symbols"])
         symbol_info = info_df.query(f"symbol == '{self.symbol}'")
         return symbol_info
 
-    def get_ticker_info(self):
+    def get_ticker_info(self) -> pd.DataFrame:
         """
         Get the ticker information for the specified symbol.
 
@@ -145,10 +152,15 @@ class KlineAPI:
         """
         if self.api == "mark_price":
             raise ValueError("Mark Price doesn't have a ticker info")
-        if self.api == "coin_margined":
-            info = self.client.futures_coin_exchange_info()
-        else:
+
+        if self.api == "spot":
             info = self.client.get_exchange_info()
+        elif self.api == "coin_margined":
+            info = self.client.futures_coin_exchange_info()
+        elif self.api == "futures":
+            info = self.client.futures_exchange_info()
+        else:
+            raise ValueError("Invalid api value")
 
         info_df = pd.DataFrame(info["symbols"])
         symbol_info = info_df.query(f"symbol == '{self.symbol}'")
@@ -159,7 +171,7 @@ class KlineAPI:
         df_filtered = df_filtered.astype("float64")
         return df_filtered
 
-    def get_tick_size(self):
+    def get_tick_size(self) -> float:
         """
         Get the tick size for the specified symbol.
 
@@ -176,7 +188,7 @@ class KlineAPI:
         self,
         start_time,
         end_time,
-    ):
+    ) -> list:
         """
         Request Kline data for the specified time range.
 
@@ -192,17 +204,19 @@ class KlineAPI:
         list
             The requested Kline data as a list.
         """
-        if self.api == "coin_margined":
-            api_get_klines = self.client.futures_coin_klines
-        elif self.api == "mark_price":
-            api_get_klines = self.client.futures_coin_mark_price_klines
-        else:  # spot
-            api_get_klines = self.client.get_klines
-
         request_limit = 1500
 
         if self.api == "spot":
+            api_get_klines = self.client.get_klines
             request_limit = 1000
+        elif self.api == "coin_margined":
+            api_get_klines = self.client.futures_coin_klines
+        elif self.api == "mark_price":
+            api_get_klines = self.client.futures_coin_mark_price_klines
+        elif self.api == "futures":
+            api_get_klines = self.client.futures_klines
+        else:
+            raise ValueError("invalid api value")
 
         max_limit = self.utils.calculate_max_multiplier(request_limit)
 
@@ -217,7 +231,7 @@ class KlineAPI:
 
     def get_Klines(
         self,
-        start_time=1502942400000,
+        start_time=1502852400000,
     ):
         """
         Get Kline data for the specified start time.
@@ -225,7 +239,8 @@ class KlineAPI:
         Parameters:
         -----------
         start_time : int, optional
-            The start time for retrieving Kline data in milliseconds. (default: 1502942400000)
+            The start time for retrieving Kline data in milliseconds.
+            (default: 1502852400000)
 
         Returns:
         --------
@@ -234,8 +249,13 @@ class KlineAPI:
         """
         max_candle_limit = 1000
 
-        if self.is_futures:
-            start_time = max(start_time, 1597118400000)
+        is_coin_margined_futures = self.api in ["coin_margined", "mark_price"]
+
+        if is_coin_margined_futures:
+            start_time = max(start_time, 1597028400000)
+            max_candle_limit = 1500
+        elif self.api == "futures":
+            start_time = max(start_time, 1567825200000)
             max_candle_limit = 1500
 
         end_times = self.utils.get_end_times(start_time, max_candle_limit)
@@ -263,7 +283,9 @@ class KlineAPI:
         self.klines_list = klines_list
         return self
 
-    def update_data(self):
+    def update_data(
+        self
+    ) -> tuple[pd.DataFrame, pd.DataFrame] | tuple[pd.DataFrame, None]:
         """
         Update the Kline data.
 
@@ -278,7 +300,10 @@ class KlineAPI:
         data_frame = pd.read_parquet(dataframe_path)
         return self.update_klines(data_frame)
 
-    def update_klines(self, dataframe):
+    def update_klines(
+        self,
+        dataframe
+    ) -> tuple[pd.DataFrame, pd.DataFrame] | tuple[pd.DataFrame, None]:
         """
         Update the Kline data by appending new data to the existing
         DataFrame.
@@ -306,7 +331,6 @@ class KlineAPI:
         updated_dataframe = pd.concat([old_dataframe, new_dataframe])
 
         if self.custom_interval:
-
             resampled_dataframe = (
                 updated_dataframe
                 .resample_ohlc(self.interval)
@@ -317,7 +341,7 @@ class KlineAPI:
 
         return updated_dataframe, None
 
-    def to_DataFrame(self):
+    def to_DataFrame(self) -> pd.DataFrame:
         """
         Convert the Kline data to a DataFrame.
 
@@ -332,7 +356,7 @@ class KlineAPI:
             klines_df.resample_ohlc(self.interval).ohlc()
         return klines_df
 
-    def to_OHLC_DataFrame(self):
+    def to_OHLC_DataFrame(self) -> pd.DataFrame:
         """
         Convert the Kline data to an OHLC DataFrame.
 
