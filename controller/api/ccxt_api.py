@@ -168,6 +168,8 @@ class CcxtAPI:
             klines = self._fetch_klines(time_value)
             klines_list.extend(klines)
 
+            if klines == []:
+                break
             if klines_list[-1][0] >= last_candle_interval:
                 break
 
