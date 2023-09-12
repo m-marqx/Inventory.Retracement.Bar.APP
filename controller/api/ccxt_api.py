@@ -160,7 +160,7 @@ class CcxtAPI:
         temp_end_klines = None
 
         last_candle_interval = (
-            time.time() * 1000 - interval_to_milliseconds("1d")
+            time.time() * 1000 - interval_to_milliseconds(self.interval)
         )
 
         while True:
