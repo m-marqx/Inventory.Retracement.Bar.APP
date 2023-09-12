@@ -158,26 +158,26 @@ class CcxtAPI:
 
         print("Starting loop")
 
+        temp_end_klines = None
+
+        last_candle_interval = (
+            time.time() * 1000 - interval_to_milliseconds("1d")
+        )
+
         while True:
             time_value = klines[-1][0] + 1 if klines else first_unix_time
             klines = self._fetch_klines(time_value)
+            klines_list.extend(klines)
 
-            if 'temp_end_klines' in locals():
+            if temp_end_klines:
                 if temp_end_klines == klines[-1][0]:
                     raise ValueError("End time not found")
             else:
                 temp_end_klines = klines[-1][0]
-
-            last_candle_interval = (
-                time.time() * 1000 - interval_to_milliseconds("1d")
-            )
-            klines_list.extend(klines)
-
             print("\nQty  : " + str(len(klines_list)))
 
             if klines_list[-1][0] >= last_candle_interval:
                 break
-
 
         print(f"\nElapsed time: {time.perf_counter() - START}")
         self.klines_list = klines_list
