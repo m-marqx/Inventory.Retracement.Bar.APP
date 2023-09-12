@@ -143,6 +143,7 @@ class CcxtAPI:
         CcxtAPI
             Returns the CcxtAPI object with the fetched K-line data.
         """
+        klines = []
         klines_list = []
 
         first_call = self._fetch_klines(self.first_candle_time)
@@ -151,8 +152,6 @@ class CcxtAPI:
             first_unix_time = first_call[0][0]
         else:
             first_unix_time = self.search_first_candle_time()
-
-        klines = []
 
         START = time.perf_counter()
 
@@ -169,15 +168,15 @@ class CcxtAPI:
             klines = self._fetch_klines(time_value)
             klines_list.extend(klines)
 
+            if klines_list[-1][0] >= last_candle_interval:
+                break
+
             if temp_end_klines:
                 if temp_end_klines == klines[-1][0]:
                     raise ValueError("End time not found")
             else:
                 temp_end_klines = klines[-1][0]
             print("\nQty  : " + str(len(klines_list)))
-
-            if klines_list[-1][0] >= last_candle_interval:
-                break
 
         print(f"\nElapsed time: {time.perf_counter() - START}")
         self.klines_list = klines_list
