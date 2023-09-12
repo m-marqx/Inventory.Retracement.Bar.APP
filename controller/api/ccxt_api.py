@@ -57,10 +57,10 @@ class CcxtAPI:
     """
     def __init__(
         self,
-        symbol,
-        interval,
-        exchange=ccxt.bitstamp(),
-        first_candle_time:int = 1325296800000
+        symbol:str,
+        interval:str,
+        exchange:ccxt.Exchange = ccxt.bitstamp(),
+        first_candle_time:int = 1325296800000,
     ) -> None:
         """
         Initialize the CcxtAPI object.
