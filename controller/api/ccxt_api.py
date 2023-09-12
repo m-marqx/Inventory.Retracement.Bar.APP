@@ -143,6 +143,14 @@ class CcxtAPI:
         CcxtAPI
             Returns the CcxtAPI object with the fetched K-line data.
         """
+        not_supported_types = (
+            type(ccxt.bittrex()),
+            type(ccxt.gemini())
+        )
+
+        if isinstance(self.exchange, not_supported_types):
+            raise ValueError(f"{self.exchange} is not supported")
+
         klines = []
         klines_list = []
 
