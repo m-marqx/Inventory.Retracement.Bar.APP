@@ -234,9 +234,9 @@ class CcxtAPI:
 
         aggregated_klines = {}
 
-        for value in zip(exchanges, symbols):
-            self.exchange = value[0]
-            self.symbol = value[1]
+        for exchange, symbol in zip(exchanges, symbols):
+            self.exchange = exchange
+            self.symbol = symbol
             aggregated_klines[self.exchange.name] = (
                 self.get_all_klines()
                 .to_OHLCV()
