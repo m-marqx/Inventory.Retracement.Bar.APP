@@ -121,15 +121,15 @@ class CcxtAPI:
                 limit=self.max_multiplier,
             )
 
+            load_percentage = ((index / (len(end_times) - 1)) * 100)
             print(
-                f"""Finding first candle time
-                [{((index / (len(end_times) - 1)) * 100):.2f}%]"""
+                f"Finding first candle time [{load_percentage:.2f}%]"
             )
 
             if len(klines) > 0:
                 print("Finding first candle time [100%]")
                 first_unix_time = klines[0][0]
-                print(f"First candle time found: {first_unix_time}")
+                print(f"\nFirst candle time found: {first_unix_time}\n")
                 break
 
         return first_unix_time
@@ -163,13 +163,14 @@ class CcxtAPI:
 
         START = time.perf_counter()
 
-        print("Starting loop")
 
         temp_end_klines = None
 
         last_candle_interval = (
             time.time() * 1000 - interval_to_milliseconds(self.interval)
         )
+
+        print("Starting requests \n")
 
         while True:
             time_value = klines[-1][0] + 1 if klines else first_unix_time
@@ -179,6 +180,7 @@ class CcxtAPI:
             if klines == []:
                 break
             if klines_list[-1][0] >= last_candle_interval:
+                print("Qty  : " + str(len(klines_list)))
                 break
 
             if temp_end_klines:
@@ -186,9 +188,9 @@ class CcxtAPI:
                     raise ValueError("End time not found")
             else:
                 temp_end_klines = klines[-1][0]
-            print("\nQty  : " + str(len(klines_list)))
+            print("Qty  : " + str(len(klines_list)))
 
-        print(f"\nElapsed time: {time.perf_counter() - START}")
+        print(f"\nElapsed time: {time.perf_counter() - START}\n")
         self.klines_list = klines_list
         return self
 
