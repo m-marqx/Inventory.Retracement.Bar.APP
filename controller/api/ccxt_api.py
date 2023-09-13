@@ -1,4 +1,5 @@
 import time
+import itertools
 from typing import Literal
 import pandas as pd
 import ccxt
@@ -163,7 +164,6 @@ class CcxtAPI:
 
         START = time.perf_counter()
 
-
         temp_end_klines = None
 
         last_candle_interval = (
@@ -224,6 +224,8 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
+        verbose: bool = True,
+        filter_by_largest_qty: bool = True,
     ) -> pd.DataFrame | dict | tuple:
         """
         Aggregate the fetched K-line data into a pandas DataFrame.
@@ -245,19 +247,100 @@ class CcxtAPI:
 
         aggregated_klines = {}
 
-        for exchange, symbol in zip(exchanges, symbols):
-            self.exchange = exchange
-            self.symbol = symbol
-            aggregated_klines[self.exchange.name] = (
-                self.get_all_klines()
-                .to_OHLCV()
-                .data_frame
+        exchange_symbol_combinations = list(
+            itertools.product(exchanges, symbols)
+        )
+
+        aggregated_klines = {}
+        printed_symbols = set()
+        index = 0
+        if not filter_by_largest_qty:
+            klines_qty = {}
+
+        for exchange, symbol in exchange_symbol_combinations:
+            markets_info = exchange.load_markets()
+            has_symbol = any(symbol in markets_info for symbol in symbols)
+            if has_symbol:
+                if filter_by_largest_qty:
+                    if symbol in markets_info and exchange not in printed_symbols:
+                        if verbose:
+                            index += 1
+                            load_percentage = index / len(exchanges) * 100
+                            print(
+                                f"\n requesting klines [{load_percentage:.2f}%]"
+                            )
+                            print(f"request: {exchange} - {symbol}")
+
+                        self.exchange = exchange
+                        self.symbol = symbol
+                        printed_symbols.add(exchange)
+                        aggregated_klines[self.exchange.name] = (
+                            self.get_all_klines()
+                            .to_OHLCV()
+                            .data_frame
+                        )
+                else:
+                    if symbol in markets_info:
+
+                        if verbose:
+                            index += 1
+                            load_percentage = (
+                                index
+                                / len(exchange_symbol_combinations)
+                                * 100
+                            )
+
+                            print(
+                                f"requesting klines [{load_percentage:.2f}%]"
+                            )
+                            print(f"request: {exchange} - symbol: {symbol}\n")
+
+                        printed_symbols.add(exchange)
+
+                        self.exchange = exchange
+                        self.symbol = symbol
+                        market = f"{self.exchange.name} - {self.symbol}"
+                        aggregated_klines[market] = (
+                            self.get_all_klines()
+                            .to_OHLCV()
+                            .data_frame
+                        )
+
+                        klines_qty[market] = (
+                            self.data_frame
+                            .shape
+                        )
+            else:
+                raise ValueError(
+                    f"{exchange} doesn't have any of the specified symbols"
+                )
+        if not printed_symbols:
+            raise ValueError(
+                "None of the exchanges support any of the specified symbols"
             )
+        if verbose:
+            print("requesting klines [100}%]")
+            print("all klines successfully retrieved")
 
         aggregated_df = (
-            pd.concat(aggregated_klines.values(), axis=0)
-            .groupby('date')
+            pd.concat(aggregated_klines)
         )
+
+        if not filter_by_largest_qty:
+            klines_qty_df = pd.DataFrame.from_dict(
+                klines_qty,
+                orient='index',
+                columns=['shape', 'columns']
+            )
+
+            klines_qty_df['exchange'] = klines_qty_df.index.str.split(' - ').str[0]
+            max_shape_indices = klines_qty_df.groupby('exchange')['shape'].idxmax()
+            aggregated_df = (
+                aggregated_df
+                .loc[max_shape_indices]
+            )
+
+        aggregated_df = aggregated_df.groupby('date')
 
         if method == "mean":
             aggregated_df = aggregated_df.mean()
