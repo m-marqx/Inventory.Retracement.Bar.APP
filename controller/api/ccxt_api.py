@@ -136,7 +136,7 @@ class CcxtAPI:
 
         return first_unix_time
 
-    def get_all_klines(self):
+    def get_all_klines(self, verbose: bool = False):
         """
         Fetch all K-line data for the specified symbol and interval.
 
@@ -161,7 +161,7 @@ class CcxtAPI:
         if first_call:
             first_unix_time = first_call[0][0]
         else:
-            first_unix_time = self.search_first_candle_time()
+            first_unix_time = self.search_first_candle_time(verbose)
 
         START = time.perf_counter()
 
@@ -171,7 +171,8 @@ class CcxtAPI:
             time.time() * 1000 - interval_to_milliseconds(self.interval)
         )
 
-        print("Starting requests \n")
+        if verbose:
+            print("Starting requests \n")
 
         while True:
             time_value = klines[-1][0] + 1 if klines else first_unix_time
@@ -181,7 +182,8 @@ class CcxtAPI:
             if klines == []:
                 break
             if klines_list[-1][0] >= last_candle_interval:
-                print("Qty  : " + str(len(klines_list)))
+                if verbose:
+                    print("Qty  : " + str(len(klines_list)))
                 break
 
             if temp_end_klines:
@@ -189,9 +191,11 @@ class CcxtAPI:
                     raise ValueError("End time not found")
             else:
                 temp_end_klines = klines[-1][0]
-            print("Qty  : " + str(len(klines_list)))
 
-        print(f"\nElapsed time: {time.perf_counter() - START}\n")
+            if verbose:
+                print("Qty  : " + str(len(klines_list)))
+        if verbose:
+            print(f"\nElapsed time: {time.perf_counter() - START}\n")
         self.klines_list = klines_list
         return self
 
@@ -276,7 +280,7 @@ class CcxtAPI:
                         self.symbol = symbol
                         printed_symbols.add(exchange)
                         aggregated_klines[self.exchange.name] = (
-                            self.get_all_klines()
+                            self.get_all_klines(verbose)
                             .to_OHLCV()
                             .data_frame
                         )
@@ -302,7 +306,7 @@ class CcxtAPI:
                         self.symbol = symbol
                         market = f"{self.exchange.name} - {self.symbol}"
                         aggregated_klines[market] = (
-                            self.get_all_klines()
+                            self.get_all_klines(verbose)
                             .to_OHLCV()
                             .data_frame
                         )
