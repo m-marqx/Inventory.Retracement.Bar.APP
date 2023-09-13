@@ -95,7 +95,7 @@ class CcxtAPI:
             limit=limit,
         )
 
-    def search_first_candle_time(self):
+    def search_first_candle_time(self, verbose: bool = False):
         """
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
@@ -121,16 +121,17 @@ class CcxtAPI:
                 since=int(end_times[index]),
                 limit=self.max_multiplier,
             )
-
-            load_percentage = ((index / (len(end_times) - 1)) * 100)
-            print(
-                f"Finding first candle time [{load_percentage:.2f}%]"
-            )
+            if verbose:
+                load_percentage = ((index / (len(end_times) - 1)) * 100)
+                print(
+                    f"Finding first candle time [{load_percentage:.2f}%]"
+                )
 
             if len(klines) > 0:
-                print("Finding first candle time [100%]")
                 first_unix_time = klines[0][0]
-                print(f"\nFirst candle time found: {first_unix_time}\n")
+                if verbose:
+                    print("Finding first candle time [100%]")
+                    print(f"\nFirst candle time found: {first_unix_time}\n")
                 break
 
         return first_unix_time
