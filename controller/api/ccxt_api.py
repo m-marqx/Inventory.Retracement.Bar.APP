@@ -132,16 +132,20 @@ class CcxtAPI:
                 limit=self.max_multiplier,
             )
             if self.verbose:
-                load_percentage = ((index / (len(end_times) - 1)) * 100)
+                load_percentage = (index / (len(end_times) - 1)) * 100
                 logging.info(
-                    f"Finding first candle time [{load_percentage:.2f}%]"
+                    "Finding first candle time [%.2f%%]",
+                    load_percentage
                 )
 
             if len(klines) > 0:
                 first_unix_time = klines[0][0]
                 if self.verbose:
                     logging.info("Finding first candle time [100%]")
-                    logging.info(f"First candle time found: {first_unix_time}\n")
+                    logging.info(
+                        "First candle time found: %s\n",
+                        first_unix_time
+                    )
                 break
 
         return first_unix_time
@@ -193,7 +197,7 @@ class CcxtAPI:
                 break
             if klines_list[-1][0] >= last_candle_interval:
                 if self.verbose:
-                    logging.info(f"Qty : {len(klines_list)}")
+                    logging.info("Qty : %s", len(klines_list))
                 break
 
             if temp_end_klines:
@@ -203,9 +207,12 @@ class CcxtAPI:
                 temp_end_klines = klines[-1][0]
 
             if self.verbose:
-                logging.info(f"Qty : {len(klines_list)}")
+                logging.info("Qty : %s", len(klines_list))
         if self.verbose:
-            logging.info(f"Requests elapsed time: {time.perf_counter() - START}\n")
+            logging.info(
+                "Requests elapsed time: %s\n",
+                time.perf_counter() - START
+            )
         self.klines_list = klines_list
         return self
 
@@ -281,9 +288,10 @@ class CcxtAPI:
                             index += 1
                             load_percentage = index / len(exchanges) * 100
                             logging.info(
-                                f"\n requesting klines [{load_percentage:.2f}%]"
+                                "requesting klines [%.2f%%]",
+                                load_percentage
                             )
-                            logging.info(f"request: {exchange} - {symbol}")
+                            logging.info("request: %s - %s", exchange, symbol)
 
                         self.exchange = exchange
                         self.symbol = symbol
@@ -305,9 +313,14 @@ class CcxtAPI:
                             )
 
                             logging.info(
-                                f"requesting klines [{load_percentage:.2f}%]"
+                                "requesting klines [%.2f%%]",
+                                load_percentage
                             )
-                            logging.info(f"request: {exchange} - symbol: {symbol}\n")
+                            logging.info(
+                                "request: %s - symbol: %s\n",
+                                exchange,
+                                symbol
+                            )
 
                         printed_symbols.add(exchange)
 
@@ -333,7 +346,7 @@ class CcxtAPI:
                 "None of the exchanges support any of the specified symbols"
             )
         if self.verbose:
-            logging.info("requesting klines [100}%]")
+            logging.info("requesting klines [100]%")
             logging.info("all klines successfully retrieved")
 
         aggregated_df = (
@@ -347,8 +360,15 @@ class CcxtAPI:
                 columns=['shape', 'columns']
             )
 
-            klines_qty_df['exchange'] = klines_qty_df.index.str.split(' - ').str[0]
-            max_shape_indices = klines_qty_df.groupby('exchange')['shape'].idxmax()
+            klines_qty_df['exchange'] = (
+                klines_qty_df.index
+                .str.split(' - ').str[0]
+            )
+            max_shape_indices = (
+                klines_qty_df
+                .groupby('exchange')['shape']
+                .idxmax()
+            )
             aggregated_df = (
                 aggregated_df
                 .loc[max_shape_indices]
