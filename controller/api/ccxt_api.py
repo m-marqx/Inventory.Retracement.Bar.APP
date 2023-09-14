@@ -1,10 +1,18 @@
 import time
 import itertools
+import logging
 from typing import Literal
 import pandas as pd
 import ccxt
 from model.utils import interval_to_milliseconds
 from .utils import KlineTimes
+
+logging.basicConfig(
+    format='%(levelname)s %(asctime)s: %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.INFO,
+)
+
 
 class CcxtAPI:
     """
@@ -123,15 +131,15 @@ class CcxtAPI:
             )
             if verbose:
                 load_percentage = ((index / (len(end_times) - 1)) * 100)
-                print(
+                logging.info(
                     f"Finding first candle time [{load_percentage:.2f}%]"
                 )
 
             if len(klines) > 0:
                 first_unix_time = klines[0][0]
                 if verbose:
-                    print("Finding first candle time [100%]")
-                    print(f"\nFirst candle time found: {first_unix_time}\n")
+                    logging.info("Finding first candle time [100%]")
+                    logging.info(f"First candle time found: {first_unix_time}\n")
                 break
 
         return first_unix_time
@@ -172,7 +180,7 @@ class CcxtAPI:
         )
 
         if verbose:
-            print("Starting requests \n")
+            logging.info("Starting requests")
 
         while True:
             time_value = klines[-1][0] + 1 if klines else first_unix_time
@@ -183,7 +191,7 @@ class CcxtAPI:
                 break
             if klines_list[-1][0] >= last_candle_interval:
                 if verbose:
-                    print("Qty  : " + str(len(klines_list)))
+                    logging.info(f"Qty : {len(klines_list)}")
                 break
 
             if temp_end_klines:
@@ -193,9 +201,9 @@ class CcxtAPI:
                 temp_end_klines = klines[-1][0]
 
             if verbose:
-                print("Qty  : " + str(len(klines_list)))
+                logging.info(f"Qty : {len(klines_list)}")
         if verbose:
-            print(f"\nElapsed time: {time.perf_counter() - START}\n")
+            logging.info(f"Requests elapsed time: {time.perf_counter() - START}\n")
         self.klines_list = klines_list
         return self
 
@@ -271,10 +279,10 @@ class CcxtAPI:
                         if verbose:
                             index += 1
                             load_percentage = index / len(exchanges) * 100
-                            print(
+                            logging.info(
                                 f"\n requesting klines [{load_percentage:.2f}%]"
                             )
-                            print(f"request: {exchange} - {symbol}")
+                            logging.info(f"request: {exchange} - {symbol}")
 
                         self.exchange = exchange
                         self.symbol = symbol
@@ -295,10 +303,10 @@ class CcxtAPI:
                                 * 100
                             )
 
-                            print(
+                            logging.info(
                                 f"requesting klines [{load_percentage:.2f}%]"
                             )
-                            print(f"request: {exchange} - symbol: {symbol}\n")
+                            logging.info(f"request: {exchange} - symbol: {symbol}\n")
 
                         printed_symbols.add(exchange)
 
@@ -324,8 +332,8 @@ class CcxtAPI:
                 "None of the exchanges support any of the specified symbols"
             )
         if verbose:
-            print("requesting klines [100}%]")
-            print("all klines successfully retrieved")
+            logging.info("requesting klines [100}%]")
+            logging.info("all klines successfully retrieved")
 
         aggregated_df = (
             pd.concat(aggregated_klines)
