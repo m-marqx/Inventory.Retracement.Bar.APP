@@ -70,6 +70,7 @@ class CcxtAPI:
         interval:str,
         exchange:ccxt.Exchange = ccxt.bitstamp(),
         first_candle_time:int = 1325296800000,
+        verbose:bool = False,
     ) -> None:
         """
         Initialize the CcxtAPI object.
@@ -89,6 +90,7 @@ class CcxtAPI:
         self.interval = interval
         self.first_candle_time = first_candle_time
         self.exchange = exchange
+        self.verbose = verbose
         self.max_interval = KlineTimes(symbol, interval).get_max_interval
         self.utils = KlineTimes(self.symbol, self.max_interval)
         self.max_multiplier = int(self.utils.calculate_max_multiplier())
@@ -103,7 +105,7 @@ class CcxtAPI:
             limit=limit,
         )
 
-    def search_first_candle_time(self, verbose: bool = False):
+    def search_first_candle_time(self):
         """
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
@@ -129,7 +131,7 @@ class CcxtAPI:
                 since=int(end_times[index]),
                 limit=self.max_multiplier,
             )
-            if verbose:
+            if self.verbose:
                 load_percentage = ((index / (len(end_times) - 1)) * 100)
                 logging.info(
                     f"Finding first candle time [{load_percentage:.2f}%]"
@@ -137,14 +139,14 @@ class CcxtAPI:
 
             if len(klines) > 0:
                 first_unix_time = klines[0][0]
-                if verbose:
+                if self.verbose:
                     logging.info("Finding first candle time [100%]")
                     logging.info(f"First candle time found: {first_unix_time}\n")
                 break
 
         return first_unix_time
 
-    def get_all_klines(self, verbose: bool = False):
+    def get_all_klines(self):
         """
         Fetch all K-line data for the specified symbol and interval.
 
@@ -169,7 +171,7 @@ class CcxtAPI:
         if first_call:
             first_unix_time = first_call[0][0]
         else:
-            first_unix_time = self.search_first_candle_time(verbose)
+            first_unix_time = self.search_first_candle_time()
 
         START = time.perf_counter()
 
@@ -179,7 +181,7 @@ class CcxtAPI:
             time.time() * 1000 - interval_to_milliseconds(self.interval)
         )
 
-        if verbose:
+        if self.verbose:
             logging.info("Starting requests")
 
         while True:
@@ -190,7 +192,7 @@ class CcxtAPI:
             if klines == []:
                 break
             if klines_list[-1][0] >= last_candle_interval:
-                if verbose:
+                if self.verbose:
                     logging.info(f"Qty : {len(klines_list)}")
                 break
 
@@ -200,9 +202,9 @@ class CcxtAPI:
             else:
                 temp_end_klines = klines[-1][0]
 
-            if verbose:
+            if self.verbose:
                 logging.info(f"Qty : {len(klines_list)}")
-        if verbose:
+        if self.verbose:
             logging.info(f"Requests elapsed time: {time.perf_counter() - START}\n")
         self.klines_list = klines_list
         return self
@@ -237,7 +239,6 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
-        verbose: bool = True,
         filter_by_largest_qty: bool = True,
     ) -> pd.DataFrame | dict | tuple:
         """
@@ -276,7 +277,7 @@ class CcxtAPI:
             if has_symbol:
                 if filter_by_largest_qty:
                     if symbol in markets_info and exchange not in printed_symbols:
-                        if verbose:
+                        if self.verbose:
                             index += 1
                             load_percentage = index / len(exchanges) * 100
                             logging.info(
@@ -288,14 +289,14 @@ class CcxtAPI:
                         self.symbol = symbol
                         printed_symbols.add(exchange)
                         aggregated_klines[self.exchange.name] = (
-                            self.get_all_klines(verbose)
+                            self.get_all_klines()
                             .to_OHLCV()
                             .data_frame
                         )
                 else:
                     if symbol in markets_info:
 
-                        if verbose:
+                        if self.verbose:
                             index += 1
                             load_percentage = (
                                 index
@@ -314,7 +315,7 @@ class CcxtAPI:
                         self.symbol = symbol
                         market = f"{self.exchange.name} - {self.symbol}"
                         aggregated_klines[market] = (
-                            self.get_all_klines(verbose)
+                            self.get_all_klines()
                             .to_OHLCV()
                             .data_frame
                         )
@@ -331,7 +332,7 @@ class CcxtAPI:
             raise ValueError(
                 "None of the exchanges support any of the specified symbols"
             )
-        if verbose:
+        if self.verbose:
             logging.info("requesting klines [100}%]")
             logging.info("all klines successfully retrieved")
 
