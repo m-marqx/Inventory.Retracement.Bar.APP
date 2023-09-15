@@ -31,6 +31,9 @@ class CcxtAPI:
     first_candle_time : int
         The Unix timestamp of the first candle
         (default: 1325296800000).
+    verbose : bool
+        If True, print verbose logging messages during data retrieval
+        (default: False).
 
     Attributes:
     -----------
@@ -49,20 +52,34 @@ class CcxtAPI:
     utils : KlineTimes
         An instance of the KlineTimes class for time-related
         calculations.
+    max_multiplier : int
+        The maximum multiplier calculated based on the time interval.
 
     Methods:
     --------
-    get_all_klines():
+    search_first_candle_time() -> int or None:
+        Search for the Unix timestamp of the first candle in the
+        historical K-line data.
+
+    get_all_klines(ignore_unsupported_exchanges=False) -> CcxtAPI:
         Fetch all K-line data for the specified symbol and interval.
 
     to_OHLCV() -> pd.DataFrame:
         Convert the fetched K-line data into a pandas DataFrame in
         OHLCV format.
 
+    aggregate_klines(
+        exchanges=None,
+        symbols=None,
+        output_format='DataFrame',
+        method='mean',
+        filter_by_largest_qty=True
+    ) -> pd.DataFrame or dict or tuple:
+        Aggregate the fetched K-line data into a pandas DataFrame.
+
     date_check() -> pd.DataFrame:
         Check for irregularities in the K-line data timestamps and
         return a DataFrame with discrepancies.
-
     """
     def __init__(
         self,
@@ -85,6 +102,9 @@ class CcxtAPI:
             The CCXT exchange object.
         first_candle_time : int
             The Unix timestamp of the first candle.
+        verbose : bool
+            If True, print verbose logging messages during data retrieval
+            (default: False).
         """
         self.symbol = symbol
         self.interval = interval
