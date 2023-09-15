@@ -161,7 +161,10 @@ class CcxtAPI:
         """
         not_supported_types = (
             type(ccxt.bittrex()),
-            type(ccxt.gemini())
+            type(ccxt.gemini()),
+            type(ccxt.huobi()),
+            type(ccxt.deribit()),
+            type(ccxt.hitbtc()),
         )
 
         if isinstance(self.exchange, not_supported_types):
