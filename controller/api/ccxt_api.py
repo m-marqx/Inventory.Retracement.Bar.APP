@@ -174,6 +174,13 @@ class CcxtAPI:
         """
         Fetch all K-line data for the specified symbol and interval.
 
+        Parameters:
+        -----------
+        ignore_unsupported_exchanges : bool, optional
+            If True, ignore exchanges that do not support the specified
+            symbol.
+            (default: False).
+
         Returns:
         --------
         CcxtAPI
