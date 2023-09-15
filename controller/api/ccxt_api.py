@@ -284,10 +284,37 @@ class CcxtAPI:
         """
         Aggregate the fetched K-line data into a pandas DataFrame.
 
+        Parameters:
+        -----------
+        exchanges : list[ccxt.Exchange], optional
+            A list of CCXT exchange objects to use for data aggregation.
+            If None, default exchanges (Binance and Bitstamp)
+            will be used.
+            (default: None)
+        symbols : list[str], optional
+            A list of trading symbols to aggregate data for. If None,
+            default symbols ('BTC/USDT' and 'BTC/USD') will be used.
+            (default: None)
+        output_format : Literal["DataFrame", "Kline", "Both"], optional
+            The format of the output. 'DataFrame' returns a pandas
+            DataFrame, 'Kline' returns a dictionary of DataFrames for
+            each exchange-symbol pair, and 'Both' returns both.
+            (default: "DataFrame")
+        method : Literal["mean", "median", "hilo-mean", "hilo-median"],
+        optional
+            The aggregation method to use for calculating aggregated
+            K-line data.
+            (default: "mean")
+        filter_by_largest_qty : bool, optional
+            If True, filter exchanges and symbols by the largest
+            quantity of data.
+            (default: True)
+
         Returns:
         --------
-        pd.DataFrame
-            Returns a pandas DataFrame containing K-line data.
+        pd.DataFrame or dict or tuple
+            Depending on the `output_format` parameter, returns
+            aggregated K-line data in the specified format.
         """
         if exchanges is None:
             exchanges = [ccxt.binance(), ccxt.bitstamp()]
