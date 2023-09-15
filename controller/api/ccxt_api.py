@@ -150,7 +150,7 @@ class CcxtAPI:
 
         return first_unix_time
 
-    def get_all_klines(self):
+    def get_all_klines(self, ignore_unsupported_exchanges: bool = False):
         """
         Fetch all K-line data for the specified symbol and interval.
 
@@ -159,13 +159,16 @@ class CcxtAPI:
         CcxtAPI
             Returns the CcxtAPI object with the fetched K-line data.
         """
-        not_supported_types = (
-            type(ccxt.bittrex()),
-            type(ccxt.gemini()),
-            type(ccxt.huobi()),
-            type(ccxt.deribit()),
-            type(ccxt.hitbtc()),
-        )
+        if ignore_unsupported_exchanges:
+            not_supported_types = None
+        else:
+            not_supported_types = (
+                type(ccxt.bittrex()),
+                type(ccxt.gemini()),
+                type(ccxt.huobi()),
+                type(ccxt.deribit()),
+                type(ccxt.hitbtc()),
+            )
 
         if isinstance(self.exchange, not_supported_types):
             raise ValueError(f"{self.exchange} is not supported")
