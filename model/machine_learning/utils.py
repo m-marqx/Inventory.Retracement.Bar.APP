@@ -1,3 +1,5 @@
+from typing import Literal
+
 import numpy as np
 import pandas as pd
 from sklearn import metrics
@@ -609,3 +611,75 @@ class DataHandler:
         )
 
         return pd.Series(outlier_array, index=self.data_frame.index)
+
+    def quantile_split(
+        self,
+        column: str,
+        target_input: str | pd.Series | np.ndarray,
+        method: Literal["simple", "ratio"] = "ratio",
+        quantiles: list[float] | None = None
+    ) -> pd.DataFrame:
+        """
+        Split data into quantiles based on a specified column and
+        analyze the relationship between these quantiles and a target
+        variable.
+
+        Parameters:
+        -----------
+        column : str
+            The name of the column used for quantile splitting.
+        target_input : str, pd.Series, or np.ndarray
+            The target variable for the analysis. It can be a column
+            name, a pandas Series, or a numpy array.
+        method : Literal["simple", "ratio"], optional
+            The method used for calculating class proportions. 'simple'
+            returns the raw class counts, 'ratio' returns the
+            proportions of the target variable within each quantile.
+            (default: "ratio")
+        quantiles : list of float or None, optional
+            The quantile intervals used for splitting the 'column' into
+            quantiles. If None, it will use decile (0-10-20-...-90-100)
+            quantiles by default.
+
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame representing the quantile split analysis. Rows
+            correspond to quantile intervals based on the specified
+            column, columns correspond to unique values of the target
+            variable, and the values represent either counts or
+            proportions, depending on the chosen method.
+        """
+        if quantiles is None:
+            quantiles = np.quantile(
+                self.data_frame[column],
+                np.arange(0, 1.01, 10)
+            )
+
+        if isinstance(target_input, str):
+            target_name = target_input
+            target = self.data_frame[target_input]
+        else:
+            target_name = "target"
+            target = target_input
+
+        class_df = pd.cut(
+            self.data_frame[column],
+            quantiles,
+            include_lowest=True,
+        )
+
+        quantile_df = pd.DataFrame({"Class": class_df, target_name: target})
+
+        quantile_df = pd.crosstab(
+            index=quantile_df["Class"],
+            columns=quantile_df[target_name],
+        )
+
+        if method == "ratio":
+            quantile_df = (
+                quantile_df
+                .div(quantile_df.sum(axis=1), axis=0)
+            )
+
+        return quantile_df
