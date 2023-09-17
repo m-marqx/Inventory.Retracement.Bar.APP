@@ -370,20 +370,24 @@ class DataHandler:
 
     """
 
-    def __init__(self, dataframe: pd.DataFrame | pd.Series) -> None:
+    def __init__(
+        self,
+        dataframe: pd.DataFrame | pd.Series | np.ndarray
+    ) -> None:
         """
         Initialize the DataHandler object.
 
         Parameters:
         -----------
-        dataframe : pd.DataFrame or pd.Series
-            The input DataFrame or Series to be processed.
+        dataframe : pd.DataFrame, pd.Series, or np.ndarray
+            The input data to be processed. It can be a pandas DataFrame,
+            Series, or a numpy array.
 
-        Returns:
-        --------
-        None
         """
         self.data_frame = dataframe.copy()
+
+        if isinstance(dataframe, np.ndarray):
+            self.data_frame = pd.Series(dataframe)
 
     def drop_zero_predictions(
         self,
