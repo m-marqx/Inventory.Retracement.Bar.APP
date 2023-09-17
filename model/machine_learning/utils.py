@@ -669,10 +669,10 @@ class DataHandler:
             include_lowest=True,
         )
 
-        quantile_df = pd.DataFrame({"Class": class_df, target_name: target})
+        quantile_df = pd.DataFrame({column: class_df, target_name: target})
 
         quantile_df = pd.crosstab(
-            index=quantile_df["Class"],
+            index=quantile_df[column],
             columns=quantile_df[target_name],
         )
 
