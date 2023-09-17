@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import ParameterGrid
 from joblib import Parallel, delayed
+import plotly.express as px
 import graphviz
 
 from tree_params import TreeParams, TrainTestSplits
@@ -724,3 +725,60 @@ class PlotCurve:
         """
         self.data_frame = data_frame
 
+    def plot_target_curves(
+        self,
+        column: str,
+        base_line: int | float = 50,
+        step: int | float = 2
+    ):
+        """
+        Plot the target curve with specified thresholds.
+
+        Parameters:
+        -----------
+        column : str
+            The name of the DataFrame column to plot.
+        base_line : int or float, optional
+            The base line or center line value (default is 50).
+        step : int or float, optional
+            The step size for upper and lower bounds (default is 2).
+
+        Returns:
+        --------
+        plotly.graph_objs._figure.Figure
+            A Plotly figure containing the target curve and thresholds.
+        """
+        if isinstance(self.data_frame.index, pd.CategoricalIndex):
+            data_frame_indexes = pd.Series(self.data_frame.index).astype(str)
+        else:
+            data_frame_indexes = self.data_frame.index
+
+        upper_bound = base_line + step
+        lower_bound = base_line - step
+
+        fig = px.line(self.data_frame, y=column, x=data_frame_indexes)
+        fig.update_traces(line_color="white")
+
+        fig.add_hline(
+            y=upper_bound,
+            line_dash="dash",
+            line_color="lime",
+            annotation_text=f"Valor Y = {upper_bound}"
+        )
+
+        fig.add_hline(
+            y=lower_bound,
+            line_dash="dash",
+            line_color="red",
+            annotation_text=f"Valor Y = {lower_bound}"
+        )
+
+        fig.add_hline(
+            y=base_line,
+            line_dash="dash",
+            line_color="grey",
+            annotation_text="Center line"
+        )
+
+        fig.update_layout(template="plotly_dark")
+        return fig
