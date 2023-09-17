@@ -655,6 +655,7 @@ class DataHandler:
                 self.data_frame[column],
                 np.arange(0, 1.1, 0.1)
             )
+            quantiles = np.unique(quantiles)
 
         if isinstance(target_input, str):
             target_name = target_input
