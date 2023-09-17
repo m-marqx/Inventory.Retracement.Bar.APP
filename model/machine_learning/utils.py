@@ -619,8 +619,8 @@ class DataHandler:
 
     def quantile_split(
         self,
-        column: str,
         target_input: str | pd.Series | np.ndarray,
+        column: str = None,
         method: Literal["simple", "ratio"] = "ratio",
         quantiles: list[float] | None = None
     ) -> pd.DataFrame:
@@ -631,11 +631,11 @@ class DataHandler:
 
         Parameters:
         -----------
-        column : str
-            The name of the column used for quantile splitting.
         target_input : str, pd.Series, or np.ndarray
             The target variable for the analysis. It can be a column
             name, a pandas Series, or a numpy array.
+        column : str, optional
+            The name of the column used for quantile splitting.
         method : Literal["simple", "ratio"], optional
             The method used for calculating class proportions. 'simple'
             returns the raw class counts, 'ratio' returns the
@@ -655,9 +655,14 @@ class DataHandler:
             variable, and the values represent either counts or
             proportions, depending on the chosen method.
         """
+        if isinstance(self.data_frame, pd.Series):
+            feature = self.data_frame
+        else:
+            feature = self.data_frame[column]
+
         if quantiles is None:
             quantiles = np.quantile(
-                self.data_frame[column],
+                feature,
                 np.arange(0, 1.1, 0.1)
             )
             quantiles = np.unique(quantiles)
@@ -669,16 +674,28 @@ class DataHandler:
             target_name = "target"
             target = target_input
 
+        if isinstance(target, pd.Series):
+            index_equals = target.index.equals(feature.index)
+            if not index_equals:
+                target = target.reset_index(drop=True)
+
         class_df = pd.cut(
-            self.data_frame[column],
+            feature,
             quantiles,
             include_lowest=True,
         )
 
-        quantile_df = pd.DataFrame({column: class_df, target_name: target})
+        feature_name = column if column else "feature"
+
+        quantile_df = pd.DataFrame(
+            {
+                feature_name: class_df,
+                target_name: target
+            }
+        )
 
         quantile_df = pd.crosstab(
-            index=quantile_df[column],
+            index=quantile_df[feature_name],
             columns=quantile_df[target_name],
         )
 
