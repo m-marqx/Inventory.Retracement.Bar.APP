@@ -688,3 +688,39 @@ class DataHandler:
             )
 
         return quantile_df
+
+class PlotCurve:
+    """
+    A class for plotting target curves with specified thresholds.
+
+    Parameters:
+    -----------
+    data_frame : pd.DataFrame
+        The DataFrame containing the data to be plotted.
+
+    Attributes:
+    -----------
+    data_frame : pd.DataFrame
+        The DataFrame containing the data.
+
+    Methods:
+    --------
+    plot_target_curves(
+        column: str,
+        base_line: int | float = 50,
+        step: int | float = 2
+    ) -> plotly.graph_objs._figure.Figure:
+        Plot the target curve with specified thresholds.
+
+    """
+    def __init__(self, data_frame: pd.DataFrame) -> None:
+        """
+        Initialize the PlotCurve object.
+
+        Parameters:
+        -----------
+        data_frame : pd.DataFrame
+            The DataFrame containing the data to be plotted.
+        """
+        self.data_frame = data_frame
+
