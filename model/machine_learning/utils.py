@@ -653,7 +653,7 @@ class DataHandler:
         if quantiles is None:
             quantiles = np.quantile(
                 self.data_frame[column],
-                np.arange(0, 1.01, 10)
+                np.arange(0, 1.1, 0.1)
             )
 
         if isinstance(target_input, str):
