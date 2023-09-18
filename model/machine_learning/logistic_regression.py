@@ -103,6 +103,55 @@ class LogisticModel:
 
         self.sk_model = LogisticRegression().fit(self.X_train, self.y_train)
 
+    @property
+    def short_summary(self) -> pd.DataFrame:
+        """
+        Generate a summary table for statistical model coefficients and
+        P-values.
+
+        This method computes a summary table that includes coefficients
+        and corresponding P-values from a statistical model. It also
+        ranks the coefficients based on their significance level.
+
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame containing the following columns:
+            - 'coefficients': Coefficients estimated by the model.
+            - 'P_values': P-values associated with the coefficients.
+            - 'rank': Rank indicators based on P-value significance.
+                - '.' for P-values < 0.1
+                - '*' for P-values < 0.05
+                - '**' for P-values < 0.01
+                - '***' for P-values < 0.001
+                - ' ' for P-values between 0.1 and 0.3
+                - '!' for P-values > 0.3
+        """
+        data_frame = pd.DataFrame({"coefficients": self.sm_model.params})
+        data_frame["P_values"] = self.sm_model.pvalues
+        data_frame["rank"] = ""
+
+        data_frame["rank"] = np.where(
+            data_frame["P_values"] < 0.1, '.', data_frame["rank"]
+        )
+
+        data_frame["rank"] = np.where(
+            data_frame["P_values"] < 0.05, '*', data_frame["rank"]
+        )
+
+        data_frame["rank"] = np.where(
+            data_frame["P_values"] < 0.01, '**', data_frame["rank"]
+        )
+
+        data_frame["rank"] = np.where(
+            data_frame["P_values"] < 0.001, '***', data_frame["rank"]
+        )
+
+        data_frame["rank"] = np.where(
+            data_frame["P_values"] > 0.3, '!', data_frame["rank"]
+        )
+        return data_frame
+
     def model_predict(
         self,
         method: Literal["statsmodels", "sklearn"],
