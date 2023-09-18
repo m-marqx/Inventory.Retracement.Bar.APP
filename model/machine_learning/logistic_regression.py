@@ -99,7 +99,7 @@ class LogisticModel:
             self.y_train,
             self.X_train,
             family=sm.families.Binomial()
-        )
+        ).fit()
 
         self.sk_model = LogisticRegression().fit(self.X_train, self.y_train)
 
