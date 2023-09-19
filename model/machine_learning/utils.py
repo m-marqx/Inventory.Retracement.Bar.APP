@@ -495,7 +495,11 @@ class DataHandler:
 
         return self.data_frame.loc[max_acc_targets]
 
-    def model_return_stats(self, result_column: str = None) -> tuple:
+    def model_return_stats(
+        self,
+        result_column: str = None,
+        output_format: Literal["dict", "Series", "DataFrame"] = "DataFrame",
+    ) -> dict[float, float, float, float] | pd.Series | pd.DataFrame:
         """
         Calculate various statistics related to model returns.
 
@@ -506,21 +510,46 @@ class DataHandler:
             analysis.
             If None, the instance's data_frame will be used as the
             result column.
+        output_format : Literal["dict", "Series", "DataFrame"], optional
+            The format of the output. Choose from 'dict', 'Series', or
+            'DataFrame' (default: 'DataFrame').
 
         Returns:
         --------
-        tuple
-            A tuple containing the following statistics:
-            - expected_return : float
-                The expected return based on the provided result column.
-            - win_rate : float
-                The win rate (percentage of positive outcomes) of the
-                model.
-            - positive_mean : float
-                The mean return of positive outcomes from the model.
-            - negative_mean : float
-                The mean return of negative outcomes from the model.
+        dict or pd.Series or pd.DataFrame
+            Returns the calculated statistics in the specified format:
+            - If output_format is `'dict'`, a dictionary with keys:
+                - 'Expected_Return': float
+                    The expected return based on the provided result
+                    column.
+                - 'Win_Rate': float
+                    The win rate (percentage of positive outcomes) of
+                    the model.
+                - 'Positive_Mean': float
+                    The mean return of positive outcomes from the model.
+                - 'Negative_Mean': float
+                    The mean return of negative outcomes from the model.
+            - If output_format is `'Series'`, a pandas Series with
+            appropriate index labels.
+            - If output_format is `'DataFrame'`, a pandas DataFrame with
+            statistics as rows and a 'Stats' column as the index.
+
+        Raises:
+        -------
+        ValueError
+            If output_format is not one of `'dict'`, `'Series'`, or
+            `'DataFrame'`.
+        ValueError
+            If result_column is `None` and the input data_frame is not a
+            Series.
         """
+
+        if output_format not in ["dict", "Series", "DataFrame"]:
+            raise ValueError(
+                "output_format must be one of 'dict', 'Series', or "
+                "'DataFrame'."
+            )
+
         if result_column is None:
             if isinstance(self.data_frame, pd.Series):
                 positive = self.data_frame[self.data_frame > 0]
@@ -535,8 +564,8 @@ class DataHandler:
         else:
             positive = self.data_frame.query(f"{result_column} > 0")
             negative = self.data_frame.query(f"{result_column} < 0")
-            positive_mean = positive[f"{result_column}"].mean()
-            negative_mean = negative[f"{result_column}"].mean()
+            positive_mean = positive[result_column].mean()
+            negative_mean = negative[result_column].mean()
 
         win_rate = (
             positive.shape[0]
@@ -550,7 +579,22 @@ class DataHandler:
             * (win_rate - 1)
         )
 
-        return expected_return, win_rate, positive_mean, negative_mean
+        results = {
+            "Expected_Return": expected_return,
+            "Win_Rate": win_rate,
+            "Positive_Mean": positive_mean,
+            "Negative_Mean": negative_mean,
+        }
+
+        if output_format == "Series":
+            return pd.Series(results).rename("Stats")
+        if output_format == "DataFrame":
+            return pd.DataFrame(
+                results,
+                index=["Value"]
+            ).T.rename_axis("Stats")
+
+        return results
 
     def fill_outlier(
         self,
