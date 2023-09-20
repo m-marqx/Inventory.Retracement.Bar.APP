@@ -155,7 +155,7 @@ class LogisticModel:
     def model_predict(
         self,
         method: Literal["statsmodels", "sklearn"],
-        threshold
+        threshold: None | float = None
     ) -> tuple:
         """
         Predict using the trained logistic regression model.
@@ -164,7 +164,7 @@ class LogisticModel:
         -----------
         method : {"statsmodels", "sklearn"}
             The method to use for prediction.
-        threshold : float
+        threshold : None or float, optional
             The threshold to apply for classification.
 
         Returns:
@@ -173,6 +173,8 @@ class LogisticModel:
             A tuple containing predicted classes and accuracy.
         """
         if method == "statsmodels":
+            if threshold is None:
+                raise ValueError("threshold must be set for statsmodels")
             y_pred = self.sm_model.predict(self.X_test)
             y_pred_classes = np.where(y_pred > threshold, 1, 0)
             accuracy = np.mean(y_pred_classes == self.y_test)
