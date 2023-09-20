@@ -498,6 +498,7 @@ class DataHandler:
     def model_return_stats(
         self,
         result_column: str = None,
+        is_percentage_data: bool = False,
         output_format: Literal["dict", "Series", "DataFrame"] = "DataFrame",
     ) -> dict[float, float, float, float] | pd.Series | pd.DataFrame:
         """
@@ -510,9 +511,14 @@ class DataHandler:
             analysis.
             If None, the instance's data_frame will be used as the
             result column.
+            (default: None).
+        is_percentage_data : bool, optional
+            Indicates whether the data represents percentages
+            (default: False).
         output_format : Literal["dict", "Series", "DataFrame"], optional
             The format of the output. Choose from 'dict', 'Series', or
-            'DataFrame' (default: 'DataFrame').
+            'DataFrame'
+            (default: 'DataFrame').
 
         Returns:
         --------
@@ -543,6 +549,10 @@ class DataHandler:
             If result_column is `None` and the input data_frame is not a
             Series.
         """
+        data_frame = self.data_frame.copy()
+
+        if is_percentage_data:
+            data_frame = (data_frame - 1) * 100
 
         if output_format not in ["dict", "Series", "DataFrame"]:
             raise ValueError(
@@ -551,9 +561,9 @@ class DataHandler:
             )
 
         if result_column is None:
-            if isinstance(self.data_frame, pd.Series):
-                positive = self.data_frame[self.data_frame > 0]
-                negative = self.data_frame[self.data_frame < 0]
+            if isinstance(data_frame, pd.Series):
+                positive = data_frame[data_frame > 0]
+                negative = data_frame[data_frame < 0]
                 positive_mean = positive.mean()
                 negative_mean = negative.mean()
             else:
@@ -562,8 +572,8 @@ class DataHandler:
                 )
 
         else:
-            positive = self.data_frame.query(f"{result_column} > 0")
-            negative = self.data_frame.query(f"{result_column} < 0")
+            positive = data_frame.query(f"{result_column} > 0")
+            negative = data_frame.query(f"{result_column} < 0")
             positive_mean = positive[result_column].mean()
             negative_mean = negative[result_column].mean()
 
