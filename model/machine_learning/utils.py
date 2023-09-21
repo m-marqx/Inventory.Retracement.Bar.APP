@@ -833,6 +833,51 @@ class ModelHandler:
 
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
+
+    @property
+    def results_report(self) -> str:
+        """
+        Generate a results report including a confusion matrix and a
+        classification report.
+
+        Returns:
+        --------
+        str
+            A string containing the results report.
+        """
+        names = pd.Series(self.y_test).sort_values().astype(str).unique()
+
+        confusion_matrix = metrics.confusion_matrix(self.y_test, self.y_pred)
+        column_names = "predicted_" + names
+        index_names = "real_" + names
+
+        confusion_matrix_df = pd.DataFrame(
+            confusion_matrix,
+            columns = column_names,
+            index = index_names,
+        )
+
+        if self._has_predic_proba:
+            auc = metrics.roc_auc_score(self.y_test, self.y_pred_probs)
+            gini = 2 * auc - 1
+            support = self.y_test.shape[0]
+            auc_str = f"""         AUC                         {auc:.4f}      {support}
+        Gini                         {gini:.4f}      {support}"""
+        else:
+            auc_str = ""
+
+        return f"""Confusion matrix
+--------------------------------------------------------------
+{confusion_matrix_df}
+
+
+Classification reports
+--------------------------------------------------------------
+
+{metrics.classification_report(self.y_test, self.y_pred, digits=4)[:-1]}
+{auc_str}
+"""
+
 class PlotCurve:
     """
     A class for plotting target curves with specified thresholds.
