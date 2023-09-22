@@ -54,7 +54,7 @@ class SklearnLinearRegression:
     """
     def __init__(
         self,
-        dataframe,
+        dataframe: pd.DataFrame,
         features: list[str],
         target: str,
         test_size: float = 0.5
@@ -70,7 +70,9 @@ class SklearnLinearRegression:
             The list of feature column names.
         target : str
             The target column name.
-
+        test_size : float, optional
+            The proportion of the dataset to include in the test split
+            (default: 0.5).
         """
         self.target = target
         self.data_frame = dataframe
