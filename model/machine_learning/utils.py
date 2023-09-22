@@ -801,7 +801,7 @@ class ModelHandler:
         a classification report, AUC, Gini index (if predict_proba is
         available), and support.
     """
-    def __init__(self, estimator, X_train, y_train, X_test, y_test) -> None:
+    def __init__(self, estimator, X_test, y_test) -> None:
         """
         Initialize the ModelHandler object.
 
@@ -810,17 +810,11 @@ class ModelHandler:
         estimator : object
             An instance of a scikit-learn estimator for classification or
             regression.
-        X_train : array-like of shape (n_samples, n_features)
-            Training input samples.
-        y_train : array-like of shape (n_samples,)
-            Target values for training.
         X_test : array-like of shape (n_samples, n_features)
             Test input samples.
         y_test : array-like of shape (n_samples,)
             True target values for testing.
         """
-        self.x_train = X_train
-        self.y_train = y_train
         self.x_test = X_test
         self.y_test = y_test
         self.estimator = estimator
