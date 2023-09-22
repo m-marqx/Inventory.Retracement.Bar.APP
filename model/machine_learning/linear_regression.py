@@ -1,16 +1,17 @@
+from math import sqrt
+
 import pandas as pd
 import sklearn.metrics as metrics
 import plotly.express as px
+import plotly.tools as tls
 import statsmodels.tools as smtools
 import statsmodels.api as sm
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
-import plotly.tools as tls
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from math import sqrt
 
 class SklearnLinearRegression:
     """
