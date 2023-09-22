@@ -383,12 +383,14 @@ class StatsmodelsLinearRegression:
 
     def get_fig_residuals(self, interactive=False):
         """
-        Generate a residuals probability plot or a partial regression plot.
+        Generate a residuals probability plot or a partial regression
+        plot.
 
         Parameters
         ----------
         interactive : bool, optional
-            Flag indicating whether to generate an interactive plot (default is False).
+            Flag indicating whether to generate an interactive plot
+            (default: False).
 
         Returns
         -------
