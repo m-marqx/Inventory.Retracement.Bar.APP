@@ -44,12 +44,59 @@ class ExternalVariables:
             The input dataframe containing the data.
         return_column : str, optional
             The name of the column representing the return values
-            (default is "Result").
+            (default: "Result").
 
         """
         self.dataframe = dataframe.copy()
         self.return_column = return_column
         self.feat_last_column = feat_last_column
+
+    def ratio_variables(self, column: str, length: int) -> pd.DataFrame:
+        """
+        Compute ratio-based variables for a given column.
+
+        Parameters:
+        -----------
+        column : str
+            The name of the column for which ratios will be calculated.
+        length : int
+            The window length for rolling statistics.
+
+        Returns:
+        --------
+        pd.DataFrame
+            Returns the DataFrame with ratio-based variables added.
+        """
+        ma_feat = "MA_" + column
+        std_feat = "STD_" + column
+
+        self.dataframe[ma_feat] = (
+            self.dataframe[column]
+            .rolling(window=length)
+            .mean()
+        )
+
+        self.dataframe[std_feat] = (
+            self.dataframe[column]
+            .rolling(window=length)
+            .std()
+        )
+
+        self.dataframe[ma_feat + "_ratio"] = (
+            self.dataframe[column]
+            / self.dataframe[ma_feat] - 1
+        )
+
+        self.dataframe[std_feat + "_ratio"] = (
+            self.dataframe[column]
+            / self.dataframe[std_feat] - 1
+        )
+
+        self.dataframe = self.dataframe.reorder_columns(
+            self.feat_last_column, self.dataframe.columns[-4:]
+        )
+
+        return self.dataframe
 
     def physics_variables(self, periods: int) -> pd.DataFrame:
         """
