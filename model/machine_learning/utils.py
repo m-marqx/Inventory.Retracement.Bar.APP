@@ -596,13 +596,14 @@ class DataHandler:
             "Negative_Mean": negative_mean,
         }
 
+        stats_str = "Stats %" if is_percentage_data else "Stats"
         if output_format == "Series":
-            return pd.Series(results).rename("Stats")
+            return pd.Series(results).rename(stats_str)
         if output_format == "DataFrame":
             return pd.DataFrame(
                 results,
                 index=["Value"]
-            ).T.rename_axis("Stats")
+            ).T.rename_axis(stats_str)
 
         return results
 
