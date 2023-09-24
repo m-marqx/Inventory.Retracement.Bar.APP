@@ -513,7 +513,7 @@ class DataHandler:
             result column.
             (default: None).
         is_percentage_data : bool, optional
-            Indicates whether the data represents percentages
+            Indicates whether the data represents percentages.
             (default: False).
         output_format : Literal["dict", "Series", "DataFrame"], optional
             The format of the output. Choose from 'dict', 'Series', or
@@ -535,6 +535,9 @@ class DataHandler:
                     The mean return of positive outcomes from the model.
                 - 'Negative_Mean': float
                     The mean return of negative outcomes from the model.
+                - 'Payoff': float
+                    The payoff ratio, calculated as the positive mean divided by
+                    the absolute value of the negative mean.
             - If output_format is `'Series'`, a pandas Series with
             appropriate index labels.
             - If output_format is `'DataFrame'`, a pandas DataFrame with
@@ -589,11 +592,14 @@ class DataHandler:
             * (win_rate - 1)
         )
 
+        payoff = positive_mean / abs(negative_mean)
+
         results = {
             "Expected_Return": expected_return,
             "Win_Rate": win_rate,
             "Positive_Mean": positive_mean,
             "Negative_Mean": negative_mean,
+            "Payoff" : payoff,
         }
 
         stats_str = "Stats %" if is_percentage_data else "Stats"
