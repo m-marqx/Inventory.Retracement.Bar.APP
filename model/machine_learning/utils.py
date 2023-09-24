@@ -495,14 +495,16 @@ class DataHandler:
 
         return self.data_frame.loc[max_acc_targets]
 
-    def model_return_stats(
+    def result_metrics(
         self,
         result_column: str = None,
         is_percentage_data: bool = False,
         output_format: Literal["dict", "Series", "DataFrame"] = "DataFrame",
     ) -> dict[float, float, float, float] | pd.Series | pd.DataFrame:
         """
-        Calculate various statistics related to model returns.
+        Calculate various statistics related to results, including
+        expected return, win rate, positive and negative means, and
+        payoff ratio.
 
         Parameters:
         -----------
@@ -536,8 +538,8 @@ class DataHandler:
                 - 'Negative_Mean': float
                     The mean return of negative outcomes from the model.
                 - 'Payoff': float
-                    The payoff ratio, calculated as the positive mean divided by
-                    the absolute value of the negative mean.
+                    The payoff ratio, calculated as the positive mean
+                    divided by the absolute value of the negative mean.
             - If output_format is `'Series'`, a pandas Series with
             appropriate index labels.
             - If output_format is `'DataFrame'`, a pandas DataFrame with
