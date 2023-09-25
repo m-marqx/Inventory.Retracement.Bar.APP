@@ -534,16 +534,18 @@ class DataHandler:
                     The win rate (percentage of positive outcomes) of
                     the model.
                 - 'Positive_Mean': float
-                    The mean return of positive outcomes from the model.
+                    The mean return of positive outcomes from the
+                    model.
                 - 'Negative_Mean': float
-                    The mean return of negative outcomes from the model.
+                    The mean return of negative outcomes from the
+                    model.
                 - 'Payoff': float
                     The payoff ratio, calculated as the positive mean
                     divided by the absolute value of the negative mean.
             - If output_format is `'Series'`, a pandas Series with
             appropriate index labels.
-            - If output_format is `'DataFrame'`, a pandas DataFrame with
-            statistics as rows and a 'Stats' column as the index.
+            - If output_format is `'DataFrame'`, a pandas DataFrame
+            with statistics as rows and a 'Stats' column as the index.
 
         Raises:
         -------
@@ -551,8 +553,8 @@ class DataHandler:
             If output_format is not one of `'dict'`, `'Series'`, or
             `'DataFrame'`.
         ValueError
-            If result_column is `None` and the input data_frame is not a
-            Series.
+            If result_column is `None` and the input data_frame is not
+            a Series.
         """
         data_frame = self.data_frame.copy()
 
