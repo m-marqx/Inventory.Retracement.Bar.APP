@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
-from sklearn.model_selection import ParameterGrid
+from sklearn.model_selection import ParameterGrid, learning_curve
 from joblib import Parallel, delayed
 import plotly.express as px
 import graphviz
@@ -836,6 +836,81 @@ class ModelHandler:
 
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
+
+    def learning_curve(
+        self,
+        train_size: np.ndarray | pd.Series = None,
+        k_fold: int = 5
+    ) -> pd.DataFrame:
+        """
+        Generate a learning curve for the estimator.
+
+        A learning curve shows the training and testing scores of an
+        estimator
+        for varying numbers of training samples. This can be useful to
+        evaluate
+        how well the estimator performs as more data is used for
+        training.
+
+        Parameters:
+        -----------
+        train_size : np.ndarray or pd.Series, optional
+            An array of training sizes or a Series of proportions to
+            use for plotting the learning curve. If None, it defaults
+            to evenly spaced values between 0.1 and 1.0
+            (default: None).
+        k_fold : int, optional
+            The number of cross-validation folds to use for computing
+            scores
+            (default: 5).
+
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame containing the mean and standard deviation of
+            train and test scores for different training sizes. Columns
+            include:
+            - 'train_mean': Mean training score
+            - 'train_std': Standard deviation of training score
+            - 'test_mean': Mean test score
+            - 'test_std': Standard deviation of test score
+
+        Notes:
+        ------
+        The learning curve is generated using cross-validation to
+        compute scores.
+        """
+        if train_size is None:
+            train_size = np.linspace(0.1, 1.0, 20)
+
+        train_sizes, train_scores, test_scores = learning_curve(
+            estimator=self.estimator,
+            X=self.x_test,
+            y=self.y_test,
+            train_sizes=train_size,
+            cv=k_fold,
+        )
+
+        train_scores_df = pd.DataFrame(train_scores, index=train_sizes)
+        train_scores_concat = pd.concat(
+            [
+                train_scores_df.mean(axis=1),
+                train_scores_df.std(axis=1)
+            ], axis=1).rename(columns={0: 'train_mean', 1: 'train_std'})
+
+        test_scores_df = pd.DataFrame(test_scores, index=train_sizes)
+
+        test_scores_concat = pd.concat(
+            [
+                test_scores_df.mean(axis=1),
+                test_scores_df.std(axis=1)
+            ], axis=1).rename(columns={0: 'test_mean', 1: 'test_std'})
+
+        return pd.concat(
+            [
+                train_scores_concat,
+                test_scores_concat,
+            ], axis=1)
 
     @property
     def results_report(self) -> str:
