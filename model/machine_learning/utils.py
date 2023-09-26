@@ -517,7 +517,8 @@ class DataHandler:
         is_percentage_data : bool, optional
             Indicates whether the data represents percentages.
             (default: False).
-        output_format : Literal["dict", "Series", "DataFrame"], optional
+        output_format : Literal["dict", "Series", "DataFrame"],
+        optional
             The format of the output. Choose from 'dict', 'Series', or
             'DataFrame'
             (default: 'DataFrame').
@@ -1049,4 +1050,59 @@ class PlotCurve:
         )
 
         fig.update_layout(template="plotly_dark")
+        return fig
+
+    def plot_roc_curve(
+        self,
+        fpr: str | np.ndarray | pd.Series,
+        tpr: str | np.ndarray | pd.Series
+    ):
+        """
+        Plot a Receiver Operating Characteristic (ROC) curve.
+
+        The ROC curve is a graphical representation of the classifier's
+        ability to distinguish between positive and negative classes.
+        It is created by plotting the True Positive Rate (TPR) against
+        the False Positive Rate (FPR) at various threshold settings.
+
+        Parameters:
+        -----------
+        fpr : str, np.ndarray, or pd.Series
+            An array containing the False Positive Rates for different
+            classification thresholds.
+        tpr : str, np.ndarray, or pd.Series
+            An array containing the True Positive Rates for different
+            classification thresholds.
+
+        Returns:
+        --------
+        plotly.graph_objs._figure.Figure
+            A Plotly figure displaying the ROC curve with AUC
+            (Area Under the Curve) score.
+
+        """
+        if isinstance(fpr, str):
+            fpr = self.data_frame[fpr]
+        if isinstance(tpr, str):
+            tpr = self.data_frame[tpr]
+
+        fig = px.line(
+            x=fpr,
+            y=tpr,
+            title=f"ROC Curve (AUC={metrics.auc(fpr, tpr):.4f})",
+            labels=dict(x="False Positive Rate", y="True Positive Rate"),
+            width=700,
+            height=700,
+            template="plotly_dark"
+        )
+
+        fig.add_shape(
+            type="line",
+            line=dict(dash="dash"),
+            x0=0,
+            x1=1,
+            y0=0,
+            y1=1,
+            opacity=0.65,
+        )
         return fig
