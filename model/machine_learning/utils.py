@@ -1106,3 +1106,26 @@ class PlotCurve:
             opacity=0.65,
         )
         return fig
+
+    def quantile_split(
+        self,
+        feature: str,
+        target: str,
+        middle_line: float = 0.5
+    ):
+        """
+        Plot the quantile split of a feature.
+        """
+        data = (
+            DataHandler(self.data_frame)
+            .quantile_split(target, feature, "ratio")
+            .iloc[:, [1]]
+        )
+
+        data["index"] = data.index
+
+        data_frame = pd.DataFrame(data.to_numpy(), columns=["value", feature])
+        data_frame[feature] = data_frame[feature].astype("str")
+        data_frame = data_frame.set_index(feature)
+        data_frame["value"] = data_frame["value"].astype("float")
+        return px.line(data_frame, y='value').add_hline(y=middle_line)
