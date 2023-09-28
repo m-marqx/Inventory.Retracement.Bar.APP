@@ -543,6 +543,8 @@ class DataHandler:
                 - 'Payoff': float
                     The payoff ratio, calculated as the positive mean
                     divided by the absolute value of the negative mean.
+                - 'Observations': int
+                    The total number of observations considered.
             - If output_format is `'Series'`, a pandas Series with
             appropriate index labels.
             - If output_format is `'DataFrame'`, a pandas DataFrame
@@ -605,6 +607,7 @@ class DataHandler:
             "Positive_Mean": positive_mean,
             "Negative_Mean": negative_mean,
             "Payoff" : payoff,
+            "Observations" : positive.shape[0] + negative.shape[0],
         }
 
         stats_str = "Stats %" if is_percentage_data else "Stats"
