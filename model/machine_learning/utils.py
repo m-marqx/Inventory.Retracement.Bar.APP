@@ -1119,8 +1119,8 @@ class PlotCurve:
 
     def quantile_split(
         self,
-        feature: str,
         target: str,
+        feature: str,
         middle_line: float = 0.5
     ):
         """
