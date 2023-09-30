@@ -999,7 +999,7 @@ class PlotCurve:
 
     def plot_target_curves(
         self,
-        column: str,
+        column: str | np.ndarray | pd.Series,
         base_line: int | float = 50,
         step: int | float = 2
     ):
@@ -1020,15 +1020,22 @@ class PlotCurve:
         plotly.graph_objs._figure.Figure
             A Plotly figure containing the target curve and thresholds.
         """
-        if isinstance(self.data_frame.index, pd.CategoricalIndex):
-            data_frame_indexes = pd.Series(self.data_frame.index).astype(str)
+        if isinstance(column, str):
+            data_frame = self.data_frame[column]
+
+            if isinstance(self.data_frame.index, pd.CategoricalIndex):
+                data_frame_indexes = pd.Series(self.data_frame.index).astype(str)
+            else:
+                data_frame_indexes = self.data_frame.index
         else:
-            data_frame_indexes = self.data_frame.index
+            column = None
+            data_frame = self.data_frame
+            data_frame_indexes = None
 
         upper_bound = base_line + step
         lower_bound = base_line - step
 
-        fig = px.line(self.data_frame, y=column, x=data_frame_indexes)
+        fig = px.line(data_frame, y=column, x=data_frame_indexes)
         fig.update_traces(line_color="white")
 
         fig.add_hline(
