@@ -1124,7 +1124,23 @@ class PlotCurve:
         middle_line: float = 0.5
     ):
         """
-        Plot the quantile split of a feature.
+        Split data into quantiles based on a feature and visualize the
+        distribution.
+
+        Parameters
+        ----------
+        target : str
+            The target variable to be plotted.
+        feature : str
+            The feature used for quantile splitting.
+        middle_line : float, optional
+            The position of the middle line (default is 0.5).
+
+        Returns
+        -------
+        plotly.graph_objs.Figure
+            A Plotly figure displaying the quantile distribution of the
+            data.
         """
         data = (
             DataHandler(self.data_frame)
