@@ -1003,7 +1003,7 @@ class PlotCurve:
         self.data_frame = data_frame
         self.data = None
 
-    def plot_target_curves(
+    def __complex_target_curves(
         self,
         column: str | np.ndarray | pd.Series,
         middle_line: int | float = 0.5,
