@@ -729,6 +729,9 @@ class DataHandler:
         else:
             feature = self.data_frame[column]
 
+        if feature.hasnans:
+            feature = feature.dropna()
+
         if quantiles is None:
             quantiles = np.quantile(
                 feature,
@@ -741,12 +744,14 @@ class DataHandler:
             target = self.data_frame[target_input]
         else:
             target_name = "target"
-            target = target_input
+            target = pd.Series(target_input)
 
-        if isinstance(target, pd.Series):
-            index_equals = target.index.equals(feature.index)
-            if not index_equals:
-                target = target.reset_index(drop=True)
+        if feature.index.dtype != target.index.dtype:
+            feature = feature.reset_index(drop=True)
+            target = target.reset_index(drop=True)
+
+        if not target.index.equals(feature.index):
+            target = target.reindex(feature.index)
 
         class_df = pd.cut(
             feature,
