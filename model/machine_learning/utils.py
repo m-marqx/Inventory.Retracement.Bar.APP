@@ -1001,12 +1001,14 @@ class PlotCurve:
             The DataFrame containing the data to be plotted.
         """
         self.data_frame = data_frame
+        self.data = None
 
     def plot_target_curves(
         self,
         column: str | np.ndarray | pd.Series,
-        base_line: int | float = 50,
-        step: int | float = 2
+        middle_line: int | float = 0.5,
+        step: int | float = 0.02,
+        **kwargs,
     ):
         """
         Plot the target curve with specified thresholds.
@@ -1015,10 +1017,12 @@ class PlotCurve:
         -----------
         column : str
             The name of the DataFrame column to plot.
-        base_line : int or float, optional
-            The base line or center line value (default is 50).
+        middle_line : int or float, optional
+            The base line or center line value
+            (default: 0.5).
         step : int or float, optional
-            The step size for upper and lower bounds (default is 2).
+            The step size for upper and lower bounds
+            (default: 0.02).
 
         Returns:
         --------
@@ -1026,45 +1030,56 @@ class PlotCurve:
             A Plotly figure containing the target curve and thresholds.
         """
         if isinstance(column, str):
-            data_frame = self.data_frame[column]
+            data_frame = self.data[column]
 
-            if isinstance(self.data_frame.index, pd.CategoricalIndex):
-                data_frame_indexes = pd.Series(self.data_frame.index).astype(str)
+            if isinstance(self.data.index, pd.CategoricalIndex):
+                data_frame_indexes = pd.Series(self.data.index).astype(str)
             else:
-                data_frame_indexes = self.data_frame.index
+                data_frame_indexes = self.data.index
         else:
             column = None
-            data_frame = self.data_frame
+            data_frame = self.data
             data_frame_indexes = None
 
-        upper_bound = base_line + step
-        lower_bound = base_line - step
+        upper_bound = middle_line + step
+        lower_bound = middle_line - step
 
         fig = px.line(data_frame, y=column, x=data_frame_indexes)
-        fig.update_traces(line_color="white")
+
+        kwargs = {**kwargs}
+
+        kwargs["upper_bound_color"] = kwargs.get("upper_bound_color", "lime")
+        kwargs["middle_line_color"] = kwargs.get("middle_line_color", "grey")
+        kwargs["lower_bound_color"] = kwargs.get("lower_bound_color", "red")
+        kwargs["line_type"] = kwargs.get("line_type", "dash")
 
         fig.add_hline(
             y=upper_bound,
-            line_dash="dash",
-            line_color="lime",
+            line_dash=kwargs["line_type"],
+            line_color=kwargs["upper_bound_color"],
             annotation_text=f"Valor Y = {upper_bound}"
         )
 
         fig.add_hline(
-            y=lower_bound,
-            line_dash="dash",
-            line_color="red",
-            annotation_text=f"Valor Y = {lower_bound}"
-        )
-
-        fig.add_hline(
-            y=base_line,
-            line_dash="dash",
-            line_color="grey",
+            y=middle_line,
+            line_dash=kwargs["line_type"],
+            line_color=kwargs["middle_line_color"],
             annotation_text="Center line"
         )
 
-        fig.update_layout(template="plotly_dark")
+        fig.add_hline(
+            y=lower_bound,
+            line_dash=kwargs["line_type"],
+            line_color=kwargs["lower_bound_color"],
+            annotation_text=f"Valor Y = {lower_bound}"
+        )
+
+        kwargs.pop('upper_bound_color')
+        kwargs.pop('middle_line_color')
+        kwargs.pop('lower_bound_color')
+        kwargs.pop('line_type')
+
+        fig.update_layout(**kwargs)
         return fig
 
     def plot_roc_curve(
