@@ -1041,10 +1041,16 @@ class PlotCurve:
             data_frame = self.data
             data_frame_indexes = None
 
+        fig = px.line(data_frame, y=column, x=data_frame_indexes)
+
+        self.__hline_range(middle_line, step, fig, **kwargs)
+
+        fig.update_layout(**kwargs)
+        return fig
+
+    def __hline_range(self, middle_line, step, fig, **kwargs):
         upper_bound = middle_line + step
         lower_bound = middle_line - step
-
-        fig = px.line(data_frame, y=column, x=data_frame_indexes)
 
         kwargs = {**kwargs}
 
@@ -1052,8 +1058,10 @@ class PlotCurve:
         kwargs["middle_line_color"] = kwargs.get("middle_line_color", "grey")
         kwargs["lower_bound_color"] = kwargs.get("lower_bound_color", "red")
         kwargs["line_type"] = kwargs.get("line_type", "dash")
+        kwargs["col"] = kwargs.get("col", "all")
 
         fig.add_hline(
+            col=kwargs["col"],
             y=upper_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["upper_bound_color"],
@@ -1061,6 +1069,7 @@ class PlotCurve:
         )
 
         fig.add_hline(
+            col=kwargs["col"],
             y=middle_line,
             line_dash=kwargs["line_type"],
             line_color=kwargs["middle_line_color"],
@@ -1068,18 +1077,19 @@ class PlotCurve:
         )
 
         fig.add_hline(
+            col=kwargs["col"],
             y=lower_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["lower_bound_color"],
             annotation_text=f"Valor Y = {lower_bound}"
         )
 
+        kwargs.pop('col')
         kwargs.pop('upper_bound_color')
         kwargs.pop('middle_line_color')
         kwargs.pop('lower_bound_color')
         kwargs.pop('line_type')
 
-        fig.update_layout(**kwargs)
         return fig
 
     def plot_roc_curve(
