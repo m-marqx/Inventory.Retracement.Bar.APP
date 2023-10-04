@@ -983,12 +983,20 @@ class PlotCurve:
 
     Methods:
     --------
-    plot_target_curves(
-        column: str,
-        base_line: int | float = 50,
-        step: int | float = 2
+    quantile_distribution(
+        target: str,
+        feature: str,
+        middle_line: float = 0.5,
+        step: int | float | None = None,
+        **kwargs,
+    ):
+        Plot the quantile distribution of target values by a feature.
+
+    plot_roc_curve(
+        fpr: str | np.ndarray | pd.Series,
+        tpr: str | np.ndarray | pd.Series
     ) -> plotly.graph_objs._figure.Figure:
-        Plot the target curve with specified thresholds.
+        Plot a Receiver Operating Characteristic (ROC) curve.
 
     """
     def __init__(self, data_frame: pd.DataFrame) -> None:
@@ -1145,15 +1153,16 @@ class PlotCurve:
         )
         return fig
 
-    def quantile_split(
+    def quantile_distribution(
         self,
         target: str,
         feature: str,
-        middle_line: float = 0.5
+        middle_line: float = 0.5,
+        step: float | None = None,
+        **kwargs,
     ):
         """
-        Split data into quantiles based on a feature and visualize the
-        distribution.
+        Plot the quantile distribution of target values by a feature.
 
         Parameters
         ----------
@@ -1162,7 +1171,24 @@ class PlotCurve:
         feature : str
             The feature used for quantile splitting.
         middle_line : float, optional
-            The position of the middle line (default is 0.5).
+            The position of the middle line (default: 0.5).
+        step : int, float, or None, optional
+            The step size for upper and lower bounds
+            (default: None).
+        **kwargs : dict
+            Additional keyword arguments for customizing the
+            visualization of the Plotly layout.
+
+            Custom kwargs used when `step` is not `None`:
+
+            - upper_bound_color: str, optional
+                Color for the upper threshold line.
+            - middle_line_color: str, optional
+                Color for the middle line.
+            - lower_bound_color: str, optional
+                Color for the lower threshold line.
+            - line_type: str, optional
+                Type of line (e.g., 'solid', 'dash') for threshold lines.
 
         Returns
         -------
@@ -1176,10 +1202,34 @@ class PlotCurve:
             .iloc[:, [1]]
         )
 
+        target_name = data.columns[0]
         data["index"] = data.index
 
-        data_frame = pd.DataFrame(data.to_numpy(), columns=["value", feature])
-        data_frame[feature] = data_frame[feature].astype("str")
-        data_frame = data_frame.set_index(feature)
-        data_frame["value"] = data_frame["value"].astype("float")
-        return px.line(data_frame, y='value').add_hline(y=middle_line)
+        self.data = (
+            pd.DataFrame(
+                data.to_numpy(),
+                columns=["probability", feature])
+        )
+
+        self.data[feature] = self.data[feature].astype("str")
+        self.data["probability"] = self.data["probability"].astype("float")
+        self.data = self.data.set_index(feature)
+
+        title = (
+            f"Quantile Distribution of {target}"
+            f" (value: {target_name}) by {feature}"
+        )
+
+        if step:
+            return (
+                self.__complex_target_curves(target_name, middle_line, step, **kwargs)
+                .update_layout(title=title, title_x=0.5)
+            )
+
+        return (
+            px.line(self.data, y="probability", title=title)
+            .add_hline(y=middle_line)
+            .update_layout(title_x=0.5)
+            .update_layout(**kwargs)
+        )
+
