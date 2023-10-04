@@ -314,7 +314,13 @@ class CcxtAPI:
         --------
         pd.DataFrame or dict or tuple
             Depending on the `output_format` parameter, returns
-            aggregated K-line data in the specified format.
+            aggregated K-line data in:
+
+            - DataFrame if `output_format` is 'DataFrame'
+
+            - dict if `output_format` is 'Kline'
+
+            - tuple[pd.DataFrame, dict] if `output_format` is 'Both'
         """
         if exchanges is None:
             exchanges = [ccxt.binance(), ccxt.bitstamp()]
