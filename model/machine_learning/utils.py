@@ -1043,16 +1043,14 @@ class PlotCurve:
 
         fig = px.line(data_frame, y=column, x=data_frame_indexes)
 
-        self.__hline_range(middle_line, step, fig, **kwargs)
+        self.__hline_range(middle_line, step, fig, kwargs)
 
-        fig.update_layout(**kwargs)
+        fig.update_layout(kwargs)
         return fig
 
-    def __hline_range(self, middle_line, step, fig, **kwargs):
+    def __hline_range(self, middle_line, step, fig, kwargs):
         upper_bound = middle_line + step
         lower_bound = middle_line - step
-
-        kwargs = {**kwargs}
 
         kwargs["upper_bound_color"] = kwargs.get("upper_bound_color", "lime")
         kwargs["middle_line_color"] = kwargs.get("middle_line_color", "grey")
@@ -1084,11 +1082,11 @@ class PlotCurve:
             annotation_text=f"Valor Y = {lower_bound}"
         )
 
-        kwargs.pop('col')
         kwargs.pop('upper_bound_color')
         kwargs.pop('middle_line_color')
         kwargs.pop('lower_bound_color')
         kwargs.pop('line_type')
+        kwargs.pop('col')
 
         return fig
 
