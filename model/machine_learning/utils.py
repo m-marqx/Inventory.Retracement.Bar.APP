@@ -1139,7 +1139,6 @@ class PlotCurve:
             labels=dict(x="False Positive Rate", y="True Positive Rate"),
             width=700,
             height=700,
-            template="plotly_dark"
         )
 
         fig.add_shape(
