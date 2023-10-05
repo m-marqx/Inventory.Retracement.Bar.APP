@@ -1222,7 +1222,12 @@ class PlotCurve:
 
         if step:
             return (
-                self.__complex_target_curves(target_name, middle_line, step, **kwargs)
+                self.__complex_target_curves(
+                    target_name,
+                    middle_line,
+                    step,
+                    **kwargs
+                )
                 .update_layout(title=title, title_x=0.5)
             )
 
