@@ -8,6 +8,8 @@ from sklearn.tree import export_graphviz
 from sklearn.model_selection import ParameterGrid, learning_curve
 from joblib import Parallel, delayed
 import plotly.express as px
+import plotly.subplots as sp
+
 import graphviz
 
 from tree_params import TreeParams, TrainTestSplits
@@ -1237,3 +1239,75 @@ class PlotCurve:
             .update_layout(**kwargs)
         )
 
+    def quantile_distribution_and_histogram(
+        self,
+        target: str,
+        feature: str,
+        middle_line: float = 0.5,
+        step: float | None = None,
+        **kwargs,
+    ):
+        """
+        Create a subplot with a histogram and a quantile distribution plot.
+
+        Parameters
+        ----------
+        target : str
+            The target variable to be plotted.
+        feature : str
+            The feature used for quantile splitting.
+        middle_line : float, optional
+            The position of the middle line (default: 0.5).
+        step : int, float, or None, optional
+            The step size for upper and lower bounds
+            (default: None).
+
+        **kwargs: optional
+            additional arguments to control the visualization and
+            styling of the subplot. These arguments can include various
+            Plotly layout parameters, such as colors, titles, labels,
+            and more.
+
+            Custom kwargs used when `step` is not `None`:
+
+            - upper_bound_color: str, optional
+                Color for the upper threshold line.
+
+            - middle_line_color: str, optional
+                Color for the middle line.
+
+            - lower_bound_color: str, optional
+                Color for the lower threshold line.
+
+            - line_type: str, optional
+                Type of line (e.g., 'solid', 'dash') for threshold lines.
+
+        Returns:
+        --------
+        plotly.graph_objs.Figure
+            A Plotly figure displaying the subplot with a histogram and a
+            quantile distribution plot.
+        """
+        fig = sp.make_subplots(rows=1, cols=2)
+
+        histogram = px.histogram(self.data_frame, x=feature)
+        fig.add_trace(histogram.data[0], row=1, col=1)
+
+        trace2 = (
+            PlotCurve(self.data_frame)
+            .quantile_distribution(target, feature)
+        )
+        fig.add_trace(trace2.data[0], row=1, col=2)
+
+        if step:
+            kwargs["col"] = 2
+            self.__hline_range(middle_line, step, fig, kwargs)
+        else:
+            fig.add_hline(col=2, y=middle_line)
+
+        fig.update_layout(
+            title='Quantile Distribution and Histogram',
+            title_x=0.5
+        )
+        fig.update_layout(**kwargs)
+        return fig
