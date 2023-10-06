@@ -1,4 +1,5 @@
 from typing import Literal
+import re
 
 import numpy as np
 import pandas as pd
@@ -1311,3 +1312,47 @@ class PlotCurve:
         )
         fig.update_layout(**kwargs)
         return fig
+
+def get_strategy_ranges(buy_zone, sell_zone, fig) -> pd.DataFrame:
+    """
+    Get strategy ranges for buy and sell zones from a Plotly figure.
+
+    This function extracts strategy ranges for buy and sell zones
+    from a Plotly figure containing data points. It searches for
+    data points on the x-axis of the figure that match the specified
+    buy and sell zones and returns them as a DataFrame.
+
+    Parameters:
+    -----------
+    buy_zone : float
+        The buy zone value to search for within the figure.
+    sell_zone : float
+        The sell zone value to search for within the figure.
+    fig : plotly.graph_objs._figure.Figure
+        The Plotly figure containing data points to search.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame containing strategy ranges for buy and sell zones.
+        The DataFrame has two columns: 'value' and 'range', where 'value'
+        represents the buy or sell zone value, and 'range' represents
+        the corresponding range found in the figure.
+    """
+    def limit_ranges(str_interval) -> tuple[float, float] | tuple[None, None]:
+        match = re.match(r'\((-?\d+\.\d+), (-?\d+\.\d+)\]', str_interval)
+        if match:
+            lower_limit = float(match.group(1))
+            upper_limit = float(match.group(2))
+            return lower_limit, upper_limit
+        return None, None
+
+    ranges_dict = {}
+    for elemento in fig.data[1]['x']:
+        lower_limit, upper_limit = limit_ranges(elemento)
+        if lower_limit is not None and upper_limit is not None:
+            if lower_limit <= buy_zone <= upper_limit:
+                ranges_dict['buy'] = [buy_zone, elemento]
+            if lower_limit <= sell_zone <= upper_limit:
+                ranges_dict['sell'] = [sell_zone,elemento]
+    return pd.DataFrame(ranges_dict, index=["value","range"])
