@@ -853,6 +853,7 @@ class ModelHandler:
 
     def roc_curve(
         self,
+        output: Literal["DataFrame", "Figure"] = "Figure"
     ):
         """
         Plot a Receiver Operating Characteristic (ROC) curve.
@@ -878,28 +879,46 @@ class ModelHandler:
             (Area Under the Curve) score.
 
         """
-        fpr, tpr, _ = metrics.roc_curve(self.y_test, self.y_pred_probs)
-        roc_auc = metrics.auc(fpr, tpr)
+        if output not in ["DataFrame", "Figure"]:
+            raise ValueError("output must be 'DataFrame' or 'Figure'")
 
-        fig = px.line(
-            x=fpr,
-            y=tpr,
-            title=f"ROC Curve (AUC={roc_auc:.4f})",
-            labels=dict(x="False Positive Rate", y="True Positive Rate"),
-            width=700,
-            height=700,
+        fpr, tpr, thresholds = (
+            metrics.roc_curve(self.y_test, self.y_pred_probs)
         )
 
-        fig.add_shape(
-            type="line",
-            line=dict(dash="dash"),
-            x0=0,
-            x1=1,
-            y0=0,
-            y1=1,
-            opacity=0.65,
-        )
-        return fig
+        roc_curve = pd.DataFrame(
+                {
+                    "fpr": fpr,
+                    "tpr": tpr,
+                    "thresholds": thresholds,
+                }
+            )
+
+        if output == "Figure":
+            roc_auc = metrics.auc(fpr, tpr)
+
+            fig = px.line(
+                roc_curve,
+                x=fpr,
+                y=tpr,
+                title=f"ROC Curve (AUC={roc_auc:.4f})",
+                labels=dict(x="False Positive Rate", y="True Positive Rate"),
+                width=700,
+                height=700,
+            )
+
+            fig.add_shape(
+                type="line",
+                line=dict(dash="dash"),
+                x0=0,
+                x1=1,
+                y0=0,
+                y1=1,
+                opacity=0.65,
+            )
+            return fig
+
+        return roc_curve
 
     def learning_curve(
         self,
