@@ -1071,7 +1071,13 @@ class PlotCurve:
         Plot a Receiver Operating Characteristic (ROC) curve.
 
     """
-    def __init__(self, data_frame: pd.DataFrame) -> None:
+    def __init__(
+        self,
+        data_frame: pd.DataFrame,
+        target: str,
+        feature: str,
+        quantiles: np.ndarray | pd.Series | None = None,
+    ) -> None:
         """
         Initialize the PlotCurve object.
 
@@ -1079,13 +1085,31 @@ class PlotCurve:
         -----------
         data_frame : pd.DataFrame
             The DataFrame containing the data to be plotted.
+        target : str
+            The target variable to be plotted.
+        feature : str
+            The feature used for quantile splitting.
+        quantiles : list of float or None, optional
+            The quantile intervals used for splitting the 'column' into
+            quantiles. If None, it will use decile (0-10-20-...-90-100)
+            quantiles by default.
         """
         self.data_frame = data_frame
         self.data = None
+        self.target = data_frame[target]
+        self.feature = data_frame[feature]
+
+        if quantiles is None:
+            self.quantiles = np.quantile(
+                self.feature,
+                np.arange(0, 1.1, 0.1)
+            )
+            self.quantiles = np.unique(self.quantiles)
+        else:
+            self.quantiles = quantiles
 
     def __complex_target_curves(
         self,
-        column: str | np.ndarray | pd.Series,
         middle_line: int | float = 0.5,
         step: int | float = 0.02,
         **kwargs,
@@ -1095,8 +1119,6 @@ class PlotCurve:
 
         Parameters:
         -----------
-        column : str
-            The name of the DataFrame column to plot.
         middle_line : int or float, optional
             The base line or center line value
             (default: 0.5).
@@ -1109,8 +1131,8 @@ class PlotCurve:
         plotly.graph_objs._figure.Figure
             A Plotly figure containing the target curve and thresholds.
         """
-        if isinstance(column, str):
-            data_frame = self.data[column]
+        if isinstance(self.target, str):
+            data_frame = self.data[self.target]
 
             if isinstance(self.data.index, pd.CategoricalIndex):
                 data_frame_indexes = pd.Series(self.data.index).astype(str)
@@ -1172,9 +1194,6 @@ class PlotCurve:
 
     def quantile_distribution(
         self,
-        target: str,
-        feature: str,
-        quantiles: np.ndarray | pd.Series | None = None,
         middle_line: float = 0.5,
         step: float | None = None,
         show_histogram: bool = False,
@@ -1185,10 +1204,6 @@ class PlotCurve:
 
         Parameters
         ----------
-        target : str
-            The target variable to be plotted.
-        feature : str
-            The feature used for quantile splitting.
         middle_line : float, optional
             The position of the middle line (default: 0.5).
         step : int, float, or None, optional
@@ -1217,7 +1232,7 @@ class PlotCurve:
         """
         data = (
             DataHandler(self.data_frame)
-            .quantile_split(target, feature, "ratio", quantiles)
+            .quantile_split(self.target, self.feature, "ratio", self.quantiles)
             .iloc[:, [1]]
         )
 
@@ -1227,22 +1242,21 @@ class PlotCurve:
         self.data = (
             pd.DataFrame(
                 data.to_numpy(),
-                columns=["probability", feature])
+                columns=["probability", self.feature])
         )
 
-        self.data[feature] = self.data[feature].astype("str")
+        self.data[self.feature] = self.data[self.feature].astype("str")
         self.data["probability"] = self.data["probability"].astype("float")
-        self.data = self.data.set_index(feature)
+        self.data = self.data.set_index(self.feature)
 
         title = (
-            f"Quantile Distribution of {target}"
-            f" (value: {target_name}) by {feature}"
+            f"Quantile Distribution of {self.target}"
+            f" (value: {target_name}) by {self.feature}"
         )
 
         if step:
             target_curve_fig = (
                 self.__complex_target_curves(
-                    target_name,
                     middle_line,
                     step,
                     **kwargs
@@ -1261,7 +1275,7 @@ class PlotCurve:
                 subplot_titles=("Distribution", "Quantile Distribution")
             )
 
-            histogram_fig = px.histogram(self.data_frame, x=feature)
+            histogram_fig = px.histogram(self.data_frame, x=self.feature)
             fig.add_trace(histogram_fig.data[0], row=1, col=1)
             fig.add_trace(target_curve_fig.data[0], row=1, col=2)
             if step:
