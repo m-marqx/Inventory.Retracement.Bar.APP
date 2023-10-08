@@ -1118,14 +1118,14 @@ class DataCurve:
         """
         self.data_frame = data_frame
         self.data = None
-        self.target = data_frame[target]
-        self.feature = data_frame[feature]
+        self.target = target
+        self.feature = feature
         self.middle_line = middle_line
         self.step = step
 
         if quantiles is None:
             self.quantiles = np.quantile(
-                self.feature,
+                data_frame[feature],
                 np.arange(0, 1.1, 0.1)
             )
             self.quantiles = np.unique(self.quantiles)
