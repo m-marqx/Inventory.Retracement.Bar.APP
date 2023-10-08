@@ -1090,6 +1090,8 @@ class DataCurve:
         target: str,
         feature: str,
         quantiles: np.ndarray | pd.Series | None = None,
+        middle_line: float = 0.5,
+        step: float | None = None,
     ) -> None:
         """
         Initialize the PlotCurve object.
@@ -1106,11 +1108,19 @@ class DataCurve:
             The quantile intervals used for splitting the 'column' into
             quantiles. If None, it will use decile (0-10-20-...-90-100)
             quantiles by default.
+        middle_line : int or float, optional
+            The base line or center line value
+            (default: 0.5).
+        step : int or float, optional
+            The step size for upper and lower bounds
+            (default: 0.02).
         """
         self.data_frame = data_frame
         self.data = None
         self.target = data_frame[target]
         self.feature = data_frame[feature]
+        self.middle_line = middle_line
+        self.step = step
 
         if quantiles is None:
             self.quantiles = np.quantile(
@@ -1123,21 +1133,10 @@ class DataCurve:
 
     def __complex_target_curves(
         self,
-        middle_line: int | float = 0.5,
-        step: int | float = 0.02,
         **kwargs,
     ):
         """
         Plot the target curve with specified thresholds.
-
-        Parameters:
-        -----------
-        middle_line : int or float, optional
-            The base line or center line value
-            (default: 0.5).
-        step : int or float, optional
-            The step size for upper and lower bounds
-            (default: 0.02).
 
         Returns:
         --------
@@ -1158,14 +1157,14 @@ class DataCurve:
 
         fig = px.line(data_frame, y=column, x=data_frame_indexes)
 
-        self.__hline_range(middle_line, step, fig, kwargs)
+        self.__hline_range(fig, kwargs)
 
         fig.update_layout(kwargs)
         return fig
 
-    def __hline_range(self, middle_line, step, fig, kwargs):
-        upper_bound = middle_line + step
-        lower_bound = middle_line - step
+    def __hline_range(self, fig, kwargs):
+        upper_bound = self.middle_line + self.step
+        lower_bound = self.middle_line - self.step
 
         kwargs["upper_bound_color"] = kwargs.get("upper_bound_color", "lime")
         kwargs["middle_line_color"] = kwargs.get("middle_line_color", "grey")
@@ -1183,7 +1182,7 @@ class DataCurve:
 
         fig.add_hline(
             col=kwargs["col"],
-            y=middle_line,
+            y=self.middle_line,
             line_dash=kwargs["line_type"],
             line_color=kwargs["middle_line_color"],
             annotation_text="Center line"
@@ -1207,8 +1206,6 @@ class DataCurve:
 
     def quantile_distribution(
         self,
-        middle_line: float = 0.5,
-        step: float | None = None,
         show_histogram: bool = False,
         **kwargs,
     ):
@@ -1217,11 +1214,6 @@ class DataCurve:
 
         Parameters
         ----------
-        middle_line : float, optional
-            The position of the middle line (default: 0.5).
-        step : int, float, or None, optional
-            The step size for upper and lower bounds
-            (default: None).
         **kwargs : dict
             Additional keyword arguments for customizing the
             visualization of the Plotly layout.
@@ -1267,18 +1259,16 @@ class DataCurve:
             f" (value: {target_name}) by {self.feature}"
         )
 
-        if step:
+        if self.step:
             target_curve_fig = (
                 self.__complex_target_curves(
-                    middle_line,
-                    step,
                     **kwargs
                 )
             )
         else:
             target_curve_fig = (
                 px.line(self.data, y="probability")
-                .add_hline(y=middle_line)
+                .add_hline(y=self.middle_line)
             )
 
         if show_histogram:
@@ -1291,11 +1281,11 @@ class DataCurve:
             histogram_fig = px.histogram(self.data_frame, x=self.feature)
             fig.add_trace(histogram_fig.data[0], row=1, col=1)
             fig.add_trace(target_curve_fig.data[0], row=1, col=2)
-            if step:
+            if self.step:
                 kwargs["col"] = 2
-                self.__hline_range(middle_line, step, fig, kwargs)
+                self.__hline_range(fig, kwargs)
             else:
-                fig.add_hline(col=2, y=middle_line)
+                fig.add_hline(col=2, y=self.middle_line)
 
         else:
             fig = target_curve_fig
