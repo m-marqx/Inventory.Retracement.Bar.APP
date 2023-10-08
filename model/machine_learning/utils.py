@@ -1159,6 +1159,7 @@ class PlotCurve:
         self,
         target: str,
         feature: str,
+        quantiles: np.ndarray | pd.Series | None = None,
         middle_line: float = 0.5,
         step: float | None = None,
         **kwargs,
@@ -1200,7 +1201,7 @@ class PlotCurve:
         """
         data = (
             DataHandler(self.data_frame)
-            .quantile_split(target, feature, "ratio")
+            .quantile_split(target, feature, "ratio", quantiles)
             .iloc[:, [1]]
         )
 
