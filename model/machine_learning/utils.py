@@ -1177,6 +1177,7 @@ class PlotCurve:
         quantiles: np.ndarray | pd.Series | None = None,
         middle_line: float = 0.5,
         step: float | None = None,
+        show_histogram: bool = False,
         **kwargs,
     ):
         """
@@ -1239,20 +1240,41 @@ class PlotCurve:
         )
 
         if step:
-            return (
+            target_curve_fig = (
                 self.__complex_target_curves(
                     target_name,
                     middle_line,
                     step,
                     **kwargs
                 )
-                .update_layout(title=title, title_x=0.5)
+            )
+        else:
+            target_curve_fig = (
+                px.line(self.data, y="probability")
+                .add_hline(y=middle_line)
             )
 
+        if show_histogram:
+            fig = sp.make_subplots(
+                rows=1,
+                cols=2,
+                subplot_titles=("Distribution", "Quantile Distribution")
+            )
+
+            histogram_fig = px.histogram(self.data_frame, x=feature)
+            fig.add_trace(histogram_fig.data[0], row=1, col=1)
+            fig.add_trace(target_curve_fig.data[0], row=1, col=2)
+            if step:
+                kwargs["col"] = 2
+                self.__hline_range(middle_line, step, fig, kwargs)
+            else:
+                fig.add_hline(col=2, y=middle_line)
+
+        else:
+            fig = target_curve_fig
+
         return (
-            px.line(self.data, y="probability", title=title)
-            .add_hline(y=middle_line)
-            .update_layout(title_x=0.5)
+            fig.update_layout(title=title, title_x=0.5)
             .update_layout(**kwargs)
         )
 
