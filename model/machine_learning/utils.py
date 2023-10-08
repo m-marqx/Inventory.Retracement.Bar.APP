@@ -1048,27 +1048,40 @@ class PlotCurve:
     data_frame : pd.DataFrame
         The DataFrame containing the data to be plotted.
 
+    target : str
+        The target variable to be used in quantile distribution.
+
+    feature : str
+        The feature used for quantile splitting.
+
+    quantiles : list of float or None, optional
+        The quantile intervals used for splitting the 'feature' into
+        quantiles. If None, it will use decile (0-10-20-...-90-100)
+        quantiles by default.
+
     Attributes:
     -----------
     data_frame : pd.DataFrame
         The DataFrame containing the data.
 
+    target : str
+        The target variable used in quantile distribution.
+
+    feature : str
+        The feature used for quantile splitting.
+
+    quantiles : np.ndarray | pd.Series
+        The quantile intervals used for splitting.
+
     Methods:
     --------
     quantile_distribution(
-        target: str,
-        feature: str,
         middle_line: float = 0.5,
-        step: int | float | None = None,
+        step: float | None = None,
+        show_histogram: bool = False,
         **kwargs,
-    ):
+    ) -> plotly.graph_objs.Figure:
         Plot the quantile distribution of target values by a feature.
-
-    plot_roc_curve(
-        fpr: str | np.ndarray | pd.Series,
-        tpr: str | np.ndarray | pd.Series
-    ) -> plotly.graph_objs._figure.Figure:
-        Plot a Receiver Operating Characteristic (ROC) curve.
 
     """
     def __init__(
