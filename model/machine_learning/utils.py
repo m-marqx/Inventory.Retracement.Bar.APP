@@ -851,7 +851,7 @@ class ModelHandler:
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
 
-    def plot_roc_curve(
+    def roc_curve(
         self,
     ):
         """
