@@ -10,6 +10,7 @@ from sklearn.model_selection import ParameterGrid, learning_curve
 from joblib import Parallel, delayed
 import plotly.express as px
 import plotly.subplots as sp
+import plotly.graph_objs as go
 
 import graphviz
 
@@ -1295,58 +1296,59 @@ class DataCurve:
             .update_layout(**kwargs)
         )
 
-def get_limit_ranges(
-    lower_limit,
-    upper_limit,
-    fig_data,
-) -> pd.DataFrame:
-    """
-    Get limit ranges for buy and sell zones from a Plotly figure.
+    def get_limit_ranges(
+        self,
+        lower_limit,
+        upper_limit,
+        fig_data,
+    ) -> pd.DataFrame:
+        """
+        Get limit ranges for buy and sell zones from a Plotly figure.
 
-    This function extracts limit ranges for buy and sell zones
-    from a Plotly figure containing data points. It searches for
-    data points on the x-axis of the figure that match the specified
-    buy and sell zones and returns them as a DataFrame.
+        This function extracts limit ranges for buy and sell zones
+        from a Plotly figure containing data points. It searches for
+        data points on the x-axis of the figure that match the specified
+        buy and sell zones and returns them as a DataFrame.
 
-    Parameters:
-    -----------
-    lower_limit : float
-        The buy zone value to search for within the figure.
-    upper_limit : float
-        The sell zone value to search for within the figure.
-    fig_data : go._scatter.Scatter
-        A Plotly Scattergl object containing data points.
+        Parameters:
+        -----------
+        lower_limit : float
+            The buy zone value to search for within the figure.
+        upper_limit : float
+            The sell zone value to search for within the figure.
+        fig_data : go._scatter.Scatter
+            A Plotly Scattergl object containing data points.
 
-    Returns:
-    --------
-    pd.DataFrame
-        A DataFrame containing limit ranges for buy and sell zones.
-        The DataFrame has two columns: 'value' and 'range', where
-        'value' represents the buy or sell zone value, and 'range'
-        represents the corresponding range found in the figure.
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame containing limit ranges for buy and sell zones.
+            The DataFrame has two columns: 'value' and 'range', where
+            'value' represents the buy or sell zone value, and 'range'
+            represents the corresponding range found in the figure.
 
-    Raises:
-    -------
-    ValueError
-        If 'fig_data' is not a Plotly Scattergl object.
-    """
-    if not isinstance(fig_data, go._scatter.Scatter):
-        raise ValueError("fig_data must be a Plotly Scattergl object.")
+        Raises:
+        -------
+        ValueError
+            If 'fig_data' is not a Plotly Scattergl object.
+        """
+        if isinstance(fig_data, go.Figure):
+            raise ValueError("fig_data must be a Plotly Figure data.")
 
-    def limit_ranges_values(str_interval: str):
-        match = re.match(r'\((-?\d+\.\d+), (-?\d+\.\d+)\]', str_interval)
-        if match:
-            lower_value = float(match.group(1))
-            higher_value = float(match.group(2))
-            return lower_value, higher_value
-        return None, None
+        def limit_ranges_values(str_interval: str):
+            match = re.match(r'\((-?\d+\.\d+), (-?\d+\.\d+)\]', str_interval)
+            if match:
+                lower_value = float(match.group(1))
+                higher_value = float(match.group(2))
+                return lower_value, higher_value
+            return None, None
 
-    ranges_dict = {}
-    for element in fig_data['x']:
-        lower_value, higher_value = limit_ranges_values(element)
-        if lower_value is not None and higher_value is not None:
-            if lower_value <= lower_limit <= higher_value:
-                ranges_dict['lower_range'] = [lower_limit, element]
-            if lower_value <= upper_limit <= higher_value:
-                ranges_dict['higher_range'] = [upper_limit,element]
-    return pd.DataFrame(ranges_dict, index=["value","range"])
+        ranges_dict = {}
+        for element in fig_data['x']:
+            lower_value, higher_value = limit_ranges_values(element)
+            if lower_value is not None and higher_value is not None:
+                if lower_value <= lower_limit <= higher_value:
+                    ranges_dict['lower_range'] = [lower_limit, element]
+                if lower_value <= upper_limit <= higher_value:
+                    ranges_dict['higher_range'] = [upper_limit,element]
+        return pd.DataFrame(ranges_dict, index=["value","range"])
