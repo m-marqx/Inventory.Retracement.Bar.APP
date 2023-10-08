@@ -1295,46 +1295,58 @@ class DataCurve:
             .update_layout(**kwargs)
         )
 
-def get_strategy_ranges(buy_zone, sell_zone, fig) -> pd.DataFrame:
+def get_limit_ranges(
+    lower_limit,
+    upper_limit,
+    fig_data,
+) -> pd.DataFrame:
     """
-    Get strategy ranges for buy and sell zones from a Plotly figure.
+    Get limit ranges for buy and sell zones from a Plotly figure.
 
-    This function extracts strategy ranges for buy and sell zones
+    This function extracts limit ranges for buy and sell zones
     from a Plotly figure containing data points. It searches for
     data points on the x-axis of the figure that match the specified
     buy and sell zones and returns them as a DataFrame.
 
     Parameters:
     -----------
-    buy_zone : float
+    lower_limit : float
         The buy zone value to search for within the figure.
-    sell_zone : float
+    upper_limit : float
         The sell zone value to search for within the figure.
-    fig : plotly.graph_objs._figure.Figure
-        The Plotly figure containing data points to search.
+    fig_data : go._scatter.Scatter
+        A Plotly Scattergl object containing data points.
 
     Returns:
     --------
     pd.DataFrame
-        A DataFrame containing strategy ranges for buy and sell zones.
-        The DataFrame has two columns: 'value' and 'range', where 'value'
-        represents the buy or sell zone value, and 'range' represents
-        the corresponding range found in the figure.
+        A DataFrame containing limit ranges for buy and sell zones.
+        The DataFrame has two columns: 'value' and 'range', where
+        'value' represents the buy or sell zone value, and 'range'
+        represents the corresponding range found in the figure.
+
+    Raises:
+    -------
+    ValueError
+        If 'fig_data' is not a Plotly Scattergl object.
     """
-    def limit_ranges(str_interval) -> tuple[float, float] | tuple[None, None]:
+    if not isinstance(fig_data, go._scatter.Scatter):
+        raise ValueError("fig_data must be a Plotly Scattergl object.")
+
+    def limit_ranges_values(str_interval: str):
         match = re.match(r'\((-?\d+\.\d+), (-?\d+\.\d+)\]', str_interval)
         if match:
-            lower_limit = float(match.group(1))
-            upper_limit = float(match.group(2))
-            return lower_limit, upper_limit
+            lower_value = float(match.group(1))
+            higher_value = float(match.group(2))
+            return lower_value, higher_value
         return None, None
 
     ranges_dict = {}
-    for elemento in fig.data[1]['x']:
-        lower_limit, upper_limit = limit_ranges(elemento)
-        if lower_limit is not None and upper_limit is not None:
-            if lower_limit <= buy_zone <= upper_limit:
-                ranges_dict['buy'] = [buy_zone, elemento]
-            if lower_limit <= sell_zone <= upper_limit:
-                ranges_dict['sell'] = [sell_zone,elemento]
+    for element in fig_data['x']:
+        lower_value, higher_value = limit_ranges_values(element)
+        if lower_value is not None and higher_value is not None:
+            if lower_value <= lower_limit <= higher_value:
+                ranges_dict['lower_range'] = [lower_limit, element]
+            if lower_value <= upper_limit <= higher_value:
+                ranges_dict['higher_range'] = [upper_limit,element]
     return pd.DataFrame(ranges_dict, index=["value","range"])
