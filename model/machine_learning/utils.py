@@ -1039,7 +1039,7 @@ Classification reports
 {auc_str}
 """
 
-class PlotCurve:
+class DataCurve:
     """
     A class for plotting target curves with specified thresholds.
 
