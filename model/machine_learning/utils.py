@@ -851,6 +851,56 @@ class ModelHandler:
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
 
+    def plot_roc_curve(
+        self,
+    ):
+        """
+        Plot a Receiver Operating Characteristic (ROC) curve.
+
+        The ROC curve is a graphical representation of the classifier's
+        ability to distinguish between positive and negative classes.
+        It is created by plotting the True Positive Rate (TPR) against
+        the False Positive Rate (FPR) at various threshold settings.
+
+        Parameters:
+        -----------
+        fpr : str, np.ndarray, or pd.Series
+            An array containing the False Positive Rates for different
+            classification thresholds.
+        tpr : str, np.ndarray, or pd.Series
+            An array containing the True Positive Rates for different
+            classification thresholds.
+
+        Returns:
+        --------
+        plotly.graph_objs._figure.Figure
+            A Plotly figure displaying the ROC curve with AUC
+            (Area Under the Curve) score.
+
+        """
+        fpr, tpr, _ = metrics.roc_curve(self.y_test, self.y_pred_probs)
+        roc_auc = metrics.auc(fpr, tpr)
+
+        fig = px.line(
+            x=fpr,
+            y=tpr,
+            title=f"ROC Curve (AUC={roc_auc:.4f})",
+            labels=dict(x="False Positive Rate", y="True Positive Rate"),
+            width=700,
+            height=700,
+        )
+
+        fig.add_shape(
+            type="line",
+            line=dict(dash="dash"),
+            x0=0,
+            x1=1,
+            y0=0,
+            y1=1,
+            opacity=0.65,
+        )
+        return fig
+
     def learning_curve(
         self,
         train_size: np.ndarray | pd.Series = None,
@@ -1099,60 +1149,6 @@ class PlotCurve:
         kwargs.pop('line_type')
         kwargs.pop('col')
 
-        return fig
-
-    def plot_roc_curve(
-        self,
-        fpr: str | np.ndarray | pd.Series,
-        tpr: str | np.ndarray | pd.Series
-    ):
-        """
-        Plot a Receiver Operating Characteristic (ROC) curve.
-
-        The ROC curve is a graphical representation of the classifier's
-        ability to distinguish between positive and negative classes.
-        It is created by plotting the True Positive Rate (TPR) against
-        the False Positive Rate (FPR) at various threshold settings.
-
-        Parameters:
-        -----------
-        fpr : str, np.ndarray, or pd.Series
-            An array containing the False Positive Rates for different
-            classification thresholds.
-        tpr : str, np.ndarray, or pd.Series
-            An array containing the True Positive Rates for different
-            classification thresholds.
-
-        Returns:
-        --------
-        plotly.graph_objs._figure.Figure
-            A Plotly figure displaying the ROC curve with AUC
-            (Area Under the Curve) score.
-
-        """
-        if isinstance(fpr, str):
-            fpr = self.data_frame[fpr]
-        if isinstance(tpr, str):
-            tpr = self.data_frame[tpr]
-
-        fig = px.line(
-            x=fpr,
-            y=tpr,
-            title=f"ROC Curve (AUC={metrics.auc(fpr, tpr):.4f})",
-            labels=dict(x="False Positive Rate", y="True Positive Rate"),
-            width=700,
-            height=700,
-        )
-
-        fig.add_shape(
-            type="line",
-            line=dict(dash="dash"),
-            x0=0,
-            x1=1,
-            y0=0,
-            y1=1,
-            opacity=0.65,
-        )
         return fig
 
     def quantile_distribution(
