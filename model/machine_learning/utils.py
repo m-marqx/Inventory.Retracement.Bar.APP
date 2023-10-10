@@ -377,7 +377,7 @@ class DataHandler:
 
     def __init__(
         self,
-        dataframe: pd.DataFrame | pd.Series | np.ndarray
+        dataframe: pd.DataFrame | pd.Series | np.ndarray,
     ) -> None:
         """
         Initialize the DataHandler object.
@@ -784,6 +784,7 @@ class DataHandler:
             )
         return quantile_df
 
+
 class ModelHandler:
     """
     A class for handling machine learning model evaluation.
@@ -825,6 +826,7 @@ class ModelHandler:
         a classification report, AUC, Gini index (if predict_proba is
         available), and support.
     """
+
     def __init__(self, estimator, X_test, y_test) -> None:
         """
         Initialize the ModelHandler object.
@@ -854,7 +856,7 @@ class ModelHandler:
 
     def roc_curve(
         self,
-        output: Literal["DataFrame", "Figure"] = "Figure"
+        output: Literal["DataFrame", "Figure"] = "Figure",
     ):
         """
         Plot a Receiver Operating Characteristic (ROC) curve.
@@ -888,12 +890,12 @@ class ModelHandler:
         )
 
         roc_curve = pd.DataFrame(
-                {
-                    "fpr": fpr,
-                    "tpr": tpr,
-                    "thresholds": thresholds,
-                }
-            )
+            {
+                "fpr": fpr,
+                "tpr": tpr,
+                "thresholds": thresholds,
+            }
+        )
 
         if output == "Figure":
             roc_auc = metrics.auc(fpr, tpr)
