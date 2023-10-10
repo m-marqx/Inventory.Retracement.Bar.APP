@@ -1023,30 +1023,38 @@ class ModelHandler:
 
         confusion_matrix_df = pd.DataFrame(
             confusion_matrix,
-            columns = column_names,
-            index = index_names,
+            columns=column_names,
+            index=index_names,
         )
 
-        if self._has_predic_proba:
-            auc = metrics.roc_auc_score(self.y_test, self.y_pred_probs)
-            gini = 2 * auc - 1
-            support = self.y_test.shape[0]
-            auc_str = f"""         AUC                         {auc:.4f}      {support}
-        Gini                         {gini:.4f}      {support}"""
-        else:
-            auc_str = ""
+        auc = metrics.roc_auc_score(self.y_test, self.y_pred_probs)
+        gini = 2 * auc - 1
+        support = self.y_test.shape[0]
+        classification_report = metrics.classification_report(
+            self.y_test, self.y_pred, digits=4
+        )[:-1]
 
-        return f"""Confusion matrix
---------------------------------------------------------------
-{confusion_matrix_df}
+        auc_str = (
+            f"\n         AUC                         {auc:.4f}"
+            f"      {support}"
+            f"\n        Gini                         {gini:.4f}"
+            f"      {support}"
+        )
 
+        confusion_matrix_str = (
+            f"Confusion matrix"
+            f"\n--------------------------------------------------------------"
+            f"\n{confusion_matrix_df}"
+            f"\n"
+            f"\n"
+            f"\nClassification reports"
+            f"\n--------------------------------------------------------------"
+            f"\n"
+            f"\n{classification_report}"
+            f"{auc_str}"
+        )
+        return confusion_matrix_str
 
-Classification reports
---------------------------------------------------------------
-
-{metrics.classification_report(self.y_test, self.y_pred, digits=4)[:-1]}
-{auc_str}
-"""
 
 class DataCurve:
     """
