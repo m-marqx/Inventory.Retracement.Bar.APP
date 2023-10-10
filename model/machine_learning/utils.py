@@ -1009,6 +1009,12 @@ class ModelHandler:
         str
             A string containing the results report.
         """
+        if not self._has_predic_proba:
+            raise ValueError(
+                "The estimator isn't suitable for classification"
+                " (predict_proba isn't available)."
+            )
+
         names = pd.Series(self.y_test).sort_values().astype(str).unique()
 
         confusion_matrix = metrics.confusion_matrix(self.y_test, self.y_pred)
