@@ -1101,17 +1101,18 @@ class DataCurve:
         Plot the quantile distribution of target values by a feature.
 
     """
+
     def __init__(
         self,
         data_frame: pd.DataFrame,
         target: str,
         feature: str,
-        quantiles: np.ndarray | pd.Series | None = None,
+        quantiles: np.ndarray | pd.Series | int = 10,
         middle_line: float = 0.5,
         step: float | None = None,
     ) -> None:
         """
-        Initialize the PlotCurve object.
+        Initialize the DataCurve object.
 
         Parameters:
         -----------
@@ -1121,10 +1122,12 @@ class DataCurve:
             The target variable to be plotted.
         feature : str
             The feature used for quantile splitting.
-        quantiles : list of float or None, optional
-            The quantile intervals used for splitting the 'column' into
-            quantiles. If None, it will use decile (0-10-20-...-90-100)
-            quantiles by default.
+        quantiles : np.ndarray or pd.Series or int, optional
+            The quantile intervals used for splitting the 'feature' into
+            quantiles. If an integer is provided, it represents the
+            number of quantiles to create. If an array or series is
+            provided, it specifies the quantile boundaries.
+            (default: 10).
         middle_line : int or float, optional
             The base line or center line value
             (default: 0.5).
@@ -1139,11 +1142,14 @@ class DataCurve:
         self.middle_line = middle_line
         self.step = step
 
-        if quantiles is None:
+        if isinstance(quantiles, int):
+            range_step = 1 / quantiles
+
             self.quantiles = np.quantile(
                 data_frame[feature],
-                np.arange(0, 1.1, 0.1)
+                np.arange(0, 1.01, range_step)
             )
+
             self.quantiles = np.unique(self.quantiles)
         else:
             self.quantiles = quantiles
