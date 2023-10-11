@@ -12,7 +12,8 @@ class KlineUtils:
     Parameters:
     -----------
     klines_list : list of lists
-        List of kline data, where each kline is represented as a list of values.
+        List of kline data, where each kline is represented as a list of
+        values.
 
     Attributes:
     -----------
@@ -32,7 +33,8 @@ class KlineUtils:
         Parameters:
         -----------
         klines_list : list of lists
-            List of kline data, where each kline is represented as a list of values.
+            List of kline data, where each kline is represented as a list of
+            values.
         """
         self.klines_list = klines_list
 
