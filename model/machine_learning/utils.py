@@ -1154,37 +1154,6 @@ class DataCurve:
         else:
             self.quantiles = quantiles
 
-    def __complex_target_curves(
-        self,
-        **kwargs,
-    ):
-        """
-        Plot the target curve with specified thresholds.
-
-        Returns:
-        --------
-        plotly.graph_objs._figure.Figure
-            A Plotly figure containing the target curve and thresholds.
-        """
-        if isinstance(self.target, str):
-            data_frame = self.data[self.target]
-
-            if isinstance(self.data.index, pd.CategoricalIndex):
-                data_frame_indexes = pd.Series(self.data.index).astype(str)
-            else:
-                data_frame_indexes = self.data.index
-        else:
-            column = None
-            data_frame = self.data
-            data_frame_indexes = None
-
-        fig = px.line(data_frame, y=column, x=data_frame_indexes)
-
-        self.__hline_range(fig, kwargs)
-
-        fig.update_layout(kwargs)
-        return fig
-
     def __hline_range(self, fig, kwargs):
         upper_bound = self.middle_line + self.step
         lower_bound = self.middle_line - self.step
@@ -1230,6 +1199,8 @@ class DataCurve:
     def quantile_distribution(
         self,
         show_histogram: bool = False,
+        lower_limit: float | None = None,
+        upper_limit: float | None = None,
         **kwargs,
     ):
         """
@@ -1283,11 +1254,9 @@ class DataCurve:
         )
 
         if self.step:
-            target_curve_fig = (
-                self.__complex_target_curves(
-                    **kwargs
-                )
-            )
+            data_frame = self.data["probability"]
+            target_curve_fig = px.line(data_frame)
+            self.__hline_range(target_curve_fig, kwargs)
         else:
             target_curve_fig = (
                 px.line(self.data, y="probability")
@@ -1295,6 +1264,8 @@ class DataCurve:
             )
 
         if show_histogram:
+            column = 2
+
             fig = sp.make_subplots(
                 rows=1,
                 cols=2,
@@ -1304,19 +1275,38 @@ class DataCurve:
             histogram_fig = px.histogram(self.data_frame, x=self.feature)
             fig.add_trace(histogram_fig.data[0], row=1, col=1)
             fig.add_trace(target_curve_fig.data[0], row=1, col=2)
+
             if self.step:
-                kwargs["col"] = 2
+                kwargs["col"] = column
                 self.__hline_range(fig, kwargs)
             else:
-                fig.add_hline(col=2, y=self.middle_line)
+                fig.add_hline(col=column, y=self.middle_line)
 
         else:
+            column = 1
             fig = target_curve_fig
 
-        return (
+        fig = (
             fig.update_layout(title=title, title_x=0.5)
             .update_layout(**kwargs)
         )
+
+        if lower_limit and upper_limit:
+            limit_ranges = self.get_limit_ranges(
+                lower_limit, upper_limit, fig.data[column - 1]
+            )
+
+            lower_range = limit_ranges["lower_range"]["range"]
+            higher_range = limit_ranges["higher_range"]["range"]
+
+            fig.add_vline(x=lower_range, col=column, line_color="lime")
+            fig.add_vline(x=higher_range, col=column, line_color="red")
+
+            if show_histogram:
+                fig.add_vline(x=lower_limit, col=1, line_color="lime")
+                fig.add_vline(x=upper_limit, col=1, line_color="red")
+
+        return fig
 
     def get_limit_ranges(
         self,
