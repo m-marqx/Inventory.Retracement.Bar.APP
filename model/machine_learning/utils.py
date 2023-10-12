@@ -1169,7 +1169,7 @@ class DataCurve:
             y=upper_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["upper_bound_color"],
-            annotation_text=f"Valor Y = {upper_bound}"
+            annotation_text=f"upper line: {upper_bound}",
         )
 
         fig.add_hline(
@@ -1177,7 +1177,7 @@ class DataCurve:
             y=self.middle_line,
             line_dash=kwargs["line_type"],
             line_color=kwargs["middle_line_color"],
-            annotation_text="Center line"
+            annotation_text="Center line",
         )
 
         fig.add_hline(
@@ -1185,7 +1185,7 @@ class DataCurve:
             y=lower_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["lower_bound_color"],
-            annotation_text=f"Valor Y = {lower_bound}"
+            annotation_text=f"lower value: {lower_bound}",
         )
 
         kwargs.pop('upper_bound_color')
