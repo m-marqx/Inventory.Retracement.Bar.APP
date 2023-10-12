@@ -1188,11 +1188,11 @@ class DataCurve:
             annotation_text=f"lower value: {lower_bound}",
         )
 
-        kwargs.pop('upper_bound_color')
-        kwargs.pop('middle_line_color')
-        kwargs.pop('lower_bound_color')
-        kwargs.pop('line_type')
-        kwargs.pop('col')
+        kwargs.pop("upper_bound_color")
+        kwargs.pop("middle_line_color")
+        kwargs.pop("lower_bound_color")
+        kwargs.pop("line_type")
+        kwargs.pop("col")
 
         return fig
 
