@@ -1310,9 +1310,9 @@ class DataCurve:
 
     def get_limit_ranges(
         self,
-        lower_limit,
-        upper_limit,
-        fig_data,
+        lower_limit: int | float,
+        upper_limit: int | float,
+        fig_data: go._scatter.Scatter,
     ) -> pd.DataFrame:
         """
         Get limit ranges for buy and sell zones from a Plotly figure.
