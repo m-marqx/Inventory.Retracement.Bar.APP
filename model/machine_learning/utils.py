@@ -1348,7 +1348,7 @@ class DataCurve:
             raise ValueError("fig_data must be a Plotly Figure data.")
 
         def limit_ranges_values(str_interval: str):
-            match = re.match(r'\((-?\d+\.\d+), (-?\d+\.\d+)\]', str_interval)
+            match = re.match(r"\((-?\d+\.\d+), (-?\d+\.\d+)\]", str_interval)
             if match:
                 lower_value = float(match.group(1))
                 higher_value = float(match.group(2))
@@ -1356,11 +1356,12 @@ class DataCurve:
             return None, None
 
         ranges_dict = {}
-        for element in fig_data['x']:
+        for element in fig_data["x"]:
             lower_value, higher_value = limit_ranges_values(element)
             if lower_value is not None and higher_value is not None:
                 if lower_value <= lower_limit <= higher_value:
-                    ranges_dict['lower_range'] = [lower_limit, element]
+                    ranges_dict["lower_range"] = [lower_limit, element]
                 if lower_value <= upper_limit <= higher_value:
-                    ranges_dict['higher_range'] = [upper_limit,element]
-        return pd.DataFrame(ranges_dict, index=["value","range"])
+                    ranges_dict["higher_range"] = [upper_limit, element]
+        return pd.DataFrame(ranges_dict, index=["value", "range"])
+
