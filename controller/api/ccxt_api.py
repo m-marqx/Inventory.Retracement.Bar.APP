@@ -279,7 +279,7 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
-        filter_by_largest_qty: bool = True,
+        filter_by: Literal["quantity"] = "quantity"
     ) -> pd.DataFrame | dict | tuple:
         """
         Aggregate the fetched K-line data into a pandas DataFrame.
@@ -341,6 +341,9 @@ class CcxtAPI:
         aggregated_klines = {}
         printed_symbols = set()
         index = 0
+
+        filter_by_largest_qty = bool(filter_by == "quantity")
+
         if not filter_by_largest_qty:
             klines_qty = {}
 
