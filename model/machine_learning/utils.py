@@ -858,6 +858,7 @@ class ModelHandler:
     def shapley_values(
         self,
         output: Literal["DataFrame", "Figure"] = "Figure",
+        **kwargs,
     ) -> go.Figure:
         """
         Calculate and visualize Shapley values for feature importance.
@@ -911,7 +912,7 @@ class ModelHandler:
             shap_df,
             y='Feature',
             x="Shapley_values",
-            color="Shapley_values"
+            **kwargs
         )
 
     def roc_curve(
