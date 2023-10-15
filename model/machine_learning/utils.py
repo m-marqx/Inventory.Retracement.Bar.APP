@@ -3,6 +3,7 @@ import re
 
 import numpy as np
 import pandas as pd
+import shap
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
@@ -853,6 +854,65 @@ class ModelHandler:
 
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
+
+    def shapley_values(
+        self,
+        output: Literal["DataFrame", "Figure"] = "Figure",
+    ) -> go.Figure:
+        """
+        Calculate and visualize Shapley values for feature importance.
+
+        This method calculates the Shapley values for feature
+        importanceusing the SHAP (SHapley Additive exPlanations)
+        library. It then visualizes the Shapley values as a bar chart
+        to show the impact of each feature on the model's predictions.
+
+        Parameters:
+        -----------
+        output : Literal["DataFrame", "Figure"], optional
+            The output format for the Shapley values. Choose between
+            "DataFrame" to return the results as a Pandas DataFrame or
+            "Figure" to generate a Plotly bar chart
+            (default: "Figure").
+
+        Returns:
+        --------
+        pd.DataFrame or plotly.graph_objs._figure.Figure
+            If `output` is set to "DataFrame," it returns a Pandas
+            DataFrame containing the feature names and their
+            corresponding Shapley values. If `output` is set to
+            "Figure," it returns a Plotly bar chart displaying the
+            Shapley values for each feature, where the length of the
+            bars represents the magnitude of impact on the model's
+            predictions.
+        """
+        shap_values = (
+            shap
+            .Explainer(self.estimator)
+            .shap_values(self.x_test)
+        )
+
+        # Calcular o valor médio SHAP para cada recurso
+        mean_shap_values = abs(shap_values).mean(axis=0)
+
+        # Criar um DataFrame para facilitar a manipulação dos dados
+        shap_df = pd.DataFrame(
+            {
+                "Feature": self.x_test.columns,
+                "Shapley_values": mean_shap_values
+            }
+        )
+
+        shap_df = shap_df.sort_values(by="Shapley_values", ascending=True)
+        if output == "DataFrame":
+            return shap_df
+
+        return px.bar(
+            shap_df,
+            y='Feature',
+            x="Shapley_values",
+            color="Shapley_values"
+        )
 
     def roc_curve(
         self,

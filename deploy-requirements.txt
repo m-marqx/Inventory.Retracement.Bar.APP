@@ -22,3 +22,4 @@ fastdtw
 screeninfo
 klib
 ccxt
+shap
