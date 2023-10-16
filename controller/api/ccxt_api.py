@@ -512,32 +512,21 @@ class CcxtAPI:
         return date_check_df
 
     def __filter_by_volume(self, klines: dict) -> pd.DataFrame:
-        all_df = list(klines.keys())
-        biggest_klines_data = 0
-        for x in all_df:
-            if klines[x].shape[0] > biggest_klines_data:
-                biggest_klines_data = klines[x].shape[0]
-                first_exchange = x
+        first_exchange = max(klines, key=lambda x: klines[x].shape[0])
 
-        base_dataframe = klines[first_exchange].copy()
+        data_frame = klines[first_exchange].copy()
 
-        for x in all_df:
-            temp_klines_dataframe = klines[x]
+        for _, kline_data in klines.items():
+            temp_klines_dataframe = kline_data.reindex(data_frame.index)
 
-            temp_base_dataframe = (
-                base_dataframe.copy().reindex(temp_klines_dataframe.index)
+            volume_comparison = (
+                temp_klines_dataframe["volume"]
+                > data_frame["volume"]
             )
 
-            new_volume_is_bigger = (
-                temp_base_dataframe['volume']
-                < temp_klines_dataframe["volume"]
+            data_frame.loc[volume_comparison, :] = (
+                temp_klines_dataframe[volume_comparison]
             )
 
-            for index, value in new_volume_is_bigger.reset_index().to_numpy():
-                if value:
-                    base_dataframe.loc[index, :] = (
-                        temp_klines_dataframe.loc[index, :]
-                    )
-
-        return base_dataframe
+        return data_frame
 
