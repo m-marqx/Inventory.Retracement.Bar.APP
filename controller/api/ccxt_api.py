@@ -279,7 +279,7 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
-        filter_by: Literal["quantity"] = "quantity"
+        filter_by: Literal["first_symbol"] = "first_symbol"
     ) -> pd.DataFrame | dict | tuple:
         """
         Aggregate the fetched K-line data into a pandas DataFrame.
@@ -306,8 +306,8 @@ class CcxtAPI:
             K-line data.
             (default: "mean")
         filter_by_largest_qty : bool, optional
-            If True, filter exchanges and symbols by the largest
-            quantity of data.
+            If True, filter exchanges and symbols by the first
+            symbol of data.
             (default: True)
 
         Returns:
@@ -342,7 +342,7 @@ class CcxtAPI:
         printed_symbols = set()
         index = 0
 
-        filter_by_largest_qty = bool(filter_by == "quantity")
+        filter_by_largest_qty = bool(filter_by == "first_symbol")
 
         if not filter_by_largest_qty:
             klines_qty = {}
@@ -529,4 +529,3 @@ class CcxtAPI:
             )
 
         return data_frame
-
