@@ -2,6 +2,7 @@ import time
 import itertools
 import logging
 from typing import Literal
+import numpy as np
 import pandas as pd
 import ccxt
 from model.utils import interval_to_milliseconds
@@ -12,7 +13,6 @@ logging.basicConfig(
     datefmt='%H:%M:%S',
     level=logging.INFO,
 )
-
 
 class CcxtAPI:
     """
@@ -372,7 +372,6 @@ class CcxtAPI:
                         )
                 else:
                     if symbol in markets_info:
-
                         if self.verbose:
                             index += 1
                             load_percentage = (
@@ -438,6 +437,7 @@ class CcxtAPI:
                 .groupby('exchange')['shape']
                 .idxmax()
             )
+
             aggregated_df = (
                 aggregated_df
                 .loc[max_shape_indices]
@@ -510,3 +510,34 @@ class CcxtAPI:
         ]
 
         return date_check_df
+
+    def __filter_by_volume(self, klines: dict) -> pd.DataFrame:
+        all_df = list(klines.keys())
+        biggest_klines_data = 0
+        for x in all_df:
+            if klines[x].shape[0] > biggest_klines_data:
+                biggest_klines_data = klines[x].shape[0]
+                first_exchange = x
+
+        base_dataframe = klines[first_exchange].copy()
+
+        for x in all_df:
+            temp_klines_dataframe = klines[x]
+
+            temp_base_dataframe = (
+                base_dataframe.copy().reindex(temp_klines_dataframe.index)
+            )
+
+            new_volume_is_bigger = (
+                temp_base_dataframe['volume']
+                < temp_klines_dataframe["volume"]
+            )
+
+            for index, value in new_volume_is_bigger.reset_index().to_numpy():
+                if value:
+                    base_dataframe.loc[index, :] = (
+                        temp_klines_dataframe.loc[index, :]
+                    )
+
+        return base_dataframe
+
