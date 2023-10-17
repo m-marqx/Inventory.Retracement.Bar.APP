@@ -279,17 +279,23 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
-        filter_by: Literal["first_symbol"] = "first_symbol"
+        filter_by: Literal["first_symbol", "volume"] = "first_symbol"
     ) -> pd.DataFrame | dict | tuple:
         """
-        Aggregate the fetched K-line data into a pandas DataFrame.
+        Aggregate K-line data from multiple exchanges and symbols.
+
+        This method fetches K-line data from a list of exchanges and
+        symbols, aggregates it using the specified method, and returns
+        the aggregated data in the chosen format. You can select the
+        output to be a pandas DataFrame, a dictionary of DataFrames,
+        or both.
 
         Parameters:
         -----------
         exchanges : list[ccxt.Exchange], optional
             A list of CCXT exchange objects to use for data aggregation.
-            If None, default exchanges (Binance and Bitstamp)
-            will be used.
+            If None, default exchanges (Binance and Bitstamp) will be
+            used.
             (default: None)
         symbols : list[str], optional
             A list of trading symbols to aggregate data for. If None,
@@ -305,10 +311,11 @@ class CcxtAPI:
             The aggregation method to use for calculating aggregated
             K-line data.
             (default: "mean")
-        filter_by_largest_qty : bool, optional
-            If True, filter exchanges and symbols by the first
-            symbol of data.
-            (default: True)
+        filter_by : Literal["first_symbol", "volume"], optional
+            Filter the results either by choosing the first
+            symbol with data or by selecting the symbol with the
+            highest trading volume.
+            (default: "first_symbol")
 
         Returns:
         --------
@@ -317,9 +324,7 @@ class CcxtAPI:
             aggregated K-line data in:
 
             - DataFrame if `output_format` is 'DataFrame'
-
             - dict if `output_format` is 'Kline'
-
             - tuple[pd.DataFrame, dict] if `output_format` is 'Both'
         """
         if exchanges is None:
@@ -467,6 +472,9 @@ class CcxtAPI:
                     'close': 'median',
                 }
             )
+
+        if filter_by == "volume":
+            aggregated_df = self.__filter_by_volume(aggregated_klines)
 
         if output_format == "DataFrame":
             return aggregated_df
