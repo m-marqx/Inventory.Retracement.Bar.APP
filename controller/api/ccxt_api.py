@@ -279,8 +279,12 @@ class CcxtAPI:
         symbols: list[str] = None,
         output_format: Literal["DataFrame", "Kline", "Both"] = "DataFrame",
         method: Literal["mean", "median", "hilo-mean", "hilo-median"] = "mean",
-        filter_by: Literal["first_symbol", "volume"] = "first_symbol"
-    ) -> pd.DataFrame | dict | tuple:
+        filter_by: Literal[
+            "first_symbol",
+            "volume",
+            "exchange_volume"
+        ] = "first_symbol"
+    ) -> pd.DataFrame | dict | tuple[pd.DataFrame, dict]:
         """
         Aggregate K-line data from multiple exchanges and symbols.
 
@@ -311,10 +315,11 @@ class CcxtAPI:
             The aggregation method to use for calculating aggregated
             K-line data.
             (default: "mean")
-        filter_by : Literal["first_symbol", "volume"], optional
-            Filter the results either by choosing the first
-            symbol with data or by selecting the symbol with the
-            highest trading volume.
+        filter_by :
+        Literal["first_symbol", "volume", "exchange_volume"], optional
+            Filter the results by choosing the first symbol with data,
+            selecting the symbol with the highest trading volume, or
+            selecting the symbol with the highest total exchange volume.
             (default: "first_symbol")
 
         Returns:
@@ -475,6 +480,8 @@ class CcxtAPI:
 
         if filter_by == "volume":
             aggregated_df = self.__filter_by_volume(aggregated_klines)
+        if filter_by == "exchange_volume":
+            aggregated_df = self.__filter_by_exchange_volume(aggregated_klines)
 
         if output_format == "DataFrame":
             return aggregated_df
@@ -521,7 +528,6 @@ class CcxtAPI:
 
     def __filter_by_volume(self, klines: dict) -> pd.DataFrame:
         first_exchange = max(klines, key=lambda x: klines[x].shape[0])
-
         data_frame = klines[first_exchange].copy()
 
         for _, kline_data in klines.items():
@@ -532,8 +538,24 @@ class CcxtAPI:
                 > data_frame["volume"]
             )
 
-            data_frame.loc[volume_comparison, :] = (
-                temp_klines_dataframe[volume_comparison]
+            data_frame = data_frame.combine_first(
+                temp_klines_dataframe.where(volume_comparison)
             )
+        return data_frame
 
+    def __filter_by_exchange_volume(self, klines: dict) -> pd.DataFrame:
+        first_exchange = max(klines, key=lambda x: klines[x].shape[0])
+        data_frame = klines[first_exchange].copy()
+
+        exchange_volumes = {}
+
+        for exchange, kline_data in klines.items():
+            exchange_volumes[exchange] = kline_data['volume'].sum()
+
+        exchange_with_highest_volume = max(
+            exchange_volumes,
+            key=exchange_volumes.get
+        )
+
+        data_frame.update(klines[exchange_with_highest_volume])
         return data_frame
