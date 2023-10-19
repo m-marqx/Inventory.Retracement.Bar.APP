@@ -794,10 +794,6 @@ class ModelHandler:
     -----------
     estimator : object
         The machine learning model to be evaluated.
-    X_train : array-like of shape (n_samples, n_features)
-        Training input samples.
-    y_train : array-like of shape (n_samples,)
-        Target values for training.
     X_test : array-like of shape (n_samples, n_features)
         Testing input samples.
     y_test : array-like of shape (n_samples,)
@@ -805,10 +801,6 @@ class ModelHandler:
 
     Attributes:
     -----------
-    x_train : array-like of shape (n_samples, n_features)
-        Training input samples.
-    y_train : array-like of shape (n_samples,)
-        Target values for training.
     x_test : array-like of shape (n_samples, n_features)
         Testing input samples.
     y_test : array-like of shape (n_samples,)
@@ -854,6 +846,117 @@ class ModelHandler:
 
         if self._has_predic_proba:
             self.y_pred_probs = estimator.predict_proba(X_test)[:, 1]
+
+    def model_returns(
+        self,
+        return_series: pd.Series,
+        fee: float = 0.1,
+    ) -> tuple[pd.DataFrame, str]:
+        """
+        Calculate returns and performance metrics for a trading model.
+
+        This method calculates returns and various performance metrics
+        for a trading model using predicted probabilities and actual
+        returns. It takes into account transaction fees for trading.
+
+        Parameters:
+        -----------
+        return_series : pd.Series
+            A pandas Series containing the actual returns of the trading
+            strategy.
+        fee : float, optional
+            The transaction fee as a percentage (e.g., 0.1% for 0.1)
+            for each trade.
+            (default: 0.1)
+
+        Returns:
+        --------
+        tuple[pd.DataFrame, str]
+            A tuple containing:
+            - pd.DataFrame: A DataFrame with various columns
+            representing the trading results
+            - str: A message indicating the success of the operation
+
+        Raises:
+        -------
+        ValueError:
+            If the estimator isn't suitable for classification
+            (predict_proba isn't available).
+        """
+        if not self._has_predic_proba:
+            raise ValueError(
+                "The estimator isn't suitable for classification"
+                " (predict_proba isn't available)."
+            )
+
+        if return_series.min() > 0:
+            return_series = return_series - 1
+
+        fee = fee / 100
+        df_returns = (
+            pd.DataFrame(
+                {'y_pred_probs' : self.y_pred_probs},
+                index=self.x_test.index
+            )
+        )
+
+        period_return = return_series.reindex(df_returns.index)
+
+        df_returns["Period_Return"] = period_return
+
+        df_returns["Position"] = np.where(
+            (df_returns["y_pred_probs"] > 0.5), 1, -1
+        )
+
+        df_returns["Result"] = (
+            df_returns["Period_Return"]
+            * df_returns["Position"]
+            + 1
+        )
+
+        df_returns["Liquid_Result"] = np.where(
+            df_returns["Position"] != 0, df_returns["Result"] - fee, 1
+        )
+
+        df_returns["Period_Return_cum"] = (
+            df_returns["Period_Return"] + 1
+        ).cumprod()
+
+        df_returns["Total_Return"] = df_returns["Result"].cumprod()
+        df_returns["Liquid_Return"] = df_returns["Liquid_Result"].cumprod()
+
+        df_returns["Period_Return_cum_log"] = np.log(
+            df_returns["Period_Return_cum"]
+        )
+
+        df_returns["Total_Return_log"] = np.log(
+            df_returns["Total_Return"]
+        )
+
+        df_returns["Liquid_Return_log"] = np.log(
+            df_returns["Liquid_Return"]
+        )
+
+        df_returns["max_Liquid_Return_log"] = (
+            df_returns["Liquid_Return_log"].expanding(365).max()
+        )
+
+        df_returns["max_Liquid_Return_log"] = np.where(
+            df_returns["max_Liquid_Return_log"].diff(),
+            np.nan, df_returns["max_Liquid_Return_log"],
+        )
+
+        df_returns["drawdown"] = (
+            1 - df_returns["Liquid_Return_log"]
+            / df_returns["max_Liquid_Return_log"]
+        )
+
+        drawdown_positive = df_returns["drawdown"] > 0
+
+        df_returns["drawdown_duration"] = drawdown_positive.groupby(
+            (~drawdown_positive).cumsum()
+        ).cumsum()
+        return df_returns
 
     def shapley_values(
         self,
