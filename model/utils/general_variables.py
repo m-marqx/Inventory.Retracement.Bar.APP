@@ -1,3 +1,6 @@
+from typing import Literal
+from math import pi
+
 import numpy as np
 import pandas as pd
 import model.utils.custom_pandas_methods
@@ -236,3 +239,82 @@ class ExternalVariables:
             self.feat_last_column, self.dataframe.columns[-11:]
         )
         return self.dataframe
+
+    def schumann_resonance(
+        self,
+        source_column,
+        n_length,
+        method: Literal[
+            "equatorial",
+            "polar",
+            "mean",
+            "custom"] = "equatorial",
+        circuference=None
+    ) -> pd.Series:
+        """
+        Calculate Schumann resonance frequencies based on a source
+        column.
+
+        This method calculates Schumann resonance frequencies based
+        on the values in a source column. The Schumann resonance
+        frequencies are influenced by the method used and Earth's
+        circumference.
+
+        Parameters:
+        -----------
+        source_column : str
+            The name of the source column containing integer values.
+        n_length : int
+            The desired length of the resulting values.
+        method : Literal["equatorial", "polar", "mean", "custom"],
+        optional
+            The method to calculate Schumann resonance frequencies:
+            - 'equatorial': For equatorial method
+            - 'polar': For polar method.
+            - 'mean': For mean Earth circumference method.
+            - 'custom': For a custom method using 'circuference'.
+            (default: "equatorial")
+        circuference : float, optional
+            The custom circumference value
+            (required if 'method' is 'custom').
+            (default: None)
+
+        Returns:
+        --------
+        pd.Series
+            A pandas Series containing the calculated Schumann
+            resonance frequencies.
+
+        Raises:
+        -------
+        ValueError:
+            If 'method' is 'custom' and 'circumference' is not specified.
+        """
+        light_speed_km = 299792.458
+
+        if method != 'custom':
+            circuferences_km = {
+                "equatorial" : 2 * pi * 6378.137,
+                "polar" : 2 * pi * 6356.752,
+                "mean" : 2 * pi * 6371.0,
+            }
+            earth_circuferences_km = pd.Series(circuferences_km)
+            sr_constant = light_speed_km / earth_circuferences_km
+        else:
+            if circuference is None:
+                raise ValueError("circumference parameter must be specified")
+            sr_constant = light_speed_km / circuference
+
+        formula_constant = (
+            sr_constant[method] if method != "custom"
+            else sr_constant
+        )
+
+        values = self.dataframe[source_column].astype("int64").copy()
+        n_digits = values.astype("str").str.len().astype("float64")
+        converted_values = values * 10 ** (n_length - n_digits)
+        schumann_resonance = (
+            formula_constant
+            * np.sqrt((converted_values * (converted_values + 1)))
+        )
+        return schumann_resonance
