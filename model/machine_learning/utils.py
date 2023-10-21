@@ -695,8 +695,10 @@ class DataHandler:
         self,
         target_input: str | pd.Series | np.ndarray,
         column: str = None,
-        method: Literal["simple", "ratio"] = "ratio",
-        quantiles: list[float] | None = None
+        method: Literal["simple", "ratio", "sum", "prod"] | None = "ratio",
+        split_type: Literal["frequency"] | None = "frequency",
+        quantiles: list[float] | None = None,
+        log_values: bool = False,
     ) -> pd.DataFrame:
         """
         Split data into quantiles based on a specified column and
@@ -772,17 +774,28 @@ class DataHandler:
                 target_name: target
             }
         )
+        if split_type != 'frequency':
+            quantile_df = quantile_df.groupby(feature_name)[target_name]
 
-        quantile_df = pd.crosstab(
-            index=quantile_df[feature_name],
-            columns=quantile_df[target_name],
-        )
+            if method == 'sum':
+                quantile_df = quantile_df.sum()
+            if method == 'prod':
+                if log_values:
+                    quantile_df = np.log(quantile_df.prod())
+                else:
+                    quantile_df = quantile_df.prod() - 1
 
-        if method == "ratio":
-            quantile_df = (
-                quantile_df
-                .div(quantile_df.sum(axis=1), axis=0)
+        else:
+            quantile_df = pd.crosstab(
+                index=quantile_df[feature_name],
+                columns=quantile_df[target_name],
             )
+
+            if method == "ratio":
+                quantile_df = (
+                    quantile_df
+                    .div(quantile_df.sum(axis=1), axis=0)
+                )
         return quantile_df
 
 
