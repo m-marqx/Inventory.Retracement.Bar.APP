@@ -1378,6 +1378,7 @@ class DataCurve:
         show_histogram: bool = False,
         lower_limit: float | None = None,
         upper_limit: float | None = None,
+        method: Literal['simple', 'ratio', 'sum', 'prod'] = 'ratio',
         **kwargs,
     ):
         """
@@ -1408,9 +1409,19 @@ class DataCurve:
         """
         data = (
             DataHandler(self.data_frame)
-            .quantile_split(self.target, self.feature, "ratio", self.quantiles)
-            .iloc[:, [1]]
+            .quantile_split(
+                self.target,
+                self.feature,
+                method,
+                self.quantiles,
+            )
         )
+
+        if isinstance(data, pd.Series):
+            data = data.rename(self.feature)
+            data = pd.DataFrame(data)
+        else:
+            data = data.iloc[:, [1]]
 
         target_name = data.columns[0]
         data["index"] = data.index
