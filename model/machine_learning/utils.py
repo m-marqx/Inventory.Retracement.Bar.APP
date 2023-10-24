@@ -1379,6 +1379,7 @@ class DataCurve:
         lower_limit: float | None = None,
         upper_limit: float | None = None,
         method: Literal['simple', 'ratio', 'sum', 'prod'] = 'ratio',
+        split_type: Literal['frequency'] = 'frequency',
         **kwargs,
     ):
         """
@@ -1413,7 +1414,9 @@ class DataCurve:
                 self.target,
                 self.feature,
                 method,
+                split_type,
                 self.quantiles,
+                True
             )
         )
 
