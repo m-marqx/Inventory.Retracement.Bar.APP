@@ -712,15 +712,25 @@ class DataHandler:
             name, a pandas Series, or a numpy array.
         column : str, optional
             The name of the column used for quantile splitting.
-        method : Literal["simple", "ratio"], optional
+        method : Literal["simple", "ratio", "sum", "prod"], optional
             The method used for calculating class proportions. 'simple'
             returns the raw class counts, 'ratio' returns the
             proportions of the target variable within each quantile.
             (default: "ratio")
+        split_type : Literal["frequency", "data"], optional
+            The type of quantile split to perform. 'frequency'
+            calculates the distribution of target variables in each
+            quantile, 'data' performs a data analysis based on the
+            quantiles.
+            (default: "frequency")
         quantiles : list of float or None, optional
             The quantile intervals used for splitting the 'column' into
             quantiles. If None, it will use decile (0-10-20-...-90-100)
             quantiles by default.
+        log_values : bool, optional
+            If True and 'method' is 'prod', the resulting values are
+            computed using logarithmic aggregation.
+            (default: False)
 
         Returns:
         --------
@@ -729,7 +739,7 @@ class DataHandler:
             correspond to quantile intervals based on the specified
             column, columns correspond to unique values of the target
             variable, and the values represent either counts or
-            proportions, depending on the chosen method.
+            proportions, depending on the chosen method and split type.
         """
         if split_type not in ["frequency", "data"]:
             raise ValueError(
