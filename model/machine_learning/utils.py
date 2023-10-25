@@ -696,7 +696,7 @@ class DataHandler:
         target_input: str | pd.Series | np.ndarray,
         column: str = None,
         method: Literal["simple", "ratio", "sum", "prod"] | None = "ratio",
-        split_type: Literal["frequency"] | None = "frequency",
+        split_type: Literal["frequency", "data"] | None = "frequency",
         quantiles: list[float] | None = None,
         log_values: bool = False,
     ) -> pd.DataFrame:
@@ -731,6 +731,12 @@ class DataHandler:
             variable, and the values represent either counts or
             proportions, depending on the chosen method.
         """
+        if split_type not in ["frequency", "data"]:
+            raise ValueError(
+                "split_type must be 'frequency' or 'data'"
+                f" instead of {split_type}"
+            )
+
         if isinstance(self.data_frame, pd.Series):
             feature = self.data_frame
         else:
@@ -1379,7 +1385,7 @@ class DataCurve:
         lower_limit: float | None = None,
         upper_limit: float | None = None,
         method: Literal['simple', 'ratio', 'sum', 'prod'] = 'ratio',
-        split_type: Literal['frequency'] = 'frequency',
+        split_type: Literal['frequency', 'data'] = 'frequency',
         **kwargs,
     ):
         """
@@ -1555,4 +1561,3 @@ class DataCurve:
                 if lower_value <= upper_limit <= higher_value:
                     ranges_dict["higher_range"] = [upper_limit, element]
         return pd.DataFrame(ranges_dict, index=["value", "range"])
-
