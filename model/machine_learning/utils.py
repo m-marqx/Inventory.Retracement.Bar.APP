@@ -1396,6 +1396,7 @@ class DataCurve:
         upper_limit: float | None = None,
         method: Literal['simple', 'ratio', 'sum', 'prod'] = 'ratio',
         split_type: Literal['frequency', 'data'] = 'frequency',
+        plot_type: Literal['line', 'bar'] = 'line',
         **kwargs,
     ):
         """
@@ -1460,13 +1461,18 @@ class DataCurve:
             f" (value: {target_name}) by {self.feature}"
         )
 
+        if plot_type == 'line':
+            plot = px.line
+        else:
+            plot = px.bar
+
         if self.step:
-            data_frame = self.data["probability"]
-            target_curve_fig = px.line(data_frame)
+            data_frame = self.data[data_type]
+            target_curve_fig = plot(data_frame)
             self.__hline_range(target_curve_fig, kwargs)
         else:
             target_curve_fig = (
-                px.line(self.data, y="probability")
+                plot(self.data, y=data_type)
                 .add_hline(y=self.middle_line)
             )
 
