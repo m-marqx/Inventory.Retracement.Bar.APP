@@ -696,7 +696,6 @@ class DataHandler:
         target_input: str | pd.Series | np.ndarray,
         column: str = None,
         method: Literal["simple", "ratio", "sum", "prod"] | None = "ratio",
-        split_type: Literal["frequency", "data"] | None = "frequency",
         quantiles: list[float] | None = None,
         log_values: bool = False,
     ) -> pd.DataFrame:
@@ -717,12 +716,6 @@ class DataHandler:
             returns the raw class counts, 'ratio' returns the
             proportions of the target variable within each quantile.
             (default: "ratio")
-        split_type : Literal["frequency", "data"], optional
-            The type of quantile split to perform. 'frequency'
-            calculates the distribution of target variables in each
-            quantile, 'data' performs a data analysis based on the
-            quantiles.
-            (default: "frequency")
         quantiles : list of float or None, optional
             The quantile intervals used for splitting the 'column' into
             quantiles. If None, it will use decile (0-10-20-...-90-100)
@@ -741,10 +734,14 @@ class DataHandler:
             variable, and the values represent either counts or
             proportions, depending on the chosen method and split type.
         """
-        if split_type not in ["frequency", "data"]:
+        if method in ["prod", "sum"]:
+            split_type = 'frequency'
+        if method in ["simple", "ratio"]:
+            split_type = 'data'
+        else:
             raise ValueError(
-                "split_type must be 'frequency' or 'data'"
-                f" instead of {split_type}"
+                "method must be prod, sum,"
+                f" simple or data instead of {method}"
             )
 
         if isinstance(self.data_frame, pd.Series):
@@ -790,7 +787,7 @@ class DataHandler:
                 target_name: target
             }
         )
-        if split_type != 'frequency':
+        if split_type == 'data':
             quantile_df = quantile_df.groupby(feature_name)[target_name]
 
             if method == 'sum':
@@ -1395,7 +1392,6 @@ class DataCurve:
         lower_limit: float | None = None,
         upper_limit: float | None = None,
         method: Literal['simple', 'ratio', 'sum', 'prod'] = 'ratio',
-        split_type: Literal['frequency', 'data'] = 'frequency',
         plot_type: Literal['line', 'bar'] = 'line',
         **kwargs,
     ):
@@ -1431,7 +1427,6 @@ class DataCurve:
                 self.target,
                 self.feature,
                 method,
-                split_type,
                 self.quantiles,
                 True
             )
