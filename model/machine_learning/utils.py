@@ -741,7 +741,7 @@ class DataHandler:
         else:
             raise ValueError(
                 "method must be prod, sum,"
-                f" simple or data instead of {method}"
+                f" simple or ratio instead of {method}"
             )
 
         if isinstance(self.data_frame, pd.Series):
