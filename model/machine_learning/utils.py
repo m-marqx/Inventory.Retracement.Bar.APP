@@ -736,7 +736,7 @@ class DataHandler:
         """
         if method in ["prod", "sum"]:
             split_type = 'data'
-        if method in ["simple","ratio"]:
+        elif method in ["simple","ratio"]:
             split_type = 'frequency'
         else:
             raise ValueError(
