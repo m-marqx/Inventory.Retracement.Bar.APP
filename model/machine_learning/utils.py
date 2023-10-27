@@ -735,9 +735,9 @@ class DataHandler:
             proportions, depending on the chosen method and split type.
         """
         if method in ["prod", "sum"]:
-            split_type = 'frequency'
-        if method in ["simple", "ratio"]:
             split_type = 'data'
+        if method in ["simple","ratio"]:
+            split_type = 'frequency'
         else:
             raise ValueError(
                 "method must be prod, sum,"
