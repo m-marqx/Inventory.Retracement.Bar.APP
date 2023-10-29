@@ -1344,7 +1344,7 @@ class DataCurve:
         else:
             self.quantiles = quantiles
 
-    def __hline_range(self, fig, kwargs):
+    def _hline_range(self, fig, kwargs):
         upper_bound = self.middle_line + self.step
         lower_bound = self.middle_line - self.step
 
@@ -1464,7 +1464,7 @@ class DataCurve:
         if self.step:
             data_frame = self.data[data_type]
             target_curve_fig = plot(data_frame)
-            self.__hline_range(target_curve_fig, kwargs)
+            self._hline_range(target_curve_fig, kwargs)
         else:
             target_curve_fig = (
                 plot(self.data, y=data_type)
@@ -1486,7 +1486,7 @@ class DataCurve:
 
             if self.step:
                 kwargs["col"] = column
-                self.__hline_range(fig, kwargs)
+                self._hline_range(fig, kwargs)
             else:
                 fig.add_hline(col=column, y=self.middle_line)
 
