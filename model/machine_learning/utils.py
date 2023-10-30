@@ -1349,7 +1349,7 @@ class DataCurve:
         lower_bound = self.middle_line - self.step
 
         kwargs["upper_bound_color"] = kwargs.get("upper_bound_color", "lime")
-        kwargs["middle_line_color"] = kwargs.get("middle_line_color", "grey")
+        kwargs["middle_line_color"] = kwargs.get("middle_line_color", None)
         kwargs["lower_bound_color"] = kwargs.get("lower_bound_color", "red")
         kwargs["line_type"] = kwargs.get("line_type", "dash")
         kwargs["col"] = kwargs.get("col", "all")
