@@ -1353,9 +1353,11 @@ class DataCurve:
         kwargs["lower_bound_color"] = kwargs.get("lower_bound_color", "red")
         kwargs["line_type"] = kwargs.get("line_type", "dash")
         kwargs["col"] = kwargs.get("col", "all")
+        kwargs["row"] = kwargs.get("row", "all")
 
         fig.add_hline(
             col=kwargs["col"],
+            row=kwargs["row"],
             y=upper_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["upper_bound_color"],
@@ -1364,6 +1366,7 @@ class DataCurve:
 
         fig.add_hline(
             col=kwargs["col"],
+            row=kwargs["row"],
             y=self.middle_line,
             line_dash=kwargs["line_type"],
             line_color=kwargs["middle_line_color"],
@@ -1372,6 +1375,7 @@ class DataCurve:
 
         fig.add_hline(
             col=kwargs["col"],
+            row=kwargs["row"],
             y=lower_bound,
             line_dash=kwargs["line_type"],
             line_color=kwargs["lower_bound_color"],
@@ -1383,6 +1387,7 @@ class DataCurve:
         kwargs.pop("lower_bound_color")
         kwargs.pop("line_type")
         kwargs.pop("col")
+        kwargs.pop("row")
 
         return fig
 
