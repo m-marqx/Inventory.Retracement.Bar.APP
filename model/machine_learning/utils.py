@@ -1445,15 +1445,19 @@ class DataCurve:
 
         target_name = data.columns[0]
         data["index"] = data.index
+        data_type = (
+            "Aggregated data" if method in ['prod', 'sum']
+            else "Probability"
+        )
 
         self.data = (
             pd.DataFrame(
                 data.to_numpy(),
-                columns=["probability", self.feature])
+                columns=[data_type, self.feature])
         )
 
         self.data[self.feature] = self.data[self.feature].astype("str")
-        self.data["probability"] = self.data["probability"].astype("float")
+        self.data[data_type] = self.data[data_type].astype("float")
         self.data = self.data.set_index(self.feature)
 
         title = (
