@@ -1460,9 +1460,14 @@ class DataCurve:
         self.data[data_type] = self.data[data_type].astype("float")
         self.data = self.data.set_index(self.feature)
 
+        value_info = (
+            f"(value: {target_name})" if method in ['simple', 'ratio']
+            else ""
+        )
+
         title = (
             f"Quantile Distribution of {self.target}"
-            f" (value: {target_name}) by {self.feature}"
+            f" {value_info} by {self.feature}"
         )
 
         if plot_type == 'line':
