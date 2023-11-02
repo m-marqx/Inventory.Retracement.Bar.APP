@@ -1586,3 +1586,136 @@ class DataCurve:
                 if lower_value <= upper_limit <= higher_value:
                     ranges_dict["higher_range"] = [upper_limit, element]
         return pd.DataFrame(ranges_dict, index=["value", "range"])
+
+    def target_distribution(
+        self,
+        data_target: 'str',
+        data_step: float | None = None,
+        data_plot_type: Literal['line', 'bar'] = 'line',
+        lower_limit: float | None = None,
+        upper_limit: float | None = None,
+        method: Literal['sum', 'prod'] = 'sum',
+        orientation: Literal['vertical', 'horizontal'] = 'horizontal',
+        **kwargs,
+    ):
+        """
+        Plot the target distribution and accumulate data by thresholds.
+
+        This method creates a Plotly figure to visualize the target
+        distribution and accumulate data within specified thresholds.
+        It shows the distribution of target values and the accumulated
+        data values within the given thresholds.
+
+        Parameters:
+        -----------
+        data_target : str
+            The name of the target variable for the target distribution.
+        data_step : float
+            The step size for upper and lower bounds of the thresholds.
+        lower_limit : float, optional
+            The lower threshold limit for accumulation
+            (default: None).
+        upper_limit : float, optional
+            The upper threshold limit for accumulation
+            (default: None).
+        method : Literal['sum', 'prod'], optional
+            The method used for accumulating data values. 'sum' for sum
+            and 'prod' for product
+            (default: 'sum').
+        orientation: Literal['vertical', 'horizontal'], optional
+            The orientation of the subplot. If 'vertical', the
+            frequency plot and the accumulated data plot will be
+            stacked vertically. If 'horizontal', they will be placed
+            side by side.
+        **kwargs : dict
+            Additional keyword arguments for customizing the Plotly layout.
+
+        Returns:
+        --------
+        plotly.graph_objs.Figure
+            A Plotly figure displaying the target distribution and
+            accumulated data within specified thresholds. It includes
+            both the frequency plot and the accumulated data plot.
+
+        Raises:
+        -------
+        ValueError:
+            If 'lower_limit' is specified without 'upper_limit', or
+            vice versa.
+        """
+        data_curve = DataCurve(
+            self.data_frame,
+            data_target,
+            self.feature,
+            self.quantiles,
+            0,
+            data_step,
+        )
+
+        title = f"Target Distribution of {self.feature}"
+
+        common_params = dict(
+            show_histogram=False,
+            lower_limit=lower_limit,
+            upper_limit=upper_limit,
+        )
+
+        frequency_fig = self.quantile_distribution(
+        method = 'ratio',
+        **common_params,
+        )
+
+        data_fig = data_curve.quantile_distribution(
+        method = method,
+        plot_type = data_plot_type,
+        **common_params,
+        )
+
+        if orientation == 'vertical':
+            subplot_row = 2
+            subplot_col = 1
+            sub_titles = None
+        else:
+            subplot_row = 1
+            subplot_col = 2
+            sub_titles = ("Frequency", "Aggregated Data")
+
+        fig = sp.make_subplots(
+            rows=subplot_row,
+            cols=subplot_col,
+            subplot_titles=sub_titles,
+        )
+
+        fig.add_trace(frequency_fig.data[0], row=1, col=1)
+        fig.add_trace(data_fig.data[0], row=subplot_row, col=subplot_col)
+
+        fig = (
+            fig.update_layout(title=title, title_x=0.5)
+            .update_layout(**kwargs)
+        )
+
+        if lower_limit and upper_limit:
+            limit_ranges = self.get_limit_ranges(
+                lower_limit, upper_limit, fig.data[0]
+            )
+
+            lower_range = limit_ranges["lower_range"]["range"]
+            higher_range = limit_ranges["higher_range"]["range"]
+
+            fig.add_vline(x=lower_range, line_color="lime")
+            fig.add_vline(x=higher_range, line_color="red")
+
+        if self.step:
+            kwargs["col"] = 1
+            kwargs["row"] = 1
+            self._hline_range(fig, kwargs)
+        else:
+            fig.add_hline(row=1, col=1, y=self.middle_line)
+
+        if data_curve.step:
+            kwargs["col"] = subplot_col
+            kwargs["row"] = subplot_row
+            data_curve._hline_range(fig, kwargs)
+        else:
+            fig.add_hline(row=subplot_row, col=subplot_col, y=0)
+        return fig
