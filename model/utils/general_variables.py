@@ -242,14 +242,14 @@ class ExternalVariables:
 
     def schumann_resonance(
         self,
-        source_column,
-        n_length,
+        source_column: str,
+        n_length: int,
         method: Literal[
             "equatorial",
             "polar",
             "mean",
             "custom"] = "equatorial",
-        circuference=None
+        circuference: float | None = None
     ) -> pd.Series:
         """
         Calculate Schumann resonance frequencies based on a source
