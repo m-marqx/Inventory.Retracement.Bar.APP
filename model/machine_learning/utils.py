@@ -7,7 +7,7 @@ import shap
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import export_graphviz
-from sklearn.model_selection import ParameterGrid, learning_curve
+from sklearn.model_selection import ParameterGrid, learning_curve, train_test_split
 from joblib import Parallel, delayed
 import plotly.express as px
 import plotly.subplots as sp
@@ -394,6 +394,74 @@ class DataHandler:
 
         if isinstance(dataframe, np.ndarray):
             self.data_frame = pd.Series(dataframe)
+
+    def get_datasets(
+        self,
+        feature_columns: list,
+        test_size: float = 0.5,
+        split_size: float = 0.7
+    ) -> dict[dict[pd.DataFrame, pd.Series]]:
+        """
+        Splits the data into development and validation datasets.
+
+        Separates the DataFrame into training and testing sets for
+        development, and a separate validation set, based on the
+        specified split and test sizes.
+
+        Parameters
+        ----------
+        feature_columns : list
+            List of column names to be used as features.
+        test_size : float
+            Proportion of the dataset to include in the test split.
+            (default: 0.5)
+        split_size : float
+            Proportion of the dataset to include in the development
+            split.
+            (default: 0.7)
+
+        Returns
+        -------
+        dict
+            A dictionary containing the development and validation
+            datasets, each itself a dictionary with DataFrames and
+            Series for features and target values respectively.
+
+        Raises
+        ------
+        ValueError
+            If the provided data_frame is not a Pandas DataFrame.
+        """
+        if not isinstance(self.data_frame, pd.DataFrame):
+            raise ValueError("The dataframe must be a Pandas DataFrame")
+
+        split_index = int(self.data_frame.shape[0] * split_size)
+        development_df = self.data_frame.iloc[:split_index].copy()
+        validation_df = self.data_frame.iloc[split_index:].copy()
+
+        features = development_df[feature_columns]
+        target = development_df["Target_1_bin"]
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            features,
+            target,
+            test_size=test_size,
+            shuffle=False
+        )
+
+        origin_datasets = {
+            "X_train": X_train, "X_test": X_test,
+            "y_train": y_train, "y_test": y_test,
+        }
+        validation_dataset = {
+            "X_validation": validation_df[feature_columns],
+            "y_validation": validation_df["Target_1_bin"]
+        }
+
+        return {
+            "development": origin_datasets,
+            "validation": validation_dataset
+        }
 
     def drop_zero_predictions(
         self,
@@ -1244,7 +1312,6 @@ class ModelHandler:
             f"{auc_str}"
         )
         return confusion_matrix_str
-
 
 class DataCurve:
     """
