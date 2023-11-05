@@ -27,7 +27,8 @@ class CcxtAPI:
         The time interval for K-line data
         (e.g., '1h' for 1-hour candles).
     exchange : ccxt.Exchange
-        The CCXT exchange object (default: ccxt.bitstamp()).
+        The CCXT exchange object
+        (default: ccxt.bitstamp()).
     first_candle_time : int
         The Unix timestamp of the first candle
         (default: 1325296800000).
