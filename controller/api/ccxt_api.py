@@ -273,6 +273,57 @@ class CcxtAPI:
         self.data_frame = self.data_frame.set_index("date")
         return self
 
+    def update_klines(
+        self,
+        klines: list | pd.DataFrame
+    ) -> list | pd.DataFrame:
+        """
+        Update historical Klines data with new data.
+
+        This method is used to update existing historical Klines data
+        with fresh data obtained from the exchange. The function
+        identifies the last timestamp in the provided Klines data and
+        retrieves new data starting from that point.
+
+        Parameters:
+        -----------
+        klines : list or pd.DataFrame
+            The historical Klines data to be updated. This can be
+            either a list of lists or a pandas DataFrame.
+
+        Returns:
+        --------
+        list or pd.DataFrame
+            The updated Klines data with the new data appended.
+        """
+        last_time = (
+            klines[-3][0] if isinstance(klines, list)
+            else int(klines.index[-3].value / 1e+6)
+        )
+
+        capi = CcxtAPI(self.symbol, self.interval, self.exchange, last_time)
+        new_data = capi.get_all_klines()
+
+        if isinstance(klines, list):
+            new_klines = new_data.klines_list
+            new_data = [
+                data for data in new_klines
+                if data[0] not in (kline[0] for kline in klines)
+            ]
+
+            updated_klines = klines + new_data
+            updated_klines.sort()
+
+        else:
+            new_df = new_data.to_OHLCV().data_frame
+            updated_klines = klines.combine_first(new_df)
+            updated_klines = updated_klines.sort_index()
+            updated_klines = updated_klines[
+                ~updated_klines.index.duplicated(keep='last')
+            ]
+
+        return updated_klines
+
     def aggregate_klines(
         self,
         exchanges: list[ccxt.Exchange] = None,
