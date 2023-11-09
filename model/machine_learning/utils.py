@@ -771,7 +771,7 @@ class DataHandler:
         target_input: str | pd.Series | np.ndarray,
         column: str = None,
         method: Literal["simple", "ratio", "sum", "prod"] | None = "ratio",
-        quantiles: list[float] | None = None,
+        quantiles: np.ndarray | pd.Series | int = 10,
         log_values: bool = False,
     ) -> pd.DataFrame:
         """
@@ -791,10 +791,12 @@ class DataHandler:
             returns the raw class counts, 'ratio' returns the
             proportions of the target variable within each quantile.
             (default: "ratio")
-        quantiles : list of float or None, optional
-            The quantile intervals used for splitting the 'column' into
-            quantiles. If None, it will use decile (0-10-20-...-90-100)
-            quantiles by default.
+        quantiles : np.ndarray or pd.Series or int, optional
+            The quantile intervals used for splitting the 'feature' into
+            quantiles. If an integer is provided, it represents the
+            number of quantiles to create. If an array or series is
+            provided, it specifies the quantile boundaries.
+            (default: 10).
         log_values : bool, optional
             If True and 'method' is 'prod', the resulting values are
             computed using logarithmic aggregation.
@@ -827,11 +829,13 @@ class DataHandler:
         if feature.hasnans:
             feature = feature.dropna()
 
-        if quantiles is None:
+        if isinstance(quantiles, int):
+            range_step = 1 / quantiles
             quantiles = np.quantile(
                 feature,
-                np.arange(0, 1.1, 0.1)
+                np.arange(0, 1.01, range_step)
             )
+
             quantiles = np.unique(quantiles)
 
         if isinstance(target_input, str):
