@@ -173,7 +173,8 @@ class CcxtAPI:
 
     def get_all_klines(self, ignore_unsupported_exchanges: bool = False):
         """
-        Fetch all K-line data for the specified symbol and interval.
+        Fetch all K-line data for the specified symbol and interval
+        using a for loop.
 
         Parameters:
         -----------
@@ -213,8 +214,6 @@ class CcxtAPI:
 
         START = time.perf_counter()
 
-        temp_end_klines = None
-
         last_candle_interval = (
             time.time() * 1000 - interval_to_milliseconds(self.interval)
         )
@@ -222,26 +221,26 @@ class CcxtAPI:
         if self.verbose:
             logging.info("Starting requests")
 
-        while True:
-            time_value = klines[-1][0] + 1 if klines else first_unix_time
-            klines = self._fetch_klines(time_value)
+        time_value = klines[-1][0] + 1 if klines else first_unix_time
+        time_delta = first_call[-1][0] - first_call[0][0]
+        step = time_delta + pd.Timedelta(self.interval).value / 1e+6
+        end_times = np.arange(time_value, last_candle_interval, step)
+
+        for current_start_time in end_times:
+            klines = self._fetch_klines(current_start_time)
+            if not klines:
+                break
+
             klines_list.extend(klines)
 
-            if klines == []:
-                break
             if klines_list[-1][0] >= last_candle_interval:
                 if self.verbose:
                     logging.info("Qty : %s", len(klines_list))
                 break
 
-            if temp_end_klines:
-                if temp_end_klines == klines[-1][0]:
-                    raise ValueError("End time not found")
-            else:
-                temp_end_klines = klines[-1][0]
-
             if self.verbose:
                 logging.info("Qty : %s", len(klines_list))
+
         if self.verbose:
             logging.info(
                 "Requests elapsed time: %s\n",
