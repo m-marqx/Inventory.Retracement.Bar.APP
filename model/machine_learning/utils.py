@@ -902,7 +902,7 @@ class DataHandler:
         higher_than_threshold: bool = True,
     ) -> pd.Series:
         """
-        Set a binary variable based on quantile analysis.
+        Get a binary variable based on quantile analysis.
 
         This method performs quantile analysis on the specified column
         using the provided target variable and threshold. It creates a
