@@ -984,6 +984,102 @@ class DataHandler:
             variable |= self.data_frame[column] < lower_bound
         return variable
 
+    def get_split_variable_intervals(
+        self,
+        target_input: str,
+        column: str,
+        quantiles: np.ndarray | pd.Series | int = 10,
+        method: Literal["simple", "ratio", "sum", "prod"] = "ratio",
+        log_values: bool = False,
+        threshold: float = 0.5,
+        higher_than_threshold: bool = True,
+    ) -> pd.Series:
+        """
+        Get intervals from quantile-split variable analysis.
+
+        This method performs quantile analysis on the specified column
+        using the provided target variable, method, and threshold. It
+        returns intervals based on values higher or lower than the
+        specified threshold.
+
+        Parameters:
+        -----------
+        target_input : str, pd.Series, or np.ndarray
+            The target variable for the analysis. It can be a column
+            name, a pandas Series, or a numpy array.
+        column : str, optional
+            The name of the column used for quantile splitting.
+        method : Literal["simple", "ratio", "sum", "prod"], optional
+            The method used for calculating class proportions. 'simple'
+            returns the raw class counts, 'ratio' returns the
+            proportions of the target variable within each quantile.
+            (default: "ratio")
+        quantiles : np.ndarray or pd.Series or int, optional
+            The quantile intervals used for splitting the 'feature' into
+            quantiles. If an integer is provided, it represents the
+            number of quantiles to create. If an array or series is
+            provided, it specifies the quantile boundaries.
+            (default: 10).
+        log_values : bool, optional
+            If True and 'method' is 'prod', the resulting values are
+            computed using logarithmic aggregation.
+            (default: False)
+        threshold : float or int, optional
+            The threshold value for determining the quantile intervals.
+            Values above this threshold will be considered.
+            (default: 0.5)
+        higher_than_threshold : bool, optional
+            If True, values higher than the threshold are considered
+            for quantile intervals. If False, values lower than the
+            threshold are considered.
+            (default: True)
+
+        Returns:
+        --------
+        pd.Series
+            A dictionary containing the intervals based on quantile
+            analysis.
+        """
+        split_data = self.quantile_split(
+            target_input,
+            column,
+            method,
+            quantiles,
+            log_values,
+        )
+
+        split_data = (
+            split_data.iloc[:, 1] if split_data.shape[1] == 2
+            else split_data
+        )
+
+        if higher_than_threshold:
+            data = split_data[split_data > threshold]
+        else:
+            data = split_data[split_data < threshold]
+
+        intervals = [[x[0].left, x[0].right] for x in data.items()]
+        variable_intervals = {}
+
+        for x in enumerate(intervals):
+            variable_intervals[f'interval_{x[0]}'] = x[1]
+
+        if data.shape[0] > 0:
+            lower_bound = (
+                data.index[0].right if data.iloc[0] > threshold
+                else None
+            )
+
+            upper_bound = (
+                data.index[-1].left if data.iloc[-1] > threshold
+                else None
+            )
+
+            variable_intervals['upper_bound'] = upper_bound
+            variable_intervals['lower_bound'] = lower_bound
+
+        return variable_intervals
+
 
 class ModelHandler:
     """
