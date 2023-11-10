@@ -22,10 +22,10 @@ The entry occurs when the candle breaks the maximum value of the candle that gen
 
 ![Start](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/9b93b458-6a31-4a55-a7e0-f12945c5cd33)
 
-The target value depends on the chosen `payoff`, which is the amplitude of the signal candle, and the stop value should be at the signal candle's minimum or the lowest value of the last N candles. 
-Thi example uses a `Payoff` of 2 and the stop at the minimum of the signal candle.
+The target value depends on the chosen `payoff`, which is the amplitude of the signal candle, and the stop value should be at the signal candle's minimum or the lowest value of the last N candles.
+This example uses a `Payoff` of 2 and the stop at the minimum of the signal candle.
 
-![End](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/071a7775-6e59-4ae8-b9a1-b110559da699)
+![End](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/8684d8f7-323e-4089-94b1-57b3420d8e03)
 
 ## How to Use
 
