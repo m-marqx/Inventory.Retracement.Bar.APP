@@ -1080,6 +1080,50 @@ class DataHandler:
 
         return variable_intervals
 
+    def get_intervals_variables(
+        self,
+        column: str,
+        intervals: dict
+    ) -> pd.Series:
+        """
+        Get a binary variable based on specified intervals.
+
+        This method creates a binary variable indicating whether the
+        values in the specified column fall within the given intervals.
+
+        Parameters:
+        -----------
+        column : str
+            The name of the column to analyze.
+        intervals : dict
+            A dictionary defining the intervals. The keys represent the
+            names of the intervals, and the values can be:
+            - A list [start, end] defining a closed interval.
+            - A single value for open intervals.
+
+        Returns:
+        --------
+        pd.Series
+            A binary variable indicating whether the values in the
+            specified column fall within the specified intervals.
+        """
+        variable = pd.Series(False, index=self.data_frame.index)
+        interval_list = list(intervals.values())
+
+        for x in intervals.values():
+            if isinstance(x, list):
+                variable |= self.data_frame[column].between(x[0], x[1])
+
+            #This case will be handled by `get_split_variable_intervals` method
+            elif x == interval_list[-2] and not isinstance(x, list):
+                if x:
+                    variable |= self.data_frame[column] > x
+
+            elif x == interval_list[-1] and not isinstance(x, list):
+                if x:
+                    variable |= self.data_frame[column] <= x
+        return variable
+
 
 class ModelHandler:
     """
