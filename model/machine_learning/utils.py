@@ -981,7 +981,7 @@ class DataHandler:
             variable |= self.data_frame[column] > upper_bound
 
         if lower_bound:
-            variable |= self.data_frame[column] < lower_bound
+            variable |= self.data_frame[column] <= lower_bound
         return variable
 
     def get_split_variable_intervals(
