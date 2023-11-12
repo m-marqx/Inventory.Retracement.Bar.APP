@@ -1645,18 +1645,7 @@ class DataCurve:
         self.feature = feature
         self.middle_line = middle_line
         self.step = step
-
-        if isinstance(quantiles, int):
-            range_step = 1 / quantiles
-
-            self.quantiles = np.quantile(
-                data_frame[feature],
-                np.arange(0, 1.01, range_step)
-            )
-
-            self.quantiles = np.unique(self.quantiles)
-        else:
-            self.quantiles = quantiles
+        self.quantiles = quantiles
 
     def _hline_range(self, fig, kwargs):
         upper_bound = self.middle_line + self.step
