@@ -1278,6 +1278,27 @@ class ModelHandler:
             df_returns["Liquid_Return"]
         )
 
+        df_returns["max_Liquid_Return"] = (
+            df_returns["Liquid_Return"].expanding(365).max()
+        )
+
+        df_returns["max_Liquid_Return"] = np.where(
+            df_returns["max_Liquid_Return"].diff(),
+            np.nan, df_returns["max_Liquid_Return"],
+        )
+
+        df_returns["drawdown"] = (
+            1 - df_returns["Liquid_Return"]
+            / df_returns["max_Liquid_Return"]
+        )
+
+        drawdown_positive = df_returns["drawdown"] > 0
+
+        df_returns["drawdown_duration"] = drawdown_positive.groupby(
+            (~drawdown_positive).cumsum()
+        ).cumsum()
+
+
         df_returns["max_Liquid_Return_log"] = (
             df_returns["Liquid_Return_log"].expanding(365).max()
         )
@@ -1287,15 +1308,15 @@ class ModelHandler:
             np.nan, df_returns["max_Liquid_Return_log"],
         )
 
-        df_returns["drawdown"] = (
+        df_returns["drawdown_log"] = (
             1 - df_returns["Liquid_Return_log"]
             / df_returns["max_Liquid_Return_log"]
         )
 
-        drawdown_positive = df_returns["drawdown"] > 0
+        drawdown_positive_log = df_returns["drawdown"] > 0
 
-        df_returns["drawdown_duration"] = drawdown_positive.groupby(
-            (~drawdown_positive).cumsum()
+        df_returns["drawdown_duration_log"] = drawdown_positive_log.groupby(
+            (~drawdown_positive_log).cumsum()
         ).cumsum()
         return df_returns
 
