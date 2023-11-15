@@ -1,3 +1,6 @@
+## PT-BR
+Se você quiser ler em português basta [clicar aqui](https://github.com/m-marqx/Hoffman-IRB/blob/master/README%20-%20BR.md)
+
 ## Initial Idea
 
 The repository aims to create a model that collects data from Binance, the largest international exchange, using the `python-binance` library. Afterward, the data is processed to obtain the results of the `Inventory Retracement Bar` strategy, developed by `Rob Hoffman`. The strategy showed promise, as the author claims it has brought victories in various trading competitions. However, it was observed that the strategy's default settings yielded unsatisfactory results in the cryptocurrency market.
@@ -31,4 +34,4 @@ This example uses a `Payoff` of 2 and the stop at the minimum of the signal cand
 
 To enhance result visualization, a Dashboard has been created using `Dash`, from the same team behind `Plotly`. The Dashboard comprises 2 pages: `homepage` and `backtest`, each with a specific objective. Both pages aim to provide users with a simple and easy way to customize and visualize results with different parameter values for the strategy.
 
-Visit the [homepage](https://github.com/m-marqx/Hoffman-IRB/blob/master/view/dashboard/pages/home/readme%20-%20BR.md) or [backtest](https://github.com/m-marqx/Hoffman-IRB/blob/master/view/dashboard/pages/backtest/readme%20-%20BR.md) for detailed information on using each page of the Dashboard.
+Visit the [homepage](https://github.com/m-marqx/Hoffman-IRB/tree/master/view/dashboard/pages/home) or [backtest](https://github.com/m-marqx/Hoffman-IRB/blob/master/view/dashboard/pages/backtest/) for detailed information on using each page of the Dashboard.
