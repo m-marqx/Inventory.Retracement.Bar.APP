@@ -470,6 +470,80 @@ class DataHandler:
             "validation": validation_dataset
         }
 
+    def model_pipeline(
+        self,
+        features_columns: list,
+        target_column: str,
+        estimator: object,
+        return_series: pd.Series,
+        validation_size: float = 0.3,
+    ) -> pd.DataFrame:
+        """
+        Execute a machine learning pipeline for model evaluation.
+
+        This method performs a machine learning pipeline, including
+        data splitting, training, validation, and evaluation.
+
+        Parameters:
+        -----------
+        features_columns : list
+            List of column names representing features used for training
+            the model.
+        target_column : str
+            Name of the target variable column.
+        estimator : object
+            Machine learning model (estimator) to be trained and
+            evaluated.
+        return_series : pd.Series
+            Series containing the target variable for the model.
+        validation_size : float, optional
+            Proportion of the dataset to include in the validation
+            split.
+            (default: 0.3)
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing model returns and validation date.
+
+        Raises:
+        -------
+        ValueError
+            If validation_size is outside the valid range (0.0 to 1.0).
+        """
+        if validation_size > 1 or validation_size < 0:
+            raise ValueError("validation_size should be between 0.0 and 1.0")
+
+        split_size = 1 - validation_size
+        split_index = int(self.data_frame.shape[0] * split_size)
+        development = self.data_frame.iloc[:split_index].copy()
+        validacao = self.data_frame.iloc[split_index:].copy()
+
+        features = development[features_columns]
+        target = development[target_column]
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            features,
+            target,
+            test_size=0.5,
+            shuffle=False
+        )
+
+        estimator.fit(X_train, y_train)
+
+        validation_x_test = validacao[features_columns]
+        validation_y_test = validacao[target_column]
+
+        x_series = pd.concat([X_test, validation_x_test], axis=0)
+        y_series = pd.concat([y_test, validation_y_test], axis=0)
+
+        model_returns = (
+            ModelHandler(estimator, x_series, y_series)
+            .model_returns(return_series)
+        )
+        model_returns['validation_date'] = str(validacao.index[0])
+        return model_returns
+
     def drop_zero_predictions(
         self,
         column: str,
