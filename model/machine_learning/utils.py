@@ -476,7 +476,7 @@ class DataHandler:
         target_column: str,
         estimator: object,
         return_series: pd.Series,
-        validation_size: float = 0.3,
+        split_location: float | int | str = 0.3,
     ) -> pd.DataFrame:
         """
         Execute a machine learning pipeline for model evaluation.
@@ -496,9 +496,16 @@ class DataHandler:
             evaluated.
         return_series : pd.Series
             Series containing the target variable for the model.
-        validation_size : float, optional
-            Proportion of the dataset to include in the validation
-            split.
+        split_location : float, int, or str, optional
+            Determines the location to split the dataset into training
+            and validation sets.
+            - Float: it represents the proportion of
+            the dataset to include in the validation split.
+            - Integer: it specifies the index to split the
+            dataset.
+            - String: it represents the label/index to split
+            the dataset.
+
             (default: 0.3)
 
         Returns:
@@ -511,13 +518,31 @@ class DataHandler:
         ValueError
             If validation_size is outside the valid range (0.0 to 1.0).
         """
-        if validation_size > 1 or validation_size < 0:
-            raise ValueError("validation_size should be between 0.0 and 1.0")
+        if not isinstance(split_location, (str, float, int)):
+            raise ValueError(
+                "Wrong split_location type: "
+                f"{split_location.__class__.__name__}"
+            )
+        is_percentage_location = 0 < split_location < 1
 
-        split_size = 1 - validation_size
-        split_index = int(self.data_frame.shape[0] * split_size)
-        development = self.data_frame.iloc[:split_index].copy()
-        validacao = self.data_frame.iloc[split_index:].copy()
+        if not (isinstance(split_location, float) and is_percentage_location):
+            raise ValueError(
+                "When split_location is a float, "
+                "it should be between 0.0 and 1.0"
+            )
+
+        if is_percentage_location:
+            split_factor = 1 - split_location
+            split_index = int(self.data_frame.shape[0] * split_factor)
+        else:
+            split_index = split_location
+
+        if isinstance(split_index, int):
+            development = self.data_frame.iloc[:split_index].copy()
+            validation = self.data_frame.iloc[split_index:].copy()
+        elif isinstance(split_index, str):
+            development = self.data_frame.loc[:split_index].copy()
+            validation = self.data_frame.loc[split_index:].copy()
 
         features = development[features_columns]
         target = development[target_column]
@@ -541,7 +566,7 @@ class DataHandler:
             ModelHandler(estimator, x_series, y_series)
             .model_returns(return_series)
         )
-        model_returns['validation_date'] = str(validacao.index[0])
+        model_returns['validation_date'] = str(validation.index[0])
         return model_returns
 
     def drop_zero_predictions(
