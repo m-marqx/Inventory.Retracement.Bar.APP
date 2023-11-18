@@ -56,7 +56,6 @@ class ExternalVariables:
 
     def rolling_ratio(
         self,
-        column: str,
         fast_length: int,
         slow_length: int,
         method: str,
@@ -69,8 +68,6 @@ class ExternalVariables:
 
         Parameters:
         -----------
-        column : str
-            The column for which to calculate the rolling ratio.
         fast_length : int
             The window size for the fast rolling average.
         slow_length : int
@@ -92,6 +89,9 @@ class ExternalVariables:
         """
         if fast_length == slow_length:
             raise ValueError("fast_length and slow_length must be different")
+
+        fast_rolling = self.dataframe[self.source_column].rolling(fast_length)
+        slow_rolling = self.dataframe[self.source_column].rolling(slow_length)
 
         try:
             fast_rolling = getattr(fast_rolling, method)()
