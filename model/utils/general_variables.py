@@ -435,8 +435,10 @@ class ExternalVariables:
 
         high_column = f"fox_trap_{self.source_column}_long"
         low_column = f"fox_trap_{self.source_column}_short"
+        hl_columns = [high_column,low_column]
 
-        self.dataframe[high_column] = buy_high_fox_trap_condition.astype('int8')
-        self.dataframe[low_column] = sell_low_fox_trap_condition.astype('int8')
+        self.dataframe[high_column] = buy_high_fox_trap_condition
+        self.dataframe[low_column] = sell_low_fox_trap_condition
+        self.dataframe[hl_columns] = self.dataframe[hl_columns].astype('int8')
 
         return self.dataframe
