@@ -90,8 +90,8 @@ class ExternalVariables:
         ValueError
             If an invalid method is specified.
         """
-        fast_rolling = self.dataframe[column].rolling(fast_length)
-        slow_rolling = self.dataframe[column].rolling(slow_length)
+        if fast_length == slow_length:
+            raise ValueError("fast_length and slow_length must be different")
 
         try:
             fast_rolling = getattr(fast_rolling, method)()
