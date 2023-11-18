@@ -368,19 +368,13 @@ class ExternalVariables:
         )
         return schumann_resonance
 
-    def fox_trap(self, moving_average_column: str) -> pd.DataFrame:
+    def fox_trap(self) -> pd.DataFrame:
         """
         Identify 'Fox Trap' conditions in financial data.
 
         Applies the 'Fox Trap' trading strategy by evaluating conditions
         against moving averages and price action in a DataFrame that
         must contain high, low, and close prices.
-
-        Parameters
-        ----------
-        moving_average_column : str
-            Name of the column with moving average values for condition
-            checks.
 
         Returns
         -------
@@ -395,13 +389,12 @@ class ExternalVariables:
             DataFrame.
         """
         required_columns = ['high', 'low', 'close']
-        data_frame = self.dataframe
 
         column_mapping = {}
         for col in required_columns:
             found_columns = [
                 column
-                for column in data_frame.columns
+                for column in self.dataframe.columns
                 if column.lower() == col
             ]
 
@@ -411,11 +404,11 @@ class ExternalVariables:
                 )
             column_mapping[col] = found_columns[0]
 
-        high = data_frame[column_mapping['high']]
-        low = data_frame[column_mapping['low']]
-        close = data_frame[column_mapping['close']]
+        high = self.dataframe[column_mapping['high']]
+        low = self.dataframe[column_mapping['low']]
+        close = self.dataframe[column_mapping['close']]
 
-        moving_average = data_frame[moving_average_column]
+        moving_average = self.dataframe[self.source_column]
         high_fox_trap_condition = (
             (close > moving_average)
             & (low < moving_average)
@@ -439,9 +432,10 @@ class ExternalVariables:
             & (low < shifted_low)
         )
 
-        high_column = f"fox_trap_{moving_average_column}_long"
-        low_column = f"fox_trap_{moving_average_column}_short"
-        data_frame[high_column] = buy_high_fox_trap_condition.astype('int8')
-        data_frame[low_column] = sell_low_fox_trap_condition.astype('int8')
+        high_column = f"fox_trap_{self.source_column}_long"
+        low_column = f"fox_trap_{self.source_column}_short"
 
-        return data_frame[[high_column, low_column]]
+        self.dataframe[high_column] = buy_high_fox_trap_condition.astype('int8')
+        self.dataframe[low_column] = sell_low_fox_trap_condition.astype('int8')
+
+        return self.dataframe
