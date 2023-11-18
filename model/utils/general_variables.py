@@ -14,16 +14,16 @@ class ExternalVariables:
     ----------
     dataframe : pandas.DataFrame
         The input dataframe containing the data.
-    return_column : str, optional
-        The name of the column representing the return values
+    source_column : str, optional
+        The name of the column representing the price values
         (default is "Result").
 
     Attributes
     ----------
     dataframe : pandas.DataFrame
         The copy of the input dataframe.
-    return_column : str
-        The name of the column representing the return values.
+    source_column : str
+        The name of the column representing the price values.
 
     Methods
     -------
@@ -35,7 +35,7 @@ class ExternalVariables:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        return_column: str = "Result",
+        source_column: str = "Result",
         feat_last_column: str = "Signal",
     ) -> None:
         """
@@ -51,7 +51,7 @@ class ExternalVariables:
 
         """
         self.dataframe = dataframe.copy()
-        self.return_column = return_column
+        self.source_column = source_column
         self.feat_last_column = feat_last_column
 
     def rolling_ratio(
@@ -167,8 +167,8 @@ class ExternalVariables:
         """
 
         self.dataframe["velocity"] = (
-            self.dataframe[self.return_column]
-            - self.dataframe[self.return_column].shift(periods)
+            self.dataframe[self.source_column]
+            - self.dataframe[self.source_column].shift(periods)
         ) / periods
 
         self.dataframe["acceleration"] = (
@@ -177,7 +177,7 @@ class ExternalVariables:
         ) / periods
 
         self.dataframe["mass"] = (
-            self.dataframe[self.return_column].rolling(periods).sum()
+            self.dataframe[self.source_column].rolling(periods).sum()
         )
 
         self.dataframe["force"] = (
@@ -193,7 +193,7 @@ class ExternalVariables:
 
         opposite_leg = (
             self.dataframe["mass"]
-            - self.dataframe[self.return_column].rolling(1).sum()
+            - self.dataframe[self.source_column].rolling(1).sum()
         )
         adjacent_leg = periods
 
