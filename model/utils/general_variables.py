@@ -8,7 +8,7 @@ import model.utils.custom_pandas_methods
 
 class ExternalVariables:
     """
-    A class for calculating physics variables based on external data.
+    A class for calculating physics variables based on external data.11
 
     Parameters
     ----------
@@ -53,6 +53,55 @@ class ExternalVariables:
         self.dataframe = dataframe.copy()
         self.return_column = return_column
         self.feat_last_column = feat_last_column
+
+    def rolling_ratio(
+        self,
+        column: str,
+        fast_length: int,
+        slow_length: int,
+        method: str,
+    ) -> pd.DataFrame:
+        """
+        Calculate a rolling ratio of two rolling averages.
+
+        This method computes a rolling ratio using two rolling averages
+        based on specified parameters.
+
+        Parameters:
+        -----------
+        column : str
+            The column for which to calculate the rolling ratio.
+        fast_length : int
+            The window size for the fast rolling average.
+        slow_length : int
+            The window size for the slow rolling average.
+        method : str
+            The method used for rolling averages
+            (e.g., 'mean', 'std', 'sum').
+
+        Returns:
+        --------
+        pd.DataFrame
+            The original DataFrame with an additional column for the
+            rolling ratio.
+
+        Raises:
+        -------
+        ValueError
+            If an invalid method is specified.
+        """
+        fast_rolling = self.dataframe[column].rolling(fast_length)
+        slow_rolling = self.dataframe[column].rolling(slow_length)
+
+        try:
+            fast_rolling = getattr(fast_rolling, method)()
+            slow_rolling = getattr(slow_rolling, method)()
+        except AttributeError as exc:
+            raise ValueError(f"Invalid method '{method}'") from exc
+
+        self.dataframe["rolling_std_ratio"] = fast_rolling / slow_rolling
+
+        return self.dataframe
 
     def ratio_variables(self, column: str, length: int) -> pd.DataFrame:
         """
@@ -342,7 +391,8 @@ class ExternalVariables:
         Raises
         ------
         ValueError
-            If 'high', 'low', or 'close' prices are absent in the DataFrame.
+            If 'high', 'low', or 'close' prices are absent in the
+            DataFrame.
         """
         required_columns = ['high', 'low', 'close']
         data_frame = self.dataframe
