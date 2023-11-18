@@ -388,19 +388,20 @@ class ExternalVariables:
             If 'high', 'low', or 'close' prices are absent in the
             DataFrame.
         """
-        required_columns = ['high', 'low', 'close']
+        required_columns = ['High', 'Low', 'Close']
 
         column_mapping = {}
         for col in required_columns:
             found_columns = [
                 column
                 for column in self.dataframe.columns
-                if column.lower() == col
+                if column == col or column.capitalize() == col
             ]
 
             if not found_columns:
                 raise ValueError(
-                    f"{col.capitalize()} Prices not found in dataframe"
+                    f"Column '{col}' not found in dataframe with either"
+                    " lowercase or capitalized format"
                 )
             column_mapping[col] = found_columns[0]
 
