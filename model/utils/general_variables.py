@@ -8,7 +8,7 @@ import model.utils.custom_pandas_methods
 
 class ExternalVariables:
     """
-    A class for calculating physics variables based on external data.11
+    A class for calculating variables based on the input data.
 
     Parameters
     ----------
@@ -16,7 +16,15 @@ class ExternalVariables:
         The input dataframe containing the data.
     source_column : str, optional
         The name of the column representing the price values
-        (default is "Result").
+        (default: "Result")
+    feat_last_column : str, optional
+        The name of the column representing the last feature
+        (default: "Signal")
+    return_type : Literal["short", "full"], optional
+        The return type of methods ('short' returns only calculated
+        values, 'full' returns the modified DataFrame with added
+        columns).
+        (default: "short")
 
     Attributes
     ----------
@@ -24,11 +32,29 @@ class ExternalVariables:
         The copy of the input dataframe.
     source_column : str
         The name of the column representing the price values.
+    feat_last_column : str
+        The name of the column representing the last feature.
+    return_type : Literal["short", "full"]
+        The return type of methods.
 
     Methods
     -------
+    rolling_ratio(fast_length, slow_length, method)
+        Calculate a rolling ratio of two rolling averages.
+
+    ratio_variable(length, method)
+        Compute ratio-based variables.
+
     physics_variables(periods)
         Calculates various physics variables based on the input data.
+
+    schumann_resonance(source_column,
+    n_length, method, circuference=None)
+        Calculate Schumann resonance frequencies based on a source
+        column.
+
+    fox_trap()
+        Identify 'Fox Trap' conditions in on the input data.
 
     """
 
