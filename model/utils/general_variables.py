@@ -37,6 +37,7 @@ class ExternalVariables:
         dataframe: pd.DataFrame,
         source_column: str = "Result",
         feat_last_column: str = "Signal",
+        return_type: Literal["short", "full"] = "short",
     ) -> None:
         """
         Initialize the ExternalVariables class.
@@ -53,6 +54,7 @@ class ExternalVariables:
         self.dataframe = dataframe.copy()
         self.source_column = source_column
         self.feat_last_column = feat_last_column
+        self.return_type = return_type
 
     def rolling_ratio(
         self,
@@ -99,7 +101,12 @@ class ExternalVariables:
         except AttributeError as exc:
             raise ValueError(f"Invalid method '{method}'") from exc
 
-        self.dataframe["rolling_std_ratio"] = fast_rolling / slow_rolling
+        rolling_std_ratio = fast_rolling / slow_rolling
+
+        if self.return_type == "short":
+            return rolling_std_ratio
+
+        self.dataframe["rolling_std_ratio"] = rolling_std_ratio
 
         return self.dataframe
 
@@ -144,9 +151,9 @@ class ExternalVariables:
             / self.dataframe[std_feat] - 1
         )
 
-        self.dataframe = self.dataframe.reorder_columns(
-            self.feat_last_column, self.dataframe.columns[-4:]
-        )
+        if self.return_type == "short":
+            return self.dataframe.iloc[:, -4:]
+
 
         return self.dataframe
 
@@ -284,6 +291,9 @@ class ExternalVariables:
             labels=False,
         )
 
+        if self.return_type == "short":
+            return self.dataframe.iloc[:, -11:]
+
         self.dataframe = self.dataframe.reorder_columns(
             self.feat_last_column, self.dataframe.columns[-11:]
         )
@@ -366,7 +376,12 @@ class ExternalVariables:
             formula_constant
             * np.sqrt((converted_values * (converted_values + 1)))
         )
-        return schumann_resonance
+        if self.return_type == "short":
+            return schumann_resonance
+
+        self.dataframe['schumann_resonance'] = schumann_resonance
+
+        return self.dataframe
 
     def fox_trap(self) -> pd.DataFrame:
         """
@@ -436,6 +451,12 @@ class ExternalVariables:
         high_column = f"fox_trap_{self.source_column}_long"
         low_column = f"fox_trap_{self.source_column}_short"
         hl_columns = [high_column,low_column]
+
+        if self.return_type == "short":
+            return pd.concat([
+                buy_high_fox_trap_condition,
+                sell_low_fox_trap_condition
+            ], axis=1).astype('int8')
 
         self.dataframe[high_column] = buy_high_fox_trap_condition
         self.dataframe[low_column] = sell_low_fox_trap_condition
