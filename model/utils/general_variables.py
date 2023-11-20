@@ -76,7 +76,7 @@ class ExternalVariables:
             The window size for the slow rolling average.
         method : str
             The method used for rolling averages
-            (e.g., 'mean', 'std', 'sum').
+            (e.g., 'mean', 'std', 'median').
 
         Returns:
         --------
@@ -110,49 +110,34 @@ class ExternalVariables:
 
         return self.dataframe
 
-    def ratio_variables(self, column: str, length: int) -> pd.DataFrame:
+    def ratio_variable(self, length: int, method: str) -> pd.DataFrame:
         """
-        Compute ratio-based variables for a given column.
+        Compute ratio-based variables.
 
         Parameters:
         -----------
-        column : str
-            The name of the column for which ratios will be calculated.
         length : int
             The window length for rolling statistics.
-
+        method : str
+            The method used for rolling averages
+            (e.g., 'mean', 'std', 'median').
         Returns:
         --------
         pd.DataFrame
             Returns the DataFrame with ratio-based variables added.
         """
-        ma_feat = "MA_" + column
-        std_feat = "STD_" + column
+        rolling_data = self.dataframe[self.source_column].rolling(length)
+        rolling_data = getattr(rolling_data, method)()
 
-        self.dataframe[ma_feat] = (
-            self.dataframe[column]
-            .rolling(window=length)
-            .mean()
-        )
-
-        self.dataframe[std_feat] = (
-            self.dataframe[column]
-            .rolling(window=length)
-            .std()
-        )
-
-        self.dataframe[ma_feat + "_ratio"] = (
-            self.dataframe[column]
-            / self.dataframe[ma_feat] - 1
-        )
-
-        self.dataframe[std_feat + "_ratio"] = (
-            self.dataframe[column]
-            / self.dataframe[std_feat] - 1
+        ratio_variable = (
+            self.dataframe[self.source_column]
+            / rolling_data - 1
         )
 
         if self.return_type == "short":
-            return self.dataframe.iloc[:, -4:]
+            return ratio_variable.iloc[:, -1:]
+
+        self.dataframe["ratio_variable"] = ratio_variable
 
 
         return self.dataframe
