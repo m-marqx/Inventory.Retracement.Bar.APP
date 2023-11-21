@@ -11,6 +11,7 @@ from .utils import KlineTimes
 logging.basicConfig(
     format='%(levelname)s %(asctime)s: %(message)s',
     datefmt='%H:%M:%S',
+    force=True,
     level=logging.INFO,
 )
 
