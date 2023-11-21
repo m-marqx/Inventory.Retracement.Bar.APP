@@ -172,13 +172,19 @@ class CcxtAPI:
 
         return first_unix_time
 
-    def get_all_klines(self, ignore_unsupported_exchanges: bool = False):
+    def get_all_klines(
+        self,
+        until: int | None = None,
+        ignore_unsupported_exchanges: bool = False
+    ):
         """
         Fetch all K-line data for the specified symbol and interval
         using a for loop.
 
         Parameters:
         -----------
+        until : None
+            The end time for fetching K-line data.
         ignore_unsupported_exchanges : bool, optional
             If True, ignore exchanges that do not support the specified
             symbol.
@@ -216,7 +222,11 @@ class CcxtAPI:
         START = time.perf_counter()
 
         last_candle_interval = (
-            time.time() * 1000 - interval_to_milliseconds(self.interval)
+            (
+                time.time() * 1000 - interval_to_milliseconds(self.interval)
+                if until is None
+                else until
+            )
         )
 
         if self.verbose:
