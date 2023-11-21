@@ -59,7 +59,7 @@ class CcxtAPI:
 
     Methods:
     --------
-    search_since_value() -> int or None:
+    get_since_value_value() -> int or None:
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
 
@@ -127,7 +127,7 @@ class CcxtAPI:
             limit=limit,
         )
 
-    def search_since(self):
+    def get_since_value(self):
         """
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
@@ -217,7 +217,7 @@ class CcxtAPI:
         if first_call:
             first_unix_time = first_call[0][0]
         else:
-            first_unix_time = self.search_since()
+            first_unix_time = self.get_since_value()
 
 
         last_candle_interval = (

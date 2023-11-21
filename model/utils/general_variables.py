@@ -61,8 +61,8 @@ class ExternalVariables:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        source_column: str = "Result",
-        feat_last_column: str = "Signal",
+        source_column: str,
+        feat_last_column: str = None,
         return_type: Literal["short", "full"] = "short",
     ) -> None:
         """
@@ -72,10 +72,16 @@ class ExternalVariables:
         ----------
         dataframe : pandas.DataFrame
             The input dataframe containing the data.
-        return_column : str, optional
-            The name of the column representing the return values
-            (default: "Result").
-
+        source_column : str
+            The name of the column representing the price values.
+        feat_last_column : str, optional
+            The name of the column representing the last feature
+            (default: None).
+        return_type : Literal["short", "full"], optional
+            The return type of methods ('short' returns only calculated
+            values, 'full' returns the modified DataFrame with added
+            columns).
+            (default: "short")
         """
         self.dataframe = dataframe.copy()
         self.source_column = source_column
@@ -134,6 +140,11 @@ class ExternalVariables:
 
         self.dataframe["rolling_std_ratio"] = rolling_std_ratio
 
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-1:]
+            )
+
         return self.dataframe
 
     def ratio_variable(self, length: int, method: str) -> pd.DataFrame:
@@ -165,6 +176,10 @@ class ExternalVariables:
 
         self.dataframe["ratio_variable"] = ratio_variable
 
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-1:]
+            )
 
         return self.dataframe
 
@@ -305,9 +320,10 @@ class ExternalVariables:
         if self.return_type == "short":
             return self.dataframe.iloc[:, -11:]
 
-        self.dataframe = self.dataframe.reorder_columns(
-            self.feat_last_column, self.dataframe.columns[-11:]
-        )
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-11:]
+            )
         return self.dataframe
 
     def schumann_resonance(
@@ -399,6 +415,10 @@ class ExternalVariables:
 
         self.dataframe["schumann_resonance"] = schumann_resonance
 
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-1:]
+            )
         return self.dataframe
 
     def fox_trap(self) -> pd.DataFrame:
@@ -480,4 +500,8 @@ class ExternalVariables:
         self.dataframe[low_column] = sell_low_fox_trap_condition
         self.dataframe[hl_columns] = self.dataframe[hl_columns].astype('int8')
 
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-2:]
+            )
         return self.dataframe
