@@ -359,35 +359,45 @@ class ExternalVariables:
         """
         light_speed_km = 299792.458
 
-        if method != 'custom':
-            circuferences_km = {
-                "equatorial" : 2 * pi * 6378.137,
-                "polar" : 2 * pi * 6356.752,
-                "mean" : 2 * pi * 6371.0,
-            }
-            earth_circuferences_km = pd.Series(circuferences_km)
-            sr_constant = light_speed_km / earth_circuferences_km
-        else:
-            if circuference is None:
-                raise ValueError("circumference parameter must be specified")
-            sr_constant = light_speed_km / circuference
+        if method not in ["equatorial", "polar", "mean", "custom"]:
+            raise ValueError(
+                f"Invalid method '{method}'. "
+                "Valid methods are"
+                " 'equatorial', 'polar', 'mean', and 'custom'."
+            )
 
-        formula_constant = (
-            sr_constant[method] if method != "custom"
-            else sr_constant
+        match method:
+            case "equatorial":
+                circuference = 2 * pi * 6378.137
+            case "mean":
+                circuference = 2 * pi * 6371.0
+            case "polar":
+                circuference = 2 * pi * 6356.752
+            case "custom":
+                if not circuference:
+                    raise ValueError(
+                        "when method is custom, the circuference parameter"
+                        " must be specified"
+                    )
+
+        sr_constant = light_speed_km / circuference
+
+        n_digits = (
+            self.dataframe[self.source_column].astype("str")
+            .str.replace(".","")
         )
 
-        values = self.dataframe[self.source_column].astype("int64").copy()
-        n_digits = values.astype("str").str.len().astype("float64")
-        converted_values = values * 10 ** (n_length - n_digits)
+        expoent = (n_length - 1) - n_digits.str.len().astype("float64")
+        converted_values = n_digits.astype("float64") * 10 ** expoent
+
         schumann_resonance = (
-            formula_constant
-            * np.sqrt((converted_values * (converted_values + 1)))
+            sr_constant
+            * np.sqrt(converted_values * (converted_values + 1))
         )
         if self.return_type == "short":
             return schumann_resonance
 
-        self.dataframe['schumann_resonance'] = schumann_resonance
+        self.dataframe["schumann_resonance"] = schumann_resonance
 
         return self.dataframe
 
