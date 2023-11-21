@@ -240,9 +240,10 @@ class CcxtAPI:
                 break
 
             if self.verbose:
-                percentage =  (
-                    end_times.index(current_start_time)
-                    / len(end_times)
+
+                percentage = (
+                    (np.where(end_times == current_start_time)[0][0] + 1)
+                    / end_times.shape[0]
                 ) * 100
                 logging.info("Qty : %d", len(klines_list))
                 logging.info("Running progress: %.2f%% complete", percentage)
