@@ -30,7 +30,7 @@ class CcxtAPI:
     exchange : ccxt.Exchange
         The CCXT exchange object
         (default: ccxt.bitstamp()).
-    first_candle_time : int
+    since : int
         The Unix timestamp of the first candle
         (default: 1325296800000).
     verbose : bool
@@ -43,7 +43,7 @@ class CcxtAPI:
         The trading symbol for the asset pair.
     interval : str
         The time interval for K-line data.
-    first_candle_time : int
+    since : int
         The Unix timestamp of the first candle.
     data_frame : pd.DataFrame
         DataFrame to store the K-line data.
@@ -59,7 +59,7 @@ class CcxtAPI:
 
     Methods:
     --------
-    search_first_candle_time() -> int or None:
+    search_since_value() -> int or None:
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
 
@@ -88,7 +88,7 @@ class CcxtAPI:
         symbol:str,
         interval:str,
         exchange:ccxt.Exchange = ccxt.bitstamp(),
-        first_candle_time:int = 1325296800000,
+        since:int = 1325296800000,
         verbose:bool = False,
     ) -> None:
         """
@@ -102,7 +102,7 @@ class CcxtAPI:
             The time interval for K-line data.
         exchange : ccxt.Exchange
             The CCXT exchange object.
-        first_candle_time : int
+        since : int
             The Unix timestamp of the first candle.
         verbose : bool
             If True, print verbose logging messages during data retrieval
@@ -110,7 +110,7 @@ class CcxtAPI:
         """
         self.symbol = symbol
         self.interval = interval
-        self.first_candle_time = first_candle_time
+        self.since = since
         self.exchange = exchange
         self.verbose = verbose
         self.max_interval = KlineTimes(symbol, interval).get_max_interval
@@ -127,7 +127,7 @@ class CcxtAPI:
             limit=limit,
         )
 
-    def search_first_candle_time(self):
+    def search_since(self):
         """
         Search for the Unix timestamp of the first candle in the
         historical K-line data.
@@ -144,7 +144,7 @@ class CcxtAPI:
             if not found.
         """
         end_times = self.utils.get_end_times(
-            self.first_candle_time,
+            self.since,
             self.max_multiplier
         )
 
@@ -212,12 +212,12 @@ class CcxtAPI:
         klines = []
         klines_list = []
 
-        first_call = self._fetch_klines(self.first_candle_time)
+        first_call = self._fetch_klines(self.since)
 
         if first_call:
             first_unix_time = first_call[0][0]
         else:
-            first_unix_time = self.search_first_candle_time()
+            first_unix_time = self.search_since()
 
 
         last_candle_interval = (
