@@ -219,7 +219,6 @@ class CcxtAPI:
         else:
             first_unix_time = self.search_first_candle_time()
 
-        START = time.perf_counter()
 
         last_candle_interval = (
             (
@@ -230,6 +229,7 @@ class CcxtAPI:
         )
 
         if self.verbose:
+            start = time.perf_counter()
             logging.info("Starting requests")
 
         time_value = klines[-1][0] + 1 if klines else first_unix_time
@@ -267,7 +267,7 @@ class CcxtAPI:
         if self.verbose:
             logging.info(
                 "Requests elapsed time: %s\n",
-                time.perf_counter() - START
+                time.perf_counter() - start
             )
         self.klines_list = klines_list
         return self
