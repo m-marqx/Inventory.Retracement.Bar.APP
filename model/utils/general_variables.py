@@ -312,7 +312,6 @@ class ExternalVariables:
 
     def schumann_resonance(
         self,
-        source_column: str,
         n_length: int,
         method: Literal[
             "equatorial",
@@ -332,8 +331,6 @@ class ExternalVariables:
 
         Parameters:
         -----------
-        source_column : str
-            The name of the source column containing integer values.
         n_length : int
             The desired length of the resulting values.
         method : Literal["equatorial", "polar", "mean", "custom"],
@@ -380,7 +377,7 @@ class ExternalVariables:
             else sr_constant
         )
 
-        values = self.dataframe[source_column].astype("int64").copy()
+        values = self.dataframe[self.source_column].astype("int64").copy()
         n_digits = values.astype("str").str.len().astype("float64")
         converted_values = values * 10 ** (n_length - n_digits)
         schumann_resonance = (
