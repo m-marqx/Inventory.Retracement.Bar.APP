@@ -318,7 +318,7 @@ class ExternalVariables:
             "polar",
             "mean",
             "custom"] = "equatorial",
-        circuference: float | None = None
+        circumference : float | None = None
     ) -> pd.Series:
         """
         Calculate Schumann resonance frequencies based on a source
@@ -368,19 +368,19 @@ class ExternalVariables:
 
         match method:
             case "equatorial":
-                circuference = 2 * pi * 6378.137
+                circumference = 2 * pi * 6378.137
             case "mean":
-                circuference = 2 * pi * 6371.0
+                circumference = 2 * pi * 6371.0
             case "polar":
-                circuference = 2 * pi * 6356.752
+                circumference = 2 * pi * 6356.752
             case "custom":
-                if not circuference:
+                if not circumference:
                     raise ValueError(
-                        "when method is custom, the circuference parameter"
+                        "when method is custom, the circumference parameter"
                         " must be specified"
                     )
 
-        sr_constant = light_speed_km / circuference
+        sr_constant = light_speed_km / circumference
 
         n_digits = (
             self.dataframe[self.source_column].astype("str")
