@@ -332,14 +332,18 @@ class RandomForestSearcher:
             "y_pred",
         ]
 
-        parameters_df = pd.DataFrame(results).melt()[["value"]].explode("value")
+        parameters_df = (
+            pd.DataFrame(results).melt()[["value"]].explode("value")
+        )
 
         results_df = pd.DataFrame()
         for column in enumerate(parameters_columns):
             results_df[column[1]] = parameters_df.iloc[column[0] :: 8]
 
         if drop_zeros:
-            results_df = DataHandler(results_df).drop_zero_predictions("y_pred")
+            results_df = (
+                DataHandler(results_df).drop_zero_predictions("y_pred")
+            )
 
         if best_results:
             results_df = DataHandler(results_df).get_best_results("target")
