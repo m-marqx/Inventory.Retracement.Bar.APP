@@ -1358,7 +1358,6 @@ class ModelHandler:
         df_returns["Result"] = (
             df_returns["Period_Return"]
             * df_returns["Position"]
-            + 1
         )
 
         df_returns["Liquid_Result"] = np.where(
@@ -1368,11 +1367,11 @@ class ModelHandler:
         )
 
         df_returns["Period_Return_cum"] = (
-            df_returns["Period_Return"] + 1
-        ).cumprod()
+            df_returns["Period_Return"]
+        ).cumsum()
 
-        df_returns["Total_Return"] = df_returns["Result"].cumprod()
-        df_returns["Liquid_Return"] = df_returns["Liquid_Result"].cumprod()
+        df_returns["Total_Return"] = df_returns["Result"].cumsum()
+        df_returns["Liquid_Return"] = df_returns["Liquid_Result"].cumsum()
 
         df_returns["Period_Return_cum_log"] = np.log(
             df_returns["Period_Return_cum"]
