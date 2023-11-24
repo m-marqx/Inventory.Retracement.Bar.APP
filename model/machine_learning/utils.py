@@ -1351,9 +1351,11 @@ class ModelHandler:
 
         df_returns["Period_Return"] = period_return
 
-        df_returns["Position"] = np.where(
+        df_returns["Predict"] = np.where(
             (df_returns["y_pred_probs"] > 0.5), 1, -1
         )
+
+        df_returns["Position"] = df_returns["Predict"].shift()
 
         df_returns["Result"] = (
             df_returns["Period_Return"]
