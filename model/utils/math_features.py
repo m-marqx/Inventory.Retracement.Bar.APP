@@ -76,3 +76,63 @@ class MathFeature:
 
         if return_type not in return_types:
             raise InvalidArgumentError(f"{return_type} not found")
+
+    def rolling_ratio(
+        self,
+        fast_length: int,
+        slow_length: int,
+        method: str,
+    ) -> pd.DataFrame:
+        """
+        Calculate a rolling ratio of two rolling averages.
+
+        This method computes a rolling ratio using two rolling averages
+        based on specified parameters.
+
+        Parameters:
+        -----------
+        fast_length : int
+            The window size for the fast rolling average.
+        slow_length : int
+            The window size for the slow rolling average.
+        method : str
+            The method used for rolling averages
+            (e.g., 'mean', 'std', 'median').
+
+        Returns:
+        --------
+        pd.DataFrame
+            The original DataFrame with an additional column for the
+            rolling ratio.
+
+        Raises:
+        -------
+        ValueError
+            If an invalid method is specified.
+        """
+        if fast_length == slow_length:
+            raise ValueError("fast_length and slow_length must be different")
+
+        fast_rolling = self.dataframe[self.source_column].rolling(fast_length)
+        slow_rolling = self.dataframe[self.source_column].rolling(slow_length)
+
+        try:
+            fast_rolling = getattr(fast_rolling, method)()
+            slow_rolling = getattr(slow_rolling, method)()
+        except AttributeError as exc:
+            raise ValueError(f"Invalid method '{method}'") from exc
+
+        rolling_std_ratio = fast_rolling / slow_rolling
+
+        if self.return_type == ReturnType.SHORT:
+            return rolling_std_ratio
+
+        self.dataframe["rolling_std_ratio"] = rolling_std_ratio
+
+        if self.feat_last_column:
+            self.dataframe = self.dataframe.reorder_columns(
+                self.feat_last_column, self.dataframe.columns[-1:]
+            )
+
+        return self.dataframe
+
