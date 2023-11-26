@@ -1355,7 +1355,7 @@ class ModelHandler:
             (df_returns["y_pred_probs"] > 0.5), 1, -1
         )
 
-        df_returns["Position"] = df_returns["Predict"].shift()
+        df_returns["Position"] = df_returns["Predict"].shift().fillna(0)
 
         df_returns["Result"] = (
             df_returns["Period_Return"]
