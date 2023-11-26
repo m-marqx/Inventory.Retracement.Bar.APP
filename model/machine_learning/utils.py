@@ -20,7 +20,7 @@ import plotly.graph_objs as go
 
 import graphviz
 
-from tree_params import TreeParams, TrainTestSplits
+from model.machine_learning.tree_params import TreeParams, TrainTestSplits
 
 
 class DataPreprocessor:
