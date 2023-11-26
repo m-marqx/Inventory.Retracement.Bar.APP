@@ -1365,7 +1365,7 @@ class ModelHandler:
         df_returns["Liquid_Result"] = np.where(
             (df_returns["Position"] != 0)
             & (df_returns["Result"].abs() != 1),
-            df_returns["Result"] - fee, 1
+            df_returns["Result"] - fee, 0
         )
 
         df_returns["Period_Return_cum"] = (
