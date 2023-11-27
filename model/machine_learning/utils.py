@@ -1428,20 +1428,16 @@ class ModelHandler:
             bars represents the magnitude of impact on the model's
             predictions.
         """
-        shap_values = (
+        shap_values = abs(
             shap
             .Explainer(self.estimator)
             .shap_values(self.x_test)
-        )
+        ).mean(axis=0)
 
-        # Calcular o valor médio SHAP para cada recurso
-        mean_shap_values = abs(shap_values).mean(axis=0)
-
-        # Criar um DataFrame para facilitar a manipulação dos dados
         shap_df = pd.DataFrame(
             {
                 "Feature": self.x_test.columns,
-                "Shapley_values": mean_shap_values
+                "Shapley_values": shap_values
             }
         )
 
