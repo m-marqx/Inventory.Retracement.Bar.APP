@@ -171,3 +171,60 @@ class FeaturesCreator:
         ).astype('int8')
 
         return self.data_frame
+
+    def train_model(
+        self,
+        features: str | list,
+        target: str,
+        model_params: dict | None = None,
+    ) -> xgb.XGBClassifier:
+        """
+        Train an XGBoost model.
+
+        Parameters:
+        -----------
+        features : str | list
+            Features used for training.
+        target : str
+            Target variable.
+        model_params : dict, optional
+            Parameters for the XGBoost model
+            (default: None).
+
+        Returns:
+        --------
+        xgb.XGBClassifier
+            Trained XGBoost model.
+
+        """
+
+        if isinstance(target, list):
+            raise ValueError('Target must be a string')
+
+        if not model_params:
+            model_params = {
+                'objective' : "binary:logistic",
+                'random_state' : self.random_state,
+                'eval_metric' : 'auc'
+            }
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            self.development[features],
+            self.development[target],
+            test_size=self.test_size,
+            random_state=self.random_state,
+            shuffle=False
+        )
+
+        model = xgb.XGBClassifier(**model_params)
+        model.fit(X_train, y_train)
+        model_dict = {
+            'model': model,
+            'X_train': X_train,
+            'X_test': X_test,
+            'y_train': y_train,
+            'y_test': y_test
+        }
+
+        return model_dict
+
