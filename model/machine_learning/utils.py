@@ -479,6 +479,40 @@ class DataHandler:
             "validation": validation_dataset
         }
 
+    def get_targets(self) -> pd.DataFrame:
+        """
+        Calculate target variables for binary classification.
+
+        Adds target variables to the DataFrame based on the 'close'
+        column:
+        - 'Return': Percentage change in 'close' from the previous day.
+        - 'Target_1': Shifted 'Return', representing the future day's
+        return.
+        - 'Target_1_bin': Binary classification of 'Target_1':
+            - 1 if 'Target_1' > 1 (positive return)
+            - 0 otherwise.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame with added target variables.
+
+        """
+        if isinstance(self.data_frame, pd.Series):
+            self.data_frame = pd.DataFrame(self.data_frame)
+
+        self.data_frame['Return'] = self.data_frame["close"].pct_change(1) + 1
+        self.data_frame["Target_1"] = self.data_frame["Return"].shift(-1)
+        self.data_frame["Target_1_bin"] = np.where(
+            self.data_frame["Target_1"] > 1,
+            1, 0)
+
+        self.data_frame["Target_1_bin"] = np.where(
+            self.data_frame['Target_1'].isna(),
+            np.nan, self.data_frame['Target_1_bin']
+        )
+        return self.data_frame
+
     def model_pipeline(
         self,
         features_columns: list,
