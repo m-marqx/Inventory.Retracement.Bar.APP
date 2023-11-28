@@ -228,3 +228,59 @@ class FeaturesCreator:
 
         return model_dict
 
+    def get_results(
+        self,
+        value: int,
+        features: list,
+        target: str,
+        result_column: str | None = None,
+        model_params: dict | None = None,
+    ) -> pd.DataFrame:
+        """
+        Get results from the trained XGBoost model.
+
+        Parameters:
+        -----------
+        value : int
+            The value for RSI calculation.
+        features : list
+            Features used for training.
+        target : str
+            Target variable.
+        result_column : str, optional
+            Column name for specific result
+            (default: None).
+        model_params : dict, optional
+            Parameters for the XGBoost model
+            (default: None).
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame with model results.
+
+        """
+        self.get_features(value)
+
+        if isinstance(target, pd.DataFrame):
+            raise ValueError('Target must be a Series')
+
+        model_dict = self.train_model(features, target, model_params)
+        model = model_dict['model']
+
+        validacao_X_test = self.validation[features]
+        validacao_y_test = self.validation[target]
+
+        x_series = pd.concat([model_dict['X_test'], validacao_X_test], axis=0)
+        y_series = pd.concat([model_dict['y_test'], validacao_y_test], axis=0)
+
+        mh2 = (
+            ModelHandler(model, x_series, y_series)
+            .model_returns(self.return_series)
+        )
+
+        if result_column:
+            return mh2[result_column]
+
+        mh2['validation_date'] = str(self.validation.index[0])
+        return mh2
