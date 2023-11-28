@@ -116,3 +116,58 @@ class FeaturesCreator:
         self.split_paramsH = split_paramsH
         self.split_paramsL = split_paramsL
 
+    def get_features(
+        self,
+        value: int,
+    ) -> pd.DataFrame:
+        """
+        Get features for the Features_Creator.
+
+        Parameters:
+        -----------
+        value : int
+            The value for RSI calculation.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame with added features.
+
+        """
+        train_development = int(self.development.shape[0] * self.test_size)
+
+        self.data_frame['temp_RSI'] = ta.RSI(self.source, value)
+        temp_RSI = self.data_frame['temp_RSI'].iloc[:train_development]
+        data_handler = DataHandler(temp_RSI)
+
+        intervals = (
+            data_handler
+            .get_split_variable_intervals(**self.split_params)
+        )
+
+        intervalsH = (
+            data_handler
+            .get_split_variable_intervals(**self.split_paramsH)
+        )
+
+        intervalsL = (
+            data_handler
+            .get_split_variable_intervals(**self.split_paramsL)
+        )
+
+        self.data_frame['temp_feature_RSI'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_RSI', intervals)
+        ).astype('int8')
+
+        self.data_frame['temp_feature_RSIH'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_RSI', intervalsH)
+        ).astype('int8')
+
+        self.data_frame['temp_feature_RSIL'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_RSI', intervalsL)
+        ).astype('int8')
+
+        return self.data_frame
