@@ -260,7 +260,7 @@ class FeaturesCreator:
             DataFrame with model results.
 
         """
-        self.get_features(value)
+        self.data_frame = self.get_features(value)
 
         if isinstance(target, pd.DataFrame):
             raise ValueError('Target must be a Series')
