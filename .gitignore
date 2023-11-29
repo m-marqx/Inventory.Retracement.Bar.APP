@@ -157,6 +157,5 @@ ignore/
 config.py
 ___*
 *.csv
-*.parquet
 *.json
 *.ipynb
