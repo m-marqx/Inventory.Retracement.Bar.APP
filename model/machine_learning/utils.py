@@ -599,8 +599,8 @@ class DataHandler:
 
         estimator.fit(X_train, y_train)
 
-        validation_x_test = validacao[features_columns]
-        validation_y_test = validacao[target_column]
+        validation_x_test = validation[features_columns]
+        validation_y_test = validation[target_column]
 
         x_series = pd.concat([X_test, validation_x_test], axis=0)
         y_series = pd.concat([y_test, validation_y_test], axis=0)
