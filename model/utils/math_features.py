@@ -1,5 +1,5 @@
 import pandas as pd
-from model.utils.enums import ReturnType
+from typing import Literal
 from model.utils.exceptions import InvalidArgumentError
 
 
@@ -18,8 +18,8 @@ class MathFeature:
         The name of the column representing the last feature
         (default: None).
     return_type : Literal["short", "full"], optional
-        The return type of methods ('short' returns only calculated
-        values, 'full' returns the modified DataFrame with added
+        The return type of methods ("short" returns only calculated
+        values, "full" returns the modified DataFrame with added
         columns).
         (default: "short")
 
@@ -48,10 +48,10 @@ class MathFeature:
         dataframe: pd.DataFrame,
         source_column: str,
         feat_last_column: str = None,
-        return_type: ReturnType = ReturnType.SHORT,
+        return_type: Literal["short", "full"] = "short",
     ) -> None:
         """
-        Initialize the MathVariables class.
+        Initialize the MathFeature class.
 
         Parameters
         ----------
@@ -63,18 +63,17 @@ class MathFeature:
             The name of the column representing the last feature
             (default: None).
         return_type : Literal["short", "full"], optional
-            The return type of methods ('short' returns only calculated
-            values, 'full' returns the modified DataFrame with added
-            columns).
-            (default: "short")
+            Determines the return type of the class methods. If "short", only
+            the calculated values are returned. If "full", the modified
+            DataFrame with added columns is returned.
+            (default: "short").
         """
         self.dataframe = dataframe.copy()
         self.source_column = source_column
         self.feat_last_column = feat_last_column
         self.return_type = return_type
-        return_types = set(operation for operation in ReturnType)
 
-        if return_type not in return_types:
+        if return_type not in ["short", "full"]:
             raise InvalidArgumentError(f"{return_type} not found")
 
     def rolling_ratio(
@@ -97,7 +96,7 @@ class MathFeature:
             The window size for the slow rolling average.
         method : str
             The method used for rolling averages
-            (e.g., 'mean', 'std', 'median').
+            (e.g., "mean", "std", "median").
 
         Returns:
         --------
@@ -120,11 +119,11 @@ class MathFeature:
             fast_rolling = getattr(fast_rolling, method)()
             slow_rolling = getattr(slow_rolling, method)()
         except AttributeError as exc:
-            raise ValueError(f"Invalid method '{method}'") from exc
+            raise ValueError(f"Invalid method "{method}"") from exc
 
         rolling_std_ratio = fast_rolling / slow_rolling
 
-        if self.return_type == ReturnType.SHORT:
+        if self.return_type == "short":
             return rolling_std_ratio
 
         self.dataframe["rolling_std_ratio"] = rolling_std_ratio
@@ -146,7 +145,7 @@ class MathFeature:
             The window length for rolling statistics.
         method : str
             The method used for rolling averages
-            (e.g., 'mean', 'std', 'median').
+            (e.g., "mean", "std", "median").
         Returns:
         --------
         pd.DataFrame
@@ -160,7 +159,7 @@ class MathFeature:
             / rolling_data - 1
         )
 
-        if self.return_type == ReturnType.SHORT:
+        if self.return_type == "short":
             return ratio_variable.iloc[:, -1:]
 
         self.dataframe["ratio_variable"] = ratio_variable
