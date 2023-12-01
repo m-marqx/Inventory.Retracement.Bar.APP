@@ -124,7 +124,7 @@ class MathFeature:
         rolling_std_ratio = fast_rolling / slow_rolling
 
         if self.return_type == "short":
-            return rolling_std_ratio
+            return rolling_std_ratio.rename(f'rolling_ratio_{method}')
 
         self.dataframe["rolling_std_ratio"] = rolling_std_ratio
 
