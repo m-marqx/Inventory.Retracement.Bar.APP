@@ -4,6 +4,7 @@ from math import pi
 import numpy as np
 import pandas as pd
 import model.utils.custom_pandas_methods
+from model.utils.exceptions import InvalidArgumentError
 
 
 class ExternalVariables:
@@ -370,14 +371,14 @@ class ExternalVariables:
 
         Raises:
         -------
-        ValueError:
+        InvalidArgumentError:
             If 'method' is 'custom' and 'circumference' is not specified.
         """
         light_speed_km = 299792.458
 
         if method not in ["equatorial", "polar", "mean", "custom"]:
-            raise ValueError(
-                f"Invalid method '{method}'. "
+            raise InvalidArgumentError(
+                f"Invalid argument: '{method}'. "
                 "Valid methods are"
                 " 'equatorial', 'polar', 'mean', and 'custom'."
             )
