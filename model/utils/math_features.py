@@ -119,7 +119,7 @@ class MathFeature:
             fast_rolling = getattr(fast_rolling, method)()
             slow_rolling = getattr(slow_rolling, method)()
         except AttributeError as exc:
-            raise ValueError(f"Invalid method "{method}"") from exc
+            raise ValueError(f"Invalid method '{method}'") from exc
 
         rolling_std_ratio = fast_rolling / slow_rolling
 
