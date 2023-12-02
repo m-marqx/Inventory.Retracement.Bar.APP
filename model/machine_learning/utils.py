@@ -1419,9 +1419,8 @@ class ModelHandler:
         )
 
         df_returns["drawdown"] = (
-            1 - df_returns["Liquid_Return"]
-            / df_returns["max_Liquid_Return"]
-        )
+            1 - df_returns["Liquid_Return"] / df_returns["max_Liquid_Return"]
+        ).fillna(0)
 
         drawdown_positive = df_returns["drawdown"] > 0
 
