@@ -44,7 +44,7 @@ class TrendParams(BaseModel):
 
 class IrbParams(BaseModel):
     """
-    Parameters for the Inside Bar Range strategy.
+    Parameters for the Inventory Retracement Bar strategy.
 
     Parameters
     ----------
