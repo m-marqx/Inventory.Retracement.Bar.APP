@@ -83,10 +83,8 @@ class MathFeature:
         method: str,
     ) -> pd.DataFrame:
         """
-        Calculate a rolling ratio of two rolling averages.
-
-        This method computes a rolling ratio using two rolling averages
-        based on specified parameters.
+        Calculate a rolling ratio feature based on the values of two
+        rolling averages.
 
         Parameters:
         -----------
@@ -95,7 +93,7 @@ class MathFeature:
         slow_length : int
             The window size for the slow rolling average.
         method : str
-            The method used for rolling averages
+            The pandas method used for rolling averages
             (e.g., "mean", "std", "median").
 
         Returns:
