@@ -89,42 +89,6 @@ class ExternalVariables:
         self.feat_last_column = feat_last_column
         self.return_type = return_type
 
-    def ratio_variable(self, length: int, method: str) -> pd.DataFrame:
-        """
-        Compute ratio-based variables.
-
-        Parameters:
-        -----------
-        length : int
-            The window length for rolling statistics.
-        method : str
-            The method used for rolling averages
-            (e.g., 'mean', 'std', 'median').
-        Returns:
-        --------
-        pd.DataFrame
-            Returns the DataFrame with ratio-based variables added.
-        """
-        rolling_data = self.dataframe[self.source_column].rolling(length)
-        rolling_data = getattr(rolling_data, method)()
-
-        ratio_variable = (
-            self.dataframe[self.source_column]
-            / rolling_data - 1
-        )
-
-        if self.return_type == "short":
-            return ratio_variable.iloc[:, -1:]
-
-        self.dataframe["ratio_variable"] = ratio_variable
-
-        if self.feat_last_column:
-            self.dataframe = self.dataframe.reorder_columns(
-                self.feat_last_column, self.dataframe.columns[-1:]
-            )
-
-        return self.dataframe
-
     def physics_variables(self, periods: int) -> pd.DataFrame:
         """
         Calculates various physics variables based on the input data.
