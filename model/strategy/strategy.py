@@ -238,7 +238,11 @@ class GetIrbSignalsBuy(BaseStrategy):
             self.bearish_calculation,
         )
 
-        self.irb_condition = self.df_filtered["IRB_Condition"] >= self.wick_percentage
+        self.irb_condition = (
+            self.df_filtered["IRB_Condition"]
+            >= self.wick_percentage
+        )
+
         self.buy_condition = self.irb_condition & self.df_filtered["uptrend"]
 
         self.df_filtered["Signal"] = np.where(self.buy_condition, 1, np.nan)
