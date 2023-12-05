@@ -114,7 +114,12 @@ class CalculateTrend(BaseStrategy):
 
 
 class SetTrend(BaseStrategy):
-    def __init__(self, dataframe, params: IndicatorsParams, trend_params: TrendParams):
+    def __init__(
+        self,
+        dataframe,
+        params: IndicatorsParams,
+        trend_params: TrendParams
+    ):
         """
         Initialize the SetTrend object.
 
