@@ -1406,8 +1406,8 @@ class ModelHandler:
             df_returns["Period_Return"]
         ).cumsum()
 
-        df_returns["Total_Return"] = df_returns["Result"].cumsum()
-        df_returns["Liquid_Return"] = df_returns["Liquid_Result"].cumsum()
+        df_returns["Total_Return"] = df_returns["Result"].cumsum() + 1
+        df_returns["Liquid_Return"] = df_returns["Liquid_Result"].cumsum() + 1
 
         df_returns["max_Liquid_Return"] = (
             df_returns["Liquid_Return"].expanding(365).max()
