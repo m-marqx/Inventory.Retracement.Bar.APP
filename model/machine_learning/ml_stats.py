@@ -109,3 +109,43 @@ class MLStats:
 
         return rt_sum_pos, rt_mean_pos, rt_sum_neg, rt_mean_neg
 
+    def calculate_expected_return(
+        self,
+        reset_dataframe: bool = False
+    ) -> pd.DataFrame:
+        """
+        Calculate expected return.
+
+        Parameters:
+        -----------
+        reset_dataframe : bool, optional
+            Flag to reset the internal DataFrame
+            (default: False).
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing expected return values.
+        """
+        if self.data_frame.min() > 0:
+            self.data_frame = self.data_frame.diff().fillna()
+
+        win_rate = self.data_frame[self.data_frame > 0].fillna(0)
+        win_rate = win_rate.where(win_rate == 0, 1).astype("bool")
+        win_rate = (
+            win_rate.resample("A").sum() / win_rate.resample("A").count()
+        )
+
+        rt_mean_pos = self.data_frame[self.data_frame > 0].resample("A").mean()
+
+        rt_mean_neg = (
+            abs(self.data_frame[self.data_frame < 0]).resample("A").mean()
+        )
+
+        expected_return = rt_mean_pos * win_rate - rt_mean_neg * (1 - win_rate)
+        expected_return = expected_return.astype("float32")
+
+        if reset_dataframe:
+            self.data_frame = pd.DataFrame([])
+
+        return expected_return
