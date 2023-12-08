@@ -234,6 +234,15 @@ class GraphLayout:
         return fig
 
     def plot_close(self):
+        """
+        Plot line chart for closing prices.
+
+        Returns:
+        --------
+        go.Figure
+            The Plotly figure for the closing prices line chart.
+        """
+
         column = "close"
         fig = px.line(
             x=self.data_frame.index,
