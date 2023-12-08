@@ -138,6 +138,21 @@ class GraphLayout:
         return fig
 
     def custom_fig_layout(self, fig, column):
+        """
+        Configure custom layout settings for the figure.
+
+        Parameters:
+        -----------
+        fig : go.Figure
+            The Plotly figure to configure.
+        column : str
+            The column name in the DataFrame.
+
+        Returns:
+        --------
+        go.Figure
+            The configured Plotly figure.
+        """
         ticks = self.data_frame[column].std() / 2
 
         fig.update_layout(
