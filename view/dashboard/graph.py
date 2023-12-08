@@ -70,9 +70,25 @@ class GraphLayout:
         self.api = api
 
     def fig_layout(self, fig, column):
+        """
+        Configure layout settings for the figure.
+
+        Parameters:
+        -----------
+        fig : go.Figure
+            The Plotly figure to configure.
+        column : str
+            The column name in the DataFrame.
+
+        Returns:
+        --------
+        go.Figure
+            The configured Plotly figure.
+        """
         ticks = self.data_frame[column].std() / 2
 
-        # In the pair names, the "mark_price" has the same values as the "coin_margined".
+        # In the pair names,
+        # the "mark_price" has the same values as the "coin_margined".
         if self.api == "mark_price":
             self.api = "coin_margined"
 
