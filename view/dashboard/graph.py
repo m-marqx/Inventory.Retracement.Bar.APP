@@ -256,6 +256,14 @@ class GraphLayout:
         return fig
 
     def grouped_lines(self):
+        """
+        Plot grouped lines for multiple columns.
+
+        Returns:
+        --------
+        go.Figure
+            The Plotly figure for the grouped lines.
+        """
         fig = go.Figure()
         total_columns = self.data_frame.shape[1]
         columns = self.data_frame.columns
@@ -319,8 +327,9 @@ class GraphLayout:
             ),
         )
 
-        # The x-axis is added using this loop because adding the x-axis with
-        # the go.Scatter() method would significantly increase the execution time.
+        # The x-axis is added using this loop because adding
+        # the x-axis with the go.Scatter() method would significantly
+        # increase the execution time.
         for scatter in fig.data:
             scatter.x = self.data_frame.index
 
