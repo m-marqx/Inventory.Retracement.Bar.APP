@@ -188,6 +188,14 @@ class GraphLayout:
 
 
     def plot_cumulative_results(self):
+        """
+        Plot cumulative results line chart.
+
+        Returns:
+        --------
+        go.Figure
+            The Plotly figure for the cumulative results line chart.
+        """
         column = "Cumulative_Result"
         fig = px.line(
             x=self.data_frame.index,
