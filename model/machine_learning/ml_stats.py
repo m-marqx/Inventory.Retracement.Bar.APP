@@ -57,3 +57,17 @@ class MLStats:
             The financial DataFrame for calculations.
         """
         self.data_frame = dataframe.astype("float32").copy()
+
+    def calculate_drawdown(self) -> pd.DataFrame:
+        """
+        Calculate drawdown based on the input financial DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing drawdown results.
+        """
+        max_results = self.data_frame.expanding(365).max()
+        self.data_frame = (max_results - self.data_frame) / max_results
+        return self.data_frame.fillna(0).astype("float32")
+
