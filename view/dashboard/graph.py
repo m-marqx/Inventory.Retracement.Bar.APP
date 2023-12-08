@@ -209,6 +209,19 @@ class GraphLayout:
         return fig
 
     def plot_single_linechart(self, column):
+        """
+        Plot a single line chart for a specified column.
+
+        Parameters:
+        -----------
+        column : str
+            The column name to plot.
+
+        Returns:
+        --------
+        go.Figure
+            The Plotly figure for the single line chart.
+        """
         fig = px.line(
             x=self.data_frame.index,
             y=self.data_frame[column],
