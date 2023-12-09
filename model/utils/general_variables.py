@@ -40,12 +40,6 @@ class ExternalVariables:
 
     Methods
     -------
-    rolling_ratio(fast_length, slow_length, method)
-        Calculate a rolling ratio of two rolling averages.
-
-    ratio_variable(length, method)
-        Compute ratio-based variables.
-
     physics_variables(periods)
         Calculates various physics variables based on the input data.
 
