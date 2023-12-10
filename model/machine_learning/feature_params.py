@@ -31,3 +31,8 @@ class FeaturesParams(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+class FeaturesParamsComplete(BaseModel):
+    split_features: FeaturesParams
+    high_features: FeaturesParams
+    low_features: FeaturesParams
