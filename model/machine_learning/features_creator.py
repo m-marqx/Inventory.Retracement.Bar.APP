@@ -1,60 +1,70 @@
-import pandas as pd
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
-import tradingview_indicators as ta
+from itertools import combinations
+from typing import Literal
 
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import xgboost as xgb
+import tradingview_indicators as ta
+from model.utils.exceptions import InvalidArgumentError
 from model.machine_learning.utils import (
     DataHandler,
-    ModelHandler
+    ModelHandler,
 )
+
+from model.machine_learning.feature_params import FeaturesParamsComplete
+
+from model.utils.math_features import MathFeature
 
 class FeaturesCreator:
     """
-    A class for creating features, training XGBoost models, and
-    obtaining results.
-
-    This class handles the creation of features, training of an XGBoost
-    model, and obtaining
-    results based on the provided data.
+    A class for creating features and evaluating machine learning
+    models.
 
     Parameters:
     -----------
     dataframe : pd.DataFrame
-        The input DataFrame containing the data.
+        The input DataFrame containing financial data.
     return_series : pd.Series
-        The return series.
+        Series containing return values.
     source : pd.Series
-        The source series.
+        Series containing source data.
+    validation_index : str | int, optional
+        Index or column to split the data for training and development.
+        (default: None)
+
+    Attributes:
+    -----------
+    data_frame : pd.DataFrame
+        Processed DataFrame using DataHandler.
+    return_series : pd.Series
+        Series containing return values.
     validation_index : int
-        The index for splitting the DataFrame into development and
-        validation sets.
+        Index to split the data for training and development.
+    train_development : pd.DataFrame
+        Subset of the data for training and development.
+    train_development_index : int
+        Index used for splitting training and development data.
+    source : pd.Series
+        Series containing source data.
     split_params : dict
-        Splitting parameters for the main feature.
+        Parameters for splitting the data.
     split_paramsH : dict
-        Splitting parameters for the high feature.
+        Parameters for splitting the data with a higher threshold.
     split_paramsL : dict
-        Splitting parameters for the low feature.
-    random_state : int, optional
-        Random state for reproducibility (default: 42).
+        Parameters for splitting the data with a lower threshold.
 
     Methods:
     --------
-    get_features(value: int) -> pd.DataFrame:
-        Get features for the Features_Creator.
-
-    train_model(
-    features: str | list, \
-    target: str, \
-    model_params: dict | None = None \
-    ) -> xgb.XGBClassifier:
-        Train an XGBoost model.
-
-    get_results(value: int, \
-    features: list, target: str, \
-    result_column: str | None = None, \
-    model_params: dict | None = None \
-    ) -> pd.DataFrame:
-        Get results from the trained XGBoost model.
+    get_results(features_columns=None, model_params=None, fee=0.1) \
+    -> pd.DataFrame:
+        Get the results of the model pipeline.
+    temp_indicator(value: int | list, \
+    indicator: Literal['RSI', 'rolling_ratio'] = 'RSI') \
+    -> pd.Series:
+        Calculate a temporary indicator series.
+    results_model_pipeline(value, indicator, model_params=None, \
+    fee=0.1, train_end_index=None, results_column=None) -> dict:
+        Get drawdown results for different variable combinations.
 
     """
     def __init__(
@@ -62,225 +72,279 @@ class FeaturesCreator:
         dataframe: pd.DataFrame,
         return_series: pd.Series,
         source: pd.Series,
-        validation_index: int,
-        split_params: dict,
-        split_paramsH: dict,
-        split_paramsL: dict,
-        random_state: int = 42,
-    ) -> None:
+        feature_params: FeaturesParamsComplete,
+        validation_index: str | int = None,
+    ):
         """
-        Initialize the Features_Creator class.
+        Initialize the FeaturesCreator instance.
 
         Parameters:
         -----------
         dataframe : pd.DataFrame
-            The input DataFrame containing the data.
+            The input DataFrame containing financial data.
         return_series : pd.Series
-            The return series.
+            Series containing return values.
         source : pd.Series
-            The source series.
-        validation_index : int
-            The index for splitting the DataFrame into development and
-            validation sets.
-        split_params : dict
-            Splitting parameters for the main feature.
-        split_paramsH : dict
-            Splitting parameters for the high feature.
-        split_paramsL : dict
-            Splitting parameters for the low feature.
-        random_state : int, optional
-            Random state for reproducibility (default: 42).
+            Series containing source data.
+        validation_index : str | int, optional
+            Index or column to split the data for training and
+            development.
+            (default: None)
 
         """
         self.data_frame = DataHandler(dataframe).get_targets()
         self.return_series = return_series
-        self.source = source
-        self.random_state = random_state
-        self.test_size = 0.5
+        self.validation_index = (
+            validation_index
+            or int(self.data_frame.shape[0] * 0.7)
+        )
+        self.temp_indicator_series = None
 
-        validation_index = validation_index or int(dataframe.shape[0] * 0.7)
-
-        self.development = (
-                self.data_frame.iloc[:validation_index].copy()
-                if isinstance(validation_index, int)
-                else self.data_frame.loc[:validation_index].copy()
-            )
-
-        self.validation = (
-            self.data_frame.iloc[validation_index:].copy()
-            if isinstance(validation_index, int)
-            else self.data_frame.loc[validation_index:].copy()
+        self.train_development = (
+            self.data_frame.loc[:self.validation_index]
+            if isinstance(self.validation_index, str)
+            else self.data_frame.iloc[:self.validation_index]
         )
 
-        self.split_params = split_params
-        self.split_paramsH = split_paramsH
-        self.split_paramsL = split_paramsL
+        self.train_development_index = int(
+            self.train_development.shape[0]
+            * 0.5
+        )
 
-    def get_features(
+        self.source = source
+
+        self.split_params = feature_params.split_features.dict()
+        self.split_paramsH = feature_params.high_features.dict()
+        self.split_paramsL = feature_params.low_features.dict()
+
+    def get_results(
         self,
-        value: int,
+        features_columns = None,
+        model_params=None,
+        fee = 0.1,
     ) -> pd.DataFrame:
         """
-        Get features for the Features_Creator.
+        Get the results of the model pipeline.
 
         Parameters:
         -----------
-        value : int
-            The value for RSI calculation.
+        features_columns : list | None, optional
+            List of feature columns to use in the model.
+            (default: None)
+        model_params : dict | None, optional
+            Parameters for the XGBoost classifier.
+            (default: None)
+        fee : float, optional
+            Transaction fee percentage.
+            (default: 0.1)
 
         Returns:
         --------
         pd.DataFrame
-            DataFrame with added features.
+            DataFrame containing model results.
 
         """
-        train_development = int(self.development.shape[0] * self.test_size)
-
-        self.data_frame['temp_RSI'] = ta.RSI(self.source, value)
-        temp_RSI = self.data_frame['temp_RSI'].iloc[:train_development]
-        data_handler = DataHandler(temp_RSI)
-
-        intervals = (
-            data_handler
-            .get_split_variable_intervals(**self.split_params)
+        development = (
+            self.data_frame.iloc[:self.validation_index].copy()
+            if self.validation_index is int
+            else self.data_frame.loc[:self.validation_index].copy()
+        )
+        validation = (
+            self.data_frame.iloc[self.validation_index:].copy()
+            if self.validation_index is int
+            else self.data_frame.loc[self.validation_index:].copy()
         )
 
-        intervalsH = (
-            data_handler
-            .get_split_variable_intervals(**self.split_paramsH)
-        )
-
-        intervalsL = (
-            data_handler
-            .get_split_variable_intervals(**self.split_paramsL)
-        )
-
-        self.data_frame['temp_feature_RSI'] = (
-            DataHandler(self.data_frame)
-            .get_intervals_variables('temp_RSI', intervals)
-        ).astype('int8')
-
-        self.data_frame['temp_feature_RSIH'] = (
-            DataHandler(self.data_frame)
-            .get_intervals_variables('temp_RSI', intervalsH)
-        ).astype('int8')
-
-        self.data_frame['temp_feature_RSIL'] = (
-            DataHandler(self.data_frame)
-            .get_intervals_variables('temp_RSI', intervalsL)
-        ).astype('int8')
-
-        return self.data_frame
-
-    def train_model(
-        self,
-        features: str | list,
-        target: str,
-        model_params: dict | None = None,
-    ) -> xgb.XGBClassifier:
-        """
-        Train an XGBoost model.
-
-        Parameters:
-        -----------
-        features : str | list
-            Features used for training.
-        target : str
-            Target variable.
-        model_params : dict, optional
-            Parameters for the XGBoost model
-            (default: None).
-
-        Returns:
-        --------
-        xgb.XGBClassifier
-            Trained XGBoost model.
-
-        """
-
-        if isinstance(target, list):
-            raise ValueError('Target must be a string')
+        features = development[features_columns]
+        target = development["Target_1_bin"]
 
         if not model_params:
             model_params = {
                 'objective' : "binary:logistic",
-                'random_state' : self.random_state,
+                'random_state' : 42,
                 'eval_metric' : 'auc'
             }
 
         X_train, X_test, y_train, y_test = train_test_split(
-            self.development[features],
-            self.development[target],
-            test_size=self.test_size,
-            random_state=self.random_state,
+            features,
+            target,
+            test_size=0.5,
+            random_state=model_params['random_state'],
             shuffle=False
         )
 
         model = xgb.XGBClassifier(**model_params)
         model.fit(X_train, y_train)
-        model_dict = {
-            'model': model,
-            'X_train': X_train,
-            'X_test': X_test,
-            'y_train': y_train,
-            'y_test': y_test
-        }
 
-        return model_dict
+        validacao_X_test = validation[features_columns]
+        validacao_y_test = validation["Target_1_bin"]
 
-    def get_results(
+        x_series = pd.concat([X_test, validacao_X_test], axis=0)
+        y_series = pd.concat([y_test, validacao_y_test], axis=0)
+
+        mh2 = ModelHandler(model, x_series, y_series).model_returns(
+            self.return_series,
+            fee
+            )
+        mh2['validation_date'] = str(validation.index[0])
+        return mh2
+
+    def temp_indicator(
+        self,
+        value: int | list,
+        indicator:Literal['RSI', 'rolling_ratio'] = 'RSI'
+    ) -> pd.Series:
+        """
+        Calculate a temporary indicator series.
+
+        Parameters:
+        -----------
+        value : int | list
+            Parameter value for the indicator.
+        indicator : Literal['RSI', 'rolling_ratio'], optional
+            Type of indicator to calculate.
+            (default: 'RSI')
+
+        Returns:
+        --------
+        pd.Series
+            Series containing the temporary indicator values.
+
+        Raises:
+        -------
+        InvalidArgumentError
+            If the specified indicator is not found.
+
+        """
+        match indicator:
+            case 'RSI':
+                return ta.RSI(self.source, value)
+            case 'rolling_ratio':
+                return (
+                    MathFeature(self.data_frame, self.source.name)
+                    .rolling_ratio(*value)
+                )
+            case _:
+                raise InvalidArgumentError(f"Indicator {indicator} not found")
+
+    def calculate_model_returns(
         self,
         value: int,
-        features: list,
-        target: str,
-        result_column: str | None = None,
+        indicator: Literal['RSI', 'rolling_ratio'] = 'RSI',
         model_params: dict | None = None,
-    ) -> pd.DataFrame:
+        fee: float = 0.1,
+        train_end_index: int | None = 1526,
+        results_column: str | list[pd.Index] | None = None,
+        features: list[pd.Index] | None = None
+    ) -> dict:
         """
-        Get results from the trained XGBoost model.
+        Run the entire model pipeline and return drawdown results.
 
         Parameters:
         -----------
         value : int
-            The value for RSI calculation.
-        features : list
-            Features used for training.
-        target : str
-            Target variable.
-        result_column : str, optional
-            Column name for specific result
-            (default: None).
-        model_params : dict, optional
-            Parameters for the XGBoost model
-            (default: None).
+            Parameter value for the indicator.
+        indicator : Literal['RSI', 'rolling_ratio'], optional
+            Type of indicator to generate.
+            (default: 'RSI')
+        model_params : dict | None, optional
+            Parameters for the XGBoost model.
+            (default: None)
+        fee : float, optional
+            Transaction fee for calculating returns.
+            (default: 0.1)
+        train_end_index : int | None, optional
+            Index for splitting the training and development data.
+            (default: None)
+        results_column : str | None, optional
+            Column to return in the results.
+            (default: None)
 
         Returns:
         --------
-        pd.DataFrame
-            DataFrame with model results.
-
+        dict
+            Dictionary containing drawdown results.
         """
-        self.data_frame = self.get_features(value)
+        features = features or []
 
-        if isinstance(target, pd.DataFrame):
-            raise ValueError('Target must be a Series')
-
-        model_dict = self.train_model(features, target, model_params)
-        model = model_dict['model']
-
-        validacao_X_test = self.validation[features]
-        validacao_y_test = self.validation[target]
-
-        x_series = pd.concat([model_dict['X_test'], validacao_X_test], axis=0)
-        y_series = pd.concat([model_dict['y_test'], validacao_y_test], axis=0)
-
-        mh2 = (
-            ModelHandler(model, x_series, y_series)
-            .model_returns(self.return_series)
+        train_end_index = (
+            train_end_index
+            or
+            self.train_development_index
         )
 
-        if result_column:
-            return mh2[result_column]
+        train_development = (
+            self.data_frame.iloc[:train_end_index]
+            if isinstance(train_end_index, int)
+            else self.data_frame.loc[:train_end_index]
+        )
 
-        mh2['validation_date'] = str(self.validation.index[0])
-        return mh2
+        self.data_frame['temp_indicator'] = (
+            self.temp_indicator(value, indicator)
+        )
+
+        self.temp_indicator_series = (
+            self.temp_indicator(value, indicator)
+            .reindex(train_development.index)
+        ).dropna()
+
+
+        intervals = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_params)
+        )
+
+        intervalsH = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_paramsH)
+        )
+
+        intervalsL = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_paramsL)
+        )
+
+        self.data_frame['temp_variable'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_indicator', intervals)
+        ).astype('int8')
+
+        self.data_frame['temp_variableH'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_indicator', intervalsH)
+        ).astype('int8')
+
+        self.data_frame['temp_variableL'] = (
+            DataHandler(self.data_frame)
+            .get_intervals_variables('temp_indicator', intervalsL)
+        ).astype('int8')
+
+        temp_variables = (
+            'temp_variable', 'temp_variableH', 'temp_variableL',
+        )
+
+        all_combinations = []
+        for items in range(1, 4):
+            combinations_item = combinations(temp_variables, items)
+            all_combinations.extend(list(combinations_item))
+
+        params = {'model_params': model_params, 'fee': fee}
+
+        if results_column:
+            results = {
+                f"RSI{value}_{combination}"
+                : self.get_results(
+                    features_columns=list(combination) + features,
+                    **params
+                )[results_column] for combination in all_combinations
+            }
+            return results
+
+        results = {
+            f"RSI{value}_{combination}"
+            : self.get_results(
+                features_columns=list(combination) + features,
+                **params
+            ) for combination in all_combinations
+        }
+        return results
