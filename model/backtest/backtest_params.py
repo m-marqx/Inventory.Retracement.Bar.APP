@@ -1,6 +1,5 @@
 import numpy as np
 from pydantic import BaseModel
-from typing import List
 
 
 class EmaParamsBacktest(BaseModel):
@@ -9,15 +8,15 @@ class EmaParamsBacktest(BaseModel):
 
     Parameters
     ----------
-    length : List[int], optional
+    length : list[int], optional
         The list of lengths for EMA calculation
         (default is range(1, 101)).
-    source_column : List[str], optional
+    source_column : list[str], optional
         The list of source columns for EMA calculation
         (default is ["open", "high", "low", "close"]).
     """
-    length: List[int] = range(1, 101)
-    source_column: List[str] = ["open", "high", "low", "close"]
+    length: list[int] = range(1, 101)
+    source_column: list[str] = ["open", "high", "low", "close"]
 
 
 class IrbParamsBacktest(BaseModel):
@@ -26,23 +25,23 @@ class IrbParamsBacktest(BaseModel):
 
     Parameters
     ----------
-    lowestlow : List[int], optional
+    lowestlow : list[int], optional
         The list of lowest low values for IRB calculation
         (default is range(1, 2)).
-    payoff : List[int], optional
+    payoff : list[int], optional
         The list of payoff values for IRB calculation
         (default is range(2, 3)).
-    ticksize : List[float], optional
+    ticksize : list[float], optional
         The list of tick size values for IRB calculation
         (default is np.arange(0.1, 0.2)).
-    wick_percentage : List[float], optional
+    wick_percentage : list[float], optional
         The list of wick percentage values for IRB calculation
         (default is np.round(np.arange(0.01, 1.01, 0.01), 2)).
     """
-    lowestlow: List[int] = range(1, 2)
-    payoff: List[int] = range(2, 3)
-    ticksize: List[float] = np.arange(0.1, 0.2)
-    wick_percentage: List[float] = np.round(np.arange(0.01, 1.01, 0.01), 2)
+    lowestlow: list[int] = range(1, 2)
+    payoff: list[int] = range(2, 3)
+    ticksize: list[float] = np.arange(0.1, 0.2)
+    wick_percentage: list[float] = np.round(np.arange(0.01, 1.01, 0.01), 2)
 
 
 class IndicatorsParamsBacktest(BaseModel):
@@ -51,19 +50,19 @@ class IndicatorsParamsBacktest(BaseModel):
 
     Parameters
     ----------
-    ema_column : List[str], optional
+    ema_column : list[str], optional
         The list of source columns for EMA calculation in indicator
         strategy (default is ["open", "high", "low", "close"]).
-    macd_histogram_trend_value : List[int], optional
+    macd_histogram_trend_value : list[int], optional
         The list of MACD histogram trend values in indicator strategy
         (default is range(0, 1)).
-    cci_trend_value : List[int], optional
+    cci_trend_value : list[int], optional
         The list of CCI trend values in indicator strategy
         (default is range(0, 1)).
     """
-    ema_column: List[str] = ["open", "high", "low", "close"]
-    macd_histogram_trend_value: List[int] = range(0, 1)
-    cci_trend_value: List[int] = range(0, 1)
+    ema_column: list[str] = ["open", "high", "low", "close"]
+    macd_histogram_trend_value: list[int] = range(0, 1)
+    cci_trend_value: list[int] = range(0, 1)
 
 
 class TrendParamsBacktest(BaseModel):
@@ -72,19 +71,19 @@ class TrendParamsBacktest(BaseModel):
 
     Parameters
     ----------
-    ema : List[bool], optional
+    ema : list[bool], optional
         The list of boolean values indicating whether to use EMA in
         trend strategy (default is [True]).
-    macd : List[bool], optional
+    macd : list[bool], optional
         The list of boolean values indicating whether to use MACD in
         trend strategy (default is [False]).
-    cci : List[bool], optional
+    cci : list[bool], optional
         The list of boolean values indicating whether to use CCI in
         trend strategy (default is [False]).
     """
-    ema: List[bool] = [True]
-    macd: List[bool] = [False]
-    cci: List[bool] = [False]
+    ema: list[bool] = [True]
+    macd: list[bool] = [False]
+    cci: list[bool] = [False]
 
 
 class ResultParamsBacktest(BaseModel):
@@ -93,30 +92,30 @@ class ResultParamsBacktest(BaseModel):
 
     Parameters
     ----------
-    capital : List[float], optional
+    capital : list[float], optional
         The list of initial capital values (default is [100000]).
-    percent : List[bool], optional
+    percent : list[bool], optional
         The list of boolean values indicating whether to use percentage
         values (default is [True]).
-    gain : List[float], optional
+    gain : list[float], optional
         The list of gain values (default is [2]).
-    loss : List[float], optional
+    loss : list[float], optional
         The list of loss values (default is [-1]).
-    method : List[str], optional
+    method : list[str], optional
         The list of method values (default is ["Fixed"]).
-    qty : List[float], optional
+    qty : list[float], optional
         The list of quantity values (default is [1]).
-    coin_margined : List[bool], optional
+    coin_margined : list[bool], optional
         The list of boolean values indicating whether the coin is
         margined (default is [True]).
     """
-    capital: List[float] = [100_000]
-    percent: List[bool] = [True]
-    gain: List[float] = [2]
-    loss: List[float] = [-1]
-    method: List[str] = ["Fixed"]
-    qty: List[float] = [1]
-    coin_margined: List[bool] = [True]
+    capital: list[float] = [100_000]
+    percent: list[bool] = [True]
+    gain: list[float] = [2]
+    loss: list[float] = [-1]
+    method: list[str] = ["Fixed"]
+    qty: list[float] = [1]
+    coin_margined: list[bool] = [True]
 
 
 class BacktestParams(BaseModel):
