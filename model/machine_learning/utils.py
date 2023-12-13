@@ -843,6 +843,62 @@ class DataHandler:
 
         return results
 
+    def get_outlier_values(
+        self,
+        column: str = None,
+        iqr_scale: float = 1.5,
+        upper_quantile: float = 0.75,
+        down_quantile: float = 0.25,
+    ) -> tuple[float, float]:
+        """
+        Calculate upper and lower bounds for identifying outliers in the
+        specified column.
+
+        Parameters:
+        -----------
+        column : str, optional
+            The name of the column in the DataFrame. If None, the
+            instance's data_frame will be used as the target.
+        iqr_scale : float, optional
+            The scale factor for the Interquartile Range (IQR).
+            (default: 1.5)
+        upper_quantile : float, optional
+            The upper quantile used to calculate the IQR.
+            (default: 0.75 (75th percentile))
+        down_quantile : float, optional
+            The lower quantile used to calculate the IQR.
+            (default: 0.25 (25th percentile))
+
+        Returns:
+        --------
+        tuple[float, float]
+            A tuple containing the upper and lower bounds for
+            identifying outliers.
+
+        Raises:
+        -------
+        ValueError
+            If column is None and the input is a DataFrame.
+        """
+        if column is None:
+            if isinstance(self.data_frame, pd.Series):
+                outlier_array = self.data_frame.copy()
+            else:
+                raise ValueError(
+                    "column must be provided for DataFrame input."
+                )
+        else:
+            outlier_array = self.data_frame[column].copy()
+
+        Q1 = outlier_array.quantile(down_quantile)
+        Q3 = outlier_array.quantile(upper_quantile)
+
+        IQR = Q3 - Q1
+        upper_bound = Q3 + iqr_scale * IQR
+        lower_bound = Q1 - iqr_scale * IQR
+
+        return upper_bound, lower_bound
+
     def fill_outlier(
         self,
         column: str = None,
