@@ -138,6 +138,61 @@ class ModelMetrics:
 
         return rt_sum_pos, rt_mean_pos, rt_sum_neg, rt_mean_neg
 
+    def calculate_payoff(
+        self,
+        method: Literal['sum', 'mean'] = 'sum',
+    ) -> pd.DataFrame:
+        """
+        Calculate return statistics.
+
+        Parameters:
+        -----------
+        reset_dataframe : bool, optional
+            Flag to reset the internal DataFrame
+            (default: False).
+
+        Returns:
+        --------
+        Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
+            Tuple containing positive sum, positive mean, negative sum,
+            and negative mean return statistics.
+        """
+        if self.data_frame.min() > 0:
+            rt = self.data_frame.copy().diff().fillna(0)
+        else:
+            rt = self.data_frame.copy()
+
+        pos_values = rt[rt > 0]
+        neg_values = abs(rt[rt < 0])
+
+        if method == 'sum':
+            pos_values = (
+                pos_values.fillna(0).rolling(self.period).sum()
+                if self.is_int_period
+                else pos_values.ffill().rolling(self.period).sum().fillna(0)
+            )
+
+            neg_values = (
+                neg_values.fillna(0).rolling(self.period).sum()
+                if self.is_int_period
+                else neg_values.ffill().rolling(self.period).sum().fillna(0)
+            )
+
+        else:
+            pos_values = (
+                pos_values.ffill().rolling(self.period).mean().fillna(0)
+                if self.is_int_period
+                else pos_values.ffill().rolling(self.period).mean().fillna(0)
+            )
+            neg_values = (
+                neg_values.ffill().rolling(self.period).mean().fillna(0)
+                if self.is_int_period
+                else neg_values.ffill().rolling(self.period).mean().fillna(0)
+            )
+
+        payoff = pos_values / neg_values
+        return payoff.dropna()
+
     def calculate_expected_return(
         self,
         reset_dataframe: bool = False
