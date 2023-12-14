@@ -75,8 +75,30 @@ class ModelMetrics:
             DataFrame containing drawdown results.
         """
         max_results = self.data_frame.expanding(365).max()
-        self.data_frame = (max_results - self.data_frame) / max_results
-        return self.data_frame.fillna(0).astype("float32")
+        drawdown = (max_results - self.data_frame) / max_results
+        return drawdown.fillna(0)
+
+    def calculate_mean_drawdown(self) -> pd.DataFrame:
+        """
+        Calculate mean drawdown based on the input financial DataFrame.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing mean drawdown results.
+        """
+        drawdown = self.calculate_drawdown()
+
+        if self.is_int_period:
+            drawdown = (
+                drawdown.fillna(0).astype('float32')
+                .resample(self.period).mean()
+            )
+
+        drawdown = (
+            drawdown.fillna(0).astype('float32')
+            .rolling(self.period).mean()
+        )
 
     def calculate_return_stats(
         self,
