@@ -233,3 +233,15 @@ class ModelMetrics:
 
         return expected_return.dropna()
 
+    def __resample_calculate_win_rate(
+        self,
+    ) -> pd.DataFrame:
+        rt = self.data_frame.copy().diff().fillna(0)
+
+        win_rate = rt[rt > 0].fillna(0)
+        win_rate = win_rate.where(win_rate == 0, 1).astype('bool')
+        win_rate = (
+            win_rate.resample(self.period).sum()
+            / win_rate.resample(self.period).count()
+        )
+        return win_rate
