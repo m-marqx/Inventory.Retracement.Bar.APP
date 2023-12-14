@@ -195,3 +195,41 @@ class ModelMetrics:
             self.data_frame = pd.DataFrame([])
 
         return expected_return
+
+    def __resample_calculate_expected_return(
+        self,
+    ) -> pd.DataFrame:
+        """
+        Calculate expected return.
+
+        Parameters:
+        -----------
+        reset_dataframe : bool, optional
+            Flag to reset the internal DataFrame
+            (default: False).
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing expected return values.
+        """
+        if self.data_frame.min() > 0:
+            self.data_frame = self.data_frame.diff().fillna()
+
+        rt = self.data_frame.to_frame().diff().fillna(0)
+
+        win_rate = rt[rt > 0].fillna(0)
+        win_rate = win_rate.where(win_rate == 0, 1).astype('bool')
+        win_rate = (
+            win_rate.resample(self.period).sum()
+            / win_rate.resample(self.period).count()
+        )
+
+        rt_mean_pos = rt[rt > 0].resample(self.period).mean()
+        rt_mean_neg = abs(rt[rt < 0]).resample(self.period).mean()
+
+        expected_return = rt_mean_pos * win_rate - rt_mean_neg * (1 - win_rate)
+        expected_return = expected_return.astype('float32')
+
+        return expected_return.dropna()
+
