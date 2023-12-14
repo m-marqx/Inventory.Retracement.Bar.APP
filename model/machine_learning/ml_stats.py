@@ -22,9 +22,10 @@ Attributes:
     The financial DataFrame used for calculations.
 """
 
+from typing import Literal
 import pandas as pd
 
-class MLStats:
+class ModelMetrics:
     """
     A class for calculating drawdown, return statistics, and expected
     return based on a given financial DataFrame.
