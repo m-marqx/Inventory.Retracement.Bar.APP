@@ -48,7 +48,11 @@ class ModelMetrics:
         The financial DataFrame used for calculations.
 
     """
-    def __init__(self, dataframe: pd.DataFrame):
+    def __init__(
+        self,
+        dataframe: pd.DataFrame,
+        period: str | int = "W"
+    ):
         """
         Constructor method for initializing the MLStats class.
 
@@ -57,7 +61,9 @@ class ModelMetrics:
         dataframe : pd.DataFrame
             The financial DataFrame for calculations.
         """
-        self.data_frame = dataframe.astype("float32").copy()
+        self.data_frame = dataframe.copy()
+        self.period = period
+        self.is_int_period = isinstance(period, int)
 
     def calculate_drawdown(self) -> pd.DataFrame:
         """
