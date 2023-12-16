@@ -268,3 +268,18 @@ class ModelMetrics:
 
         return expected_return.dropna()
 
+    def __rolling_calculate_win_rate(
+        self,
+        period: int = 30,
+    ) -> pd.DataFrame:
+        rt = self.data_frame.diff().fillna(0)
+
+        pos_values = rt[rt > 0]
+        neg_values = abs(rt[rt < 0])
+
+        pos_count = pos_values.rolling(period).count()
+        neg_count = neg_values.rolling(period).count()
+
+        win_rate = pos_count / (pos_count + neg_count)
+        return win_rate
+
