@@ -245,3 +245,26 @@ class ModelMetrics:
             / win_rate.resample(self.period).count()
         )
         return win_rate
+
+    def __rolling_calculate_expected_return(
+        self,
+        period: int = 30,
+    ) -> pd.DataFrame:
+        rt = self.data_frame.diff().fillna(0)
+
+        pos_values = rt[rt > 0]
+        neg_values = abs(rt[rt < 0])
+
+        pos_count = pos_values.rolling(period).count()
+        neg_count = neg_values.rolling(period).count()
+
+        win_rate = pos_count / (pos_count + neg_count)
+
+        pos_mean = pos_values.ffill().rolling(period).mean().fillna(0)
+        neg_mean = neg_values.ffill().rolling(period).mean().fillna(0)
+
+        expected_return = pos_mean * win_rate - neg_mean * (1 - win_rate)
+        expected_return = expected_return.astype('float32')
+
+        return expected_return.dropna()
+
