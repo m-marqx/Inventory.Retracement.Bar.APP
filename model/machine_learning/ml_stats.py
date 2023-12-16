@@ -283,3 +283,15 @@ class ModelMetrics:
         win_rate = pos_count / (pos_count + neg_count)
         return win_rate
 
+    def calculate_win_rate(self):
+        """
+        Calculate win rate.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing win rate values.
+        """
+        if self.is_int_period:
+            return self.__resample_calculate_win_rate()
+        return self.__rolling_calculate_win_rate()
