@@ -843,7 +843,7 @@ class DataHandler:
 
         return results
 
-    def get_outlier_values(
+    def calculate_outlier_values(
         self,
         column: str = None,
         iqr_scale: float = 1.5,
@@ -942,7 +942,7 @@ class DataHandler:
             outlier_array = self.data_frame[column].copy()
 
         outlier_args = [column, iqr_scale, upper_quantile, down_quantile]
-        upper_bound, lower_bound = self.get_outlier_values(*outlier_args)
+        upper_bound, lower_bound = self.calculate_outlier_values(*outlier_args)
 
         outlier_array = np.where(
             outlier_array > upper_bound,
