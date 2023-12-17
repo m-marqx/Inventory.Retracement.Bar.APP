@@ -941,14 +941,8 @@ class DataHandler:
         else:
             outlier_array = self.data_frame[column].copy()
 
-        iqr_range = (
-            outlier_array.quantile(upper_quantile)
-            - outlier_array.quantile(down_quantile)
-        ) * iqr_scale
-
-        upper_bound = outlier_array.quantile(upper_quantile) + iqr_range
-
-        lower_bound = outlier_array.quantile(down_quantile) - iqr_range
+        outlier_args = [column, iqr_scale, upper_quantile, down_quantile]
+        upper_bound, lower_bound = self.get_outlier_values(*outlier_args)
 
         outlier_array = np.where(
             outlier_array > upper_bound,
