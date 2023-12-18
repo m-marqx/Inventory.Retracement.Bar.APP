@@ -479,7 +479,7 @@ class DataHandler:
             "validation": validation_dataset
         }
 
-    def get_targets(self) -> pd.DataFrame:
+    def calculate_targets(self) -> pd.DataFrame:
         """
         Calculate target variables for binary classification.
 
@@ -1176,7 +1176,7 @@ class DataHandler:
             variable |= self.data_frame[column] <= lower_bound
         return variable
 
-    def get_split_variable_intervals(
+    def calculate_split_variable_intervals(
         self,
         target_input: str,
         column: str,
@@ -1272,7 +1272,7 @@ class DataHandler:
 
         return variable_intervals
 
-    def get_intervals_variables(
+    def calculate_intervals_variables(
         self,
         column: str,
         intervals: dict

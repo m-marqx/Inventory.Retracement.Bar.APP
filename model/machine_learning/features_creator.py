@@ -55,16 +55,16 @@ class FeaturesCreator:
 
     Methods:
     --------
-    get_results(features_columns=None, model_params=None, fee=0.1) \
+    calculate_results(features_columns=None, model_params=None, fee=0.1) \
     -> pd.DataFrame:
-        Get the results of the model pipeline.
+        Calculate the results of the model pipeline.
     temp_indicator(value: int | list, \
     indicator: Literal['RSI', 'rolling_ratio'] = 'RSI') \
     -> pd.Series:
         Calculate a temporary indicator series.
     results_model_pipeline(value, indicator, model_params=None, \
     fee=0.1, train_end_index=None, results_column=None) -> dict:
-        Get drawdown results for different variable combinations.
+        Calculate drawdown results for different variable combinations.
 
     """
     def __init__(
@@ -92,7 +92,7 @@ class FeaturesCreator:
             (default: None)
 
         """
-        self.data_frame = DataHandler(dataframe).get_targets()
+        self.data_frame = DataHandler(dataframe).calculate_targets()
         self.return_series = return_series
         self.validation_index = (
             validation_index
@@ -117,14 +117,14 @@ class FeaturesCreator:
         self.split_paramsH = feature_params.high_features.dict()
         self.split_paramsL = feature_params.low_features.dict()
 
-    def get_results(
+    def calculate_results(
         self,
         features_columns = None,
         model_params=None,
         fee = 0.1,
     ) -> pd.DataFrame:
         """
-        Get the results of the model pipeline.
+        Calculate the results of the model pipeline.
 
         Parameters:
         -----------
@@ -276,32 +276,32 @@ class FeaturesCreator:
 
         intervals = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_params)
+            .calculate_split_variable_intervals(**self.split_params)
         )
 
         intervalsH = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_paramsH)
+            .calculate_split_variable_intervals(**self.split_paramsH)
         )
 
         intervalsL = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_paramsL)
+            .calculate_split_variable_intervals(**self.split_paramsL)
         )
 
         self.data_frame[f'{based_on}_split'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervals)
+            .calculate_intervals_variables('temp_indicator', intervals)
         ).astype('int8')
 
         self.data_frame[f'{based_on}_high'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervalsH)
+            .calculate_intervals_variables('temp_indicator', intervalsH)
         ).astype('int8')
 
         self.data_frame[f'{based_on}_low'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervalsL)
+            .calculate_intervals_variables('temp_indicator', intervalsL)
         ).astype('int8')
 
         self.data_frame = self.data_frame.drop(columns='temp_indicator')
@@ -372,32 +372,32 @@ class FeaturesCreator:
 
         intervals = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_params)
+            .calculate_split_variable_intervals(**self.split_params)
         )
 
         intervalsH = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_paramsH)
+            .calculate_split_variable_intervals(**self.split_paramsH)
         )
 
         intervalsL = (
             DataHandler(self.temp_indicator_series)
-            .get_split_variable_intervals(**self.split_paramsL)
+            .calculate_split_variable_intervals(**self.split_paramsL)
         )
 
         self.data_frame['temp_variable'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervals)
+            .calculate_intervals_variables('temp_indicator', intervals)
         ).astype('int8')
 
         self.data_frame['temp_variableH'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervalsH)
+            .calculate_intervals_variables('temp_indicator', intervalsH)
         ).astype('int8')
 
         self.data_frame['temp_variableL'] = (
             DataHandler(self.data_frame)
-            .get_intervals_variables('temp_indicator', intervalsL)
+            .calculate_intervals_variables('temp_indicator', intervalsL)
         ).astype('int8')
 
         temp_variables = (
@@ -414,7 +414,7 @@ class FeaturesCreator:
         if results_column:
             results = {
                 f"RSI{value}_{combination}"
-                : self.get_results(
+                : self.calculate_results(
                     features_columns=list(combination) + features,
                     **params
                 )[results_column] for combination in all_combinations
@@ -423,7 +423,7 @@ class FeaturesCreator:
 
         results = {
             f"RSI{value}_{combination}"
-            : self.get_results(
+            : self.calculate_results(
                 features_columns=list(combination) + features,
                 **params
             ) for combination in all_combinations

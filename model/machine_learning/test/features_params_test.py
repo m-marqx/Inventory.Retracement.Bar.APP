@@ -12,7 +12,7 @@ class TestFeaturesParams(unittest.TestCase):
             "model/data/reference_dataset.parquet"
         )
 
-        self.data_frame = DataHandler(self.data_frame).get_targets()
+        self.data_frame = DataHandler(self.data_frame).calculate_targets()
 
     def test_split_params(self):
         split_params = dict(

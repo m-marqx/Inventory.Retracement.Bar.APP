@@ -37,7 +37,7 @@ class TestDatasetManipulation(unittest.TestCase):
             index=dates
         )
 
-        result = DataHandler(df).get_targets()
+        result = DataHandler(df).calculate_targets()
 
         returns = [np.nan,
             0.9587615633780466,

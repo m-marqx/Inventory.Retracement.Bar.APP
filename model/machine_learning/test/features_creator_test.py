@@ -10,7 +10,7 @@ from model.machine_learning.feature_params import (
 class TestFeaturesCreator(unittest.TestCase):
     def setUp(self):
         self.dataframe = pd.read_parquet('model/data/reference_dataset.parquet')
-        self.dataframe = DataHandler(self.dataframe).get_targets()
+        self.dataframe = DataHandler(self.dataframe).calculate_targets()
         split_params = FeaturesParams(
             target_input=self.dataframe['Target_1_bin'],
             column='temp_indicator',
@@ -106,7 +106,7 @@ class TestFeaturesCreator(unittest.TestCase):
 
         all_features_results = (
             self.features_creator
-            .get_results(['temp_variable','temp_variableH','temp_variableL'])
+            .calculate_results(['temp_variable','temp_variableH','temp_variableL'])
         )
 
         all_features_reference_results = pd.read_parquet(
