@@ -154,3 +154,67 @@ class TradeAnalysis:
 
         return all_trades
 
+    def get_trades(self, colored: bool = False) -> pd.DataFrame:
+        """
+        Fetch and process trades data.
+
+        Parameters:
+        -----------
+        colored : bool, optional
+            If True, the DataFrame is styled with colors based on the
+            'side'.
+            (default: False).
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing trades data.
+        """
+        trade_params = {
+            'type': self.market_type,
+            **self.kwargs
+        }
+        if not trade_params.get('endTime', None) and self.end_time:
+            trade_params['endTime'] = self.end_time
+
+        if self.market_type in ['spot', 'margin']:
+            trades = self.exchange.fetch_my_trades(
+                symbol=self.symbol,
+                since=self.start_time,
+                params=trade_params
+            )
+        else:
+            trades = self.__get_trades_from_futures()
+
+        logging.info("Processing trades [100%]")
+        logging.info("Trades processed: %s\n", len(trades))
+
+        if not trades:
+            raise ValueError('No trades found')
+
+        trades_df = (
+            pd.DataFrame(trades)
+            .drop(columns=['info', 'id', 'datetime', 'order', 'type', 'fees'])
+            .set_index('timestamp')
+        )
+        trades_df.index = pd.to_datetime(trades_df.index, unit='ms')
+        trades_df = trades_df.rename_axis('date')
+        trades_df = trades_df.rename(columns={'cost': 'amount_quote'})
+
+        fee = pd.DataFrame(list(trades_df['fee'])).set_index(trades_df.index)
+        fee.columns = ['fee_cost', 'fee_currency']
+        trades_df = pd.concat([trades_df, fee], axis=1).drop(columns='fee')
+        trades_df['fee_cost_USD'] = np.where(
+            trades_df['fee_currency'] == self.main_currency,
+            trades_df['price'] * trades_df['fee_cost'], trades_df['fee_cost']
+        )
+
+        if colored:
+            trades_df = trades_df.reset_index().style.apply(
+                lambda row: [
+                    "color: #FF3344" if row['side'] == 'sell'
+                    else "color: #00e676" for _ in row
+                ], axis=1
+            )
+
+        return trades_df
