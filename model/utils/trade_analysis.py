@@ -218,3 +218,60 @@ class TradeAnalysis:
             )
 
         return trades_df
+
+    def calculate_trade_results(
+        self,
+        dataframe: pd.DataFrame,
+        first_side: Literal['buy', 'sell'] = 'buy'
+    ) -> pd.DataFrame:
+        """
+        Calculate trade results.
+
+        Parameters:
+        -----------
+        dataframe : pd.DataFrame
+            DataFrame containing trades data.
+        first_side : Literal['buy', 'sell'], optional
+            The first side of the trade.
+            (default: 'buy')
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing calculated trade results.
+        """
+        second_side = 'sell' if first_side == 'buy' else 'buy'
+
+        analysis_df = pd.DataFrame(index=dataframe.index)
+        analysis_df['open_price'] = np.where(
+            dataframe['side'] == first_side,
+            dataframe['price'], np.nan
+        )
+
+        analysis_df['close_price'] = np.where(
+            dataframe['side'] == second_side,
+            dataframe['price'], np.nan
+        )
+        analysis_df['close_price'] = analysis_df['close_price'].bfill()
+        analysis_df['amount_quote'] = dataframe['amount_quote']
+        analysis_df['fee_cost'] = dataframe['fee_cost_USD']
+
+        analysis_df['result'] = -(
+            (
+                (analysis_df['close_price'] - analysis_df['open_price'])
+                / analysis_df['open_price']
+            ) * 100
+        )
+
+        analysis_df['total_fee'] = np.where(
+            analysis_df['result'].isna(),
+            np.nan, analysis_df['fee_cost'] + analysis_df['fee_cost'].shift(-1)
+        )
+        analysis_df['diff_quote'] = np.where(
+            analysis_df['result'].isna(),
+            np.nan, -(analysis_df['amount_quote'].diff(-1))
+        )
+
+        analysis_df.fillna('')
+        return analysis_df
+
