@@ -8,12 +8,6 @@ import ccxt
 from model.utils import interval_to_milliseconds
 from .utils import KlineTimes
 
-logging.basicConfig(
-    format='%(levelname)s %(asctime)s: %(message)s',
-    datefmt='%H:%M:%S',
-    force=True,
-    level=logging.INFO,
-)
 
 class CcxtAPI:
     """
@@ -118,6 +112,18 @@ class CcxtAPI:
         self.max_multiplier = int(self.utils.calculate_max_multiplier())
         self.data_frame = None
         self.klines_list = None
+        if verbose:
+            logging.basicConfig(
+                format='%(levelname)s %(asctime)s: %(message)s',
+                datefmt='%H:%M:%S',
+                force=True,
+                level=logging.INFO,
+            )
+        else:
+            logging.basicConfig(
+                force=True,
+                level=logging.CRITICAL,
+            )
 
     def _fetch_klines(self, since, limit: int=None) -> list:
         return self.exchange.fetch_ohlcv(
