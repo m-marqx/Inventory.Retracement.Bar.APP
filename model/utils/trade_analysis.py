@@ -113,3 +113,44 @@ class TradeAnalysis:
             self.end_time = time.time() * 1000
         else:
             self.end_time = end_time
+
+    def __get_trades_from_futures(self) -> list:
+        """
+        Fetch trades for futures market type.
+
+        Returns:
+        --------
+        list
+            List of trades.
+        """
+        day = 24 * 60 * 60 * 1000
+        total_days = (self.end_time - self.start_time) / day
+
+        all_trades = []
+        range_time = range(self.start_time, self.end_time, day)
+
+        for index, start_time in enumerate(range_time):
+            end_time = start_time + day
+            load_percentage = (index / total_days) * 100
+
+            trades = self.exchange.fetch_my_trades(
+                self.symbol,
+                start_time,
+                None,
+                {'endTime': end_time, **self.kwargs}
+            )
+
+            if len(trades):
+                last_trade = trades[-1]
+                self.start_time = last_trade['timestamp'] + 1
+                all_trades += trades
+            else:
+                self.start_time = end_time
+
+            logging.info("Processing trades [%.2f%%]", load_percentage)
+
+            if len(all_trades) > 0:
+                logging.info("Trades processed: %s\n", len(all_trades))
+
+        return all_trades
+
