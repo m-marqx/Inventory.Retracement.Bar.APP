@@ -275,3 +275,47 @@ class TradeAnalysis:
         analysis_df.fillna('')
         return analysis_df
 
+    def caculate_trade_daily_results(self) -> pd.DataFrame:
+        """
+        Calculate daily trade results.
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing calculated daily trade results.
+        """
+        sum_columns = ['amount', 'amount_quote', 'fee_cost', 'fee_cost_USD']
+        drop_columns = ['takerOrMaker', 'symbol', 'fee_currency']
+
+        trades_df = self.get_trades()
+        trades_df['amount'] = np.where(
+            trades_df['side'] == 'buy',
+            trades_df['amount'],
+            -abs(trades_df['amount'])
+        )
+        trades_df = trades_df.drop(columns=drop_columns)
+
+        mean_df = (
+            trades_df
+            .drop(sum_columns)
+            .groupby([trades_df.index.date, 'side'])
+            .mean()
+        )
+
+        sum_df = (
+            trades_df
+            .groupby([trades_df.index.date, 'side'])[sum_columns]
+            .sum()
+        )
+
+        result_df = (
+            pd.concat([mean_df, sum_df], axis=1)
+            .reset_index()
+            .set_index('level_0')
+            .rename_axis('date')
+        )
+
+        first_side = result_df['side'][0]
+
+        analysis_df = self.calculate_trade_results(result_df, first_side)
+        return analysis_df
