@@ -275,7 +275,7 @@ class TradeAnalysis:
         analysis_df.fillna('')
         return analysis_df
 
-    def caculate_trade_daily_results(self) -> pd.DataFrame:
+    def calculate_trade_daily_results(self) -> pd.DataFrame:
         """
         Calculate daily trade results.
 
