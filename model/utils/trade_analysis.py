@@ -295,10 +295,9 @@ class TradeAnalysis:
         )
         trades_df = trades_df.drop(columns=drop_columns)
 
-        mean_df = (
+        price_serie = (
             trades_df
-            .drop(sum_columns)
-            .groupby([trades_df.index.date, 'side'])
+            .groupby([trades_df.index.date, 'side'])['price']
             .mean()
         )
 
@@ -309,7 +308,7 @@ class TradeAnalysis:
         )
 
         result_df = (
-            pd.concat([mean_df, sum_df], axis=1)
+            pd.concat([price_serie, sum_df], axis=1)
             .reset_index()
             .set_index('level_0')
             .rename_axis('date')
