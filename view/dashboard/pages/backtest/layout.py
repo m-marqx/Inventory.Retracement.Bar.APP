@@ -25,6 +25,7 @@ def layout(lang="en_US"):
     get_data_component = backtest_menu_collapse.get_data_component
     parameters_component = backtest_menu_collapse.parameters_component
     strategy_component = backtest_menu_collapse.strategy_component
+    trend_component = backtest_menu_collapse.trend_component
     result_parameters_component = backtest_menu_collapse.result_parameters_component
     hardware_component = backtest_menu_collapse.hardware_component
 
@@ -83,6 +84,7 @@ def layout(lang="en_US"):
                                             get_data_component,
                                             parameters_component,
                                             strategy_component,
+                                            trend_component,
                                             result_parameters_component,
                                             hardware_component,
                                         ],

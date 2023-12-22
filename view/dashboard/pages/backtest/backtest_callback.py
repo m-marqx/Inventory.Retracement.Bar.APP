@@ -63,12 +63,14 @@ class RunBacktest:
         State("backtest_max_lowestlow", "value"),
         State("backtest_max_payoff", "value"),
         State("backtest_max_wick_percentage", "value"),
-        # Trend Params - min values
-        State("backtest_min_indicator_macd_histogram_trend_value", "value"),
-        State("backtest_min_indicator_cci_trend_value", "value"),
-        # Trend Params - max values
-        State("backtest_max_indicator_macd_histogram_trend_value", "value"),
-        State("backtest_max_indicator_cci_trend_value", "value"),
+        #! If this options are enabled, the backtest will take a
+        #! long time to run and will consume a lot of memory
+        # # Trend Params - min values
+        # State("backtest_min_indicator_macd_histogram_trend_value", "value"),
+        # State("backtest_min_indicator_cci_trend_value", "value"),
+        # # Trend Params - max values
+        # State("backtest_max_indicator_macd_histogram_trend_value", "value"),
+        # State("backtest_max_indicator_cci_trend_value", "value"),
         # Hardware Params
         State("hardware_types", "value"),
         State("backtest_cpu_cores_number", "value"),
@@ -104,12 +106,14 @@ class RunBacktest:
         backtest_max_lowestlow,
         backtest_max_payoff,
         backtest_max_wick_percentage,
-        # Trend Params - min values
-        backtest_min_indicator_macd_histogram_trend_value,
-        backtest_min_indicator_cci_trend_value,
-        # Trend Params - max values
-        backtest_max_indicator_macd_histogram_trend_value,
-        backtest_max_indicator_cci_trend_value,
+        #! If this options are enabled, the backtest will take a
+        #! long time to run and will consume a lot of memory
+        # # Trend Params - min values
+        # backtest_min_indicator_macd_histogram_trend_value,
+        # backtest_min_indicator_cci_trend_value,
+        # # Trend Params - max values
+        # backtest_max_indicator_macd_histogram_trend_value,
+        # backtest_max_indicator_cci_trend_value,
         # Hardware Params
         hardware_type,
         backtest_cpu_cores_number,
@@ -198,6 +202,7 @@ class RunBacktest:
                 0.01,
             )
 
+            # In Real App this variables setting should be dynamic
             backtest_min_indicator_macd_histogram_trend_value = 0
             backtest_max_indicator_macd_histogram_trend_value = 0
             backtest_min_indicator_cci_trend_value = 0
