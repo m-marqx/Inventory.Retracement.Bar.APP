@@ -231,7 +231,7 @@ class BacktestComponents:
         )
 
     @property
-    def cci_bullish_value_components(self):
+    def macd_cci_max_values_components(self):
         return (
             dbc.Row(
                 [
@@ -279,7 +279,7 @@ class BacktestComponents:
                         width=6,
                         ),
                     dbc.Col(
-                        dbc.CardGroup([self.cci_bullish_value_components]),
+                        dbc.CardGroup([self.macd_cci_max_values_components]),
                         width=6,
                         ),
                 ]
