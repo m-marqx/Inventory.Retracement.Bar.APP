@@ -16,7 +16,6 @@ class LayoutMenuCollapse:
             self.page_component_base = MainPageComponents(lang)
             self.page_component_result = MainPageComponents(lang)
         else:
-            self.backtest_components = BacktestComponents(lang)
             self.page_component_base = BacktestComponents(lang)
             self.page_component_result = ResultsComponents(lang)
 
@@ -112,6 +111,6 @@ class LayoutMenuCollapse:
         return MenuCollapse(
             lang=self.lang,
             label="MODIFY_HARDWARE_PARAMETERS_BUTTON",
-            component=self.backtest_components.hardware_components,
+            component=self.page_component_base.hardware_components,
             id_prefix="hardware_params",
         ).simple_collapse
