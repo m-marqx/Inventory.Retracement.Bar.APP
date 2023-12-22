@@ -20,7 +20,7 @@ def layout(lang="en_US"):
     else:
         lang = en_US
 
-    backtest_menu_collapse = LayoutMenuCollapse(lang, "Backtest")
+    backtest_menu_collapse = LayoutMenuCollapse(lang, "backtest")
 
     get_data_component = backtest_menu_collapse.get_data_component
     parameters_component = backtest_menu_collapse.parameters_component
