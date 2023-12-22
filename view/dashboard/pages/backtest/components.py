@@ -192,7 +192,7 @@ class BacktestComponents:
         return dbc.CardGroup([self.irb_components_second_col])
 
     @property
-    def macd_bullish_value_components(self):
+    def macd_cci_min_values_components(self):
         return (
             dbc.Row(
                 [
@@ -275,7 +275,7 @@ class BacktestComponents:
             dbc.Row(
                 [
                     dbc.Col(
-                        dbc.CardGroup([self.macd_bullish_value_components]),
+                        dbc.CardGroup([self.macd_cci_min_values_components]),
                         width=6,
                         ),
                     dbc.Col(
