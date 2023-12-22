@@ -208,6 +208,7 @@ class BacktestComponents:
                             id="backtest_min_indicator_macd_histogram_trend_value",
                             value=0,
                             type="number",
+                            disabled=True,
                         ),
                         width=45,
                     ),
@@ -223,6 +224,7 @@ class BacktestComponents:
                             id="backtest_min_indicator_cci_trend_value",
                             value=0,
                             type="number",
+                            disabled=True,
                         ),
                         width=45,
                     ),
@@ -245,8 +247,9 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="backtest_max_indicator_macd_histogram_trend_value",
-                            value=0,
+                            value=1,
                             type="number",
+                            disabled=True,
                         ),
                         width=45,
                     ),
@@ -260,8 +263,9 @@ class BacktestComponents:
                     dbc.Col(
                         dbc.Input(
                             id="backtest_max_indicator_cci_trend_value",
-                            value=0,
+                            value=1,
                             type="number",
+                            disabled=True,
                         ),
                         width=45,
                     ),
