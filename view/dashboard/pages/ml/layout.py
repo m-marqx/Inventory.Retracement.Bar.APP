@@ -90,10 +90,20 @@ def layout(lang="en_US"):
                                             html.P(
                                                 lang["EMPTY_RESULT"],
                                                 id="model_text_output",
-                                                style={"margin-top": "10px",},
-                                            ),
+                                                style={
+                                                    "margin-top": "10px",
+                                                    "border-radius": "20px",
+                                                    "display": "flex",
+                                                    "flex-wrap": "wrap",
+                                                    "align-content": "flex-start",
+                                                    "justify-content": "center",
+                                                }),
+                                            id="text_model_spinner",
                                             color="primary",
                                             spinner_class_name="spinner-loader",
+                                            spinner_style={
+                                                    "margin-top": "10px",
+                                            },
                                         ),
                                     ]
                                 ),

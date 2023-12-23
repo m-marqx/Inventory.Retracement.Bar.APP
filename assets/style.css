@@ -490,6 +490,38 @@
   }
 }
 
+.spinner-loader_model {
+  width: 32px;
+  height: 32px;
+  margin-top: -24vh !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  border: 5px solid #e4f88b;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: rot5 1s infinite;
+}
+
+@keyframes rot5 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+    border-top-color: #c9e75d;
+    border-bottom-color: #8bbb11;
+    border-right-color: transparent;
+    border-left-color: transparent;
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .btn-group .form-check {
   padding-left: 0 !important;
   padding-right: 0 !important;

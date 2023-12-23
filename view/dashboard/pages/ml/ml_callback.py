@@ -22,6 +22,7 @@ class RunModel:
     @callback(
         Output("model_text_output", "children"),
         Output("ml_results", "figure"),
+        Output("text_model_spinner", "spinner_class_name"),
         Input("run_model", "n_clicks"),
         State("preset_options", "value"),
         Input("preset", "value"),
@@ -32,36 +33,33 @@ class RunModel:
         if not ctx.triggered:
             raise dash.exceptions.PreventUpdate
 
-        # print(ctx.triggered)
         if "run_model" in ctx.triggered[0]["prop_id"]:
-            updated_dataset = pd.read_parquet('model/data/dataset_updated.parquet')
-
-            last_update = updated_dataset.index[-1]
+            updated_dataset = pd.read_parquet("model/data/dataset_updated.parquet")
 
             BTCUSD = DataHandler(updated_dataset).calculate_targets()
-            capi = CcxtAPI(symbol='BTC/USDT', interval='1d', exchange=ccxt.binance())
-            updated_dataset = capi.update_klines(updated_dataset).drop(columns='volume')
+            capi = CcxtAPI(symbol="BTC/USDT", interval="1d", exchange=ccxt.binance())
+            updated_dataset = capi.update_klines(updated_dataset).drop(columns="volume")
             BTCUSD = DataHandler(updated_dataset.copy()).calculate_targets()
-            BTCUSD['RSI79'] = ta.RSI(BTCUSD['high'].pct_change(), 79)
-            return_series = BTCUSD['Return']
+            BTCUSD["RSI79"] = ta.RSI(BTCUSD["high"].pct_change(), 79)
+            return_series = BTCUSD["Return"]
 
             split_params = dict(
-                target_input=BTCUSD['Target_1_bin'],
-                column='temp_indicator',
+                target_input=BTCUSD["Target_1_bin"],
+                column="temp_indicator",
                 log_values=True,
                 threshold=0.50
             )
 
             split_params_H = dict(
-                target_input=BTCUSD['Target_1_bin'],
-                column='temp_indicator',
+                target_input=BTCUSD["Target_1_bin"],
+                column="temp_indicator",
                 log_values=True,
                 threshold=0.52
             )
 
             split_params_L = dict(
-                target_input=BTCUSD['Target_1_bin'],
-                column='temp_indicator',
+                target_input=BTCUSD["Target_1_bin"],
+                column="temp_indicator",
                 log_values=True,
                 threshold=0.48,
                 higher_than_threshold=False,
@@ -78,36 +76,36 @@ class RunModel:
             )
 
             model_params = {
-                'objective' : "binary:logistic",
-                'random_state' : 1635,
-                'subsample': 0.6499999999999999,
-                'n_estimators': 450,
-                'max_depth': 16,
-                'learning_rate': 0.66,
-                'gamma': 5,
-                'colsample_bytree': 0.1,
-                'eval_metric' : 'auc'
+                "objective" : "binary:logistic",
+                "random_state" : 1635,
+                "subsample": 0.6499999999999999,
+                "n_estimators": 450,
+                "max_depth": 16,
+                "learning_rate": 0.66,
+                "gamma": 5,
+                "colsample_bytree": 0.1,
+                "eval_metric" : "auc"
             }
 
             predict_params = dict(
-                indicator='rolling_ratio',
+                indicator="rolling_ratio",
                 model_params=model_params,
                 fee=0.13,
                 train_end_index=1527,
-                features=['RSI79_low'],
+                features=["RSI79_low"],
             )
 
-            validation_date = '2020-04-11 00:00:00'
+            validation_date = "2020-04-11 00:00:00"
             model_predict = FeaturesCreator(
                 BTCUSD,
                 return_series,
-                BTCUSD['RSI79'],
+                BTCUSD["RSI79"],
                 complete_params,
                 validation_date
             )
-            model_predict.calculate_features('RSI79', 1527)
+            model_predict.calculate_features("RSI79", 1527)
             combination = os.getenv(preset_selected)
-            if preset_selected == 'All':
+            if preset_selected == "All":
                 name_list = os.getenv(preset_input).replace(" ","").split(",")
 
                 feats_list = [os.getenv(name) for name in name_list]
@@ -123,19 +121,10 @@ class RunModel:
                     for combination, param, name in zip(feats_list, params_list, name_list)
                 }
 
-                recommendation = [result[name]['Position'].rename(name) for name in name_list]
-                recommendation = pd.concat([result[name]['Position'].rename(name) for name in name_list], axis=1)
-                # recommendation = recommendation.where(recommendation == 1, 'Short').where(recommendation == -1, 'Long')
-                # recommendation = recommendation.iloc[-1].to_dict()
-                # recommendation = (
-                #     str(recommendation)
-                #     .replace('{', '')
-                #     .replace('}', '')
-                #     .replace("'", "")
-                #     .replace(', ', ' \n ')
-                # )
+                recommendation = [result[name]["Position"].rename(name) for name in name_list]
+                recommendation = pd.concat([result[name]["Position"].rename(name) for name in name_list], axis=1)
 
-                liquid_returns = [result[name]['Liquid_Return'].rename(name) for name in name_list]
+                liquid_returns = [result[name]["Liquid_Return"].rename(name) for name in name_list]
                 liquid_returns_concat = pd.concat(liquid_returns, axis=1)
                 fig = GraphLayout(
                     liquid_returns_concat,
@@ -151,9 +140,7 @@ class RunModel:
                     .calculate_model_returns(param, **predict_params)
                     [combination]
                 )
-                recommendation = result['Position'].to_frame()
-                # recommendation = result['Position'].iloc[-1]
-                # recommendation = "Short" if recommendation == -1 else "Long"
+                recommendation = result["Position"].to_frame()
                 graph_layout = GraphLayout(
                     result,
                     "BTC/USDT",
@@ -163,20 +150,20 @@ class RunModel:
 
                 fig = graph_layout.plot_single_linechart("Liquid_Return")
 
-            recommendation = recommendation.where(recommendation == 1, 'Short').where(recommendation == -1, 'Long')
+            recommendation = recommendation.where(recommendation == 1, "Short").where(recommendation == -1, "Long")
             recommendation = recommendation.tail(5)
-            recommendation = recommendation.reset_index()
+            recommendation = recommendation.reset_index().astype("str")
 
             recommendation_table = dag.AgGrid(
                     rowData=recommendation.to_dict("records"),
                     getRowId="params.data.date",
                     columnDefs=[{"field": i} for i in recommendation.columns],
                     defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth": 115},
-                    columnSize="sizeToFit",
+                    columnSize="responsiveSizeToFit",
                     dashGridOptions={"pagination": False},
                     className="ag-theme-alpine-dark",
-                    style={"overflow": "hidden", "height": "40vh"},
+                    style={"overflow": "hidden", "height": "29vh"},
                 )
 
-            return recommendation_table, fig
+            return recommendation_table, fig, 'spinner-loader_model'
 
