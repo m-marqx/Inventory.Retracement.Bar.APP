@@ -5,6 +5,7 @@ from dash import Output, Input, State, callback
 import tradingview_indicators as ta
 import pandas as pd
 import ccxt
+import dash_ag_grid as dag
 
 from controller.api.ccxt_api import CcxtAPI
 
@@ -15,6 +16,7 @@ from model.machine_learning.features_creator import FeaturesCreator
 
 from .utils import get_model_feat_params
 from .graph import GraphLayout
+
 
 class RunModel:
     @callback(
@@ -123,15 +125,15 @@ class RunModel:
 
                 recommendation = [result[name]['Position'].rename(name) for name in name_list]
                 recommendation = pd.concat([result[name]['Position'].rename(name) for name in name_list], axis=1)
-                recommendation = recommendation.where(recommendation == 1, 'Short').where(recommendation == -1, 'Long')
-                recommendation = recommendation.iloc[-1].to_dict()
-                recommendation = (
-                    str(recommendation)
-                    .replace('{', '')
-                    .replace('}', '')
-                    .replace("'", "")
-                    .replace(', ', ' \n ')
-                )
+                # recommendation = recommendation.where(recommendation == 1, 'Short').where(recommendation == -1, 'Long')
+                # recommendation = recommendation.iloc[-1].to_dict()
+                # recommendation = (
+                #     str(recommendation)
+                #     .replace('{', '')
+                #     .replace('}', '')
+                #     .replace("'", "")
+                #     .replace(', ', ' \n ')
+                # )
 
                 liquid_returns = [result[name]['Liquid_Return'].rename(name) for name in name_list]
                 liquid_returns_concat = pd.concat(liquid_returns, axis=1)
@@ -149,8 +151,9 @@ class RunModel:
                     .calculate_model_returns(param, **predict_params)
                     [combination]
                 )
-                recommendation = result['Position'].iloc[-1]
-                recommendation = "Short" if recommendation == -1 else "Long"
+                recommendation = result['Position'].to_frame()
+                # recommendation = result['Position'].iloc[-1]
+                # recommendation = "Short" if recommendation == -1 else "Long"
                 graph_layout = GraphLayout(
                     result,
                     "BTC/USDT",
@@ -159,5 +162,21 @@ class RunModel:
                 )
 
                 fig = graph_layout.plot_single_linechart("Liquid_Return")
-            return recommendation, fig
+
+            recommendation = recommendation.where(recommendation == 1, 'Short').where(recommendation == -1, 'Long')
+            recommendation = recommendation.tail(5)
+            recommendation = recommendation.reset_index()
+
+            recommendation_table = dag.AgGrid(
+                    rowData=recommendation.to_dict("records"),
+                    getRowId="params.data.date",
+                    columnDefs=[{"field": i} for i in recommendation.columns],
+                    defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth": 115},
+                    columnSize="sizeToFit",
+                    dashGridOptions={"pagination": False},
+                    className="ag-theme-alpine-dark",
+                    style={"overflow": "hidden", "height": "40vh"},
+                )
+
+            return recommendation_table, fig
 

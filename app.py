@@ -9,6 +9,9 @@ from view.dashboard.pages import (
     NavLinkPages,
 )
 
+from view.dashboard.pages.ml.ml_callback import RunModel
+from view.dashboard.pages.ml.label_callbacks import MLLabelCallbacks
+
 server = app.server
 
 if __name__ == "__main__":
@@ -16,6 +19,8 @@ if __name__ == "__main__":
     LangCallbacks()
     RunStrategy()
     RunBacktest()
+    MLLabelCallbacks()
+    RunModel()
     BacktestParams()
     GeneralCollapse()
     NavLinkPages()

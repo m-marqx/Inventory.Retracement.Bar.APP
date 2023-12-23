@@ -25,6 +25,14 @@ menu = dbc.Nav(
                 id="backtest",
             )
         ),
+        dbc.NavItem(
+            dbc.NavLink(
+                "MACHINE LEARNING",
+                href="/ml",
+                active=False,
+                id="ml",
+            )
+        ),
     ],
 )
 
