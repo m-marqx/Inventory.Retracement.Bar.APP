@@ -83,4 +83,8 @@ en_US = {
     "MODIFY_RESULT_CONFIGS_BUTTON" : "Modify Result Settings",
     # Backtest Button
     "RUN_BACKTEST": "Run Backtest",
+    # Presets
+    "PRESET": "Preset",
+    "COMBINATION": "Combination",
+    "RUN_MODEL": "Run Model",
 }

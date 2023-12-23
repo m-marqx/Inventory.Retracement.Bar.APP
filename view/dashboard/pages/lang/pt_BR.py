@@ -83,4 +83,8 @@ pt_BR = {
     "MODIFY_RESULT_CONFIGS_BUTTON": "Modificar Configurações de Resultado",
     # Backtest Button
     "RUN_BACKTEST": "Rodar Backtest",
+    # Presets
+    "PRESETS": "Presets",
+    "COMBINATION": "Combinação",
+    "RUN_MODEL": "Rodar Modelo",
 }
