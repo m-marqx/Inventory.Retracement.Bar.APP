@@ -1,6 +1,7 @@
 import pathlib
 import dash
-from dash import dcc
+from dash import dcc, DiskcacheManager
+import diskcache
 import dash_bootstrap_components as dbc
 
 from view.dashboard.pages.general.components import navbar_components
@@ -8,6 +9,8 @@ from view.dashboard.pages.general.components import navbar_components
 theme = dbc.themes.MORPH
 style_sheet = ["assets/style"]
 icons = "https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+cache = diskcache.Cache("./cache")
+background_callback_manager = DiskcacheManager(cache)
 
 page_folder = pathlib.Path("view", "dashboard", "pages")
 
@@ -18,6 +21,7 @@ app = dash.Dash(
     title="Inventory Retracement Bar",
     use_pages=True,
     pages_folder=page_folder,
+    background_callback_manager=background_callback_manager,
 )
 
 app.layout = dbc.Container(

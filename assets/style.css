@@ -102,6 +102,9 @@
   background: #2F3323;
 }
 
+.progress-bar-model {
+  margin-top: 10px;
+}
 
 .btn-primary {
   position: relative;

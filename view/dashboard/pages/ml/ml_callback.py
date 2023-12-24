@@ -1,9 +1,10 @@
 import os
 
 import dash
-from dash import Output, Input, State, callback
 import tradingview_indicators as ta
 import pandas as pd
+from dash import Output, Input, State, callback
+import time
 import ccxt
 import dash_ag_grid as dag
 
@@ -20,28 +21,62 @@ from .graph import GraphLayout
 
 class RunModel:
     @callback(
-        Output("model_text_output", "children"),
-        Output("ml_results", "figure"),
-        Output("text_model_spinner", "spinner_class_name"),
+        Output("progress_bar", "value", True),
         Input("run_model", "n_clicks"),
-        State("preset_options", "value"),
-        Input("preset", "value"),
+        prevent_initial_call=True,
     )
-    def get_model_predict(run_button, preset_selected, preset_input):
+    def update_progress_bar(run_button):
         ctx = dash.callback_context
 
         if not ctx.triggered:
             raise dash.exceptions.PreventUpdate
 
         if "run_model" in ctx.triggered[0]["prop_id"]:
-            updated_dataset = pd.read_parquet("model/data/dataset_updated.parquet")
+            time.sleep(0.786)
+            return "5"
 
+    @callback(
+        Output("model_text_output", "children"),
+        Output("ml_results", "figure"),
+        Output("text_model_spinner", "spinner_class_name"),
+        Output("progress_bar", "value"),
+        inputs=[
+        Input("run_model", "n_clicks"),
+        State("preset_options", "value"),
+        Input("preset", "value"),
+        ],
+        background=True,
+        cancel=Input("cancel_model", "n_clicks"),
+        running=[
+            (Output("run_model", "disabled"), True, False),
+            (Output("cancel_model", "disabled"), False, True),
+            (
+                Output("progress_bar", "style"),
+                {"visibility": "visible", "margin-top": "10px"},
+                {"visibility": "hidden", "margin-top": "10px"},
+            ),
+        ],
+        progress=Output("progress_bar", "value"),
+        prevent_initial_call=True,
+    )
+    def get_model_predict(set_progress, run_button, preset_selected, preset_input):
+        ctx = dash.callback_context
+
+        if not ctx.triggered:
+            raise dash.exceptions.PreventUpdate
+
+        if "run_model" in ctx.triggered[0]["prop_id"]:
+            set_progress("35")
+
+            updated_dataset = pd.read_parquet("model/data/dataset_updated.parquet")
             BTCUSD = DataHandler(updated_dataset).calculate_targets()
             capi = CcxtAPI(symbol="BTC/USDT", interval="1d", exchange=ccxt.binance())
             updated_dataset = capi.update_klines(updated_dataset).drop(columns="volume")
             BTCUSD = DataHandler(updated_dataset.copy()).calculate_targets()
             BTCUSD["RSI79"] = ta.RSI(BTCUSD["high"].pct_change(), 79)
             return_series = BTCUSD["Return"]
+
+            set_progress("25")
 
             split_params = dict(
                 target_input=BTCUSD["Target_1_bin"],
@@ -96,6 +131,7 @@ class RunModel:
             )
 
             validation_date = "2020-04-11 00:00:00"
+
             model_predict = FeaturesCreator(
                 BTCUSD,
                 return_series,
@@ -103,17 +139,28 @@ class RunModel:
                 complete_params,
                 validation_date
             )
+
+            set_progress("35")
+
             model_predict.calculate_features("RSI79", 1527)
             combination = os.getenv(preset_selected)
+
+            set_progress("45")
+
             if preset_selected == "All":
+                set_progress("55")
                 name_list = os.getenv(preset_input).replace(" ","").split(",")
 
                 feats_list = [os.getenv(name) for name in name_list]
+
 
                 params_list = [
                     get_model_feat_params(combination)
                     for combination in feats_list
                 ]
+
+
+                set_progress("95")
 
                 result = {
                     name:
@@ -124,8 +171,12 @@ class RunModel:
                 recommendation = [result[name]["Position"].rename(name) for name in name_list]
                 recommendation = pd.concat([result[name]["Position"].rename(name) for name in name_list], axis=1)
 
+                # set_progress("75")
                 liquid_returns = [result[name]["Liquid_Return"].rename(name) for name in name_list]
                 liquid_returns_concat = pd.concat(liquid_returns, axis=1)
+
+                # set_progress("85")
+
                 fig = GraphLayout(
                     liquid_returns_concat,
                     "BTC/USDT",
@@ -133,13 +184,19 @@ class RunModel:
                     "spot",
                 ).grouped_lines()
 
+                # set_progress("95")
+
             elif combination:
+                set_progress("95")
+
                 param = get_model_feat_params(combination)
+
                 result = (
                     model_predict
                     .calculate_model_returns(param, **predict_params)
                     [combination]
                 )
+
                 recommendation = result["Position"].to_frame()
                 graph_layout = GraphLayout(
                     result,
@@ -165,5 +222,4 @@ class RunModel:
                     style={"overflow": "hidden", "height": "29vh"},
                 )
 
-            return recommendation_table, fig, 'spinner-loader_model'
-
+            return recommendation_table, fig, 'spinner-loader_model', "0"

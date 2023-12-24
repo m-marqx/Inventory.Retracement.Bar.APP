@@ -75,16 +75,33 @@ def layout(lang="en_US"):
                                 ),
                                 dbc.Col(
                                     [
-                                        dbc.Button(
-                                            lang["RUN_MODEL"],
-                                            id="run_model",
-                                            style={
-                                                "margin-top": "10px",
-                                                "border-radius": "20px",
-                                            },
-                                            color="primary",
-                                            outline=False,
-                                            className="d-grid gap-2 col-6 mx-auto w-100",
+                                        dbc.Row(
+                                            [
+                                                dbc.Button(
+                                                    lang["RUN_MODEL"],
+                                                    id="run_model",
+                                                    style={
+                                                        "margin-top": "10px",
+                                                        "border-radius": "20px",
+                                                    },
+                                                    color="primary",
+                                                    outline=False,
+                                                    className="d-grid gap-2 col-6 mx-auto w-50",
+                                                ),
+                                                dbc.Button(
+                                                    lang["CANCEL_MODEL"],
+                                                    id="cancel_model",
+                                                    style={
+                                                        "margin-top": "10px",
+                                                        "border-radius": "20px",
+                                                    },
+                                                    color="primary",
+                                                    disabled=True,
+                                                    outline=False,
+                                                    className="d-grid gap-2 col-6 mx-auto w-50",
+                                                ),
+                                                html.Progress(id="progress_bar", value="0", max="100", className="progress-bar-model", style={"margin-top": "10px"}),
+                                            ],
                                         ),
                                         dbc.Spinner(
                                             html.P(
