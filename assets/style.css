@@ -383,6 +383,26 @@
   overflow: hidden;
 }
 
+.Select input {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.Select-clear {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.Select-arrow {
+  border-top-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.is-open>.Select-control .Select-arrow {
+  border-color: transparent transparent rgba(255, 255, 255, 0.85) !important;
+}
+
+.Select-placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .Select-control {
   background: #536d13 !important;
   color: rgba(255, 255, 255, 0.85);
