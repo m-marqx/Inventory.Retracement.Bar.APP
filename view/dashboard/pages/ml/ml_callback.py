@@ -215,7 +215,7 @@ class RunModel:
                     rowData=recommendation.to_dict("records"),
                     getRowId="params.data.date",
                     columnDefs=[{"field": i} for i in recommendation.columns],
-                    defaultColDef={"resizable": True, "sortable": True, "filter": True, "minWidth": 115},
+                    defaultColDef={"resizable": True, "sortable": True, "filter": True},
                     columnSize="responsiveSizeToFit",
                     dashGridOptions={"pagination": False},
                     className="ag-theme-alpine-dark",
