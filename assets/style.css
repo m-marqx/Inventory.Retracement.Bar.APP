@@ -98,6 +98,11 @@
   background: #6f9412;
 }
 
+.btn:disabled {
+  background: #2F3323;
+}
+
+
 .btn-primary {
   position: relative;
   padding: 1rem 1.5rem;
