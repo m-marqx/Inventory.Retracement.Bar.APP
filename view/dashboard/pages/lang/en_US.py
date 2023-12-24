@@ -87,4 +87,5 @@ en_US = {
     "PRESET": "Preset",
     "COMBINATION": "Combination",
     "RUN_MODEL": "Run Model",
+    "CANCEL_MODEL": "Cancel Model",
 }

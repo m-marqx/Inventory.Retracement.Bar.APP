@@ -87,4 +87,5 @@ pt_BR = {
     "PRESETS": "Presets",
     "COMBINATION": "Combinação",
     "RUN_MODEL": "Rodar Modelo",
+    "CANCEL_MODEL": "Cancelar Modelo"
 }
