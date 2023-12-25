@@ -62,7 +62,7 @@ def layout(lang="en_US"):
                                     ),
                                 ),
                             ],
-                            width=9,
+                            width=8,
                         ),
                         dbc.Col(
                             [
@@ -156,7 +156,7 @@ def layout(lang="en_US"):
                                 ),
                                 dbc.Col(id="table_container"),
                             ],
-                            width=3,
+                            width=4,
                         ),
                     ],
                 ),
