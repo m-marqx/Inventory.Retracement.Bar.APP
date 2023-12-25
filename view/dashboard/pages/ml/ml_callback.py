@@ -1,4 +1,5 @@
 import os
+import json
 
 import dash
 import tradingview_indicators as ta
@@ -111,17 +112,14 @@ class RunModel:
                 low_features=low_params
             )
 
-            model_params = {
-                "objective" : "binary:logistic",
-                "random_state" : 1635,
-                "subsample": 0.6499999999999999,
-                "n_estimators": 450,
-                "max_depth": 16,
-                "learning_rate": 0.66,
-                "gamma": 5,
-                "colsample_bytree": 0.1,
-                "eval_metric" : "auc"
-            }
+
+            try:
+                model_params = json.loads(os.getenv('model_params'))
+            except KeyError:
+                model_params = {
+                    "objective" : "binary:logistic",
+                    "random_state" : 33,
+                }
 
             predict_params = dict(
                 indicator="rolling_ratio",
