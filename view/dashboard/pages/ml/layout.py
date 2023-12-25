@@ -100,7 +100,15 @@ def layout(lang="en_US"):
                                                     outline=False,
                                                     className="d-grid gap-2 col-6 mx-auto w-50",
                                                 ),
-                                                html.Progress(id="progress_bar", value="0", max="100", className="progress-bar-model", style={"margin-top": "10px"}),
+                                                html.Progress(
+                                                    id="progress_bar",
+                                                    value="0",
+                                                    max="100",
+                                                    className="progress-bar-model",
+                                                    style={
+                                                        "margin-top": "10px"
+                                                    }
+                                                ),
                                             ],
                                         ),
                                         dbc.Spinner(
