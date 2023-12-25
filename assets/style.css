@@ -380,7 +380,7 @@
 .VirtualizedSelectFocusedOption {
   color: #ffffff !important;
   background: #c9e75da6 !important;
-  overflow: hidden;
+overflow: hidden;
 }
 
 .Select input {
@@ -404,34 +404,18 @@
 }
 
 .Select-control {
-  background: #536d13 !important;
+  background: #536d13d9 !important;
+  border-radius: 7px;
+  border: 1px solid rgba(0,0,0,0) !important;
   color: rgba(255, 255, 255, 0.85);
-  border: none;
+  display: table;
   border-spacing: 0;
-  border-radius: 10px;
-  box-shadow: none;
-  padding: 1rem 1.5rem;
-  font-weight: 400;
-  position: relative;
-  height: var(--default-height);
-  display: flex;
-  align-items: center !important;
-  justify-content: center !important;
+  border-collapse: separate;
+  height: 36px;
+  overflow: hidden;
 }
 
-.Select-multi-value-wrapper, .Select-value, .Select-value-label {
-  font-weight: 400;
-  position: relative !important;
-  width: 100% !important;
-  display: grid !important;
-  align-items: center !important;
-  justify-items: center !important;
-  line-height: 2.5 !important;
-  height: 0px !important;
-  overflow: visible !important;
-}
-
-.Select--multi.Select-value {
+.Select--multi .Select-value {
   background-color: #c9e75d27;
   border-radius: 2px;
   border: 1px solid #c9e75da6;
@@ -450,19 +434,19 @@
   color: #c9e75d !important;
 }
 
-.Select-placeholder, .Select-input {
-  position: relative;
-  height: 0px !important;
-  overflow: visible !important;
-  width: 100% !important;
-  display: grid !important;
-  align-content: center !important;
-  justify-content: center !important;
+.Select-placeholder {
+    position: relative;
+    height: 0px !important;
+    overflow: visible !important;
+    width: 100% !important;
+    display: grid !important;
+    align-content: stretch;
+    justify-content: space-around;
 }
 
 .has-value.Select--single > .Select-control .Select-value .Select-value-label {
   color: rgba(255, 255, 255, 0.85) !important;
-  display: grid;
+display: grid;
   align-content: center;
   justify-content: center;
 }
@@ -480,7 +464,7 @@
 }
 
 .dropdown-item {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .dropdown-item:hover {
@@ -580,7 +564,7 @@ body {
   font-family: -apple-system, "BlinkMacSystemFont", "Segoe UI", "Roboto",
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
-}
+  }
 
 h1,
 h2,
