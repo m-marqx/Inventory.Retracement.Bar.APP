@@ -37,6 +37,7 @@ class RunModel:
 
     @callback(
         Output("model_text_output", "children"),
+        Output("new_signal_output", "children"),
         Output("ml_results", "figure"),
         Output("text_model_spinner", "spinner_class_name"),
         Output("progress_bar", "value"),
@@ -168,14 +169,11 @@ class RunModel:
                     for combination, param, name in zip(feats_list, params_list, name_list)
                 }
 
-                recommendation = [result[name]["Position"].rename(name) for name in name_list]
-                recommendation = pd.concat([result[name]["Position"].rename(name) for name in name_list], axis=1)
+                predict = [result[name]["Predict"].rename(name) for name in name_list]
+                predict = pd.concat([result[name]["Predict"].rename(name) for name in name_list], axis=1)
 
-                # set_progress("75")
                 liquid_returns = [result[name]["Liquid_Return"].rename(name) for name in name_list]
                 liquid_returns_concat = pd.concat(liquid_returns, axis=1)
-
-                # set_progress("85")
 
                 fig = GraphLayout(
                     liquid_returns_concat,
@@ -183,8 +181,6 @@ class RunModel:
                     "1D",
                     "spot",
                 ).grouped_lines()
-
-                # set_progress("95")
 
             elif combination:
                 set_progress("95")
@@ -197,7 +193,8 @@ class RunModel:
                     [combination]
                 )
 
-                recommendation = result["Position"].to_frame()
+                predict = result["Predict"].to_frame()
+
                 graph_layout = GraphLayout(
                     result,
                     "BTC/USDT",
@@ -207,9 +204,15 @@ class RunModel:
 
                 fig = graph_layout.plot_single_linechart("Liquid_Return")
 
-            recommendation = recommendation.where(recommendation == 1, "Short").where(recommendation == -1, "Long")
-            recommendation = recommendation.tail(5)
-            recommendation = recommendation.reset_index().astype("str")
+            recommendation = predict.shift()
+            recommendation = (
+                recommendation
+                .where(recommendation < 0, 'Long')
+                .where(recommendation > 0, 'Short')
+                .tail(5)
+            )
+
+            recommendation = recommendation.reset_index()
 
             recommendation_table = dag.AgGrid(
                     rowData=recommendation.to_dict("records"),
@@ -222,4 +225,29 @@ class RunModel:
                     style={"overflow": "hidden", "height": "29vh"},
                 )
 
-            return recommendation_table, fig, 'spinner-loader_model', "0"
+            new_signal = pd.DataFrame({"date" : predict.iloc[-1]}).T.reset_index()
+
+            new_signal = (
+                new_signal
+                .where(new_signal == "1", "Long")
+                .where(new_signal == "-1", "Short")
+            )
+
+            new_signal_table = dag.AgGrid(
+                    rowData=new_signal.to_dict("records"),
+                    getRowId="params.data.date",
+                    columnDefs=[{"field": i} for i in new_signal.columns],
+                    defaultColDef={"resizable": True, "sortable": True, "filter": True},
+                    columnSize="responsiveSizeToFit",
+                    dashGridOptions={"pagination": False},
+                    className="ag-theme-alpine-dark",
+                    style={"overflow": "hidden", "height": "29vh"},
+                )
+
+            return (
+                recommendation_table,
+                new_signal_table,
+                fig,
+                'spinner-loader_model',
+                "0",
+            )

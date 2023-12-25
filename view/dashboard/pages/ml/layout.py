@@ -104,17 +104,29 @@ def layout(lang="en_US"):
                                             ],
                                         ),
                                         dbc.Spinner(
-                                            html.P(
-                                                lang["EMPTY_RESULT"],
-                                                id="model_text_output",
-                                                style={
-                                                    "margin-top": "10px",
-                                                    "border-radius": "20px",
-                                                    "display": "flex",
-                                                    "flex-wrap": "wrap",
-                                                    "align-content": "flex-start",
-                                                    "justify-content": "center",
-                                                }),
+                                            [
+                                                html.P(
+                                                    lang["EMPTY_RESULT"],
+                                                    id="model_text_output",
+                                                    style={
+                                                        "margin-top": "10px",
+                                                        "border-radius": "20px",
+                                                        "display": "flex",
+                                                        "flex-wrap": "wrap",
+                                                        "align-content": "flex-start",
+                                                        "justify-content": "center",
+                                                    }),
+                                                html.P(
+                                                    id="new_signal_output",
+                                                    style={
+                                                        "margin-top": "10px",
+                                                        "border-radius": "20px",
+                                                        "display": "flex",
+                                                        "flex-wrap": "wrap",
+                                                        "align-content": "flex-start",
+                                                        "justify-content": "center",
+                                                    }),
+                                            ],
                                             id="text_model_spinner",
                                             color="primary",
                                             spinner_class_name="spinner-loader",
