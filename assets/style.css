@@ -286,6 +286,7 @@
   box-shadow: none !important;
   transition: background 0.15s ease-in-out;
   height: var(--default-height);
+  text-align:center;
 }
 
 .form-control::-webkit-outer-spin-button,
@@ -423,6 +424,7 @@
   border-collapse: separate;
   height: var(--default-height);
   overflow: hidden;
+  text-align: center;
 }
 
 .Select--multi .Select-value {
