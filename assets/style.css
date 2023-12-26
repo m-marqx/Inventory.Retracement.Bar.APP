@@ -519,7 +519,7 @@ display: grid;
 .spinner-loader_model {
   width: 32px;
   height: 32px;
-  margin-top: -24vh !important;
+  margin-top: -39vh !important;
   display: flex !important;
   flex-wrap: wrap !important;
   align-content: flex-start !important;
