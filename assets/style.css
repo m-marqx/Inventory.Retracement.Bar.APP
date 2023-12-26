@@ -380,7 +380,7 @@
 .VirtualizedSelectFocusedOption {
   color: #ffffff !important;
   background: #c9e75da6 !important;
-overflow: hidden;
+  overflow: hidden;
 }
 
 .Select input {
@@ -411,7 +411,7 @@ overflow: hidden;
   display: table;
   border-spacing: 0;
   border-collapse: separate;
-  height: 36px;
+  height: var(--default-height);
   overflow: hidden;
 }
 
