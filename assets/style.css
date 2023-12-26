@@ -502,6 +502,10 @@ display: grid;
   }
 }
 
+.negative-2vh {
+  margin-top: -1vh !important
+}
+
 .spinner-loader_model {
   width: 32px;
   height: 32px;
