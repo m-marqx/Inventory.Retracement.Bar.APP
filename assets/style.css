@@ -259,6 +259,16 @@
   justify-content: center;
 }
 
+.progress-info {
+  margin-top: 1vh;
+  color: #c9e75d;
+  text-align: center;
+  font-weight: 300;
+  height: 28px;
+  font-size: 21px;
+  background: transparent !important;
+}
+
 .form-control {
   display: block;
   width: 100%;
