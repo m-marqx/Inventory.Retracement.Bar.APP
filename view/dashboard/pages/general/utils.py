@@ -128,6 +128,7 @@ class MenuCollapse:
         component,
         id_prefix: str,
         is_open: bool = False,
+        **kwargs
     ):
         """
         Initialize a MenuCollapse instance.
@@ -165,6 +166,7 @@ class MenuCollapse:
             className="d-grid gap-2 col-6 mx-auto w-100",
             outline=True,
             color="secondary",
+            **kwargs,
         )
 
     @property
