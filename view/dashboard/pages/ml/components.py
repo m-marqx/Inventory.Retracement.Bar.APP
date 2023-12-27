@@ -36,7 +36,7 @@ class MLComponents:
                 dbc.Col(
                     dbc.Label("PRESET"),
                     width=45,
-                    style={"margin-top": "10px"},
+                    style={"margin-top": "1vh"},
                     class_name="center",
                 ),
             dbc.Col(
@@ -68,7 +68,7 @@ class MLComponents:
                 dbc.Col(
                     dbc.Label(self.lang["COMBINATION"]),
                     width=45,
-                    style={"margin-top": "10px"},
+                    style={"margin-top": "1vh"},
                     class_name="center",
                 ),
                 dbc.Col(
