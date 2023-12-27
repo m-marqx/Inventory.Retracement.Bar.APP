@@ -100,13 +100,15 @@ class TestFeaturesCreator(unittest.TestCase):
         pd.testing.assert_frame_equal(rolling_rsi_ratio_indicator, ratio_reference_indicator)
 
     def test_get_results(self):
-        _ = self.features_creator.calculate_model_returns(
-            14, 'RSI'
+        self.features_creator.data_frame['RSI'] = self.features_creator.temp_indicator(
+            14, 'RSI', self.source,
         )
+
+        self.features_creator.calculate_features("RSI", 1526)
 
         all_features_results = (
             self.features_creator
-            .calculate_results(['temp_variable','temp_variableH','temp_variableL'])
+            .calculate_results(['RSI_split','RSI_high','RSI_low'])
         )
 
         all_features_reference_results = pd.read_parquet(

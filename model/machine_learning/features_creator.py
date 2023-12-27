@@ -223,9 +223,12 @@ class FeaturesCreator:
         source_name = source.name if isinstance(source, pd.Series) else source
         source_name = source_name or self.source.name
 
+        if source is None:
+            source = self.source
+
         match indicator:
             case 'RSI':
-                return ta.RSI(self.data_frame[source_name], value)
+                return ta.RSI(source, value)
             case 'rolling_ratio':
                 return (
                     MathFeature(self.data_frame[source_name].to_frame(), source_name)
