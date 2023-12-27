@@ -92,4 +92,14 @@ en_US = {
 
     #General Components
     "SELECT_PLACEHOLDER": "Select...",
+
+    # Indicators
+    "INDICATORS": "Indicators",
+    "MODIFY_INDICATORS": "Modify Indicators",
+    "LENGTH" : "Length",
+    "RSI": "RSI",
+    "ROLLING_RATIO_SOURCE": "Rolling Ratio Source",
+    "FIRST_LENGTH": "First Length",
+    "SECOND_LENGTH": "Second Length",
+
 }

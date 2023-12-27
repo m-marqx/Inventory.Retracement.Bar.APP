@@ -101,3 +101,119 @@ class MLComponents:
             id_prefix="preset_configs",
         ).simple_collapse
 
+    @property
+    def rsi_settings(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    DropdownMenu(
+                        lang=self.lang,
+                        label="RSI",
+                        options=["open", "high", "low", "close"],
+                        id_prefix="rsi_model",
+                        is_multi_options=False,
+                    ).dropdown_components,
+                    width=6,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Col(
+                            dbc.Label(self.lang["LENGTH"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id='length-input',
+                            type='number',
+                        ),
+                    ],
+                    width=6,
+                )
+            ],
+            id="rsi_settings",
+            class_name="hidden"
+        )
+
+    @property
+    def rolling_ratio_settings(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    DropdownMenu(
+                        lang=self.lang,
+                        label="ROLLING_RATIO_SOURCE",
+                        options=["open", "high", "low", "close", "RSI"],
+                        id_prefix="rolling_ratio",
+                    ).dropdown_components,
+                    width=6,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Col(
+                            dbc.Label(self.lang["FIRST_LENGTH"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id='length-input',
+                            type='number',
+                        ),
+                    ],
+                    width=3,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Col(
+                            dbc.Label(self.lang["SECOND_LENGTH"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id='length-input',
+                            type='number',
+                        ),
+                    ],
+                    width=3,
+                )
+            ],
+            id="rolling_settings",
+            class_name="hidden"
+        )
+
+    @property
+    def indicators_select(self):
+        """Component for the dropdown menu selection.
+
+        Returns
+        -------
+        dbc.Row
+            A Row component containing the dropdown menu selection.
+
+        """
+        return dbc.Col(
+            [
+                DropdownMenu(
+                    lang=self.lang,
+                    label="INDICATORS",
+                    options=["RSI", "rolling ratio"],
+                    id_prefix="indicators",
+                    is_multi_options=True,
+                ).dropdown_components,
+                self.rsi_settings,
+                self.rolling_ratio_settings,
+            ]
+        )
+
+    @property
+    def indicators_settings(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_INDICATORS",
+            component=self.indicators_select,
+            id_prefix="indicators_models",
+            style={"margin-top": "1vh"},
+        ).simple_collapse
+

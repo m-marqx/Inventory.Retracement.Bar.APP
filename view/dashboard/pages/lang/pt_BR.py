@@ -92,4 +92,13 @@ pt_BR = {
 
     #General Components
     "SELECT_PLACEHOLDER": "Selecionar...",
+    # Indicators
+    "INDICATORS": "Indicadores",
+    "MODIFY_INDICATORS": "Modificar Indicadores",
+    "RSI": "RSI",
+    "LENGTH" : "Periodo",
+    "ROLLING_RATIO_SOURCE": "Fonte da Proporção",
+    "FIRST_LENGTH": "Primeiro Período",
+    "SECOND_LENGTH": "Segundo Período",
+
 }
