@@ -193,7 +193,8 @@ class MenuCollapse:
 
     def collapse_with_inside_collapse(self, inside_component):
         """
-        Create a collapsible menu item.
+        Create a collapsible menu item with another collpsible menu
+        inside.
 
         Returns
         -------
