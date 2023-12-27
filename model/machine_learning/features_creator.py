@@ -217,15 +217,18 @@ class FeaturesCreator:
             If the specified indicator is not found.
 
         """
-        if source is None:
-            source = self.source
+        if isinstance(source, pd.Series):
+            self.data_frame[source.name] = source
+
+        source_name = source.name if isinstance(source, pd.Series) else source
+        source_name = source_name or self.source.name
 
         match indicator:
             case 'RSI':
-                return ta.RSI(source, value)
+                return ta.RSI(self.data_frame[source_name], value)
             case 'rolling_ratio':
                 return (
-                    MathFeature(self.data_frame, source.name)
+                    MathFeature(self.data_frame[source_name].to_frame(), source_name)
                     .rolling_ratio(*value)
                 )
             case _:
