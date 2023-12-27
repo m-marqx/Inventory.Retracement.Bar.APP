@@ -10,7 +10,7 @@
 }
 
 .center {
-  display: grid;
+  display: grid !important;
   align-content: center;
   justify-content: center;
   align-items: center;
