@@ -76,7 +76,7 @@ class TestFeaturesCreator(unittest.TestCase):
 
     def test_rsi_indicator(self):
         rsi_indicator = self.features_creator.temp_indicator(
-            14, 'RSI'
+            14, 'RSI', self.source,
         )
         rsi_indicator = rsi_indicator.to_frame()
 

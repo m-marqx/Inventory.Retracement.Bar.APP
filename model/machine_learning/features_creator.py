@@ -192,7 +192,8 @@ class FeaturesCreator:
     def temp_indicator(
         self,
         value: int | list,
-        indicator:Literal['RSI', 'rolling_ratio'] = 'RSI'
+        indicator:Literal['RSI', 'rolling_ratio'] = 'RSI',
+        source: None | pd.Series = None,
     ) -> pd.Series:
         """
         Calculate a temporary indicator series.
@@ -216,12 +217,15 @@ class FeaturesCreator:
             If the specified indicator is not found.
 
         """
+        if source is None:
+            source = self.source
+
         match indicator:
             case 'RSI':
-                return ta.RSI(self.source, value)
+                return ta.RSI(source, value)
             case 'rolling_ratio':
                 return (
-                    MathFeature(self.data_frame, self.source.name)
+                    MathFeature(self.data_frame, source.name)
                     .rolling_ratio(*value)
                 )
             case _:
