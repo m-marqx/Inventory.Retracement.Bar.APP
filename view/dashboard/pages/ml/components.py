@@ -74,6 +74,7 @@ class MLComponents:
                 dbc.Col(
                     dcc.Dropdown(
                         id="preset_options",
+                        placeholder=self.lang["SELECT_PLACEHOLDER"],
                     ),
                     width=45,
                 ),
