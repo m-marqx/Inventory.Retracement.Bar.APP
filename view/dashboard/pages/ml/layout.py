@@ -22,8 +22,6 @@ def layout(lang="en_US"):
         lang = pt_BR
 
     ml_components = MLComponents(lang)
-    presets_getter = ml_components.presets_getter
-    presets_setter = ml_components.preset_setter
 
     return [
         dbc.Container(
@@ -66,13 +64,7 @@ def layout(lang="en_US"):
                         ),
                         dbc.Col(
                             [
-                                dbc.Col(
-                                    [
-                                        presets_getter,
-                                        presets_setter,
-                                    ],
-                                    class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container",
-                                ),
+                                ml_components.collapse_preset_settings,
                                 dbc.Col(
                                     [
                                         dbc.Row(

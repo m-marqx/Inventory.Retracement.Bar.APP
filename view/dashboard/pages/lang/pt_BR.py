@@ -87,6 +87,8 @@ pt_BR = {
     "PRESETS": "Presets",
     "COMBINATION": "Combinação",
     "RUN_MODEL": "Rodar Modelo",
+    "CANCEL_MODEL": "Cancelar Modelo",
+    "USE_PREBUILD_MODELS": "Usar Modelos Feitos",
 
     #General Components
     "SELECT_PLACEHOLDER": "Selecionar...",

@@ -11,6 +11,7 @@ from view.dashboard.pages import (
 
 from view.dashboard.pages.ml.ml_callback import RunModel
 from view.dashboard.pages.ml.label_callbacks import MLLabelCallbacks
+from view.dashboard.pages.ml.ml_collapse_callbacks import MLCollapseCallbacks
 
 server = app.server
 
@@ -20,6 +21,7 @@ if __name__ == "__main__":
     RunStrategy()
     RunBacktest()
     MLLabelCallbacks()
+    MLCollapseCallbacks()
     RunModel()
     BacktestParams()
     GeneralCollapse()

@@ -81,3 +81,23 @@ class MLComponents:
             ],
             style={"justify-content": "center"},
         )
+
+    @property
+    def preset_settings(self):
+        return dbc.Col(
+            [
+                self.presets_getter,
+                self.preset_setter,
+            ],
+            class_name="d-grid gap-2 col-6 mx-auto w-100 menu-collapse_container",
+        )
+
+    @property
+    def collapse_preset_settings(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="USE_PREBUILD_MODELS",
+            component=self.preset_settings,
+            id_prefix="preset_configs",
+        ).simple_collapse
+

@@ -88,6 +88,7 @@ en_US = {
     "COMBINATION": "Combination",
     "RUN_MODEL": "Run Model",
     "CANCEL_MODEL": "Cancel Model",
+    "USE_PREBUILD_MODELS": "Use Prebuild Models",
 
     #General Components
     "SELECT_PLACEHOLDER": "Select...",
