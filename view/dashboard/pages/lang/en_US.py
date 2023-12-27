@@ -88,4 +88,7 @@ en_US = {
     "COMBINATION": "Combination",
     "RUN_MODEL": "Run Model",
     "CANCEL_MODEL": "Cancel Model",
+
+    #General Components
+    "SELECT_PLACEHOLDER": "Select...",
 }

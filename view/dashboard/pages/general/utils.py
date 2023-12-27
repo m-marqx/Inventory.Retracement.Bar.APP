@@ -347,6 +347,7 @@ class DropdownMenu:
     ):
         self.options = options
         self.label_name = lang[label]
+        self.placeholder = lang["SELECT_PLACEHOLDER"]
         self.id_prefix = id_prefix
         self.is_multi_options = is_multi_options
 
@@ -364,6 +365,7 @@ class DropdownMenu:
                         self.options,
                         id=f"{self.id_prefix}_dropdown",
                         multi=self.is_multi_options,
+                        placeholder=self.placeholder,
                     ),
                     width=45,
                 ),
