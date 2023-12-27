@@ -223,13 +223,16 @@ class RunModel:
                     style={"overflow": "hidden", "height": "29vh"},
                 )
 
-            new_signal = pd.DataFrame({"date" : predict.iloc[-1]}).T.reset_index()
+            new_signal = pd.DataFrame({"Unconfirmed" : predict.iloc[-1]}).T
 
             new_signal = (
                 new_signal
-                .where(new_signal == "1", "Long")
-                .where(new_signal == "-1", "Short")
+                .where(new_signal < 0, "Long")
+                .where(new_signal > 0, "Short")
+                .reset_index()
             )
+
+            new_signal.columns = ["date"] + list(new_signal.columns[1:])
 
             new_signal_table = dag.AgGrid(
                     rowData=new_signal.to_dict("records"),
@@ -239,7 +242,7 @@ class RunModel:
                     columnSize="responsiveSizeToFit",
                     dashGridOptions={"pagination": False},
                     className="ag-theme-alpine-dark",
-                    style={"overflow": "hidden", "height": "29vh"},
+                    style={"overflow": "hidden", "height": "10vh", "margin-top": "1vh"},
                 )
 
             return (
