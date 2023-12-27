@@ -101,4 +101,17 @@ pt_BR = {
     "FIRST_LENGTH": "Primeiro Período",
     "SECOND_LENGTH": "Segundo Período",
 
+    # Params
+    "MODIFY_PARAMS": "Modificar Parâmetros",
+
+    # Features
+    "FEATURES_THRESHOLD": "Ponto de corte das Features",
+    "INTERMEDIATE": "Intermediário",
+
+
+    # Model Params
+    "MODEL_PARAMS": "Parâmetros do Modelo",
+    "SCORING_METRIC": "Métrica de Avaliação",
+    "GENERATE_PARAMS": "Gerar Parâmetros",
+
 }

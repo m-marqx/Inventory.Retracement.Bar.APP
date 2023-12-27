@@ -66,6 +66,7 @@ def layout(lang="en_US"):
                             [
                                 ml_components.collapse_preset_settings,
                                 ml_components.indicators_settings,
+                                ml_components.model_params_settings,
                                 dbc.Col(
                                     [
                                         dbc.Row(

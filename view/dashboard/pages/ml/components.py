@@ -217,3 +217,255 @@ class MLComponents:
             style={"margin-top": "1vh"},
         ).simple_collapse
 
+    @property
+    def feat_params_components(self):
+        return dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label(self.lang["FEATURES_THRESHOLD"]),
+                    width=45,
+                    class_name="center",
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label(self.lang["HIGH"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="high_threshold",
+                            value=0.51,
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            placeholder="High threshold",
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label(self.lang["INTERMEDIATE"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="split_threshold",
+                            value=0.50,
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            placeholder="Intermediate threshold",
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label(self.lang["LOW"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="low_threshold",
+                            value=0.49,
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            placeholder="Low threshold",
+                            type="number",
+                        )],
+                        style={"width": "30%"},
+                    )
+                ],
+                style={"justify-content": "center"},
+                ),
+            ]
+        )
+
+    @property
+    def model_param_component(self):
+        model_params_row = [
+                dbc.Col(
+                    dbc.Label(self.lang["MODEL_PARAMS"]),
+                    width=45,
+                    class_name="center",
+                    style={"margin-top": "2vh"},
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("n_estimators"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="n_estimators",
+                            min=0,
+                            max=1,
+                            step=1,
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Max Depth"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="max_depth",
+                            min=0,
+                            max=1,
+                            step=1,
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Gamma"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="gamma",
+                            min=0,
+                            max=1,
+                            step=1,
+                            type="number",
+                        )],
+                        style={"width": "30%"},
+                    )
+                ],
+                style={"justify-content": "center"},
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Subsample"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="subsample",
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Learning Rate"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="learning_rate",
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Colsample Bytree"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="colsample_bytree",
+                            min=0,
+                            max=1,
+                            step=0.01,
+                            type="number",
+                        )],
+                        style={"width": "30%"},
+                    )
+                ],
+                style={"justify-content": "center"},
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Random State"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dbc.Input(
+                            id="random_state",
+                            min=0,
+                            max=1,
+                            step=1,
+                            type="number",
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label("Eval Metric"),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dcc.Dropdown(
+                            eval_metric,
+                            id="eval_metric",
+                            placeholder=self.lang['SELECT_PLACEHOLDER'],
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    ),
+                    dbc.Col([
+                        dbc.Col(
+                            dbc.Label(self.lang["SCORING_METRIC"]),
+                            width=45,
+                            style={"margin-top": "1vh"},
+                            class_name="center",
+                        ),
+                        dcc.Dropdown(
+                            scorings,
+                            id="scorings",
+                            placeholder=self.lang['SELECT_PLACEHOLDER'],
+                        )],
+                        style={"width": "30%", "margin-right": "auto"},
+                    )],
+                style={"justify-content": "center"},
+                ),
+            ]
+
+        button = dbc.Button(
+            self.lang["GENERATE_PARAMS"],
+            id="generate_params",
+            color="primary",
+            className="mr-1",
+            style={"margin-top": "2.5vh", "width": "40%", "margin-right": "auto", "margin-left": "auto"},
+            outline=True,
+        )
+        return dbc.Col(model_params_row + [button])
+
+    @property
+    def model_params_settings(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_PARAMS",
+            component=dbc.Col([self.feat_params_components, self.model_param_component]),
+            id_prefix="model_params",
+            style={"margin-top": "1vh"},
+        ).simple_collapse
+

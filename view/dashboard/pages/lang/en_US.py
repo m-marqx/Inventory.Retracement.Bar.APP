@@ -102,4 +102,16 @@ en_US = {
     "FIRST_LENGTH": "First Length",
     "SECOND_LENGTH": "Second Length",
 
+    # Params
+    "MODIFY_PARAMS": "Modify Params",
+
+    # Features
+    "FEATURES_THRESHOLD": "Features Threshold",
+    "INTERMEDIATE": "Intermediate",
+
+    # Model Params
+    "MODEL_PARAMS": "Model Params",
+    "SCORING_METRIC": "Scoring Metric",
+    "GENERATE_PARAMS": "Generate Params",
+
 }
