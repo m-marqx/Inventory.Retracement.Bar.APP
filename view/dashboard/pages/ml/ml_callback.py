@@ -202,15 +202,14 @@ class RunModel:
 
                 fig = graph_layout.plot_single_linechart("Liquid_Return")
 
-            recommendation = predict.shift()
+            recommendation = predict.copy().shift()
             recommendation = (
                 recommendation
                 .where(recommendation < 0, 'Long')
                 .where(recommendation > 0, 'Short')
                 .tail(5)
+                .reset_index()
             )
-
-            recommendation = recommendation.reset_index()
 
             recommendation_table = dag.AgGrid(
                     rowData=recommendation.to_dict("records"),
@@ -220,7 +219,7 @@ class RunModel:
                     columnSize="responsiveSizeToFit",
                     dashGridOptions={"pagination": False},
                     className="ag-theme-alpine-dark",
-                    style={"overflow": "hidden", "height": "29vh"},
+                    style={"overflow": "hidden", "height": "27vh", "margin-top": "1vh"},
                 )
 
             new_signal = pd.DataFrame({"Unconfirmed" : predict.iloc[-1]}).T
