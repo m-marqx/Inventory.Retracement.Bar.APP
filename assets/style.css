@@ -216,7 +216,7 @@
 }
 
 .btn.btn-outline-primary:active {
-  background: none !important;
+background: transparent !important;
   color: rgba(255, 255, 255, 0.85) !important;
   padding: 1rem 1.5rem;
   border: 1px solid #8bbb11 !important;
@@ -226,17 +226,17 @@
 }
 
 .btn.btn-outline-primary:hover {
-  background: #1f2611;
+  background: #2e3c10 !important;
   color: rgba(255, 255, 255, 0.85) !important;
   padding: 1rem 1.5rem;
-  border: 1px solid #8bbb11 !important;
+  border: 2px solid #8bbb11 !important;
   box-shadow: none;
   transition: background 0.08s ease-in-out, border 0.08s ease-in-out,
     color 0.08s ease-in-out;
 }
 
 .btn.btn-outline-primary:focus {
-  background: #2e3c10 !important;
+  background-color: transparent;
   padding: 1rem 1.5rem;
   color: rgba(255, 255, 255, 0.85) !important;
   box-shadow: none !important;
