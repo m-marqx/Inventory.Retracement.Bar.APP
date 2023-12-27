@@ -22,53 +22,107 @@ from .graph import GraphLayout
 
 class RunModel:
     @callback(
-        Output("progress_bar", "value", True),
+        Output("progress_bar", "children", True),
+        Input("preset_options", "value"),
         Input("run_model", "n_clicks"),
         prevent_initial_call=True,
     )
-    def update_progress_bar(run_button):
+    def update_progress_bar(
+        preset_selected,
+        run_button, #run_button is necessary to track run_model clicks
+    ):
         ctx = dash.callback_context
 
         if not ctx.triggered:
             raise dash.exceptions.PreventUpdate
 
-        if "run_model" in ctx.triggered[0]["prop_id"]:
+        if "run_model" in ctx.triggered[0]["prop_id"] and preset_selected:
             time.sleep(0.786)
-            return "5"
+            return "Getting data..."
+        return ""
+
+    @callback(
+        Output("rolling_ratio_dropdown", "options"),
+        Input("indicators_dropdown", "value"),
+    )
+    def update_rolling_ratio_dropdown(indicators):
+        ctx = dash.callback_context
+
+        if not ctx.triggered:
+            raise dash.exceptions.PreventUpdate
+
+        if "RSI" in indicators:
+            return ["open", "high", "low", "close", "RSI"]
+        return ["open", "high", "low", "close"]
+
+    @callback(
+        Output("rsi_settings", "class_name"),
+        Output("rolling_settings", "class_name"),
+        Input("indicators_dropdown", "value"),
+    )
+    def update_rolling_ratio_dropdown(indicators):
+        ctx = dash.callback_context
+
+        if not ctx.triggered:
+            raise dash.exceptions.PreventUpdate
+
+        is_rsi_selected = False
+        is_rolling_ratio_selected = False
+
+        if "RSI" in indicators:
+            is_rsi_selected = True
+        if "rolling ratio" in indicators:
+            is_rolling_ratio_selected = True
+
+        if is_rsi_selected and not is_rolling_ratio_selected:
+            return "row", "hidden"
+        elif is_rolling_ratio_selected and not is_rsi_selected:
+            return "hidden", "row"
+        elif is_rsi_selected and is_rolling_ratio_selected:
+            return "row", "row"
+        return "hidden", "hidden"
 
     @callback(
         Output("model_text_output", "children"),
         Output("new_signal_output", "children"),
         Output("ml_results", "figure"),
         Output("text_model_spinner", "spinner_class_name"),
-        Output("progress_bar", "value"),
+        Output("progress_bar", "children"),
         inputs=[
         Input("run_model", "n_clicks"),
         State("preset_options", "value"),
-        Input("preset", "value"),
+        State("preset", "value"),
         ],
         background=True,
         cancel=Input("cancel_model", "n_clicks"),
         running=[
             (Output("run_model", "disabled"), True, False),
             (Output("cancel_model", "disabled"), False, True),
-            (
-                Output("progress_bar", "style"),
-                {"visibility": "visible", "margin-top": "10px"},
-                {"visibility": "hidden", "margin-top": "10px"},
-            ),
+            (Output("progress_bar", "className"), "progress-info", "hidden"),
         ],
-        progress=Output("progress_bar", "value"),
+        progress=Output("progress_bar", "children"),
         prevent_initial_call=True,
     )
-    def get_model_predict(set_progress, run_button, preset_selected, preset_input):
+    def get_model_predict(
+        set_progress,
+        run_button, #run_button is necessary to track run_model clicks
+        preset_selected,
+        preset_input
+    ):
         ctx = dash.callback_context
 
-        if not ctx.triggered:
+        if not ctx.triggered or not preset_selected:
             raise dash.exceptions.PreventUpdate
 
-        if "run_model" in ctx.triggered[0]["prop_id"]:
-            set_progress("35")
+        if "run_model" in ctx.triggered[0]["prop_id"] and preset_selected:
+
+            creating_model_str = (
+                "Creating model..."
+                if preset_selected != "All"
+                else "Creating models..."
+            )
+
+            set_progress(creating_model_str)
 
             updated_dataset = pd.read_parquet("model/data/dataset_updated.parquet")
             BTCUSD = DataHandler(updated_dataset).calculate_targets()
@@ -78,7 +132,6 @@ class RunModel:
             BTCUSD["RSI79"] = ta.RSI(BTCUSD["high"].pct_change(), 79)
             return_series = BTCUSD["Return"]
 
-            set_progress("25")
 
             split_params = dict(
                 target_input=BTCUSD["Target_1_bin"],
@@ -139,15 +192,11 @@ class RunModel:
                 validation_date
             )
 
-            set_progress("35")
-
             model_predict.calculate_features("RSI79", 1527)
             combination = os.getenv(preset_selected)
 
-            set_progress("45")
 
             if preset_selected == "All":
-                set_progress("55")
                 name_list = os.getenv(preset_input).replace(" ","").split(",")
 
                 feats_list = [os.getenv(name) for name in name_list]
@@ -159,7 +208,7 @@ class RunModel:
                 ]
 
 
-                set_progress("95")
+                set_progress("Calculating models returns...")
 
                 result = {
                     name:
@@ -181,7 +230,7 @@ class RunModel:
                 ).grouped_lines()
 
             elif combination:
-                set_progress("95")
+                set_progress("Calculating model returns...")
 
                 param = get_model_feat_params(combination)
 
@@ -249,5 +298,5 @@ class RunModel:
                 new_signal_table,
                 fig,
                 'spinner-loader_model',
-                "0",
+                "",
             )
