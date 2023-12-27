@@ -1,6 +1,12 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
 
+from view.dashboard.pages import (
+    MenuCollapse,
+    DropdownMenu,
+)
+
+from view.dashboard.pages.ml.utils import scorings, eval_metric
 
 class MLComponents:
     """A class representing the components of a main page in a Dash
@@ -469,3 +475,66 @@ class MLComponents:
             style={"margin-top": "1vh"},
         ).simple_collapse
 
+    @property
+    def dataset_split_settings(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="DATASET_SPLITS",
+            component=self.dataset_split_component,
+            id_prefix="dataset_splits",
+            style={"margin-top": "1vh"},
+        ).simple_collapse
+
+    @property
+    def dataset_split_component(self):
+        return (
+            dbc.Row([
+                dbc.Col([
+                    dbc.Col(
+                        dbc.Label(self.lang["TRAIN_PERIOD"]),
+                        width=6,
+                        class_name="center",
+                    ),
+                    dcc.DatePickerRange(
+                        id="train_date",
+                        min_date_allowed="2012-01-02",
+                        className="center",
+                        start_date="2012-01-02",
+                        end_date="2016-02-21",
+                        start_date_id="start_train_date",
+                        end_date_id="end_train_date",
+                    ),
+                ]),
+                dbc.Col([
+                    dbc.Col(
+                        dbc.Label(self.lang["TEST_PERIOD"]),
+                        width=6,
+                        style={"margin-top": "2vh"},
+                        class_name="center",
+                    ),
+                    dcc.DatePickerRange(
+                        id="test_date",
+                        min_date_allowed="2012-01-02",
+                        className="center",
+                        start_date="2016-02-21",
+                        end_date="2020-04-12",
+                        start_date_id="start_test_date",
+                        end_date_id="end_test_date",
+                    ),
+                ]),
+            ]),
+            dbc.Row([
+                dbc.Col(
+                    dbc.Label(self.lang["VALIDATION_STARTS_AT"]),
+                    width=45,
+                    style={"margin-top": "2vh"},
+                    class_name="center",
+                ),
+                dcc.DatePickerSingle(
+                    id="validation_date",
+                    min_date_allowed="2012-01-02",
+                    date="2020-04-11",
+                    className="center",
+                ),
+            ]),
+        )

@@ -114,4 +114,10 @@ en_US = {
     "SCORING_METRIC": "Scoring Metric",
     "GENERATE_PARAMS": "Generate Params",
 
+    # Dataset Splits
+    "DATASET_SPLITS": "Dataset Splits",
+    "TRAIN_PERIOD": "Train Split",
+    "TEST_PERIOD": "Test Split",
+    "VALIDATION_STARTS_AT": "Validation Starts At",
+
 }

@@ -114,4 +114,9 @@ pt_BR = {
     "SCORING_METRIC": "Métrica de Avaliação",
     "GENERATE_PARAMS": "Gerar Parâmetros",
 
+    # Dataset Splits
+    "DATASET_SPLITS": "Divisões do Dataset",
+    "TRAIN_PERIOD": "Período de Treino",
+    "TEST_PERIOD": "Período de Teste",
+    "VALIDATION_STARTS_AT": "Início da Validação",
 }
