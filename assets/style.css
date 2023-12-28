@@ -579,26 +579,40 @@ display: grid;
   background: transparent;
 }
 
-.SingleDatePicker, .DateRangePicker {
-    border-radius: 1vh;
-    border: 1px solid var(--gray-9);
-}
-
-
 .SingleDatePickerInput, .DateInput_input, .DateRangePickerInput__withBorder {
-  text-align: center;
   background: transparent !important;
   border-color: transparent;
   color: #ffffffd9;
 }
 
-.SingleDatePicker, .DateRangePicker {
+.SingleDatePicker .DateInput_input {
   border-radius: 1vh;
   border: 1px solid var(--gray-9);
   height: var(--default-height);
   display: grid;
   align-content: center;
   flex-wrap: wrap;
+  width: fit-content;
+  text-align: center;
+}
+
+.DateRangePicker {
+  border-radius: 1vh;
+  border: 1px solid var(--gray-9);
+  height: var(--default-height);
+  display: grid;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.DateInput_input:hover {
+  border-radius: 1vh;
+  background-color: var(--gray-9) !important;
+  height: var(--default-height);
+  display: grid;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-items: center;
 }
 
 .CalendarMonth, .CalendarMonthGrid, .CalendarDay__outside, .DayPicker_focusRegion {
@@ -674,7 +688,7 @@ display: grid;
 .DayPicker__withBorder {
     box-shadow: 0 2px 6px rgba(0,0,0,.05), 0 0 0 1px rgba(0,0,0,.07);
     border-radius: 24px;
-    width: 33vh !important;
+    width: 318px !important;
 }
 
 .DayPickerNavigation_button__default:active {
@@ -708,4 +722,17 @@ hr {
 
 p {
   color: rgba(255, 255, 255, 0.45);
+}
+
+.is_custom_validation_check .form-check{
+  padding-left: 0px !important;
+}
+.is_custom_validation_check .form-check .btn {
+  border-radius: 1.5vh !important;
+  background-color: transparent;
+}
+
+.is_custom_validation_check .form-check .btn:checked,
+.is_custom_validation_check .form-check .btn.active {
+  background-color: #2e3c10 !important;
 }

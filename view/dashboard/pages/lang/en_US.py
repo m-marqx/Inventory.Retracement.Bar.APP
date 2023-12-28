@@ -115,9 +115,8 @@ en_US = {
     "GENERATE_PARAMS": "Generate Params",
 
     # Dataset Splits
-    "DATASET_SPLITS": "Dataset Splits",
-    "TRAIN_PERIOD": "Train Split",
-    "TEST_PERIOD": "Test Split",
+    "MODIFY_DATASET_SPLITS": "Modify Dataset Splits",
+    "TRAIN_TEST_PERIOD": "Train / Test Split",
+    "TRAIN_TEST_RATIO": "Train / Test Ratio",
     "VALIDATION_STARTS_AT": "Validation Starts At",
-
 }

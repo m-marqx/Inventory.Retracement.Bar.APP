@@ -83,6 +83,22 @@ class RunModel:
         return "hidden", "hidden"
 
     @callback(
+        Output("validation_date", "className"),
+        Output("validation_date", "date"),
+        Input("validation_checklist", "value"),
+        State("train_test_date", "end_date"),
+    )
+    def update_validation_date(is_custom_validation_date, last_date):
+        ctx = dash.callback_context
+
+        if not ctx.triggered:
+            raise dash.exceptions.PreventUpdate
+
+        if is_custom_validation_date:
+            return "center", last_date
+        return "hidden", None
+
+    @callback(
         Output("model_text_output", "children"),
         Output("new_signal_output", "children"),
         Output("ml_results", "figure"),

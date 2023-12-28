@@ -479,7 +479,7 @@ class MLComponents:
     def dataset_split_settings(self):
         return MenuCollapse(
             lang=self.lang,
-            label="DATASET_SPLITS",
+            label="MODIFY_DATASET_SPLITS",
             component=self.dataset_split_component,
             id_prefix="dataset_splits",
             style={"margin-top": "1vh"},
@@ -491,50 +491,52 @@ class MLComponents:
             dbc.Row([
                 dbc.Col([
                     dbc.Col(
-                        dbc.Label(self.lang["TRAIN_PERIOD"]),
-                        width=6,
+                        dbc.Label(self.lang["TRAIN_TEST_PERIOD"]),
+                        width=45,
                         class_name="center",
                     ),
                     dcc.DatePickerRange(
-                        id="train_date",
+                        id="train_test_date",
                         min_date_allowed="2012-01-02",
                         className="center",
                         start_date="2012-01-02",
-                        end_date="2016-02-21",
-                        start_date_id="start_train_date",
-                        end_date_id="end_train_date",
+                        end_date="2020-04-12",
+                        start_date_id="start_train_test_date",
+                        end_date_id="end_train_test_date",
+                        display_format="DD/MM/YYYY",
+                        show_outside_days=True,
                     ),
                 ]),
                 dbc.Col([
                     dbc.Col(
-                        dbc.Label(self.lang["TEST_PERIOD"]),
-                        width=6,
-                        style={"margin-top": "2vh"},
+                        dbc.Label(self.lang["TRAIN_TEST_RATIO"]),
+                        width=45,
                         class_name="center",
                     ),
-                    dcc.DatePickerRange(
-                        id="test_date",
-                        min_date_allowed="2012-01-02",
-                        className="center",
-                        start_date="2016-02-21",
-                        end_date="2020-04-12",
-                        start_date_id="start_test_date",
-                        end_date_id="end_test_date",
+                    dbc.Input(
+                        id="TRAIN_TEST_RATIO",
+                        step=0.01,
+                        value=0.5,
+                        max=1,
+                        min=0,
                     ),
                 ]),
             ]),
-            dbc.Row([
-                dbc.Col(
-                    dbc.Label(self.lang["VALIDATION_STARTS_AT"]),
-                    width=45,
-                    style={"margin-top": "2vh"},
-                    class_name="center",
+            dbc.Col([
+                dbc.Checklist(
+                    [{"label":"Use Custom Validation Date", "value":True}],
+                    id="validation_checklist",
+                    class_name="is_custom_validation_check",
+                    input_class_name="btn-check",
+                    label_class_name="btn btn-outline-primary",
+                    label_checked_class_name="active",
+                    style={"margin-top": "2vh", "margin-bottom": "1vh", "width": "27.36vh", "padding-left": "0px"},
                 ),
                 dcc.DatePickerSingle(
                     id="validation_date",
                     min_date_allowed="2012-01-02",
-                    date="2020-04-11",
-                    className="center",
-                ),
-            ]),
+                    className="hidden",
+                    display_format="DD/MM/YYYY"
+                )], style={"margin-left": "auto", "margin-right": "auto", "justify-items": "center", "display": "grid"},
+            )
         )

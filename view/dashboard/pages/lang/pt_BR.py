@@ -115,8 +115,8 @@ pt_BR = {
     "GENERATE_PARAMS": "Gerar Parâmetros",
 
     # Dataset Splits
-    "DATASET_SPLITS": "Divisões do Dataset",
-    "TRAIN_PERIOD": "Período de Treino",
-    "TEST_PERIOD": "Período de Teste",
+    "MODIFY_DATASET_SPLITS": "Modificar Divisão de Dados",
+    "TRAIN_TEST_PERIOD": "Divisão de Treino / Teste",
+    "TRAIN_TEST_RATIO": "Proporção de Treino / Teste",
     "VALIDATION_STARTS_AT": "Início da Validação",
 }
