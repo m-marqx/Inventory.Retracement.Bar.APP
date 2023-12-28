@@ -574,6 +574,113 @@ display: grid;
   color: #c9e75d !important;
 }
 
+.DateInput {
+  width: 45%;
+  background: transparent;
+}
+
+.SingleDatePicker, .DateRangePicker {
+    border-radius: 1vh;
+    border: 1px solid var(--gray-9);
+}
+
+
+.SingleDatePickerInput, .DateInput_input, .DateRangePickerInput__withBorder {
+  text-align: center;
+  background: transparent !important;
+  border-color: transparent;
+  color: #ffffffd9;
+}
+
+.SingleDatePicker, .DateRangePicker {
+  border-radius: 1vh;
+  border: 1px solid var(--gray-9);
+  height: var(--default-height);
+  display: grid;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.CalendarMonth, .CalendarMonthGrid, .CalendarDay__outside, .DayPicker_focusRegion {
+  background: var(--gray-12);
+}
+
+.CalendarDay__default {
+  border: 1px solid #8bbb11;
+  color: rgba(255,255,255,0.25);
+  background: var(--gray-11);
+}
+.CalendarDay__default:hover, .CalendarDay__selected {
+  background: var(--gray-12) !important;
+  border: 1px solid #8bbb11 !important;
+  color: rgba(255,255,255,0.85);
+}
+
+.CalendarDay__selected {
+  border: 3px solid #8bbb11 !important;
+}
+
+.CalendarDay__outside {
+    background: var(--gray-12) !important;
+    border: transparent !important;
+}
+
+.CalendarMonth_caption {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.DayPicker_weekHeader_li {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* days between selected dates */
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__selected_span.CalendarDay__selected_span_3,
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__lastDayOfWeek.CalendarDay__lastDayOfWeek_3.CalendarDay__selected_span.CalendarDay__selected_span_4,
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__firstDayOfWeek.CalendarDay__firstDayOfWeek_3.CalendarDay__selected_span.CalendarDay__selected_span_4 {
+  background: var(--gray-9) !important;
+  color: rgba(255,255,255,0.85);
+}
+
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__lastDayOfWeek.CalendarDay__lastDayOfWeek_3.CalendarDay__hovered_span.CalendarDay__hovered_span_4,
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__firstDayOfWeek.CalendarDay__firstDayOfWeek_3.CalendarDay__hovered_span.CalendarDay__hovered_span_4,
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__hovered_span.CalendarDay__hovered_span_3 {
+  background: var(--gray-9) !important;
+  color: rgba(255,255,255,0.85);
+}
+
+/* remove background changes when user hover the mouse in start day */
+.CalendarDay.CalendarDay_1.CalendarDay__default.CalendarDay__default_2.CalendarDay__after_hovered_start.CalendarDay__after_hovered_start_3.CalendarDay__selected_span.CalendarDay__selected_span_4 {
+  background: var(--gray-9) !important;
+  color: rgba(255,255,255,0.85);
+}
+
+.DayPickerNavigation_button__default {
+    border: 1px solid var(--gray-9);
+    background-color: var(--gray-11);
+    color: rgba(255,255,255,0.85);
+}
+
+.DayPickerKeyboardShortcuts_show__bottomRight::before {
+    border-top: 26px solid transparent;
+    border-right: 33px solid var(--gray-9);
+    bottom: 0;
+    right: 0;
+}
+
+.DayPickerKeyboardShortcuts_show__bottomRight:hover::before {
+  border-right: 33px solid var(--gray-8);
+}
+
+.DayPicker__withBorder {
+    box-shadow: 0 2px 6px rgba(0,0,0,.05), 0 0 0 1px rgba(0,0,0,.07);
+    border-radius: 24px;
+    width: 33vh !important;
+}
+
+.DayPickerNavigation_button__default:active {
+    background: var(--gray-9);
+}
+
 body {
   background: var(--gray-11);
   color: rgba(255, 255, 255, 0.85);
