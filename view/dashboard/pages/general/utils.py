@@ -345,12 +345,14 @@ class DropdownMenu:
         options,
         id_prefix: str,
         is_multi_options: bool = False,
+        **kwargs
     ):
         self.options = options
         self.label_name = lang[label]
         self.placeholder = lang["SELECT_PLACEHOLDER"]
         self.id_prefix = id_prefix
         self.is_multi_options = is_multi_options
+        self.kwargs = kwargs
 
     @property
     def dropdown_components(self):
@@ -367,6 +369,7 @@ class DropdownMenu:
                         id=f"{self.id_prefix}_dropdown",
                         multi=self.is_multi_options,
                         placeholder=self.placeholder,
+                        **self.kwargs,
                     ),
                     width=45,
                 ),
