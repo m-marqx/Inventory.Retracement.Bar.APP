@@ -359,7 +359,7 @@ class DropdownMenu:
                 dbc.Col(
                     dbc.Label(self.label_name),
                     width=45,
-                    style={"margin-top": "10px"},
+                    style={"margin-top": "1vh"},
                 ),
                 dbc.Col(
                     dcc.Dropdown(
