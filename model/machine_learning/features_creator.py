@@ -286,17 +286,17 @@ class FeaturesCreator:
 
         intervals = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_params)
+            .get_split_variable_intervals(**self.split_params)
         )
 
         intervalsH = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_paramsH)
+            .get_split_variable_intervals(**self.split_paramsH)
         )
 
         intervalsL = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_paramsL)
+            .get_split_variable_intervals(**self.split_paramsL)
         )
 
         self.data_frame[f'{based_on}_split'] = (
@@ -382,17 +382,17 @@ class FeaturesCreator:
 
         intervals = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_params)
+            .get_split_variable_intervals(**self.split_params)
         )
 
         intervalsH = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_paramsH)
+            .get_split_variable_intervals(**self.split_paramsH)
         )
 
         intervalsL = (
             DataHandler(self.temp_indicator_series)
-            .calculate_split_variable_intervals(**self.split_paramsL)
+            .get_split_variable_intervals(**self.split_paramsL)
         )
 
         self.data_frame['temp_variable'] = (

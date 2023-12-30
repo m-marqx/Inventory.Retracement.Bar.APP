@@ -1176,7 +1176,7 @@ class DataHandler:
             variable |= self.data_frame[column] <= lower_bound
         return variable
 
-    def calculate_split_variable_intervals(
+    def get_split_variable_intervals(
         self,
         target_input: str,
         column: str,
