@@ -8,6 +8,7 @@ pt_BR = {
     "SYMBOL": "Símbolo",
     "TIMEFRAME": "Timeframe",
     "UPLOAD_DATA": "Inserir Dados",
+    "EXCHANGE": "Corretora",
     # Geral
     "SOURCE": "Fonte",
     "OPEN": "Abertura",
@@ -102,10 +103,12 @@ pt_BR = {
     "SECOND_LENGTH": "Segundo Período",
 
     # Params
-    "MODIFY_PARAMS": "Modificar Parâmetros",
+    "MODIFY_FEAT_PARAMS": "Modificar Parâmetros de Features",
+    "MODIFY_MODEL_PARAMS": "Modificar Parâmetros do Modelo",
 
     # Features
     "FEATURES_THRESHOLD": "Ponto de corte das Features",
+    "FEATURES_SELECTION": "Seleção de Features",
     "INTERMEDIATE": "Intermediário",
 
 

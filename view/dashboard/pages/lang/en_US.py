@@ -8,6 +8,7 @@ en_US = {
     "SYMBOL": "Symbol",
     "TIMEFRAME": "Timeframe",
     "UPLOAD_DATA": "Upload Data",
+    "EXCHANGE": "Exchange",
     # General
     "SOURCE": "Source",
     "OPEN": "Open",
@@ -103,10 +104,12 @@ en_US = {
     "SECOND_LENGTH": "Second Length",
 
     # Params
-    "MODIFY_PARAMS": "Modify Params",
+    "MODIFY_FEAT_PARAMS": "Modify Features Params",
+    "MODIFY_MODEL_PARAMS": "Modify Model Params",
 
     # Features
     "FEATURES_THRESHOLD": "Features Threshold",
+    "FEATURES_SELECTION": "Features Selection",
     "INTERMEDIATE": "Intermediate",
 
     # Model Params
