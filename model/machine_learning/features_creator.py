@@ -237,6 +237,70 @@ class FeaturesCreator:
             case _:
                 raise InvalidArgumentError(f"Indicator {indicator} not found")
 
+    def get_features(
+        self,
+        based_on: str,
+        train_end_index: int | None = None,
+        features: list[pd.Index] | None = None
+    ) -> dict:
+        """
+        Calculate features for the model pipeline.
+
+        Parameters:
+        -----------
+        based_on : str
+            Column to base the indicator on.
+        train_end_index : int | None, optional
+            Index for splitting the training and development data.
+            (default: None)
+        features : list[pd.Index] | None, optional
+            List of features to calculate.
+            (default: None)
+
+        Returns:
+        --------
+        pd.DataFrame
+            DataFrame containing the calculated features.
+
+        """
+        features = features or []
+
+        train_end_index = (
+            train_end_index
+            or
+            self.train_development_index
+        )
+
+        train_development = (
+            self.data_frame.iloc[:train_end_index]
+            if isinstance(train_end_index, int)
+            else self.data_frame.loc[:train_end_index]
+        )
+
+        self.data_frame['temp_indicator'] = self.data_frame[based_on]
+
+        self.temp_indicator_series = (
+            self.data_frame['temp_indicator']
+            .reindex(train_development.index)
+        ).dropna()
+
+        intervals = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_params)
+        )
+
+        intervalsH = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_paramsH)
+        )
+
+        intervalsL = (
+            DataHandler(self.temp_indicator_series)
+            .get_split_variable_intervals(**self.split_paramsL)
+        )
+
+        return {"split": intervals, "high": intervalsH, "low": intervalsL}
+
     def calculate_features(
         self,
         based_on: str,
