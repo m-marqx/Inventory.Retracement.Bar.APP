@@ -122,6 +122,7 @@ class FeaturesCreator:
         features_columns = None,
         model_params=None,
         fee = 0.1,
+        test_size = 0.5,
     ) -> pd.DataFrame:
         """
         Calculate the results of the model pipeline.
@@ -146,12 +147,13 @@ class FeaturesCreator:
         """
         development = (
             self.data_frame.iloc[:self.validation_index].copy()
-            if self.validation_index is int
+            if isinstance(self.validation_index, int)
             else self.data_frame.loc[:self.validation_index].copy()
         )
+
         validation = (
             self.data_frame.iloc[self.validation_index:].copy()
-            if self.validation_index is int
+            if isinstance(self.validation_index, int)
             else self.data_frame.loc[self.validation_index:].copy()
         )
 
@@ -168,7 +170,7 @@ class FeaturesCreator:
         X_train, X_test, y_train, y_test = train_test_split(
             features,
             target,
-            test_size=0.5,
+            test_size=test_size,
             random_state=model_params['random_state'],
             shuffle=False
         )
