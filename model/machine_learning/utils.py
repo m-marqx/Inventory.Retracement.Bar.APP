@@ -677,11 +677,9 @@ class DataHandler:
 
         for value in enumerate(target):
             y_train[f"target_{value[0]}"] = x_train[value[1]]
-            print(y_train.shape)
 
         for value in enumerate(target):
             y_test[f"target_{value[0]}"] = x_test[value[1]]
-            print(y_test.shape)
 
         return df_train, y_train, df_test, y_test
 

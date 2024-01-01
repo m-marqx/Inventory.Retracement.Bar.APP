@@ -124,7 +124,7 @@ class ModelMLCallback:
 
             try:
                 exchange = getattr(ccxt, exchange)()
-                capi = CcxtAPI(symbol=symbol, interval=interval, exchange=exchange, verbose=True)
+                capi = CcxtAPI(symbol=symbol, interval=interval, exchange=exchange)
                 exchange_klines = capi.get_all_klines().to_OHLCV().data_frame
             except Exception as e:
                 return (
@@ -150,8 +150,6 @@ class ModelMLCallback:
                 first_train_start_date if train_diff_days <= 0
                 else train_start_date
             )
-
-            print(first_train_day_index)
 
             split_params = dict(
                 target_input=BTCUSD2["Target_1_bin"],
