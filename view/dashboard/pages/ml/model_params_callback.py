@@ -27,6 +27,13 @@ class ModelParamsCallback:
         Output("colsample_bytree", "value"),
         Output("train_test_date", "start_date", True),
 
+        Output("n_estimators", "class_name"),
+        Output("max_depth", "class_name"),
+        Output("gamma", "class_name"),
+        Output("subsample", "class_name"),
+        Output("learning_rate", "class_name"),
+        Output("colsample_bytree", "class_name"),
+
         # Model Params Inputs
         inputs=[
             Input("generate_params", "n_clicks"),
@@ -57,6 +64,14 @@ class ModelParamsCallback:
             State("train_test_date", "start_date"),
             State("train_test_date", "end_date"),
             State("TRAIN_TEST_RATIO", "value"),
+
+            #Dinamic Model Params Inputs
+            State("n_estimators", "value"),
+            State("max_depth", "value"),
+            State("gamma", "value"),
+            State("subsample", "value"),
+            State("learning_rate", "value"),
+            State("colsample_bytree", "value"),
         ],
         background=True,
         running=[
@@ -97,6 +112,14 @@ class ModelParamsCallback:
         test_train_start_date,
         test_train_end_date,
         TRAIN_TEST_RATIO,
+
+        #Dinamic Model Params Inputs
+        n_estimators,
+        max_depth,
+        gamma,
+        subsample,
+        learning_rate,
+        colsample_bytree,
     ):
         ctx = dash.callback_context
 
@@ -194,7 +217,6 @@ class ModelParamsCallback:
                 model_predict.calculate_features("rolling_ratio", train_end_index)
 
             if features_selected:
-                print(features_selected)
                 target = model_predict.data_frame["Target_1_bin"].dropna()
                 features = model_predict.data_frame[features_selected].reindex(target.index)
 
@@ -216,7 +238,6 @@ class ModelParamsCallback:
                     n_iter=100,
                     cv=4,
                     random_state=random_state,
-                    verbose=2,
                     n_jobs=-1,
                     scoring=scorings,
                 )
@@ -224,8 +245,23 @@ class ModelParamsCallback:
                 # Fit the RandomizedSearchCV object to the data
                 random_search.fit(features, target)
 
+                model_params = {
+                    "n_estimators": n_estimators,
+                    "max_depth": max_depth,
+                    "gamma": gamma,
+                    "subsample": subsample,
+                    "learning_rate": learning_rate,
+                    "colsample_bytree": colsample_bytree,
+                }
+
                 # Get the best parameters
                 best_params = random_search.best_params_
+
+                new_model_params = {
+                    key: "form-control" if model_params[key] == best_params[key]
+                    else "focused-form-control" for key in model_params
+                }
+
                 return (
                     best_params["n_estimators"],
                     best_params["max_depth"],
@@ -234,6 +270,13 @@ class ModelParamsCallback:
                     best_params["learning_rate"],
                     best_params["colsample_bytree"],
                     first_train_day_index,
+
+                    new_model_params["n_estimators"],
+                    new_model_params["max_depth"],
+                    new_model_params["gamma"],
+                    new_model_params["subsample"],
+                    new_model_params["learning_rate"],
+                    new_model_params["colsample_bytree"],
                 )
             return (
                 "",
