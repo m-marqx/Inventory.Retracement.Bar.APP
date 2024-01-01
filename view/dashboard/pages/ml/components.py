@@ -296,6 +296,27 @@ class MLComponents:
             ]
         )]
 
+        feat_selection = [dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label(self.lang["FEATURES_SELECTION"]),
+                    width=45,
+                    style={"margin-top": "2vh"},
+                ),
+                dbc.Col(
+                    dcc.Dropdown(
+                        [],
+                        id="features_selection_dropdown",
+                        multi=True,
+                        placeholder=self.lang["SELECT_PLACEHOLDER"],
+                    ),
+                    width=45,
+                ),
+            ]
+        )]
+
+        return dbc.Col(children=list(thresholds + feat_selection))
+
     @property
     def model_param_component(self):
         model_params_row = [
