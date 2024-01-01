@@ -496,6 +496,98 @@ class MLComponents:
         return dbc.Col(model_params_row + [button])
 
     @property
+    def get_data(self):
+        not_supported_exchanges = [
+            "bittrex",
+            "gemini",
+            "huobi",
+            "huobijp",
+            "huobipro",
+            "deribit",
+            "hitbtc",
+            "hitbtc3"
+        ]
+
+        supported_exchanges = [
+            exchange for exchange in ccxt.exchanges
+            if exchange not in not_supported_exchanges
+        ]
+
+        menus = DropdownMenu(
+            lang=self.lang,
+            label="EXCHANGE",
+            options=supported_exchanges,
+            id_prefix="exchange",
+            is_multi_options=False,
+        ).dropdown_components
+
+        intervals = [
+            # "1m",
+            # "5m",
+            # "15m",
+            # "30m",
+            # "1h",
+            # "2h",
+            # "4h",
+            # "6h",
+            # "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+        ]
+
+        intervals_dropdown = DropdownMenu(
+            lang=self.lang,
+            label="TIMEFRAME",
+            options=intervals,
+            id_prefix="interval",
+            is_multi_options=False,
+        ).dropdown_components
+
+        symbol = dbc.Col(
+            [
+                # Get Data
+                dbc.Col(
+                    dbc.Label(self.lang["SYMBOL"]),
+                    width=45,
+                    style={"margin-top": "10px"},
+                ),
+                dbc.Col(
+                    dbc.Input(
+                        id="symbol",
+                        value="BTC/USDT",
+                        type="text",
+                    ),
+                    width=45,
+                ),
+            ],
+            width=6,
+        )
+
+        data_row = dbc.Row([symbol, dbc.Col(intervals_dropdown, width=6)])
+
+        menus = dbc.Col(
+            menus,
+            style={
+                "margin-top": "1vh",
+                "margin-left": "auto",
+                "margin-right": "auto"
+            }
+        )
+
+        data_settings = MenuCollapse(
+            lang=self.lang,
+            label="GET_DATA_BUTTON",
+            component=dbc.Col([data_row, menus]),
+            id_prefix="get_data",
+            style={"margin-bottom": "1vh"},
+        ).simple_collapse
+
+        return data_settings
+
+    @property
     def feat_params_settings(self):
         return MenuCollapse(
             lang=self.lang,
