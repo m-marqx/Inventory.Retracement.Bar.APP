@@ -485,7 +485,7 @@ class MLComponents:
             ]
 
         button = dbc.Button(
-            self.lang["GENERATE_PARAMS"],
+            [dbc.Spinner(size="sm", spinner_class_name="hidden", id="generate_spinner"), self.lang["GENERATE_PARAMS"]],
             id="generate_params",
             color="primary",
             className="mr-1",
