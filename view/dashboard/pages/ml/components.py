@@ -496,6 +496,16 @@ class MLComponents:
         return dbc.Col(model_params_row + [button])
 
     @property
+    def feat_params_settings(self):
+        return MenuCollapse(
+            lang=self.lang,
+            label="MODIFY_FEAT_PARAMS",
+            component=dbc.Col([self.feat_params_components]),
+            id_prefix="feat_params",
+            style={"margin-top": "1vh"},
+        ).simple_collapse
+
+    @property
     def model_params_settings(self):
         return MenuCollapse(
             lang=self.lang,
