@@ -1,10 +1,8 @@
 import dash
-import tradingview_indicators as ta
 import numpy as np
 import pandas as pd
 from dash import Output, Input, State, callback
 import ccxt
-import dash_ag_grid as dag
 from sklearn.model_selection import RandomizedSearchCV
 import xgboost as xgb
 
@@ -13,8 +11,6 @@ from controller.api.ccxt_api import CcxtAPI
 from model.machine_learning.utils import DataHandler
 from model.machine_learning.feature_params import FeaturesParams, FeaturesParamsComplete
 from model.machine_learning.features_creator import FeaturesCreator
-
-from .graph import GraphLayout
 
 class ModelParamsCallback:
     @callback(
@@ -235,7 +231,7 @@ class ModelParamsCallback:
                 random_search = RandomizedSearchCV(
                     estimator=model,
                     param_distributions=param_distributions,
-                    n_iter=100,
+                    n_iter=25,
                     cv=4,
                     random_state=random_state,
                     n_jobs=-1,
