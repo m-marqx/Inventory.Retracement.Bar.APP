@@ -64,7 +64,7 @@ def layout(lang="en_US"):
                         ),
                         dbc.Col(
                             [
-                                ml_components.collapse_preset_settings,
+                                ml_components.get_data,
                                 ml_components.indicators_settings,
                                 ml_components.feat_params_settings,
                                 ml_components.model_params_settings,
