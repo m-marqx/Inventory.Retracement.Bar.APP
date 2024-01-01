@@ -299,6 +299,14 @@ background: transparent !important;
   color: rgba(255, 255, 255, 0.85);
   background: var(--gray-8) !important;
   transition: background 0.15s ease-in-out;
+  border: 2px solid rgba(255,255,255,0.85);
+}
+
+.focused-form-control {
+  color: rgba(255, 255, 255, 0.85);
+  background: var(--gray-8) !important;
+  transition: background 0.15s ease-in-out;
+  border: 2px solid rgba(255,255,255,0.85);
 }
 
 .form-control:hover {
