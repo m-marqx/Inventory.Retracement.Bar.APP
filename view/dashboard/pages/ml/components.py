@@ -541,8 +541,6 @@ class MLComponents:
                         className="center",
                         start_date="2012-01-02",
                         end_date="2020-04-12",
-                        start_date_id="start_train_test_date",
-                        end_date_id="end_train_test_date",
                         display_format="DD/MM/YYYY",
                         show_outside_days=True,
                     ),
@@ -562,21 +560,4 @@ class MLComponents:
                     ),
                 ]),
             ]),
-            dbc.Col([
-                dbc.Checklist(
-                    [{"label":"Use Custom Validation Date", "value":True}],
-                    id="validation_checklist",
-                    class_name="is_custom_validation_check",
-                    input_class_name="btn-check",
-                    label_class_name="btn btn-outline-primary",
-                    label_checked_class_name="active",
-                    style={"margin-top": "2vh", "margin-bottom": "1vh", "width": "27.36vh", "padding-left": "0px"},
-                ),
-                dcc.DatePickerSingle(
-                    id="validation_date",
-                    min_date_allowed="2012-01-02",
-                    className="hidden",
-                    display_format="DD/MM/YYYY"
-                )], style={"margin-left": "auto", "margin-right": "auto", "justify-items": "center", "display": "grid"},
-            )
         )
