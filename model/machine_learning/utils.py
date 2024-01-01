@@ -658,7 +658,6 @@ class DataHandler:
             and testing sets.
         features : str or list of str, optional
             The list of feature column names to use in the DataFrame.
-            If None, defaults to ["IRB_Condition", "Signal", "uptrend"].
 
         Returns
         -------
