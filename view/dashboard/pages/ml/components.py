@@ -130,8 +130,9 @@ class MLComponents:
                             class_name="center",
                         ),
                         dbc.Input(
-                            id='length-input',
+                            id='rsi_length-input',
                             type='number',
+                            value=89,
                         ),
                     ],
                     width=6,
@@ -163,8 +164,9 @@ class MLComponents:
                             class_name="center",
                         ),
                         dbc.Input(
-                            id='length-input',
+                            id='first_length-input',
                             type='number',
+                            value=144
                         ),
                     ],
                     width=3,
@@ -178,8 +180,9 @@ class MLComponents:
                             class_name="center",
                         ),
                         dbc.Input(
-                            id='length-input',
+                            id='second_length-input',
                             type='number',
+                            value=233
                         ),
                     ],
                     width=3,
@@ -225,7 +228,7 @@ class MLComponents:
 
     @property
     def feat_params_components(self):
-        return dbc.Row(
+        thresholds = [dbc.Row(
             [
                 dbc.Col(
                     dbc.Label(self.lang["FEATURES_THRESHOLD"]),
@@ -242,7 +245,7 @@ class MLComponents:
                         ),
                         dbc.Input(
                             id="high_threshold",
-                            value=0.51,
+                            value=0.52,
                             min=0,
                             max=1,
                             step=0.01,
@@ -278,7 +281,7 @@ class MLComponents:
                         ),
                         dbc.Input(
                             id="low_threshold",
-                            value=0.49,
+                            value=0.48,
                             min=0,
                             max=1,
                             step=0.01,
@@ -291,7 +294,7 @@ class MLComponents:
                 style={"justify-content": "center"},
                 ),
             ]
-        )
+        )]
 
     @property
     def model_param_component(self):
@@ -313,9 +316,9 @@ class MLComponents:
                         dbc.Input(
                             id="n_estimators",
                             min=0,
-                            max=1,
                             step=1,
                             type="number",
+                            value=333,
                         )],
                         style={"width": "30%", "margin-right": "auto"},
                     ),
@@ -329,9 +332,9 @@ class MLComponents:
                         dbc.Input(
                             id="max_depth",
                             min=0,
-                            max=1,
                             step=1,
                             type="number",
+                            value=11,
                         )],
                         style={"width": "30%", "margin-right": "auto"},
                     ),
@@ -345,9 +348,9 @@ class MLComponents:
                         dbc.Input(
                             id="gamma",
                             min=0,
-                            max=1,
                             step=1,
                             type="number",
+                            value=7,
                         )],
                         style={"width": "30%"},
                     )
@@ -368,6 +371,7 @@ class MLComponents:
                             max=1,
                             step=0.01,
                             type="number",
+                            value=0.69,
                         )],
                         style={"width": "30%", "margin-right": "auto"},
                     ),
@@ -383,6 +387,7 @@ class MLComponents:
                             min=0,
                             max=1,
                             step=0.01,
+                            value=0.69,
                             type="number",
                         )],
                         style={"width": "30%", "margin-right": "auto"},
@@ -399,6 +404,7 @@ class MLComponents:
                             min=0,
                             max=1,
                             step=0.01,
+                            value=0.07,
                             type="number",
                         )],
                         style={"width": "30%"},
@@ -416,8 +422,8 @@ class MLComponents:
                         ),
                         dbc.Input(
                             id="random_state",
+                            value=69,
                             min=0,
-                            max=1,
                             step=1,
                             type="number",
                         )],
@@ -434,6 +440,7 @@ class MLComponents:
                             eval_metric,
                             id="eval_metric",
                             placeholder=self.lang['SELECT_PLACEHOLDER'],
+                            value="logloss",
                         )],
                         style={"width": "30%", "margin-right": "auto"},
                     ),
@@ -447,6 +454,7 @@ class MLComponents:
                         dcc.Dropdown(
                             scorings,
                             id="scorings",
+                            value="accuracy",
                             placeholder=self.lang['SELECT_PLACEHOLDER'],
                         )],
                         style={"width": "30%", "margin-right": "auto"},
@@ -463,6 +471,7 @@ class MLComponents:
             style={"margin-top": "2.5vh", "width": "40%", "margin-right": "auto", "margin-left": "auto"},
             outline=True,
         )
+
         return dbc.Col(model_params_row + [button])
 
     @property
