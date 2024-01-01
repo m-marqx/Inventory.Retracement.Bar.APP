@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
+import ccxt
 
 from view.dashboard.pages import (
     MenuCollapse,
@@ -601,8 +602,8 @@ class MLComponents:
     def model_params_settings(self):
         return MenuCollapse(
             lang=self.lang,
-            label="MODIFY_PARAMS",
-            component=dbc.Col([self.feat_params_components, self.model_param_component]),
+            label="MODIFY_MODEL_PARAMS",
+            component=dbc.Col([self.model_param_component]),
             id_prefix="model_params",
             style={"margin-top": "1vh"},
         ).simple_collapse
