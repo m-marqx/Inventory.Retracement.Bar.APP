@@ -9,7 +9,8 @@ Essa página possui 3 objetivos:
 
 O menu `Obter dados` Tem como objetivo permitir o usuário a escolher qual criptomoeda ele deseja que o modelo utilize os dados, como por exemplo o `Simbolo`, que deverá conter o nome do `par` que o modelo utilizará em sua base de dados, e deverá ser `exatamente` como é visto na corretora.
 
-![[Pasted image 20240102181111.png]]
+![Get Data](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/ad3b1938-3b54-4cd5-89ad-980f3eb73430)
+
 
 ## Indicadores 💹
 
@@ -17,10 +18,14 @@ No menu `Modificar indicadores` permite selecionar qual indicador poderá ser ut
 
 
 Sem nenhuma configuração adicional:
-![[Pasted image 20240102181632.png]]
+
+![indicators modify1](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/74e9e6c2-db3e-4783-bcee-6afac7f1cae0)
+
 
 Com alguma nova configuração adicional:
-![[Pasted image 20240102181619.png]]
+
+![indicators modify2](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/84b0ff4d-5448-4aec-8b92-38ad165cc8f7)
+
 ## Features ♟️
 Em termos de trading, as features são metaforicamente o `setup` do modelo. Em outras palavras elas são conjunto de regras do modelo.
 
@@ -31,17 +36,22 @@ Todas as features do modelo são features númericas, tendo isso em vista, os 3 
 O menu  `Seleção de Features` permite ao usuário escolher qual feature binária será utilizada.
 
 - a ordem selecionada dessas features pode impactar no resultado final do modelo.
-![[Pasted image 20240102182616.png]]
+
+![modify features](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/98e2ac70-e89e-48a3-90d5-64706ea00c36)
 
 ## Parâmetros do modelo 🤖
 
 Os parâmetros do modelo são valores que definem como o modelo irá aprender a classificar as features binárias, a cada nova configuração nos indicadores ou features é recomendado clicar no botão `Gerar Parâmetros` porque será buscado os melhores valores para o modelo.
 
 Valores padrões:
-![[Pasted image 20240102182753.png]]
+
+![default model params](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/9ac35d28-5afb-476e-9540-54762b881409)
+
 
 Valores gerados:
-![[Pasted image 20240102184008.png]]
+
+![new model params](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/a860e2f1-05cf-4c15-b4ba-ca37b6ebd100)
+
 
 ## Divisão de Dados 📈📉📈
 
@@ -53,15 +63,17 @@ O objetivo dessa separação é permitir que seja possível analisar se o modelo
 
 A forma que é feito a divisão nesse repositório foi buscando a simplicidade permitindo com que o usuário defina a base de dados que o modelo tem acesso (`in-sample`) e todo o restante ser a base de dados `out of sample` ou validação.
 
-![[Pasted image 20240102183618.png]]
+![data split](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/1b509efe-df29-4962-ad12-631de3dfcaa9)
+
 
 
 Essa página foi projetada para ser mais responsiva:
 
 * o botão de gerar parâmetros indica quais parâmetros foram atualizados
 
-![[gerarparams.gif]]
+![generate params](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/d70da265-3d1f-47d9-a7e6-a89b6471e7cc)
+
 
 * A criação do modelo pode ser cancelada, e também há a informação do que está sendo feito.
 
-![[createmodel.gif]]
+![new_model_gif](https://github.com/m-marqx/Hoffman-IRB/assets/124513922/beedad9c-af59-4024-987f-e8379392b504)
