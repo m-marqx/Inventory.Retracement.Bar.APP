@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import ccxt
 from model.utils import interval_to_milliseconds
-from .utils import KlineTimes
+from controller.api.utils import KlineTimes
 
 
 class CcxtAPI:
