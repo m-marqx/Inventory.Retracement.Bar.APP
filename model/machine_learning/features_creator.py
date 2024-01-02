@@ -2,6 +2,7 @@ from itertools import combinations
 from typing import Literal
 
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 import xgboost as xgb
 import tradingview_indicators as ta
@@ -245,7 +246,6 @@ class FeaturesCreator:
         self,
         based_on: str,
         train_end_index: int | None = None,
-        features: list[pd.Index] | None = None
     ) -> dict:
         """
         Calculate features for the model pipeline.
@@ -267,8 +267,6 @@ class FeaturesCreator:
             DataFrame containing the calculated features.
 
         """
-        features = features or []
-
         train_end_index = (
             train_end_index
             or
@@ -309,7 +307,6 @@ class FeaturesCreator:
         self,
         based_on: str,
         train_end_index: int | None = None,
-        features: list[pd.Index] | None = None
     ) -> dict:
         """
         Calculate features for the model pipeline.
@@ -331,8 +328,6 @@ class FeaturesCreator:
             DataFrame containing the calculated features.
 
         """
-        features = features or []
-
         train_end_index = (
             train_end_index
             or
