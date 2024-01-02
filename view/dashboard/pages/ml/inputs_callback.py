@@ -24,6 +24,22 @@ class ModelInputsCallbacks:
         return feat_selection
 
     @callback(
+        Output("features_selection_dropdown", "value"),
+        Input("indicators_dropdown", "value"),
+        Input("features_selection_dropdown", "value"),
+    )
+    def update_features_selection_dropdown(indicators_selected, features_selected):
+        if indicators_selected and features_selected:
+            filtered_features = [
+                feature for feature in features_selected
+                if any(
+                    feature.startswith(indicator.replace(' ', '_'))
+                    for indicator in indicators_selected
+                )
+            ]
+            return filtered_features
+
+    @callback(
         Output("rolling_ratio_dropdown", "options"),
         Input("indicators_dropdown", "value"),
     )
