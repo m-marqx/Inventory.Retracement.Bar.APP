@@ -218,13 +218,13 @@ class CcxtAPI:
         klines = []
         klines_list = []
 
-        first_call = self._fetch_klines(self.since)
+        first_call = self._fetch_klines(self.since, self.max_multiplier)
 
         if first_call:
             first_unix_time = first_call[0][0]
         else:
             first_unix_time = self.get_since_value()
-            first_call = self._fetch_klines(first_unix_time)
+            first_call = self._fetch_klines(first_unix_time, self.max_multiplier)
 
 
         last_candle_interval = (
@@ -245,7 +245,10 @@ class CcxtAPI:
         end_times = np.arange(time_value, last_candle_interval, step)
 
         for current_start_time in end_times:
-            klines = self._fetch_klines(int(current_start_time))
+            klines = self._fetch_klines(
+                int(current_start_time),
+                self.max_multiplier
+            )
             if not klines:
                 break
 
