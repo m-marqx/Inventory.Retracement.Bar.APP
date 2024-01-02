@@ -211,6 +211,7 @@ class ModelMLCallback:
 
             is_rsi_indicator_selected = "RSI" in indicators_selected
             is_rolling_ratio_selected = "rolling ratio" in indicators_selected
+            is_wick_proportion_selected = "wick proportion" in indicators_selected
 
             if is_rsi_indicator_selected:
                 model_predict.data_frame["RSI"] = (
@@ -235,6 +236,14 @@ class ModelMLCallback:
                 )
 
                 model_predict.calculate_features("rolling_ratio", train_end_index)
+
+            if is_wick_proportion_selected:
+                model_predict.data_frame["wick_proportion"] = (
+                    model_predict
+                    .temp_indicator(None, "wick_proportion")
+                )
+
+                model_predict.calculate_features("wick_proportion", train_end_index)
 
             set_progress("Calculating model returns...")
 

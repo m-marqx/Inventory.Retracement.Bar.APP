@@ -208,7 +208,7 @@ class MLComponents:
                 DropdownMenu(
                     lang=self.lang,
                     label="INDICATORS",
-                    options=["RSI", "rolling ratio"],
+                    options=["RSI", "rolling ratio", "wick proportion"],
                     id_prefix="indicators",
                     is_multi_options=True,
                 ).dropdown_components,

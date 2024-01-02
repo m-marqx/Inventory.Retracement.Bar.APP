@@ -14,19 +14,11 @@ class ModelInputsCallbacks:
 
         feat_selection = []
 
-        if "RSI" in indicators_dropdown:
-
+        for indicator in indicators_dropdown:
             feat_selection.extend([
-                "RSI_low",
-                "RSI_split",
-                "RSI_high",
-            ])
-        if "rolling ratio" in indicators_dropdown:
-
-            feat_selection.extend([
-                "rolling_ratio_low",
-                "rolling_ratio_split",
-                "rolling_ratio_high",
+                f"{indicator}_low".replace(" ", "_"),
+                f"{indicator}_split".replace(" ", "_"),
+                f"{indicator}_high".replace(" ", "_"),
             ])
 
         return feat_selection
