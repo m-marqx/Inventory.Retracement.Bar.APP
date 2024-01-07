@@ -250,7 +250,6 @@ class DevRunModel:
 
             fig.add_vline(validation_date, line_width=1, line_dash="dash", line_color="#595959")
             fig.add_vline("2023-11-29 00:00:00", line_width=1, line_dash="dash", line_color="#595959")
-            print(fig)
             return (
                 "",
                 recommendation_table,

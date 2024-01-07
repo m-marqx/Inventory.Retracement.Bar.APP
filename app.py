@@ -46,4 +46,4 @@ if __name__ == "__main__":
     DevRunModel()
     DevMLLabelCallbacks()
     DevMLCollapseCallbacks()
-    app.run(debug=True)
+    app.run(debug=False)

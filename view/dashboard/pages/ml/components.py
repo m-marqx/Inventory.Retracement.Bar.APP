@@ -9,6 +9,7 @@ from view.dashboard.pages import (
 
 from view.dashboard.pages.ml.utils import scorings, eval_metric
 
+
 class MLComponents:
     """A class representing the components of a main page in a Dash
     application.
@@ -46,19 +47,18 @@ class MLComponents:
                     style={"margin-top": "1vh"},
                     class_name="center",
                 ),
-            dbc.Col(
-                dbc.Input(
-                    id="preset",
-                    value="presets",
-                    placeholder="PRESETS in environment variables",
-                    type="text",
-                ),
-                width=45
-            )
+                dbc.Col(
+                    dbc.Input(
+                        id="preset",
+                        value="presets",
+                        placeholder="PRESETS in environment variables",
+                        type="text",
+                    ),
+                    width=45
+                )
             ],
             style={"justify-content": "center"},
         )
-
 
     @property
     def preset_setter(self):
