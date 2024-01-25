@@ -1,6 +1,6 @@
 ## Ideia Inicial
 
-O repositório tem objetivo criar um modelo que coleta os dados da Binance, a maior exchange internacional, usando a biblioteca `python-binance`, após isso os dados são manipulados para obter os resultados da estratégia `Inventory Retracement Bar`, desenvolvida por `Rob Hoffman`. A estratégia se mostrava promissora, já que o autor alega que ela trouxe vitórias em várias competições de trading, porém com as configurações padrões do setup foi observado que os resultados insatisfatórios no mercado de criptomoedas.
+O repositório tem objetivo criar um modelo que coleta os dados da Binance, a maior exchange internacional, usando a biblioteca `python-binance` e `ccxt`, após isso os dados são manipulados para obter os resultados da estratégia `Inventory Retracement Bar`, desenvolvida por `Rob Hoffman`. A estratégia se mostrava promissora, já que o autor alega que ela trouxe vitórias em várias competições de trading, porém com as configurações padrões do setup foi observado que os resultados insatisfatórios no mercado de criptomoedas.
 
 ## Objetivo
 
